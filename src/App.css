@@ -1,44 +1,89 @@
 @import "tailwindcss";
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+input[type="checkbox"] {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  background-color: #cfcfcf;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  appearance: none;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+input[type="checkbox"]:checked {
+  background-color: #27014f;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 6.6px;
+  width: 7.5px;
+  height: 13px;
+  border: 2px solid transparent;
+  border-left: none;
+  border-top: none;
+  transform: rotate(45deg) scale(1);
 }
 
-@keyframes logo-spin {
+input[type="checkbox"]:checked:before {
+  border-color: #fff;
+  animation: checkAnim 0.2s ease;
+}
+@keyframes CheckAnim {
   from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+    transform: rotate(45deg) scale(0);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Phone Input css */
+.PhoneInput {
+  width: 100%;
+
 }
 
-.card {
-  padding: 2em;
+.PhoneInputInput {
+  padding: 10px 12px;
+  border: 1px solid #a4a4a4;
+  outline: none;
+  font-size: 13px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
-.read-the-docs {
-  color: #888;
+.PhoneInputInput:focus {
+  border: 2px solid #6b21a8;
+}
+
+.PhoneInputCountry {
+  padding: 0 10px 0 10px;
+  border-top: 1px solid #a4a4a4;
+  border-bottom: 1px solid #a4a4a4;
+  border-left: 1px solid #a4a4a4;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+.PhoneInputCountryIcon--border {
+  border-radius: 100%;
+  /* height: 2px ; */
+}
+
+.PhoneInputCountryIconImg {
+  border-radius: 100%;
+  object-fit: cover;
+  height: 100%;
+  width: 100;
+}
+.PhoneInputCountryIcon {
+  margin-right: 2px;
+  height: 22px !important;
+  width: 25px !important;
+}
+
+.PhoneInputCountrySelectArrow {
+  border-color: black !important;
+  font-weight: 800 !important;
+  /* height: 5px !important;
+  width: 2px !important; */
 }
