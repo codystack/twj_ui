@@ -3,118 +3,211 @@ import SignUpImg from "../assets/auth_imgs/pexels-keira-burton.png";
 import Logo from "../assets/auth_imgs/Logo.svg";
 import "react-phone-number-input/style.css";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+// import axios from "axios";
+import { useNavigate } from "react-router";
 import { useState } from "react";
 import { NavLink } from "react-router";
 import eye from "../assets/auth_imgs/Eye_light.svg";
 import "../App.css";
+import { useAuthStore } from "../store/authStore";
 
 const SignUp = () => {
-  const [value, setValue] = useState<string | undefined>("");
-  const [error, setError] = useState<string | undefined>(""); 
+  const navigate = useNavigate();
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  // Single state to hold all form values (inputs)
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
+    phoneNumber: "",
+    isChecked: false,
   });
 
-  // Separate state for errors
   const [errors, setErrors] = useState({
     fullName: "",
     email: "",
     password: "",
-    PhoneNumber: "",
+    phoneNumber: "",
+    isChecked: "",
   });
+  const { signUp, isLoading } = useAuthStore();
 
-  // State for password visibility
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
-  // Update form field value
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
+  // Validation function
+  const validateField = (name: string, value: string | boolean | undefined) => {
+    let error = "";
+
+    switch (name) {
+      case "fullName":
+        if (!value) error = "fullname is required";
+        break;
+
+      case "email":
+        if (!value) error = "Email is required";
+        else if (
+          typeof value === "string" &&
+          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)
+        ) {
+          error = "Invalid email address";
+        }
+        break;
+
+      case "password":
+        if (!value) error = "Password is required";
+        else if (typeof value === "string" && value.length < 8) {
+          error = "Password must be at least 8 characters";
+        } else if (
+          typeof value === "string" &&
+          !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)/.test(value)
+        ) {
+          error = "Password must include uppercase, lowercase, and a number";
+        }
+        break;
+
+      case "phoneNumber":
+        if (!value) error = "Phone number is required";
+        else if (typeof value === "string" && !isValidPhoneNumber(value)) {
+          error = "Invalid phone number";
+        }
+        break;
+
+      case "isChecked":
+        if (value !== true) error = "You must agree to the terms";
+        break;
+
+      default:
+        break;
+    }
+
+    setErrors((prevState) => ({
+      ...prevState,
+      [name]: error,
     }));
+
+    return error;
   };
 
-  // Validate Full Name
-  const validateFullName = () => {
-    if (!formData.fullName.trim()) {
-      setErrors((prev) => ({
-        ...prev,
-        fullName: "This field is required",
-      }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        fullName: "",
-      }));
-    }
+  // Handle input changes for text fields
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
+
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: newValue,
+    }));
+
+    validateField(name, newValue);
   };
 
-  // Validate Email
-  const validateEmail = () => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!formData.email.trim()) {
-      setErrors((prev) => ({
-        ...prev,
-        email: "This field is required",
-      }));
-    } else if (!emailRegex.test(formData.email)) {
-      setErrors((prev) => ({
-        ...prev,
-        email: "Please enter a valid email",
-      }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        email: "",
-      }));
-    }
-  };
-
-  // Validation for phone number
+  // Handle phone number change
   const handlePhoneNumberChange = (value: string | undefined) => {
-    setValue(value);
-    // Validate the phone number based on the selected country
-    if (value && !isValidPhoneNumber(value)) {
-      setError("Please enter a valid phone number");
+    setFormData((prevState) => ({
+      ...prevState,
+      phoneNumber: value || "",
+    }));
+
+    validateField("phoneNumber", value);
+  };
+
+  // Check all fields for errors before submission
+  const validateForm = () => {
+    const newErrors = {
+      fullName: validateField("fullname", formData.fullName),
+      email: validateField("email", formData.email),
+      password: validateField("password", formData.password),
+      phoneNumber: validateField("phoneNumber", formData.phoneNumber),
+      isChecked: validateField("isChecked", formData.isChecked),
+    };
+
+    setErrors(newErrors);
+
+    // Check if there are any errors
+    return !Object.values(newErrors).some((error) => error);
+  };
+
+  // Handle form submission
+  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+
+  //   const isValid = validateForm();
+
+  //   if (!isValid) {
+  //     console.log("Form has errors:", isValid);
+  //   } else {
+  //     console.log("Form Data:", formData);
+
+  //     setFormData({
+  //       fullname: "",
+  //       email: "",
+  //       password: "",
+  //       phoneNumber: "",
+  //       isChecked: false,
+  //     });
+
+  //     // Also clear any validation errors
+  //     // setErrors({}); // Also clear any errors displayed
+  //     // Proceed to send the formData to your backend or API
+  //   }
+  // };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const isValid = validateForm();
+
+    if (isValid) {
+      // setIsLoading(true); // Start loading
+      try {
+        signUp(formData, navigate);
+        console.log("submitted successfully");
+        // Reset form on success
+        setFormData({
+          fullName: "",
+          email: "",
+          password: "",
+          phoneNumber: "",
+          isChecked: false,
+        });
+        // setErrors({});
+      } catch (error: any) {
+        if (error.response) {
+          setFormData({
+            fullName: "",
+            email: "",
+            password: "",
+            phoneNumber: "",
+            isChecked: false,
+          });
+          console.log("Error Response Data:", error.response.data);
+        }
+     
+      } finally {
+        // setIsLoading(false); // Stop loading
+      }
     } else {
-      setError(""); // Clear the error if valid
+      console.log("Form has errors:", errors);
     }
   };
 
-  // Validate Password
-  const validatePassword = (password: string) => {
-    if (password.length === 0) {
-      setErrors((prev) => ({
-        ...prev,
-        password: "This field is required",
-      }));
-    } else if (password.length < 8) {
-      setErrors((prev) => ({
-        ...prev,
-        password: "Please enter a valid password",
-      }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        password: "",
-      }));
-    }
-  };
-
-  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
   };
 
+  // checks to disable the button.
+  const isFormInvalid =
+    Object.values(errors).some((error) => error) ||
+    !formData.fullName ||
+    !formData.email ||
+    !formData.password ||
+    !formData.phoneNumber ||
+    !formData.isChecked;
+
   return (
     <div className="flex h-screen w-full ">
       {/* Left: Signup Form */}
-      <form className=" w-1/2 my-[1rem] mx-[2rem] ">
+      <form onSubmit={handleSubmit} className=" w-1/2 my-[1rem] mx-[2rem] ">
         <div className="mt-8">
           <div className="Nav flex justify-between ">
             <NavLink to="/" className="cursor-pointer">
@@ -124,7 +217,10 @@ const SignUp = () => {
               <p className="font-semibold text-[#27014F]">
                 Already have an account?
               </p>
-              <NavLink to="/Login" className=" cursor-pointer font-semibold ml-[5px] text-[#9605C5]">
+              <NavLink
+                to="/Login"
+                className=" cursor-pointer font-semibold ml-[5px] text-[#9605C5]"
+              >
                 Log in
               </NavLink>
             </div>
@@ -145,9 +241,11 @@ const SignUp = () => {
                   placeholder="Full name"
                   name="fullName"
                   value={formData.fullName}
-                  onChange={handleInputChange}
-                  onBlur={validateFullName}
-                  className=" p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 focus:border-purple-800 outline-none rounded-md "
+                  onChange={handleChange}
+                  onBlur={() => validateField("fullname", formData.fullName)}
+                  className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 focus:border-purple-800 outline-none rounded-md ${
+                    errors.fullName ? "border border-red-600" : ""
+                  } `}
                 />
 
                 {errors.fullName && (
@@ -162,9 +260,11 @@ const SignUp = () => {
                   placeholder="Enter your email"
                   name="email"
                   value={formData.email}
-                  onChange={handleInputChange}
-                  onBlur={validateEmail}
-                  className="focus:border-purple-800 text-[13px] focus:border-2 outline-none p-2.5 pl-3 pr-3 border border-[#A4A4A4] rounded-md w-full"
+                  onChange={handleChange}
+                  onBlur={() => validateField("email", formData.email)}
+                  className={`focus:border-purple-800 text-[13px] focus:border-2 outline-none p-2.5 pl-3 pr-3 border border-[#A4A4A4] rounded-md w-full ${
+                    errors.email ? "border border-red-600" : ""
+                  }`}
                 />
                 {errors.email && (
                   <p className="text-red-500 text-[13px] mt-1">
@@ -177,16 +277,22 @@ const SignUp = () => {
                 <PhoneInput
                   placeholder="Enter phone number"
                   defaultCountry="NG"
-                  value={value}
+                  value={formData.phoneNumber}
                   onChange={handlePhoneNumberChange}
                   style={
                     {
                       "--PhoneInputCountrySelect-marginRight": "0em",
+                      borderRadius: "0.375rem",
+                      ...(errors.phoneNumber && {
+                        border: "1px solid red", // Override with red border if there's an error
+                      }),
                     } as React.CSSProperties
                   }
                 />
-                {error && (
-                  <p className="text-red-500 text-[13px] mt-">{error}</p>
+                {errors.phoneNumber && (
+                  <p className="text-red-500 text-[13px] mt-">
+                    {errors.phoneNumber}
+                  </p>
                 )}{" "}
                 {/* Show error message if invalid */}
               </div>
@@ -197,9 +303,11 @@ const SignUp = () => {
                   placeholder="Password"
                   name="password"
                   value={formData.password}
-                  onChange={handleInputChange}
-                  onBlur={() => validatePassword(formData.password)}
-                  className="focus:border-purple-800  w-full focus:border-2 outline-none p-2.5 pl-3 pr-3 text-[13px] border border-[#A4A4A4] rounded-md"
+                  onChange={handleChange}
+                  onBlur={() => validateField("password", formData.password)}
+                  className={`focus:border-purple-800  w-full focus:border-2 outline-none p-2.5 pl-3 pr-3 text-[13px] border border-[#A4A4A4] rounded-md  ${
+                    errors.email ? "border border-red-600" : ""
+                  }`}
                 />
                 <img
                   className={`absolute  cursor-pointer right-[0.8rem] bottom-[0.45rem] 
@@ -217,7 +325,14 @@ const SignUp = () => {
                 Password must be at least 8 charaters
               </p>
               <div className="flex text-[14px] gap-[6px] my-[1.6rem] ">
-                <input className="term" type="checkbox" id="terms" />
+                <input
+                  className="checkbox"
+                  type="checkbox"
+                  id="terms"
+                  name="isChecked"
+                  checked={formData.isChecked}
+                  onChange={handleChange}
+                />
                 <div className="flex">
                   <p>I agree to the </p>
                   <a href="" className="ml-[2.5px] underline text-[#9605C5]">
@@ -226,8 +341,49 @@ const SignUp = () => {
                 </div>
               </div>
 
-              <button className="bg-[#9605C5] cursor-pointer font-semibold text-white p-3 rounded-[10px]">
+              {/* <button
+                type="submit"
+                className={`bg-[#9605C5]  font-semibold text-white p-3 rounded-[10px] 
+    ${isFormInvalid ? "opacity-60 cursor-not-allowed " : " cursor-pointer"}`}
+                disabled={isFormInvalid}
+              >
                 Create Account
+              </button> */}
+
+              <button
+                type="submit"
+                className={`bg-[#9605C5] font-semibold text-white p-3 rounded-[10px] flex items-center justify-center
+  ${
+    isFormInvalid || isLoading
+      ? "opacity-60 cursor-not-allowed"
+      : "  cursor-pointer"
+  }`}
+                disabled={isFormInvalid || isLoading}
+              >
+                {isLoading ? (
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                ) : (
+                  "Create Account"
+                )}
               </button>
             </div>
           </div>

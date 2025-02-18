@@ -3,53 +3,90 @@ import SignUpImg from "../assets/auth_imgs/pexels-keira-burton.png";
 import Logo from "../assets/auth_imgs/Logo.svg";
 import Back from "../assets/auth_imgs/Vector 9.svg";
 import "react-phone-number-input/style.css";
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { useAuthStore } from "../store/authStore";
+
 import "../App.css";
 import { NavLink } from "react-router";
 
 const VerifyOtp = () => {
-  // Using array to store each OTP digit
-  const [otp, setOtp] = useState(["", "", "", "", "",""]);
+  // const navigate = useNavigate;
+  // const [token, setToken] = useState(["", "", "", "", "", ""]);
+  // // const inputRefs = useRef([])
+  const navigate = useNavigate();
+  const [token, setToken] = useState<string[]>(new Array(6).fill(""));
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [email, setEmail] = useState<string | null>("");
+  const {
+    emailVerification,
+    isLoading,
+    // isVerifyingOtp,
+    // verificationSuccess,
+    verificationError,
+    // clearVerificationMessage,
+  } = useAuthStore();
 
-  // Handle input change for OTP fields
+  // Handle input change
   const handleOtpChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
     const { value } = e.target;
-
-    // Allow only digits
     if (/^\d*$/.test(value)) {
-      const newOtp = [...otp];
+      // Allow only digits
+      const newOtp = [...token];
       newOtp[index] = value;
-      setOtp(newOtp);
+      setToken(newOtp);
 
-      // Auto-focus to the next field if not the last field
-      if (value && index < otp.length - 1) {
-        const nextInput = document.getElementById(`otp-${index + 1}`);
-        nextInput?.focus();
+      // Move to the next field automatically
+      if (value && index < token.length - 1) {
+        inputRefs.current[index + 1]?.focus();
       }
     }
   };
 
-  // Handle backspace for seamless navigation
+  // Handle backspace and navigation
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number
   ) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
-      const prevInput = document.getElementById(`otp-${index - 1}`);
-      prevInput?.focus();
+    if (e.key === "Backspace" && token[index] === "") {
+      if (index > 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
     }
   };
 
-  // Handle submit
+  // Handle paste event
+  const handleOtpPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasteData = e.clipboardData.getData("text");
+    if (/^\d{6}$/.test(pasteData)) {
+      const newOtp = pasteData.split("");
+      setToken(newOtp);
+      inputRefs.current[5]?.focus();
+    }
+  };
+
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const otpCode = otp.join("");
-    console.log("OTP:", otpCode);
+    const otpCode: any = token.join("");
+    console.log("OTP Submitted:", otpCode);
 
-    // Add your verification logic here
+    emailVerification(otpCode, navigate);
+  };
+
+  useEffect(() => {
+    // Get email from localStorage
+    const storedEmail = localStorage.getItem("emailForOtp");
+    setEmail(storedEmail);
+  }, []);
+
+  const maskEmail = (email: string) => {
+    const [name, domain] = email.split("@");
+    const maskedName = name[0] + "***" + name.slice(-3);
+    return `${maskedName}@${domain}`;
   };
 
   return (
@@ -62,9 +99,9 @@ const VerifyOtp = () => {
               <img src={Logo} alt="Logo" />
             </div>
             <NavLink to="/signup" className="flex items-center text-[15px]">
-             <img src={Back} alt="" />
+              <img src={Back} alt="" />
               <p className="cursor-pointer font-semibold ml-[5px] text-[#27014F]">
-               Go Back
+                Go Back
               </p>
             </NavLink>
           </div>
@@ -76,32 +113,86 @@ const VerifyOtp = () => {
             </h2>
             <p className="text-[14px]">
               Please enter the code sent to your email{" "}
-              <span className="text-[#8003A9]"> ...kpoju@gmail.com</span>
+              <span className="text-[#8003A9]">
+                {" "}
+                {email && maskEmail(email)}
+              </span>
             </p>
 
             {/* OTP Input Fields */}
             <div className="flex justify-center gap-[1rem] mt-[2rem]">
-              {otp.map((digit, index) => (
+              {token.map((digit, index) => (
                 <input
                   key={index}
+                  ref={(el) => {
+                    inputRefs.current[index] = el;
+                  }}
                   id={`otp-${index}`}
                   type="tel"
                   inputMode="numeric"
                   maxLength={1}
                   value={digit}
                   onChange={(e) => handleOtpChange(e, index)}
+                  onPaste={handleOtpPaste}
+                  autoFocus={index === 0}
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   className="focus:border-purple-800 w-[55px] h-[55px] font-semibold text-[32px] text-center focus:border-2 outline-none p-2.5 border border-[#A4A4A4] rounded-md"
                 />
               ))}
             </div>
 
-            <button
-              className="bg-[#9605C5] cursor-pointer font-semibold text-white p-3 rounded-[10px] mt-4"
-              disabled={otp.some((digit) => digit === "")}
+            {verificationError && (
+              <p className="text-red-600 text-[14px]  mt-1">
+                {verificationError}
+              </p>
+            )}
+
+            {/* <button
+              className={`bg-[#9605C5]  font-semibold text-white p-3 rounded-[10px] mt-4 ${
+                token.some((digit) => digit === "")
+                  ? "opacity-60 cursor-not-allowed"
+                  : "cursor-pointer"
+              }`}
+              disabled={token.some((digit) => digit === "")}
             >
               Verify Account
-            </button>
+            </button> */}
+
+
+<button
+  className={`bg-[#9605C5] font-semibold text-white p-3 rounded-[10px] mt-4 ${
+    token.some((digit) => digit === "")
+      ? "opacity-60 cursor-not-allowed"
+      : "cursor-pointer"
+  }`}
+  disabled={token.some((digit) => digit === "")}
+>
+  {isLoading ? (
+    // Spinner (Tailwind CSS example)
+    <svg
+      className="animate-spin h-5 w-5 text-white mx-auto"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      ></circle>
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+      ></path>
+    </svg>
+  ) : (
+    "Verify Account"
+  )}
+</button>
 
             <div className="flex flex-col w-full items-center mt-2.5">
               <p>Didn't receive OTP? </p>
@@ -135,7 +226,9 @@ const VerifyOtp = () => {
           <h3 className="text-[48px] leading-[3rem] font-semibold">
             Trade the future, <br /> today.
           </h3>
-          <p className="text-[32px] text-[#D671F7]">safe, secure, and simple.</p>
+          <p className="text-[32px] text-[#D671F7]">
+            safe, secure, and simple.
+          </p>
         </div>
       </div>
     </div>
