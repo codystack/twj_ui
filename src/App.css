@@ -51,9 +51,9 @@ input[type="checkbox"]:checked:before {
   border-bottom-right-radius: 6px;
 }
 
-.PhoneInputInput:focus {
-  border: 2px solid #6b21a8;
-}
+/* .PhoneInputInput:focus {
+
+} */
 
 .PhoneInputCountry {
   padding: 0 10px 0 10px;
