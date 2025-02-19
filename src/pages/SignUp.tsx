@@ -127,31 +127,6 @@ const SignUp = () => {
     return !Object.values(newErrors).some((error) => error);
   };
 
-  // Handle form submission
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   const isValid = validateForm();
-
-  //   if (!isValid) {
-  //     console.log("Form has errors:", isValid);
-  //   } else {
-  //     console.log("Form Data:", formData);
-
-  //     setFormData({
-  //       fullname: "",
-  //       email: "",
-  //       password: "",
-  //       phoneNumber: "",
-  //       isChecked: false,
-  //     });
-
-  //     // Also clear any validation errors
-  //     // setErrors({}); // Also clear any errors displayed
-  //     // Proceed to send the formData to your backend or API
-  //   }
-  // };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -242,9 +217,9 @@ const SignUp = () => {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
-                  onBlur={() => validateField("fullname", formData.fullName)}
-                  className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 focus:border-purple-800 outline-none rounded-md ${
-                    errors.fullName ? "border border-red-600" : ""
+                  onBlur={() => validateField("fullName", formData.fullName)}
+                  className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                    errors.fullName ? "border border-red-600" : "focus:border-purple-800"
                   } `}
                 />
 
@@ -262,8 +237,8 @@ const SignUp = () => {
                   value={formData.email}
                   onChange={handleChange}
                   onBlur={() => validateField("email", formData.email)}
-                  className={`focus:border-purple-800 text-[13px] focus:border-2 outline-none p-2.5 pl-3 pr-3 border border-[#A4A4A4] rounded-md w-full ${
-                    errors.email ? "border border-red-600" : ""
+                  className={` text-[13px] focus:border-2 outline-none p-2.5 pl-3 pr-3 border border-[#A4A4A4] rounded-md w-full ${
+                    errors.email ? "border border-red-600" : "focus:border-purple-800"
                   }`}
                 />
                 {errors.email && (
@@ -273,7 +248,12 @@ const SignUp = () => {
                 )}
               </div>
 
-              <div className="mb-[1rem]">
+              <div 
+              
+              
+              className={` mb-[1rem] ${
+                errors.phoneNumber ? "border-red-500" : "focus:border-purple-800"
+              }`}>
                 <PhoneInput
                   placeholder="Enter phone number"
                   defaultCountry="NG"
@@ -305,8 +285,8 @@ const SignUp = () => {
                   value={formData.password}
                   onChange={handleChange}
                   onBlur={() => validateField("password", formData.password)}
-                  className={`focus:border-purple-800  w-full focus:border-2 outline-none p-2.5 pl-3 pr-3 text-[13px] border border-[#A4A4A4] rounded-md  ${
-                    errors.email ? "border border-red-600" : ""
+                  className={`  w-full focus:border-2 outline-none p-2.5 pl-3 pr-3 text-[13px] border border-[#A4A4A4] rounded-md  ${
+                    errors.email ? "border border-red-600" : "focus:border-purple-800"
                   }`}
                 />
                 <img

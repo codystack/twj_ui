@@ -1,34 +1,63 @@
 import { create } from "zustand";
 import axios from "axios";
 
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 interface AuthState {
-    user: any;
-    message: any;
-    isAuthenticated: boolean;
-    isLoading: boolean;
-    error: string | null;
-    isCheckingAuth: boolean;
-    isVerifyingOtp: boolean;
-    verificationError: string | null;
-    verificationSuccess: boolean;
-    signUp: (formData: Record<string, any>, navigate: (path: string) => void) => Promise<void>;
-    emailVerification: (token: string[], navigate: (path: string) => void) => Promise<void>;
-    clearError: () => void;
-  }
+  user: any;
+  message: any;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
+  isCheckingAuth: boolean;
+  isVerifyingOtp: boolean;
+  verificationError: string | null;
+  verificationSuccess: boolean;
+  loginError: null,        
+  loginSuccess: boolean,    
+  isLoadingLogin: boolean,
+  
+  setIsAuthenticated: (status: boolean) => void;
+  checkAuth: () => void;
+  signUp: (
+    formData: Record<string, any>,
+    navigate: (path: string) => void
+  ) => Promise<void>;
 
+
+  emailVerification: (
+    token: string[],
+  
+  ) => Promise<void>;
+
+
+
+  login: (
+    formData: Record<string, any>,
+    navigate: (path: string) => void
+  ) => Promise<void>;
+  clearError: () => void;
+}
 
 export const useAuthStore = create<AuthState>((set) => ({
+  isAuthenticated: false,
+
   user: null,
   message: null,
-  isAuthenticated: false,
   error: null,
   isLoading: false,
   isCheckingAuth: true,
   isVerifyingOtp: false,
   verificationError: null,
   verificationSuccess: false,
+  loginError: null,         // Renamed for clarity
+  loginSuccess: false,      // To track successful login
+  isLoadingLogin: false, 
+  
+
+
+  setIsAuthenticated: (status: boolean) => set({ isAuthenticated: status }),
 
   // Signup Function
   signUp: async (formData, navigate) => {
@@ -56,15 +85,15 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (error: any) {
       console.error("Signup Error:", error);
       set({
-        error: error.response?.data?.message || "Signup failed. Please try again.",
+        error:
+          error.response?.data?.message || "Signup failed. Please try again.",
         isLoading: false,
       });
     }
   },
 
-
   // Email Verification Function
-  emailVerification: async (token, navigate) => {
+  emailVerification: async (token, ) => {
     set({
       isLoading: true,
       isVerifyingOtp: true,
@@ -94,7 +123,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       const { message } = response.data;
 
       set({
-      
         isAuthenticated: true,
         verificationSuccess: message || "OTP Verified Successfully!",
         isVerifyingOtp: false,
@@ -102,19 +130,119 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       // Clear localStorage and navigate after a short delay
       localStorage.removeItem("emailForOtp");
-      setTimeout(() => {
-        navigate("/login");
-      }, 100); 
+      // setTimeout(() => {
+      //   navigate("/login");
+      // }, 100);
     } catch (error: any) {
       console.error("OTP Verification Error:", error);
       set({
         verificationError:
-          error.response?.data?.message || "OTP verification failed. Please try again.",
+          error.response?.data?.message ||
+          "OTP verification failed. Please try again.",
         isVerifyingOtp: false,
         isLoading: false,
       });
     }
   },
+
+  // login: async (formData, navigate) => {
+  //   set({ isLoadingLogin: true, loginError: null });
+
+  //   try {
+  //     const response = await axios.post(
+  //       `${API_URL}/login`,
+  //       formData
+  //     );
+
+  //     const { data } = response;
+
+  //     // console.log("Login Response:", data);
+
+  //     // Store token
+  //     localStorage.setItem("authToken", data.data.token.accessToken);
+
+  //     // Update state
+  //     set({
+  //       isAuthenticated: true,
+  //       isLoadingLogin: false,
+  //       loginSuccess: true,
+  //       loginError: null,
+  //     });
+
+  //     // Redirect after successful login
+  //     navigate("/dashboard");
+  //   } catch (error: any) {
+  //     // console.error("Login Error:", error);
+
+  //     set({
+  //       loginError:
+  //         error.response?.data?.message || "Login failed. Please try again.",
+  //       isLoadingLogin: false,
+  //     });
+  //   }
+  // },
+
+  // checkAuth: () => {
+  //   const token = localStorage.getItem("authToken");
+  //   if (token) {
+  //     set({ isAuthenticated: true });
+  //   } else {
+  //     set({ isAuthenticated: false });
+  //   }
+  // },
+
+
+  login: async (formData, navigate) => {
+    set({ isLoadingLogin: true, loginError: null });
+  
+    try {
+      const response = await axios.post(`${API_URL}/login`, formData);
+      const { data } = response;
+  
+      // Store token
+      localStorage.setItem("authToken", data.data.token.accessToken);
+      localStorage.setItem("isAuthenticated", "true"); // Store authentication state
+  
+      set({
+        isAuthenticated: true,
+        isLoadingLogin: false,
+        loginSuccess: true,
+        loginError: null,
+      });
+  
+      navigate("/dashboard");
+    } catch (error: any) {
+      set({
+        loginError: error.response?.data?.message || "Login failed. Please try again.",
+        isLoadingLogin: false,
+      });
+    }
+  },
+  
+  // checkAuth: () => {
+  //   const token = localStorage.getItem("authToken");
+  
+  //   if (token) {
+  //     set({ isAuthenticated: true });
+  //   } else {
+  //     set({ isAuthenticated: false });
+  //   }
+  // },
+  
+  
+
+
+  checkAuth: () => {
+    const token = localStorage.getItem("authToken");
+    const authState = localStorage.getItem("isAuthenticated");
+  
+    if (token && authState === "true") {
+      set({ isAuthenticated: true });
+    } else {
+      set({ isAuthenticated: false });
+    }
+  },
+  
   // Clear Error
   clearError: () => set({ error: null, verificationError: null }),
 }));
