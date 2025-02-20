@@ -188,9 +188,19 @@ export const useAuthStore = create<AuthState>((set) => ({
       const response = await axios.post(`${API_URL}/login`, formData);
       const { data } = response;
 
+
+    
+
       // Store token
       localStorage.setItem("authToken", data.data.token.accessToken);
-      localStorage.setItem("isAuthenticated", "true"); // Store authentication state
+      localStorage.setItem("isAuthenticated", "true"); 
+      // console.log("All login Response:", data); 
+      // console.log("Login Response:", data.data.user); 
+      localStorage.setItem("userData", JSON.stringify(data.data.user));
+  
+
+
+
 
       set({
         isAuthenticated: true,
@@ -208,16 +218,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
     }
   },
-
-  // checkAuth: () => {
-  //   const token = localStorage.getItem("authToken");
-
-  //   if (token) {
-  //     set({ isAuthenticated: true });
-  //   } else {
-  //     set({ isAuthenticated: false });
-  //   }
-  // },
 
   checkAuth: () => {
     const token = localStorage.getItem("authToken");

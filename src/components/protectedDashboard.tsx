@@ -1,4 +1,4 @@
-// 
+
 
 import React from "react";
 import { Navigate } from "react-router"; 
@@ -15,7 +15,7 @@ const ProtectedDashboard: React.FC<ProtectedDashboardProps> = ({ children }) => 
   const token = localStorage.getItem("authToken");
 
   if (!isAuthenticated && !token) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;

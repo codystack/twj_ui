@@ -65,7 +65,7 @@ const router = createBrowserRouter([
         element: <GiftCards />,
       },
       {
-        path: "/dashboard/cryptos",
+        path: "/dashboard/crypto",
         element: <Crypto />,
       },
       {
@@ -73,7 +73,7 @@ const router = createBrowserRouter([
         element: <Wallet />,
       },
       {
-        path: "/dashboard/transaction",
+        path: "/dashboard/transactions",
         element: <Transaction />,
       },
       {
@@ -81,7 +81,7 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: "/dashboard/rate",
+        path: "/dashboard/rates",
         element: <Rates />,
       },
     ],
