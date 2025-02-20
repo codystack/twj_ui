@@ -157,7 +157,6 @@ const SignUp = () => {
           });
           console.log("Error Response Data:", error.response.data);
         }
-     
       } finally {
         // setIsLoading(false); // Stop loading
       }
@@ -185,16 +184,16 @@ const SignUp = () => {
       <form onSubmit={handleSubmit} className=" w-1/2 my-[1rem] mx-[2rem] ">
         <div className="mt-8">
           <div className="Nav flex justify-between ">
-            <NavLink to="/" className="cursor-pointer">
+            <a href="https://twjhub.com/" className="cursor-pointer">
               <img src={Logo} alt="Logo" />
-            </NavLink>
+            </a>
             <div className="flex items-center text-[15px]">
-              <p className="font-semibold text-[#27014F]">
+              <p className="font-[500] text-[#27014F]">
                 Already have an account?
               </p>
               <NavLink
                 to="/Login"
-                className=" cursor-pointer font-semibold ml-[5px] text-[#9605C5]"
+                className=" cursor-pointer font-[500] ml-[5px] text-[#9605C5]"
               >
                 Log in
               </NavLink>
@@ -219,7 +218,9 @@ const SignUp = () => {
                   onChange={handleChange}
                   onBlur={() => validateField("fullName", formData.fullName)}
                   className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
-                    errors.fullName ? "border border-red-600" : "focus:border-purple-800"
+                    errors.fullName
+                      ? "border border-red-600"
+                      : "focus:border-purple-800"
                   } `}
                 />
 
@@ -238,7 +239,9 @@ const SignUp = () => {
                   onChange={handleChange}
                   onBlur={() => validateField("email", formData.email)}
                   className={` text-[13px] focus:border-2 outline-none p-2.5 pl-3 pr-3 border border-[#A4A4A4] rounded-md w-full ${
-                    errors.email ? "border border-red-600" : "focus:border-purple-800"
+                    errors.email
+                      ? "border border-red-600"
+                      : "focus:border-purple-800"
                   }`}
                 />
                 {errors.email && (
@@ -248,12 +251,13 @@ const SignUp = () => {
                 )}
               </div>
 
-              <div 
-              
-              
-              className={` mb-[1rem] ${
-                errors.phoneNumber ? "border-red-500" : "focus:border-purple-800"
-              }`}>
+              <div
+                className={` mb-[1rem] ${
+                  errors.phoneNumber
+                    ? "border-red-500"
+                    : "focus:border-purple-800"
+                }`}
+              >
                 <PhoneInput
                   placeholder="Enter phone number"
                   defaultCountry="NG"
@@ -286,7 +290,9 @@ const SignUp = () => {
                   onChange={handleChange}
                   onBlur={() => validateField("password", formData.password)}
                   className={`  w-full focus:border-2 outline-none p-2.5 pl-3 pr-3 text-[13px] border border-[#A4A4A4] rounded-md  ${
-                    errors.email ? "border border-red-600" : "focus:border-purple-800"
+                    errors.email
+                      ? "border border-red-600"
+                      : "focus:border-purple-800"
                   }`}
                 />
                 <img
@@ -315,7 +321,11 @@ const SignUp = () => {
                 />
                 <div className="flex">
                   <p>I agree to the </p>
-                  <a href="" className="ml-[2.5px] underline text-[#9605C5]">
+                  <a
+                    href="https://twjhub.com/terms"
+                    target="_blank"
+                    className="ml-[2.5px] underline text-[#9605C5]"
+                  >
                     terms & conditions
                   </a>
                 </div>

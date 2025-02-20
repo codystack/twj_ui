@@ -21,7 +21,6 @@ const ResetPassword = () => {
     // PhoneNumber: "",
   });
 
- 
   // Update form field value
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -51,7 +50,6 @@ const ResetPassword = () => {
       }));
     }
   };
-
 
   return (
     <div className="flex h-screen w-full ">
@@ -88,7 +86,11 @@ const ResetPassword = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   onBlur={validateEmail}
-                  className="focus:border-purple-800 text-[13px] focus:border-2 outline-none p-2.5 pl-3 pr-3 border border-[#A4A4A4] rounded-md w-full"
+                  className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                    errors.email
+                      ? "border border-red-600"
+                      : "focus:border-purple-800"
+                  } `}
                 />
                 {errors.email && (
                   <p className="text-red-500 text-[13px] mt-1">
@@ -97,18 +99,19 @@ const ResetPassword = () => {
                 )}
               </div>
 
-             
-
-              <button className="bg-[#9605C5] mt-[1rem] cursor-pointer font-semibold text-white p-3 rounded-[10px]">
+              <NavLink
+                to=" /auth-account"
+                className="bg-[#9605C5] mt-[1rem] cursor-pointer text-center font-semibold text-white p-3 rounded-[10px]"
+              >
                 Reset Password
-              </button>
+              </NavLink>
             </div>
           </div>
         </div>
       </form>
 
       {/* Right: Image with Overlay */}
-      <div className="relative w-[641px] h-screen m-[1rem]  ">
+      <div className="relative w-[641px] h-[calc(100vh-1rem)] m-[1rem]  ">
         {/* Background Image */}
         <img
           src={Reset}
