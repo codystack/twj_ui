@@ -30,9 +30,9 @@ const Dashboard = () => {
   return (
     <nav className="bg-[#F5F5F5] h-[calc(100vh-1px)] ">
       <div className="flex border w-full bg-[#F5F5F5] z-[999] fixed items-center justify-between">
-        <div className="p-[12px] -[10px]">
+        <NavLink to="/dashboard/dashboard" className="p-[12px] cursor-pointer -[10px]">
           <img src={Logo} alt="" />
-        </div>
+        </NavLink>
         <div className="flex items-center ">
           <div className="bg-[#fff] rounded-[100%] h-[40px] w-[40px] flex items-center justify-center border mr-[1rem] border-[#8003A9]">
             <img src={Alert} alt="" />

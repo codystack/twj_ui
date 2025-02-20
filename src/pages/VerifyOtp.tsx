@@ -92,7 +92,7 @@ const VerifyOtp = () => {
   };
 
   return (
-    <div className="flex h-screen w-full ">
+    <div className="flex h-[calc(100vh-1rem)] w-full ">
       {/* Left: Signup Form */}
 
       {!isVerified ? (
@@ -118,7 +118,7 @@ const VerifyOtp = () => {
               <p className="text-[14px]">
                 Please enter the code sent to your email{" "}
                 <span className="text-[#8003A9]">
-                  {" "}
+                
                   {email && maskEmail(email)}
                 </span>
               </p>
@@ -196,7 +196,7 @@ const VerifyOtp = () => {
           </div>
         </form>
       ) : (
-        <div className=" w-1/2 my-[1rem] mx-[2rem] h-screen ">
+        <div className=" w-1/2 my-[1rem] mx-[2rem] h-[calc(100vh-1rem)] ">
           <div className="Nav mt-8 flex justify-between ">
             <div className="cursor-pointer">
               <img src={Logo} alt="Logo" />
@@ -234,7 +234,7 @@ const VerifyOtp = () => {
       )}
 
       {/* Right: Image with Overlay */}
-      <div className="relative w-[641px] h-screen m-[1rem]">
+      <div className="relative w-[641px] h-[calc(100vh-1rem)] m-[1rem]">
         {/* Background Image */}
         <img
           src={SignUpImg}
