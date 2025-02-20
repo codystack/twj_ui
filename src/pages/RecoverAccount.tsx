@@ -7,7 +7,7 @@ import { useState } from "react";
 import "../App.css";
 import { NavLink } from "react-router";
 
-const VerifyOtp = () => {
+const RecoverAccount = () => {
   // Using array to store each OTP digit
   const [otp, setOtp] = useState(["", "", "", "", "",""]);
 
@@ -142,4 +142,4 @@ const VerifyOtp = () => {
   );
 };
 
-export default VerifyOtp;
+export default RecoverAccount;

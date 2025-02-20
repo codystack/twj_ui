@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
-import Home from "./pages/Home.tsx";
+// import Home from "./pages/Home.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import Login from "./pages/Login.tsx";
 import VerifyOtp from "./pages/VerifyOtp.tsx";
@@ -12,20 +12,30 @@ import ProtectedDashboard from "./components/protectedDashboard";
 import AuthWrapper from "./components/AuthWrapper";
 import { useAuthStore } from "./store/authStore.ts";
 import { useEffect } from "react";
+import DashboardLinks from "./pages/Logged_in/DashboardLinks.tsx";
+import Bills from "./pages/Logged_in/Bills.tsx";
+import GiftCards from "./pages/Logged_in/GiftCards.tsx";
+import Crypto from "./pages/Logged_in/Crypto.tsx";
+import Wallet from "./pages/Logged_in/Wallet.tsx";
+import Transaction from "./pages/Logged_in/Transaction.tsx";
+import Profile from "./pages/Logged_in/Profile.tsx";
+import Rates from "./pages/Logged_in/Rates.tsx";
 
 const router = createBrowserRouter([
+  // {
+  //   path: "/",
+  //   element: <Home />,
+  // },
+
   {
     path: "/",
-    element: <Home />,
+    element: <Login />,
   },
   {
     path: "/signup",
     element: <SignUp />,
   },
-  {
-    path: "/login",
-    element: <Login />,
-  },
+
   {
     path: "/verify-otp",
     element: (
@@ -41,13 +51,42 @@ const router = createBrowserRouter([
         <Dashboard />
       </ProtectedDashboard>
     ),
+    children: [
+      {
+        path: "/dashboard/dashboard",
+        element: <DashboardLinks />,
+      },
+      {
+        path: "/dashboard/bills",
+        element: <Bills />,
+      },
+      {
+        path: "/dashboard/giftcards",
+        element: <GiftCards />,
+      },
+      {
+        path: "/dashboard/cryptos",
+        element: <Crypto />,
+      },
+      {
+        path: "/dashboard/wallet",
+        element: <Wallet />,
+      },
+      {
+        path: "/dashboard/transaction",
+        element: <Transaction />,
+      },
+      {
+        path: "/dashboard/profile",
+        element: <Profile />,
+      },
+      {
+        path: "/dashboard/rate",
+        element: <Rates />,
+      },
+    ],
   },
 
-
-  {
-    path: "/dashboad_links",
-    element: <ResetPassword />,
-  },
   {
     path: "/reset-password",
     element: <ResetPassword />,

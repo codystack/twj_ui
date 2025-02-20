@@ -33,7 +33,6 @@ const Login = () => {
 
   // State for password visibility
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
- 
 
   // Field Validation using Switch Statement
   const validateField = (fieldName: string, value: string) => {
@@ -120,26 +119,26 @@ const Login = () => {
   return (
     <div className="flex h-screen w-full">
       {/* Left: Login Form */}
-      <form onSubmit={handleSubmit} className="w-1/2 my-[1rem] mx-[2rem]">
+      <form onSubmit={handleSubmit} className="w-1/2 my-[1rem]  mx-[2rem]">
         <div className="mt-8">
           <div className="Nav flex justify-between">
-            <div className="cursor-pointer">
+            <a href="https://twjhub.com/" className="cursor-pointer">
               <img src={Logo} alt="Logo" />
-            </div>
+            </a>
             <div className="flex items-center text-[15px]">
-              <p className="font-semibold text-[#27014F]">
+              <p className="font-[500] text-[#27014F]">
                 Don't have an account?
               </p>
               <NavLink
                 to="/signup"
-                className="cursor-pointer font-semibold ml-[5px] text-[#9605C5]"
+                className="cursor-pointer  ml-[5px] text-[#9605C5]"
               >
-                Create Account
+                Create account
               </NavLink>
             </div>
           </div>
         </div>
-        <div className="flex w-full h-[80%] justify-center items-center">
+        <div className="flex w-full h-[80%] max-w-[480px] mx-auto justify-center items-center">
           <div className="flex flex-col justify-center w-full p-8 bg-white">
             <h2 className="text-2xl font-bold mb-[0.4rem] text-[40px] text-[#27014F] w-full leading-[2.5rem]">
               Welcome back
@@ -198,9 +197,12 @@ const Login = () => {
                 <p className="text-red-600 text-[14px]  mt-1">{loginError}</p>
               )}
 
-              <p className="text-[13px] text-end cursor-pointer text-[#27014F] underline bold-semibold mt-[5px]">
+              <NavLink
+                to="/reset-password"
+                className="text-[13px] text-end cursor-pointer text-[#27014F] underline bold-semibold mt-[5px]"
+              >
                 Forgot password?
-              </p>
+              </NavLink>
 
               <button
                 className={`bg-[#9605C5] mt-[2rem] font-semibold text-white p-3 rounded-[10px]  ${
@@ -209,30 +211,29 @@ const Login = () => {
                     : "  cursor-pointer"
                 }`}
                 disabled={isFormInvalid}
-                
               >
-            {isLoadingLogin ? (
+                {isLoadingLogin ? (
                   <div className="flex items-center justify-center">
                     <svg
-                    className="animate-spin h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                    ></path>
-                  </svg>
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      ></path>
+                    </svg>
                   </div>
                 ) : (
                   "Log In"
@@ -244,7 +245,7 @@ const Login = () => {
       </form>
 
       {/* Right: Image with Overlay */}
-      <div className="relative w-[641px] h-screen m-[1rem]">
+      <div className="relative w-[641px] h-[calc(100vh-1rem)] m-[1rem]">
         <img
           src={LoginImg}
           alt="Signup"
