@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
 
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 interface AuthState {
@@ -14,25 +13,18 @@ interface AuthState {
   isVerifyingOtp: boolean;
   verificationError: string | null;
   verificationSuccess: boolean;
-  loginError: null,        
-  loginSuccess: boolean,    
-  isLoadingLogin: boolean,
-  
+  signUpError: null;
+  loginError: null;
+  loginSuccess: boolean;
+  isLoadingLogin: boolean;
+
   setIsAuthenticated: (status: boolean) => void;
   checkAuth: () => void;
   signUp: (
     formData: Record<string, any>,
     navigate: (path: string) => void
   ) => Promise<void>;
-
-
-  emailVerification: (
-    token: string[],
-  
-  ) => Promise<void>;
-
-
-
+  emailVerification: (token: string[]) => Promise<void>;
   login: (
     formData: Record<string, any>,
     navigate: (path: string) => void
@@ -42,7 +34,6 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
-
   user: null,
   message: null,
   error: null,
@@ -51,17 +42,16 @@ export const useAuthStore = create<AuthState>((set) => ({
   isVerifyingOtp: false,
   verificationError: null,
   verificationSuccess: false,
-  loginError: null,         // Renamed for clarity
-  loginSuccess: false,      // To track successful login
-  isLoadingLogin: false, 
-  
-
+  signUpError: null,
+  loginError: null, // Renamed for clarity
+  loginSuccess: false, // To track successful login
+  isLoadingLogin: false,
 
   setIsAuthenticated: (status: boolean) => set({ isAuthenticated: status }),
 
   // Signup Function
   signUp: async (formData, navigate) => {
-    set({ isLoading: true, error: null });
+    set({ isLoading: true, signUpError: null });
 
     try {
       const response = await axios.post(`${API_URL}/register-user`, {
@@ -83,9 +73,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       // Redirect to OTP verification page
       navigate("/verify-otp");
     } catch (error: any) {
-      console.error("Signup Error:", error);
+      // console.error("Signup Error:", error);
       set({
-        error:
+        signUpError:
           error.response?.data?.message || "Signup failed. Please try again.",
         isLoading: false,
       });
@@ -93,7 +83,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   // Email Verification Function
-  emailVerification: async (token, ) => {
+  emailVerification: async (token) => {
     set({
       isLoading: true,
       isVerifyingOtp: true,
@@ -191,58 +181,55 @@ export const useAuthStore = create<AuthState>((set) => ({
   //   }
   // },
 
-
   login: async (formData, navigate) => {
     set({ isLoadingLogin: true, loginError: null });
-  
+
     try {
       const response = await axios.post(`${API_URL}/login`, formData);
       const { data } = response;
-  
+
       // Store token
       localStorage.setItem("authToken", data.data.token.accessToken);
       localStorage.setItem("isAuthenticated", "true"); // Store authentication state
-  
+
       set({
         isAuthenticated: true,
         isLoadingLogin: false,
         loginSuccess: true,
         loginError: null,
       });
-  
-      navigate("/dashboard");
+
+      navigate("/dashboard/dashboard");
     } catch (error: any) {
       set({
-        loginError: error.response?.data?.message || "Login failed. Please try again.",
+        loginError:
+          error.response?.data?.message || "Login failed. Please try again.",
         isLoadingLogin: false,
       });
     }
   },
-  
+
   // checkAuth: () => {
   //   const token = localStorage.getItem("authToken");
-  
+
   //   if (token) {
   //     set({ isAuthenticated: true });
   //   } else {
   //     set({ isAuthenticated: false });
   //   }
   // },
-  
-  
-
 
   checkAuth: () => {
     const token = localStorage.getItem("authToken");
     const authState = localStorage.getItem("isAuthenticated");
-  
+
     if (token && authState === "true") {
       set({ isAuthenticated: true });
     } else {
       set({ isAuthenticated: false });
     }
   },
-  
+
   // Clear Error
   clearError: () => set({ error: null, verificationError: null }),
 }));

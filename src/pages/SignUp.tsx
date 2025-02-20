@@ -30,7 +30,7 @@ const SignUp = () => {
     phoneNumber: "",
     isChecked: "",
   });
-  const { signUp, isLoading } = useAuthStore();
+  const { signUp, signUpError, isLoading } = useAuthStore();
 
   // const [isLoading, setIsLoading] = useState(false);
 
@@ -192,7 +192,7 @@ const SignUp = () => {
                 Already have an account?
               </p>
               <NavLink
-                to="/Login"
+                to="/"
                 className=" cursor-pointer font-[500] ml-[5px] text-[#9605C5]"
               >
                 Log in
@@ -310,6 +310,9 @@ const SignUp = () => {
               <p className="text-[13px] bold-semibold mt-[5px] ">
                 Password must be at least 8 charaters
               </p>
+              {signUpError && (
+                <p className="text-red-600 text-[14px]  mt-1">{signUpError}</p>
+              )}
               <div className="flex text-[14px] gap-[6px] my-[1.6rem] ">
                 <input
                   className="checkbox"

@@ -107,7 +107,7 @@ const Login = () => {
 
     // Call the login function from Zustand store
     login(formData, navigate);
-    console.log(formData);
+    // console.log(formData);
   };
 
   useEffect(() => {
