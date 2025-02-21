@@ -397,9 +397,9 @@ const SignUp = () => {
 
         {/* Top-Right Icon */}
 
-        <div className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
+        <a href="https://twjhub.com/" className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
           <LuHouse className=" text-[#27014F] text-[1.5rem]" />
-        </div>
+        </a>
         {/* Bottom Text */}
         <div className="absolute bottom-[4rem] left-10 text-white t]">
           <h3 className="text-[48px] leading-[3rem] font-semibold">

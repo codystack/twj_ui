@@ -69,7 +69,7 @@ const VerifyOtp = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const otpCode: any = token.join("");
-    console.log("OTP Submitted:", otpCode);
+    // console.log("OTP Submitted:", otpCode);
 
     // emailVerification(otpCode, navigate);
 
@@ -234,7 +234,7 @@ const VerifyOtp = () => {
       )}
 
       {/* Right: Image with Overlay */}
-      <div className="relative w-[641px] h-[calc(100vh-1rem)] m-[1rem]">
+      <div className="relative w-[641px] h-[calc(100vh-2rem)] m-[1rem]">
         {/* Background Image */}
         <img
           src={SignUpImg}
@@ -246,9 +246,9 @@ const VerifyOtp = () => {
         <div className="absolute inset-0 bg-gradient-to-t rounded-[3rem] from-[#27014F] to-transparent opacity-90"></div>
 
         {/* Top-Right Icon */}
-        <div className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
+        <a href="https://twjhub.com/" className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
           <LuHouse className="text-[#27014F] text-[1.5rem]" />
-        </div>
+        </a>
 
         {/* Bottom Text */}
         <div className="absolute bottom-[4rem] left-10 text-white">

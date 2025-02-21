@@ -61,7 +61,7 @@ const ResetPassword = () => {
               <img src={Logo} alt="Logo" />
             </div>
 
-            <NavLink to="/login" className="flex items-center text-[15px]">
+            <NavLink to="/" className="flex items-center text-[15px]">
               <img src={Back} alt="" />
               <div className=" cursor-pointer font-semibold ml-[5px] text-[#27014F]">
                 Go Back
@@ -111,7 +111,7 @@ const ResetPassword = () => {
       </form>
 
       {/* Right: Image with Overlay */}
-      <div className="relative w-[641px] h-[calc(100vh-1rem)] m-[1rem]  ">
+      <div className="relative w-[641px] h-[calc(100vh-2rem)] m-[1rem]  ">
         {/* Background Image */}
         <img
           src={Reset}
@@ -124,9 +124,9 @@ const ResetPassword = () => {
 
         {/* Top-Right Icon */}
 
-        <div className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
+        <a href="https://twjhub.com/" className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
           <LuHouse className=" text-[#27014F] text-[1.5rem]" />
-        </div>
+        </a>
         {/* Bottom Text */}
         <div className="absolute bottom-[4rem] left-10 text-white t]">
           <h3 className="text-[48px] leading-[3rem] font-semibold">
