@@ -53,7 +53,7 @@ const RecoverAccount = () => {
   };
 
   return (
-    <div className="flex h-screen w-full ">
+    <div className="flex  h-[calc(100vh-2rem)] w-full ">
       {/* Left: Signup Form */}
       <form className="w-1/2 my-[1rem] mx-[2rem]" onSubmit={handleSubmit}>
         <div className="mt-8">
@@ -126,9 +126,9 @@ const RecoverAccount = () => {
         <div className="absolute inset-0 bg-gradient-to-t rounded-[3rem] from-[#27014F] to-transparent opacity-90"></div>
 
         {/* Top-Right Icon */}
-        <div className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
+        <a href="https://twjhub.com/" className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
           <LuHouse className="text-[#27014F] text-[1.5rem]" />
-        </div>
+        </a>
 
         {/* Bottom Text */}
         <div className="absolute bottom-[4rem] left-10 text-white">

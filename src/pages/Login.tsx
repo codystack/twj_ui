@@ -117,7 +117,7 @@ const Login = () => {
   }, [isAuthenticated]);
 
   return (
-    <div className="flex h-screen w-full">
+    <div className="flex h-[calc(100vh-1rem)] w-full">
       {/* Left: Login Form */}
       <form onSubmit={handleSubmit} className="w-1/2 my-[1rem]  mx-[2rem]">
         <div className="mt-8">
@@ -245,16 +245,16 @@ const Login = () => {
       </form>
 
       {/* Right: Image with Overlay */}
-      <div className="relative w-[641px] h-[calc(100vh-1rem)] m-[1rem]">
+      <div className="relative w-[641px] h-[calc(100vh-2rem)] m-[1rem]">
         <img
           src={LoginImg}
           alt="Signup"
           className="w-full h-full rounded-[3rem] object-top object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t rounded-[3rem] from-[#27014F] to-transparent opacity-90"></div>
-        <div className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
+        <a href="https://twjhub.com/" className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
           <LuHouse className="text-[#27014F] text-[1.5rem]" />
-        </div>
+        </a>
         <div className="absolute bottom-[4rem] left-10 text-white">
           <h3 className="text-[48px] leading-[3rem] font-semibold">
             Trade the future, <br /> today.

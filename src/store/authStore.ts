@@ -29,6 +29,8 @@ interface AuthState {
     formData: Record<string, any>,
     navigate: (path: string) => void
   ) => Promise<void>;
+  logout: (navigate: (path: string) => void) => void;
+
   clearError: () => void;
 }
 
@@ -188,19 +190,15 @@ export const useAuthStore = create<AuthState>((set) => ({
       const response = await axios.post(`${API_URL}/login`, formData);
       const { data } = response;
 
-
-    
-
       // Store token
       localStorage.setItem("authToken", data.data.token.accessToken);
-      localStorage.setItem("isAuthenticated", "true"); 
-      // console.log("All login Response:", data); 
-      // console.log("Login Response:", data.data.user); 
-      localStorage.setItem("userData", JSON.stringify(data.data.user));
-  
+      localStorage.setItem("name", data.data.userDetails.fullName);
+      localStorage.setItem("email", data.data.userDetails.email);
+      localStorage.setItem("isAuthenticated", "true");
+      // console.log("All login Response:", data);
 
-
-
+      // console.log("Login Response:", data.data.userDetails);
+      // localStorage.setItem("userData", JSON.stringify(data.data.user));
 
       set({
         isAuthenticated: true,
@@ -218,7 +216,23 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
     }
   },
-
+  logout: (navigate: (path: string) => void) => {
+    // Clear local storage
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
+    localStorage.removeItem("isAuthenticated");
+  
+    // Update authentication state
+    set({
+      isAuthenticated: false,
+      loginSuccess: false,
+    });
+  
+    // Redirect to home page
+    navigate("/");
+  },
+  
   checkAuth: () => {
     const token = localStorage.getItem("authToken");
     const authState = localStorage.getItem("isAuthenticated");

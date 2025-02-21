@@ -2,8 +2,27 @@ import { NavLink, Outlet } from "react-router";
 import Logo from "../../assets/dashboard_img/Logo.svg";
 import Alert from "../../assets/dashboard_img/Bell_pin_light.svg";
 import profileImage from "../../assets/auth_imgs/reset-img.png";
+import { useEffect, useState } from "react";
+import { useAuthStore } from "../../store/authStore";
+import { useNavigate } from "react-router";
 
 const Dashboard = () => {
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+
+  useEffect(() => {
+    // Get email and name from localStorage
+    const storedEmail = localStorage.getItem("email");
+    const storedName = localStorage.getItem("name");
+
+    setEmail(storedEmail ?? ""); // Use empty string if null
+    setName(storedName ?? "");
+  }, []);
+
+  // Get logout function from store
+  const navigate = useNavigate();
+  const logout = useAuthStore((state) => state.logout); // Get logout function from store
+
   return (
     <nav className="bg-[#F5F5F5] h-[calc(100vh-1px)] ">
       <div className="flex  w-full bg-[#F5F5F5] z-[999] fixed items-center justify-between">
@@ -27,9 +46,9 @@ const Dashboard = () => {
             </div>
             <div className="mr-[10px]">
               <p className="mb-[-3px] text-[15px] text-[#27014F] font-bold ">
-                Name
+                {name}
               </p>
-              <p className="text-[12px] text-[#534D5A]">edcsdail@gmail.com</p>
+              <p className="text-[12px] text-[#534D5A]">{email}</p>
             </div>
           </div>
         </div>
@@ -377,7 +396,10 @@ const Dashboard = () => {
                 </button>
               </li>
               <li className="flex  items-center gap-2">
-                <button className="flex cursor-pointer px-[1rem] pb-[10px] justify-center gap-2 text-[#27014F] ">
+                <button
+                  onClick={() => logout(navigate)}
+                  className="flex cursor-pointer px-[1rem] pb-[10px] justify-center gap-2 text-[#27014F] "
+                >
                   <>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
