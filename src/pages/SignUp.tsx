@@ -136,7 +136,7 @@ const SignUp = () => {
       // setIsLoading(true); // Start loading
       try {
         signUp(formData, navigate);
-        console.log("submitted successfully");
+        // console.log("submitted successfully");
         // Reset form on success
         setFormData({
           fullName: "",
@@ -155,14 +155,14 @@ const SignUp = () => {
             phoneNumber: "",
             isChecked: false,
           });
-          console.log("Error Response Data:", error.response.data);
+          // console.log("Error Response Data:", error.response.data);
         }
-      } finally {
-        // setIsLoading(false); // Stop loading
-      }
-    } else {
-      console.log("Form has errors:", errors);
-    }
+      } // finally {
+      // setIsLoading(false); // Stop loading
+      // }
+    } // else {
+    // console.log("Form has errors:", errors);
+    // }
   };
 
   const togglePasswordVisibility = () => {
@@ -397,7 +397,10 @@ const SignUp = () => {
 
         {/* Top-Right Icon */}
 
-        <a href="https://twjhub.com/" className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
+        <a
+          href="https://twjhub.com/"
+          className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer"
+        >
           <LuHouse className=" text-[#27014F] text-[1.5rem]" />
         </a>
         {/* Bottom Text */}

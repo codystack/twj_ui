@@ -2,7 +2,8 @@ import { LuHouse } from "react-icons/lu";
 import SignUpImg from "../assets/auth_imgs/pexels-keira-burton.png";
 import Logo from "../assets/auth_imgs/Logo.svg";
 import Back from "../assets/auth_imgs/Vector 9.svg";
-import Success from "../assets/auth_imgs/success.svg";
+// import Success from "../assets/auth_imgs/success.svg";
+import { motion } from "framer-motion";
 import "react-phone-number-input/style.css";
 import { useRef, useEffect, useState } from "react";
 import { useAuthStore } from "../store/authStore";
@@ -17,11 +18,10 @@ const VerifyOtp = () => {
 
   const {
     emailVerification,
+    otpAuth,
     isLoading,
-    // isVerifyingOtp,
     // verificationSuccess,
     verificationError,
-    // clearVerificationMessage,
   } = useAuthStore();
 
   // Handle input change
@@ -68,19 +68,20 @@ const VerifyOtp = () => {
   // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const otpCode: any = token.join("");
+    const otpCode = token.join("");
+    emailVerification(otpCode);
     // console.log("OTP Submitted:", otpCode);
-
-    // emailVerification(otpCode, navigate);
-
-    const isOtpValid: any = emailVerification(otpCode);
-    if (isOtpValid) {
-      setIsVerified(true); // User is verified
-    }
   };
 
   useEffect(() => {
-    // Get email from localStorage
+    if (otpAuth === true) {
+      setIsVerified(true); // User is verified
+    }
+    // console.log({ otpAuth });
+  }, [otpAuth]);
+
+  // console.log({ isVerified });
+  useEffect(() => {
     const storedEmail = localStorage.getItem("emailForOtp");
     setEmail(storedEmail);
   }, []);
@@ -118,7 +119,6 @@ const VerifyOtp = () => {
               <p className="text-[14px]">
                 Please enter the code sent to your email{" "}
                 <span className="text-[#8003A9]">
-                
                   {email && maskEmail(email)}
                 </span>
               </p>
@@ -206,10 +206,35 @@ const VerifyOtp = () => {
 
           <div className="flex flex-col justify-center  h-[80%]  items-center  ">
             <div className=" max-w-[480px] mx-auto ">
-              <div className="flex  flex-col justify-center  bg-white">
-                <img src={Success} className=" h-[195px]" alt="" />
-                <div className="">
-                  <h2 className="text-2xl mt-[1rem] font-bold mb-[0.4rem] text-[40px] text-[#27014F] w-full leading-[2.5rem]">
+              <div className="flex w-full  flex-col justify-center  items-center  bg-white">
+                <div className="flex justify-center items-center">
+                  <motion.svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="150"
+                    height="150"
+                    viewBox="0 0 203 203"
+                    fill="none"
+                  >
+                    {/* Background Circle */}
+                    <circle cx="101.5" cy="97.5" r="97.5" fill="#9605C5" />
+                    <path fillRule="evenodd" clipRule="evenodd" fill="white" />
+
+                    {/* Animated Checkmark */}
+                    <motion.path
+                      d="M64 98L92 126L137 75"
+                      fill="none"
+                      stroke="white"
+                      strokeWidth="9"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: 1, opacity: 1 }}
+                      transition={{ duration: 0.5, ease: "easeInOut" }}
+                    />
+                  </motion.svg>
+                </div>
+                <div className=" flex flex-col  justify-center items-center">
+                  <h2 className="text-2xl mt-[1rem] font-bold mb-[0.4rem] text-[40px] text-[#27014F]  leading-[2.5rem]">
                     Registration Successful
                   </h2>
                   <p className="text-[14px] mb-[-3px] mt-[0.5rem] text-[#27014F] text-center">
@@ -218,10 +243,10 @@ const VerifyOtp = () => {
                   <p className="text-[14px] text-[#27014F] text-center">
                     Click to continue to login.
                   </p>
-                  <div className="flex flex-col mt-[2rem] ">
+                  <div className="flex items-center justify-center mt-[2rem] w-[480px] ">
                     <NavLink
-                      to="/login"
-                      className="bg-[#9605C5] w cursor-pointer font-semibold text-white text-center p-3 rounded-[10px]"
+                      to="/"
+                      className="bg-[#9605C5] lg:w-[80%] cursor-pointer font-semibold text-white text-center p-3 rounded-[10px]"
                     >
                       Continue
                     </NavLink>
@@ -246,7 +271,10 @@ const VerifyOtp = () => {
         <div className="absolute inset-0 bg-gradient-to-t rounded-[3rem] from-[#27014F] to-transparent opacity-90"></div>
 
         {/* Top-Right Icon */}
-        <a href="https://twjhub.com/" className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
+        <a
+          href="https://twjhub.com/"
+          className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer"
+        >
           <LuHouse className="text-[#27014F] text-[1.5rem]" />
         </a>
 

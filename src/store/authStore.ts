@@ -7,6 +7,7 @@ interface AuthState {
   user: any;
   message: any;
   isAuthenticated: boolean;
+  otpAuth: boolean;
   isLoading: boolean;
   error: string | null;
   isCheckingAuth: boolean;
@@ -24,7 +25,7 @@ interface AuthState {
     formData: Record<string, any>,
     navigate: (path: string) => void
   ) => Promise<void>;
-  emailVerification: (token: string[]) => Promise<void>;
+  emailVerification: (token: string) => Promise<void>;
   login: (
     formData: Record<string, any>,
     navigate: (path: string) => void
@@ -36,6 +37,7 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
+  otpAuth: false,
   user: null,
   message: null,
   error: null,
@@ -87,6 +89,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   // Email Verification Function
   emailVerification: async (token) => {
     set({
+      otpAuth: false,
       isLoading: true,
       isVerifyingOtp: true,
       verificationError: null,
@@ -96,7 +99,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       // Retrieve email from localStorage
       const email = localStorage.getItem("emailForOtp");
-
       if (!email) {
         set({
           verificationError: "Email not found. Please try again.",
@@ -110,24 +112,25 @@ export const useAuthStore = create<AuthState>((set) => ({
         email,
         token,
       });
-
+      // console.log("data sent");
       // Check if response contains a success message
       const { message } = response.data;
 
       set({
-        isAuthenticated: true,
+        otpAuth: true,
         verificationSuccess: message || "OTP Verified Successfully!",
         isVerifyingOtp: false,
+        isLoading: false,
       });
-
-      // Clear localStorage and navigate after a short delay
+      // console.log(message)
+      // console.log("succeful:", message);
+      
+      // Clear localStorage
       localStorage.removeItem("emailForOtp");
-      // setTimeout(() => {
-      //   navigate("/login");
-      // }, 100);
     } catch (error: any) {
-      console.error("OTP Verification Error:", error);
+      // console.error("OTP Verification Error:", error);
       set({
+        otpAuth: false,
         verificationError:
           error.response?.data?.message ||
           "OTP verification failed. Please try again.",
@@ -222,17 +225,17 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.removeItem("name");
     localStorage.removeItem("email");
     localStorage.removeItem("isAuthenticated");
-  
+
     // Update authentication state
     set({
       isAuthenticated: false,
       loginSuccess: false,
     });
-  
+
     // Redirect to home page
     navigate("/");
   },
-  
+
   checkAuth: () => {
     const token = localStorage.getItem("authToken");
     const authState = localStorage.getItem("isAuthenticated");
