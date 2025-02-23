@@ -4,10 +4,10 @@ import Logo from "../assets/auth_imgs/Logo.svg";
 import "react-phone-number-input/style.css";
 import { useState } from "react";
 import eye from "../assets/auth_imgs/Eye_light.svg";
-import "../App.css";
-import React, { useEffect } from "react";
+import React from "react";
 import { NavLink, useNavigate } from "react-router";
 import { useAuthStore } from "../store/authStore";
+import "../App.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const Login = () => {
     login,
     // isLoading,
     isLoadingLogin,
-    isAuthenticated,
+    // isAuthenticated,
     loginError,
   } = useAuthStore();
 
@@ -110,11 +110,11 @@ const Login = () => {
     // console.log(formData);
   };
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      console.log("User is authenticated");
-    }
-  }, [isAuthenticated]);
+  //useEffect(() => {
+  // if (isAuthenticated) {
+  // console.log("User is authenticated");
+  //  }
+  //}, [isAuthenticated]);
 
   return (
     <div className="flex h-[calc(100vh-1rem)] w-full">
@@ -252,7 +252,10 @@ const Login = () => {
           className="w-full h-full rounded-[3rem] object-top object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t rounded-[3rem] from-[#27014F] to-transparent opacity-90"></div>
-        <a href="https://twjhub.com/" className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer">
+        <a
+          href="https://twjhub.com/"
+          className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer"
+        >
           <LuHouse className="text-[#27014F] text-[1.5rem]" />
         </a>
         <div className="absolute bottom-[4rem] left-10 text-white">
