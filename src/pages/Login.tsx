@@ -102,6 +102,7 @@ const Login = () => {
     !formData.email ||
     !formData.password;
 
+    // submit function
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -119,7 +120,7 @@ const Login = () => {
   return (
     <div className="flex h-[calc(100vh-1rem)] w-full">
       {/* Left: Login Form */}
-      <form onSubmit={handleSubmit} className="w-1/2 my-[1rem]  mx-[2rem]">
+      <form onSubmit={handleSubmit} className="w-1/2 my-[1rem]   mx-[2rem]">
         <div className="mt-8">
           <div className="Nav flex justify-between">
             <a href="https://twjhub.com/" className="cursor-pointer">

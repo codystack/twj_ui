@@ -18,6 +18,12 @@ interface AuthState {
   loginError: null;
   loginSuccess: boolean;
   isLoadingLogin: boolean;
+  isLoadingEmailForgotPass: boolean;
+  emailForgotPasswordSucces: boolean;
+  emailForgotPasswordError: boolean;
+  isVerifyingForgotOtp: boolean;
+  ForgotOtpError: string | null;
+  ForgotOtpSuccess: boolean;
 
   setIsAuthenticated: (status: boolean) => void;
   checkAuth: () => void;
@@ -26,12 +32,18 @@ interface AuthState {
     navigate: (path: string) => void
   ) => Promise<void>;
   emailVerification: (token: string) => Promise<void>;
+
+  forgotpasswordVerification: (token: string) => Promise<void>;
+
   login: (
     formData: Record<string, any>,
     navigate: (path: string) => void
   ) => Promise<void>;
   logout: (navigate: (path: string) => void) => void;
-
+  forgotpasswordemail: (
+    formData: { emailOrPhoneNumber: string },
+    navigate: (path: string) => void
+  ) => Promise<void>;
   clearError: () => void;
 }
 
@@ -50,6 +62,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   loginError: null, // Renamed for clarity
   loginSuccess: false, // To track successful login
   isLoadingLogin: false,
+  isLoadingEmailForgotPass: false,
+  emailForgotPasswordSucces: false,
+  emailForgotPasswordError: false,
+  isVerifyingForgotOtp: true,
+  ForgotOtpError: null,
+  ForgotOtpSuccess: false,
 
   setIsAuthenticated: (status: boolean) => set({ isAuthenticated: status }),
 
@@ -124,7 +142,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
       // console.log(message)
       // console.log("succeful:", message);
-      
+
       // Clear localStorage
       localStorage.removeItem("emailForOtp");
     } catch (error: any) {
@@ -140,51 +158,63 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  // login: async (formData, navigate) => {
-  //   set({ isLoadingLogin: true, loginError: null });
+  //Fortgot password email verification
+  forgotpasswordVerification: async (token) => {
+    set({
+      otpAuth: false,
+      isLoading: true,
+      isVerifyingForgotOtp: true,
+      ForgotOtpError: null,
+    });
 
-  //   try {
-  //     const response = await axios.post(
-  //       `${API_URL}/login`,
-  //       formData
-  //     );
+    try {
+      const emailOrPhoneNumber: any = localStorage.getItem(
+        "forgotPasswordEmail"
+      );
+      if (!emailOrPhoneNumber) {
+        console.error("No email found in local storage.");
+        return;
+      }
 
-  //     const { data } = response;
+      // Ensure token is a string
+      // if (!token || typeof token !== "string") {
+      //   console.error("Invalid token format:", token);
+      //   return;
+      // }
+      // console.log("otp in authStore is a string:", token);
+      const response = await axios.post(
+        `${API_URL}/ResetPasswordVerifyOtp?emailOrPhoneNumber=${emailOrPhoneNumber}`,
+        { token }
+      );
+      // console.log("Data sent");
+      // Check if response contains a success message
+      const { message } = response.data;
 
-  //     // console.log("Login Response:", data);
+      set({
+        otpAuth: true,
+        verificationSuccess: message || "OTP Verified Successfully!",
+        isLoading: false,
+        isVerifyingForgotOtp: false,
+        ForgotOtpError: null,
+        ForgotOtpSuccess: true,
+      });
+      // console.log(message)
+      // console.log("succeful:", message);
 
-  //     // Store token
-  //     localStorage.setItem("authToken", data.data.token.accessToken);
-
-  //     // Update state
-  //     set({
-  //       isAuthenticated: true,
-  //       isLoadingLogin: false,
-  //       loginSuccess: true,
-  //       loginError: null,
-  //     });
-
-  //     // Redirect after successful login
-  //     navigate("/dashboard");
-  //   } catch (error: any) {
-  //     // console.error("Login Error:", error);
-
-  //     set({
-  //       loginError:
-  //         error.response?.data?.message || "Login failed. Please try again.",
-  //       isLoadingLogin: false,
-  //     });
-  //   }
-  // },
-
-  // checkAuth: () => {
-  //   const token = localStorage.getItem("authToken");
-  //   if (token) {
-  //     set({ isAuthenticated: true });
-  //   } else {
-  //     set({ isAuthenticated: false });
-  //   }
-  // },
+      // Clear localStorage
+      localStorage.removeItem("forgotPasswordEmail");
+    } catch (error: any) {
+    
+      set({
+        otpAuth: false,
+        ForgotOtpError:
+          error.response?.data?.message ||
+          "OTP verification failed. Please try again.",
+        isVerifyingForgotOtp: false,
+        isLoading: false,
+      });
+    }
+  },
 
   login: async (formData, navigate) => {
     set({ isLoadingLogin: true, loginError: null });
@@ -219,6 +249,33 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
     }
   },
+
+  forgotpasswordemail: async (formData, navigate) => {
+    set({ isLoadingEmailForgotPass: true, emailForgotPasswordError: false });
+
+    try {
+      const response = await axios.post(`${API_URL}/forgotPassword`, formData);
+      const { data } = response;
+      console.log({ data });
+      localStorage.setItem("forgotPasswordEmail", formData.emailOrPhoneNumber);
+      set({
+        emailForgotPasswordSucces: true,
+        emailForgotPasswordError: false,
+        isLoadingEmailForgotPass: false,
+      });
+
+      navigate("/auth-account");
+    } catch (error: any) {
+      console.error("passemail recovery Error:", error);
+      set({
+        emailForgotPasswordSucces: false,
+        emailForgotPasswordError:
+          error.response?.data?.message || "Login failed. Please try again.",
+        isLoadingEmailForgotPass: false,
+      });
+    }
+  },
+
   logout: (navigate: (path: string) => void) => {
     // Clear local storage
     localStorage.removeItem("authToken");
