@@ -6,12 +6,11 @@ import "react-phone-number-input/style.css";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import "../App.css";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { useAuthStore } from "../store/authStore";
 
 const RecoverAccount = () => {
-  // Using array to store each OTP digit
-  // const [otp, setOtp] = useState(["", "", "", "", "",""]);
+  const navigate = useNavigate();
   const [token, setToken] = useState<string[]>(new Array(6).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [email, setEmail] = useState<string | null>("");
@@ -107,9 +106,9 @@ const RecoverAccount = () => {
     e.preventDefault();
     const otpCode: string = token.join("");
     // const strOtpCode = otpCode.toString();
-    console.log("OTP to be Submitted:", otpCode);
-    forgotpasswordVerification(otpCode);
-    console.log("OTP Submitted:", otpCode);
+    // console.log("OTP to be Submitted:", otpCode);
+    forgotpasswordVerification(otpCode, navigate);
+    // console.log("OTP Submitted:", otpCode);
   };
 
   useEffect(() => {

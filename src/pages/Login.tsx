@@ -102,7 +102,7 @@ const Login = () => {
     !formData.email ||
     !formData.password;
 
-    // submit function
+  // submit function
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -199,7 +199,7 @@ const Login = () => {
               )}
 
               <NavLink
-                to="/reset-password"
+                to="/email_for_reset_password"
                 className="text-[13px] text-end cursor-pointer text-[#27014F] underline bold-semibold mt-[5px]"
               >
                 Forgot password?
