@@ -73,6 +73,7 @@ const VerifyOtp = () => {
     // console.log("OTP Submitted:", otpCode);
   };
 
+  
   useEffect(() => {
     if (otpAuth === true) {
       setIsVerified(true); // User is verified

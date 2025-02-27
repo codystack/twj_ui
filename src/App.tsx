@@ -20,6 +20,7 @@ import Wallet from "./pages/Logged_in/Wallet.tsx";
 import Transaction from "./pages/Logged_in/Transaction.tsx";
 import Profile from "./pages/Logged_in/Profile.tsx";
 import Rates from "./pages/Logged_in/Rates.tsx";
+import ResetPasswordInput from "./pages/ResetPasswordInput.tsx";
 
 const router = createBrowserRouter([
   // {
@@ -88,7 +89,7 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "/reset-password",
+    path: "/email_for_reset_password",
     element: <ResetPassword />,
   },
   {
@@ -98,6 +99,10 @@ const router = createBrowserRouter([
   {
     path: "/success",
     element: <RegSuccessful />,
+  },
+  {
+    path: "/reset_password",
+    element: <ResetPasswordInput />,
   },
 ]);
 

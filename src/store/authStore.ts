@@ -24,6 +24,9 @@ interface AuthState {
   isVerifyingForgotOtp: boolean;
   ForgotOtpError: string | null;
   ForgotOtpSuccess: boolean;
+  // newPasswordError: boolean;
+  // newPasswordSuccess: boolean;
+  // newPasswordMessage: string | null;
 
   setIsAuthenticated: (status: boolean) => void;
   checkAuth: () => void;
@@ -32,8 +35,11 @@ interface AuthState {
     navigate: (path: string) => void
   ) => Promise<void>;
   emailVerification: (token: string) => Promise<void>;
-
-  forgotpasswordVerification: (token: string) => Promise<void>;
+  // newPasswordChanage: (newPassword: string) => Promise<void>;
+  forgotpasswordVerification: (
+    token: string,
+    navigate: (path: string) => void
+  ) => Promise<void>;
 
   login: (
     formData: Record<string, any>,
@@ -59,8 +65,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   verificationError: null,
   verificationSuccess: false,
   signUpError: null,
-  loginError: null, // Renamed for clarity
-  loginSuccess: false, // To track successful login
+  loginError: null,
+  loginSuccess: false,
   isLoadingLogin: false,
   isLoadingEmailForgotPass: false,
   emailForgotPasswordSucces: false,
@@ -68,6 +74,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   isVerifyingForgotOtp: true,
   ForgotOtpError: null,
   ForgotOtpSuccess: false,
+  // newPasswordError: false,
+  // newPasswordSuccess: false,
+  // newPasswordMessage: null,
 
   setIsAuthenticated: (status: boolean) => set({ isAuthenticated: status }),
 
@@ -159,9 +168,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   //Fortgot password email verification
-  forgotpasswordVerification: async (token) => {
+  forgotpasswordVerification: async (token, navigate) => {
     set({
-      otpAuth: false,
+      // otpAuth: false,
       isLoading: true,
       isVerifyingForgotOtp: true,
       ForgotOtpError: null,
@@ -171,10 +180,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       const emailOrPhoneNumber: any = localStorage.getItem(
         "forgotPasswordEmail"
       );
-      if (!emailOrPhoneNumber) {
-        console.error("No email found in local storage.");
-        return;
-      }
 
       // Ensure token is a string
       // if (!token || typeof token !== "string") {
@@ -191,7 +196,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       const { message } = response.data;
 
       set({
-        otpAuth: true,
+        // otpAuth: true,
         verificationSuccess: message || "OTP Verified Successfully!",
         isLoading: false,
         isVerifyingForgotOtp: false,
@@ -201,12 +206,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       // console.log(message)
       // console.log("succeful:", message);
 
-      // Clear localStorage
-      localStorage.removeItem("forgotPasswordEmail");
+      navigate("/reset_password");
     } catch (error: any) {
-    
       set({
-        otpAuth: false,
+        // otpAuth: false,
         ForgotOtpError:
           error.response?.data?.message ||
           "OTP verification failed. Please try again.",
@@ -250,15 +253,19 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
+
+
+
   forgotpasswordemail: async (formData, navigate) => {
     set({ isLoadingEmailForgotPass: true, emailForgotPasswordError: false });
 
     try {
       const response = await axios.post(`${API_URL}/forgotPassword`, formData);
       const { data } = response;
-      console.log({ data });
+      // console.log({ data });
       localStorage.setItem("forgotPasswordEmail", formData.emailOrPhoneNumber);
       set({
+        user: data,
         emailForgotPasswordSucces: true,
         emailForgotPasswordError: false,
         isLoadingEmailForgotPass: false,
@@ -266,7 +273,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       navigate("/auth-account");
     } catch (error: any) {
-      console.error("passemail recovery Error:", error);
+      // console.error("passemail recovery Error:", error);
       set({
         emailForgotPasswordSucces: false,
         emailForgotPasswordError:
