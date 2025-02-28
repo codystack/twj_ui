@@ -21,7 +21,13 @@ const ResetPassword = () => {
     // PhoneNumber: "",
   });
 
-  const { forgotpasswordemail, isLoadingEmailForgotPass, emailForgotPasswordError } = useAuthStore();
+  const {
+    forgotpasswordemail,
+    isLoadingEmailForgotPass,
+    emailForgotPasswordError,
+  } = useAuthStore();
+
+  // localStorage.setItem("forgotPasswordEmail", emailOrPhoneNumber);
 
   // Update form field value
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,15 +66,14 @@ const ResetPassword = () => {
   };
 
   const isFormInvalid =
-    Object.values(errors).some((error) => error) || !formData.emailOrPhoneNumber;
+    Object.values(errors).some((error) => error) ||
+    !formData.emailOrPhoneNumber;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Call the login function from Zustand store
     forgotpasswordemail(formData, navigate);
-    console.log(formData);
-
     setFormData({
       emailOrPhoneNumber: "",
     });
@@ -108,7 +113,9 @@ const ResetPassword = () => {
                   name="emailOrPhoneNumber"
                   value={formData.emailOrPhoneNumber}
                   onChange={handleInputChange}
-                  onBlur={() => validateField("email", formData.emailOrPhoneNumber)}
+                  onBlur={() =>
+                    validateField("email", formData.emailOrPhoneNumber)
+                  }
                   className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                     errors.email
                       ? "border border-red-600"

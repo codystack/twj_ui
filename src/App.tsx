@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
-// import Home from "./pages/Home.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import Login from "./pages/Login.tsx";
 import VerifyOtp from "./pages/VerifyOtp.tsx";
@@ -21,13 +20,9 @@ import Transaction from "./pages/Logged_in/Transaction.tsx";
 import Profile from "./pages/Logged_in/Profile.tsx";
 import Rates from "./pages/Logged_in/Rates.tsx";
 import ResetPasswordInput from "./pages/ResetPasswordInput.tsx";
+import ProtectPassReset from "./components/ProtectPassReset.tsx";
 
 const router = createBrowserRouter([
-  // {
-  //   path: "/",
-  //   element: <Home />,
-  // },
-
   {
     path: "/",
     element: <Login />,
@@ -94,7 +89,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/auth-account",
-    element: <RecoverAccount />,
+    element: (
+      <ProtectPassReset>
+        <RecoverAccount />
+      </ProtectPassReset>
+    ),
   },
   {
     path: "/success",
@@ -102,7 +101,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/reset_password",
-    element: <ResetPasswordInput />,
+    element: (
+      <ProtectPassReset>
+        <ResetPasswordInput />
+      </ProtectPassReset>
+    ),
   },
 ]);
 

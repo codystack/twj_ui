@@ -1,7 +1,7 @@
 import { LuHouse } from "react-icons/lu";
-import LoginImg from "../assets/auth_imgs/login-img.png";
 import Logo from "../assets/auth_imgs/Logo.svg";
 import Back from "../assets/auth_imgs/Vector 9.svg";
+import Reset from "../assets/auth_imgs/reset-img.png";
 import "react-phone-number-input/style.css";
 import { useEffect, useState } from "react";
 import eye from "../assets/auth_imgs/Eye_light.svg";
@@ -27,7 +27,7 @@ const ResetPasswordInput = () => {
 
   const [isVerified, setIsVerified] = useState(false);
 
-  const { isLoading, otpAuth, newPasswordError, newPasswordChange } =
+  const { isLoading, authOtp, newPasswordError, newPasswordChange } =
     usenewPasswordStore();
 
   // State for password visibility
@@ -122,11 +122,11 @@ const ResetPasswordInput = () => {
   };
 
   useEffect(() => {
-    if (otpAuth === true) {
+    if (authOtp === true) {
       setIsVerified(true);
     }
     // console.log({ otpAuth });
-  }, [otpAuth]);
+  }, [authOtp]);
 
   return (
     <div className="flex h-[calc(100vh-1rem)] w-full">
@@ -349,7 +349,7 @@ const ResetPasswordInput = () => {
       {/* Right: Image with Overlay */}
       <div className="relative w-[641px] h-[calc(100vh-2rem)] m-[1rem]">
         <img
-          src={LoginImg}
+          src={Reset}
           alt="Signup"
           className="w-full h-full rounded-[3rem] object-top object-cover"
         />
