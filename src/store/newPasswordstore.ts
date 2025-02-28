@@ -4,7 +4,7 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
 interface NewPasswordState {
-  otpAuth: boolean;
+  authOtp: boolean;
   isLoading: boolean;
   newPasswordError: boolean | string;
   newPasswordSuccess: boolean;
@@ -14,7 +14,7 @@ interface NewPasswordState {
 }
 
 export const usenewPasswordStore = create<NewPasswordState>((set) => ({
-  otpAuth: false,
+  authOtp: false,
   isLoading: false,
   newPasswordError: false,
   newPasswordSuccess: false,
@@ -22,13 +22,11 @@ export const usenewPasswordStore = create<NewPasswordState>((set) => ({
 
   newPasswordChange: async (newPassword) => {
     set({
-      otpAuth: false,
       isLoading: true,
       newPasswordError: false,
       newPasswordSuccess: false,
       newPasswordMessage: null,
     });
-
     try {
       // Retrieve email from localStorage
       const email = localStorage.getItem("forgotPasswordEmail");
@@ -36,35 +34,31 @@ export const usenewPasswordStore = create<NewPasswordState>((set) => ({
         set({
           verificationError: "Email not found. Please try again.",
           isLoading: false,
-         
         });
-        console.log("email not found");
         return;
       }
-      console.log("email is before submition :", email);
+
       // Send new password request using Axios
       const response = await axios.post(
         `${API_URL}/ResetPasswordChangePassword?emailOrPhoneNumber=${email}`,
         { newPassword }
       );
-      console.log("submitied");
+      //   console.log("submitied");
       const message = response.data.message || "Password updated successfully!";
-
       set({
         isLoading: false,
-        otpAuth: true,
+        authOtp: true,
         newPasswordMessage: message,
         newPasswordError: false,
         newPasswordSuccess: true,
       });
 
       // Clear localStorage
-      alert("Password successfully updated!");
-      localStorage.removeItem("emailForOtp");
+      localStorage.removeItem("forgotPasswordEmail");
     } catch (error: any) {
-      console.error("passemail recovery Error:", error);
+      //   console.error("passemail recovery Error:", error);
       set({
-        otpAuth: false,
+        authOtp: false,
         newPasswordSuccess: false,
         newPasswordError:
           error.response?.data?.message ||

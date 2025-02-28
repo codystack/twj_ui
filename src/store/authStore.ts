@@ -24,10 +24,6 @@ interface AuthState {
   isVerifyingForgotOtp: boolean;
   ForgotOtpError: string | null;
   ForgotOtpSuccess: boolean;
-  // newPasswordError: boolean;
-  // newPasswordSuccess: boolean;
-  // newPasswordMessage: string | null;
-
   setIsAuthenticated: (status: boolean) => void;
   checkAuth: () => void;
   signUp: (
@@ -35,7 +31,6 @@ interface AuthState {
     navigate: (path: string) => void
   ) => Promise<void>;
   emailVerification: (token: string) => Promise<void>;
-  // newPasswordChanage: (newPassword: string) => Promise<void>;
   forgotpasswordVerification: (
     token: string,
     navigate: (path: string) => void
@@ -74,9 +69,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   isVerifyingForgotOtp: true,
   ForgotOtpError: null,
   ForgotOtpSuccess: false,
-  // newPasswordError: false,
-  // newPasswordSuccess: false,
-  // newPasswordMessage: null,
 
   setIsAuthenticated: (status: boolean) => set({ isAuthenticated: status }),
 
@@ -181,35 +173,25 @@ export const useAuthStore = create<AuthState>((set) => ({
         "forgotPasswordEmail"
       );
 
-      // Ensure token is a string
-      // if (!token || typeof token !== "string") {
-      //   console.error("Invalid token format:", token);
-      //   return;
-      // }
-      // console.log("otp in authStore is a string:", token);
       const response = await axios.post(
         `${API_URL}/ResetPasswordVerifyOtp?emailOrPhoneNumber=${emailOrPhoneNumber}`,
         { token }
       );
-      // console.log("Data sent");
+   
       // Check if response contains a success message
       const { message } = response.data;
 
       set({
-        // otpAuth: true,
         verificationSuccess: message || "OTP Verified Successfully!",
         isLoading: false,
         isVerifyingForgotOtp: false,
         ForgotOtpError: null,
         ForgotOtpSuccess: true,
       });
-      // console.log(message)
-      // console.log("succeful:", message);
-
+  
       navigate("/reset_password");
     } catch (error: any) {
       set({
-        // otpAuth: false,
         ForgotOtpError:
           error.response?.data?.message ||
           "OTP verification failed. Please try again.",
@@ -231,11 +213,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem("name", data.data.userDetails.fullName);
       localStorage.setItem("email", data.data.userDetails.email);
       localStorage.setItem("isAuthenticated", "true");
-      // console.log("All login Response:", data);
-
-      // console.log("Login Response:", data.data.userDetails);
-      // localStorage.setItem("userData", JSON.stringify(data.data.user));
-
       set({
         isAuthenticated: true,
         isLoadingLogin: false,
@@ -253,11 +230,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-
-
-
   forgotpasswordemail: async (formData, navigate) => {
     set({ isLoadingEmailForgotPass: true, emailForgotPasswordError: false });
+    localStorage.setItem("forgotPasswordEmail", formData.emailOrPhoneNumber);
 
     try {
       const response = await axios.post(`${API_URL}/forgotPassword`, formData);
