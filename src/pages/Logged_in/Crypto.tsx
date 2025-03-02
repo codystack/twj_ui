@@ -1,10 +1,15 @@
 
 const Crypto = () => {
   return (
-    <div className="w-[80%] overflow-hidden  ml-[250px] h-[100] mr-[2rem] mt-[5rem]  rounded-tl-[30px]   bg-[#fff] text-center">
-
-    <div className="text-[30px] h-[1212px] font-bold"> Component for Crypto</div>
-  </div>
+    <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
+      <div className="flex-1 overflow-y-auto p-4">
+        Component for Crypto
+        {/* Simulating long content */}
+        <div className="h-[1000px] ">
+          Scrollable content goes here...
+        </div>
+      </div>
+    </div>
   )
 }
 

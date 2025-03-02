@@ -220,7 +220,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         loginError: null,
       });
 
-      navigate("/dashboard/dashboard");
+      navigate("/dashboard");
     } catch (error: any) {
       set({
         loginError:
