@@ -11,6 +11,7 @@ import Sidebar from "./Sidebar";
 import Transaction from "./Transaction";
 import Profile from "./Profile";
 import Rates from "./Rates";
+import AccountUpgrade from "./AccountUpgrade";
 const DashboardLayoutt = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -21,7 +22,7 @@ const DashboardLayoutt = () => {
     case "/dashboard":
       CurrentPage = <Dashboard />;
       break;
-    case "/bills":
+    case "/bills_payment":
       CurrentPage = <Bills />;
       break;
     case "/crypto":
@@ -35,6 +36,9 @@ const DashboardLayoutt = () => {
       break;
     case "/profile":
       CurrentPage = <Profile />;
+      break;
+    case "/profile/account_upgrade":
+      CurrentPage = <AccountUpgrade />;
       break;
     case "/rates":
       CurrentPage = <Rates />;
@@ -54,8 +58,8 @@ const DashboardLayoutt = () => {
 
   return (
     <nav className="bg-[#F5F5F5] h-full ">
-      <div className="flex   w-full bg-[#F5F5F5] z-[999] fixed items-center justify-between">
-        <NavLink to="/dashboard" className="p-[12px] cursor-pointer -[10px]">
+      <div className="flex   w-full bg-[#F5F5F5] z-[10] fixed items-center justify-between">
+        <NavLink to="/dashboard" className="p-[12px] cursor-pointer ">
           <img src={Logo} alt="logo image" />
         </NavLink>
         <div className="flex items-center ">
