@@ -7,14 +7,18 @@ import Delete from "../../assets/dashboard_img/profile/Trash_duotone_line.svg";
 import Edit from "../../assets/dashboard_img/profile/Edit_duotone_line.svg";
 import BankIcon from "../../assets/dashboard_img/profile/Bank_icon.svg";
 import AddRing from "../../assets/dashboard_img/profile/Add_ring_light.svg";
+import Cancel from "../../assets/dashboard_img/profile/cancel.svg";
 import BgImage from "../../assets/dashboard_img/profile/atmcard.jpg";
 import { useState } from "react";
 import ToggleButton from "../../components/ToggleButton";
+import { NavLink } from "react-router";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<"account" | "security" | "bank">(
     "account"
   );
+  const [showForm, setShowForm] = useState(false);
+  const [reason, setReason] = useState("");
 
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
@@ -78,10 +82,13 @@ const Profile = () => {
                     <p className="text-[#27014F] text-[24px] font-bold ">
                       John Doe
                     </p>
-                    <div className="flex bg-[#F1C8FF] p-[6px] py-[4px] text-[#27014F] cursor-pointer rounded-[5px] text-[13px] items-center gap-1 w-fit">
-                      <span>Tier One</span>
+                    <NavLink
+                      to="/profile/account_upgrade"
+                      className="flex hover:bg-[#F1C8FF]/80 transition-colors duration-200 bg-[#F1C8FF] p-[6px] py-[4px] text-[#27014F] cursor-pointer rounded-[5px] text-[13px] items-center gap-1 w-fit"
+                    >
+                      <p>Tier One</p>
                       <img src={arrowRight} alt="pointing arror to the right" />
-                    </div>
+                    </NavLink>
                   </div>
                 </div>
                 <div className="mt-[3%] px-[0.6rem]">
@@ -112,7 +119,10 @@ const Profile = () => {
                       18th Nov 2000
                     </p>
                   </div>
-                  <button className="flex cursor-pointer items-center w-full justify-between bg-[#FF3366]/13 p-[5px] py-[8px] rounded-[10px] border border-[#FF3366] mb-[7%] ">
+                  <NavLink
+                    to="/profile/account_upgrade"
+                    className="flex cursor-pointer items-center w-full justify-between bg-[#FF3366]/13 hover:bg-[#FF3366]/20 transition-colors duration-300 p-[5px] py-[8px] rounded-[10px] border border-[#FF3366] mb-[7%] "
+                  >
                     <span className="flex items-center">
                       <span className="bg-[#FF3366]/20 rounded-[100%] p-[2px] mr-[2px] ">
                         <img src={alarmIcon} alt="" />
@@ -127,16 +137,60 @@ const Profile = () => {
                         </p>
                       </span>
                     </span>
-
                     <img src={arrowRightBtn} alt="" />
-                  </button>
+                  </NavLink>
+                  <div className="relative">
+                    {!showForm ? (
+                      <button
+                        onClick={() => setShowForm(true)} // Fix: Make sure the modal opens
+                        className="mt-[5%] flex text-[#F80004] items-center gap-2 cursor-pointer "
+                      >
+                        <span>
+                          <img src={Delete} alt="" />
+                        </span>
+                        <p>Delete Account</p>
+                      </button>
+                    ) : (
+                      // Fullscreen Dark Overlay with Centered Popup
+                      <div className="fixed inset-0 flex w-[100vw] items-center h-[100vh] justify-center bg-black/40  z-100">
+                        {/* Dialog Box */}
+                        <div className="p-[1rem] rounded-[20px] bg-[#fff]/10">
+                          <div className="bg-white w-[900px] max-w-md  z-[50]  h-[calc(100vh-2rem)] p-6 rounded-[15px] shadow-lg flex flex-col">
+                            <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] justify-between">
+                              <h3 className="text-[17px] font-semibold text-[#27014F] ">
+                                Delete my TWJ Account
+                              </h3>
+                              <button className="cursor-pointer" onClick={() => setShowForm(false)}>
+                                
+                                <img src={Cancel} alt="" />
+                              </button>
+                            </div>
 
-                  <button className="mt-[5%] flex text-[#F80004] items-center gap-2 cursor-pointer ">
-                    <span>
-                      <img src={Delete} alt="" />
-                    </span>
-                    <p>Delete Account</p>
-                  </button>
+                            {/* Textarea */}
+                            <textarea
+                              value={reason}
+                              onChange={(e) => setReason(e.target.value)}
+                              className="w-full border p-2 rounded-md resize-none h-24 mt-3"
+                              placeholder="Enter your reason..."
+                            ></textarea>
+
+                            {/* Buttons */}
+                            <div className="flex justify-between mt-4">
+                              <button
+                                onClick={() => {
+                                  console.log("Reason:", reason);
+                                  // Handle delete logic here
+                                }}
+                                className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300"
+                              >
+                                Confirm Delete
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

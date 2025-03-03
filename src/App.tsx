@@ -35,6 +35,7 @@ import ProtectPassReset from "./components/ProtectPassReset.tsx";
 import ResetPasswordInput from "./pages/ResetPasswordInput.tsx";
 import RegSuccessful from "./pages/RegSuccessful.tsx";
 import RecoverAccount from "./pages/RecoverAccount.tsx";
+import AccountUpgrade from "./pages/Logged_in/AccountUpgrade.tsx";
 
 const App = () => {
   // const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -49,7 +50,6 @@ const App = () => {
   //     </AuthWrapper>
   //   );
   // }
-
   return (
     <BrowserRouter>
       <Routes>
@@ -57,7 +57,6 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/email_for_reset_password" element={<ResetPassword />} />
         <Route path="/success" element={<RegSuccessful />} />
-        <Route path="/email_for_reset_password" element={<ResetPassword />} />
 
         <Route
           path="/auth-account"
@@ -83,6 +82,8 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* Protected Dashboard with Nested Routes */}
         <Route
           element={
             <ProtectedDashboard>
@@ -91,17 +92,18 @@ const App = () => {
           }
         >
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/bills" element={<Bills />} />
+          <Route path="/bills_payment" element={<Bills />} />
           <Route path="/giftcards" element={<GiftCards />} />
           <Route path="/crypto" element={<Crypto />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/transactions" element={<Transaction />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile />}>
+            <Route path="account_upgrade" element={<AccountUpgrade />} />
+          </Route>
           <Route path="/rates" element={<Rates />} />
         </Route>
       </Routes>
     </BrowserRouter>
   );
 };
-
 export default App;

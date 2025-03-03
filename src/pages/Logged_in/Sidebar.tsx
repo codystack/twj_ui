@@ -13,7 +13,7 @@ const Sidebar = () => {
           <NavLink
             to="/dashboard"
             className={({ isActive }) =>
-              `flex items-center gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
+              `flex items-center w-[70%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
@@ -44,9 +44,9 @@ const Sidebar = () => {
 
         <li className="flex items-center gap-2">
           <NavLink
-            to="/bills"
+            to="/bills_payment"
             className={({ isActive }) =>
-              `flex items-center gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
+              `flex items-center gap-2 transition-colors w-[70%] rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
@@ -81,7 +81,7 @@ const Sidebar = () => {
           <NavLink
             to="/giftcards"
             className={({ isActive }) =>
-              `flex items-center gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
+              `flex items-center gap-2 w-[70%] transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
@@ -114,7 +114,7 @@ const Sidebar = () => {
           <NavLink
             to="/crypto"
             className={({ isActive }) =>
-              `flex items-center w-[9rem] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px] p-[1rem] ${
+              `flex w-[70%] items-center  gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px] p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
@@ -153,7 +153,7 @@ const Sidebar = () => {
           <NavLink
             to="/wallet"
             className={({ isActive }) =>
-              `flex items-center w-[9rem] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px] p-[1rem] ${
+              `flex items-center w-[70%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px] p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
@@ -194,7 +194,7 @@ const Sidebar = () => {
           <NavLink
             to="/transactions"
             className={({ isActive }) =>
-              `flex items-center  gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px] p-[1rem] ${
+              `flex items-center  gap-2 transition-colors rounded-r-[50px] w-[70%] duration-100 py-[10px] p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
@@ -230,12 +230,11 @@ const Sidebar = () => {
             )}
           </NavLink>
         </li>
-
         <li className="flex items-center gap-2">
           <NavLink
             to="/profile"
             className={({ isActive }) =>
-              `flex items-center w-[9rem] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
+              `flex items-center w-[70%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
@@ -270,7 +269,7 @@ const Sidebar = () => {
           <NavLink
             to="/rates"
             className={({ isActive }) =>
-              `flex items-center gap-2 w-[9rem] transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
+              `flex items-center w-[70%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
