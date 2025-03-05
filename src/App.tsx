@@ -36,6 +36,7 @@ import ResetPasswordInput from "./pages/ResetPasswordInput.tsx";
 import RegSuccessful from "./pages/RegSuccessful.tsx";
 import RecoverAccount from "./pages/RecoverAccount.tsx";
 import AccountUpgrade from "./pages/Logged_in/AccountUpgrade.tsx";
+import Referals from "./pages/Logged_in/Referals.tsx";
 
 const App = () => {
   // const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -93,6 +94,7 @@ const App = () => {
         >
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/bills_payment" element={<Bills />} />
+          <Route path="/referals" element={<Referals />} />
           <Route path="/giftcards" element={<GiftCards />} />
           <Route path="/crypto" element={<Crypto />} />
           <Route path="/wallet" element={<Wallet />} />

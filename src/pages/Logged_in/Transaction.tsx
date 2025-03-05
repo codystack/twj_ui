@@ -1,16 +1,93 @@
+import { useRef, useState } from "react";
+import CrytoTransaction from "./Logged_in_components/CryptoTransaction";
+import GiftCardTransaction from "./Logged_in_components/GiftcardTransaction";
+import UtilityTransaction from "./Logged_in_components/UtilityBillsTransaction";
 
 const Transaction = () => {
+  const [activeTab, setActiveTab] = useState<
+    "crypto" | "gift_cards" | "utility_bills"
+  >("crypto");
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+
+  const handleScrollToTop = () => {
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 500);
+  };
+
   return (
-    <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
-    <div className="flex-1 font-bold overflow-y-auto p-4">
-      Component for Transactions
-      {/* Simulating long content */}
-      <div className="h-[1000px] ">
-        Scrollable content goeertyuis here...
+    <div  ref={containerRef} className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff]  flex flex-col">
+      <div className="flex-1 overflow-y-auto p-4">
+        <div className=" flex flex-col mt-[2.3%] ml-[2%] ">
+          {/* Tab Buttons */}
+          <div className="bg-[#F5F7FA]/99 z-20 backdrop-blur-lg fixed w-[calc(100%-71%)] bg-blur-md flex items-center rounded-[50px] justify-between p-[7px]">
+            <button
+              className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${
+                activeTab === "crypto"
+                  ? "bg-[#fff] text-[#8003A9] "
+                  : "bg-transparent text-[#7688B4]"
+              }`}
+              onClick={() => setActiveTab("crypto")
+                
+              }
+            >
+              Crypto
+            </button>
+
+            <button
+              className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${
+                activeTab === "gift_cards"
+                  ? "bg-[#fff] text-[#8003A9] "
+                  : "bg-transparent  text-[#7688B4]"
+              }`}
+              onClick={() => setActiveTab("gift_cards")}
+            >
+              Gift Cards
+            </button>
+
+            <button
+              className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px]  ${
+                activeTab === "utility_bills"
+                  ? "bg-[#fff] text-[#8003A9] "
+                  : "bg-transparent  text-[#7688B4]"
+              }`}
+              
+              onClick={() => {
+                setActiveTab("utility_bills");
+                handleScrollToTop();
+              }}
+    >
+              Utility Bills
+            </button>
+          </div>
+
+          {/* Dynamic Content profile*/}
+          <div className=" h-[100%]  mt-[7%] ">
+            {activeTab === "crypto" && (
+              <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
+                <CrytoTransaction />
+              </div>
+            )}
+
+            {/* Dynamic Content Security*/}
+            {activeTab === "gift_cards" && (
+             <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
+             <GiftCardTransaction />
+           </div>
+            )}
+            {/* Dynamic Content Bank*/}
+            {activeTab === "utility_bills" && (
+              <div className="w-full cursor-pointer border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
+              <UtilityTransaction />
+            </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  )
-}
+  );
+};
 
-export default Transaction
+export default Transaction;

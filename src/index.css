@@ -69,3 +69,23 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+
+
+/* Custom scrollbar  */
+::-webkit-scrollbar {
+  width: 5px; 
+}
+
+::-webkit-scrollbar-track {
+  background: #fff; 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c9c9c9;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1; 
+}

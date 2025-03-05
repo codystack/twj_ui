@@ -12,6 +12,7 @@ import Transaction from "./Transaction";
 import Profile from "./Profile";
 import Rates from "./Rates";
 import AccountUpgrade from "./AccountUpgrade";
+import Referals from "./Referals";
 const DashboardLayoutt = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -42,6 +43,9 @@ const DashboardLayoutt = () => {
       break;
     case "/rates":
       CurrentPage = <Rates />;
+      break;
+    case "/referals":
+      CurrentPage = <Referals />;
       break;
     default:
       CurrentPage = <Dashboard />; // Default page
@@ -86,7 +90,7 @@ const DashboardLayoutt = () => {
 
       <div className="bg-[#F5F5F5] h-screen flex w-full ">
         {/* The left Screen */}
-        <div className=" pt-[7rem] bg-[#F5F5F5] fixed h-full   w-[20%]">
+        <div className=" pt-[10%] bg-[#F5F5F5] fixed h-full   w-[20%]">
           {/* Top Section - First 5 Items */}
           <Sidebar />
         </div>
