@@ -8,12 +8,12 @@ const Sidebar = () => {
 
   return (
     <div className="flex flex-col h-full  justify-between">
-      <ul className="flex flex-col ">
+      <ul className="flex flex-col ga ">
         <li className="flex items-center gap-2">
           <NavLink
             to="/dashboard"
             className={({ isActive }) =>
-              `flex items-center w-[70%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
+              `flex items-center w-[68%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
@@ -42,7 +42,7 @@ const Sidebar = () => {
           </NavLink>
         </li>
 
-        <li className="flex items-center gap-2">
+        {/* <li className="flex items-center gap-2">
           <NavLink
             to="/bills_payment"
             className={({ isActive }) =>
@@ -76,8 +76,9 @@ const Sidebar = () => {
               </>
             )}
           </NavLink>
-        </li>
-        <li className="flex items-center gap-2">
+        </li> */}
+
+        {/* <li className="flex items-center gap-2">
           <NavLink
             to="/giftcards"
             className={({ isActive }) =>
@@ -109,8 +110,8 @@ const Sidebar = () => {
               </>
             )}
           </NavLink>
-        </li>
-        <li className="flex items-center gap-2">
+        </li> */}
+        {/* <li className="flex items-center gap-2">
           <NavLink
             to="/crypto"
             className={({ isActive }) =>
@@ -148,12 +149,12 @@ const Sidebar = () => {
               </>
             )}
           </NavLink>
-        </li>
+        </li> */}
         <li className="flex items-center gap-2">
           <NavLink
             to="/wallet"
             className={({ isActive }) =>
-              `flex items-center w-[70%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px] p-[1rem] ${
+              `flex items-center w-[68%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px] p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
@@ -190,11 +191,12 @@ const Sidebar = () => {
             )}
           </NavLink>
         </li>
+
         <li className="flex items-center gap-2">
           <NavLink
             to="/transactions"
             className={({ isActive }) =>
-              `flex items-center  gap-2 transition-colors rounded-r-[50px] w-[70%] duration-100 py-[10px] p-[1rem] ${
+              `flex items-center  gap-2 transition-colors rounded-r-[50px] w-[68%] duration-100 py-[10px] p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
@@ -234,7 +236,7 @@ const Sidebar = () => {
           <NavLink
             to="/profile"
             className={({ isActive }) =>
-              `flex items-center w-[70%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
+              `flex items-center w-[68%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
@@ -266,10 +268,36 @@ const Sidebar = () => {
         </li>
 
         <li className="flex items-center gap-2">
+          <a
+            href="http://app.twjhub.com"
+            target="_blank"
+            className="flex items-center w-[70%] gap-2 transition-colors  duration-100 py-[10px]  p-[1rem]  rounded-r-[50px] pr-[30px]  text-[#27014F]"
+          >
+            <>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M2.87868 2.87868C2 3.75736 2 5.17157 2 8V16C2 18.8284 2 20.2426 2.87868 21.1213C3.75736 22 5.17157 22 8 22H16C18.8284 22 20.2426 22 21.1213 21.1213C22 20.2426 22 18.8284 22 16V8C22 5.17157 22 3.75736 21.1213 2.87868C20.2426 2 18.8284 2 16 2H8C5.17157 2 3.75736 2 2.87868 2.87868ZM17.8321 9.5547C18.1384 9.09517 18.0142 8.4743 17.5547 8.16795C17.0952 7.8616 16.4743 7.98577 16.1679 8.4453L13.1238 13.0115L12.6651 12.094C11.9783 10.7205 10.0639 10.6013 9.2121 11.8791L6.16795 16.4453C5.8616 16.9048 5.98577 17.5257 6.4453 17.8321C6.90483 18.1384 7.5257 18.0142 7.83205 17.5547L10.8762 12.9885L11.3349 13.906C12.0217 15.2795 13.9361 15.3987 14.7879 14.1209L17.8321 9.5547Z"
+                  fill="currentColor"
+                  className="w-6 h-6 text-[#2014F]"
+                />
+              </svg>
+              Rates
+            </>
+          </a>
+        </li>
+        <li className="flex items-center gap-2">
           <NavLink
-            to="/rates"
+            to="/referals"
             className={({ isActive }) =>
-              `flex items-center w-[70%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
+              `flex items-center  gap-2 transition-colors rounded-r-[50px] w-[68%] duration-100 py-[10px] p-[1rem] ${
                 isActive
                   ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                   : "text-[#27014F]"
@@ -280,30 +308,38 @@ const Sidebar = () => {
               <>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
                   fill="none"
                 >
                   <path
                     fillRule="evenodd"
                     clipRule="evenodd"
-                    d="M2.87868 2.87868C2 3.75736 2 5.17157 2 8V16C2 18.8284 2 20.2426 2.87868 21.1213C3.75736 22 5.17157 22 8 22H16C18.8284 22 20.2426 22 21.1213 21.1213C22 20.2426 22 18.8284 22 16V8C22 5.17157 22 3.75736 21.1213 2.87868C20.2426 2 18.8284 2 16 2H8C5.17157 2 3.75736 2 2.87868 2.87868ZM17.8321 9.5547C18.1384 9.09517 18.0142 8.4743 17.5547 8.16795C17.0952 7.8616 16.4743 7.98577 16.1679 8.4453L13.1238 13.0115L12.6651 12.094C11.9783 10.7205 10.0639 10.6013 9.2121 11.8791L6.16795 16.4453C5.8616 16.9048 5.98577 17.5257 6.4453 17.8321C6.90483 18.1384 7.5257 18.0142 7.83205 17.5547L10.8762 12.9885L11.3349 13.906C12.0217 15.2795 13.9361 15.3987 14.7879 14.1209L17.8321 9.5547Z"
+                    d="M9 6.31592H2C1.05719 6.31592 0.585786 6.31592 0.292893 6.60881C0 6.9017 0 7.37311 0 8.31592V9.57908C0 10.5219 0 10.9933 0.292893 11.2862C0.585786 11.5791 1.05719 11.5791 2 11.5791H3.33333V11.6314H9V6.31592ZM3.33333 13.6314V18.0001C3.33333 18.9429 3.33333 19.4143 3.62623 19.7072C3.91912 20.0001 4.39052 20.0001 5.33333 20.0001H9V13.6314H3.33333ZM11 20.0001H14.6667C15.6095 20.0001 16.0809 20.0001 16.3738 19.7072C16.6667 19.4143 16.6667 18.9429 16.6667 18.0001V13.6314H11V20.0001ZM16.6667 11.6314V11.5791H18C18.9428 11.5791 19.4142 11.5791 19.7071 11.2862C20 10.9933 20 10.5219 20 9.57908V8.31592C20 7.37311 20 6.9017 19.7071 6.60881C19.4142 6.31592 18.9428 6.31592 18 6.31592H11V11.6314H16.6667Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M14.7382 5.17032L16.3799 4.65192C17.2119 4.38916 17.7776 3.60857 17.7776 2.73601C17.7776 1.38875 16.4688 0.41331 15.1841 0.819011C13.6005 1.3191 12.1512 2.17241 10.9456 3.31454L9.99981 4.21053V5.26316H14.136C14.3403 5.26316 14.5434 5.23185 14.7382 5.17032Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M5.26177 5.17032L3.62015 4.65192C2.78809 4.38916 2.22241 3.60857 2.22241 2.73601C2.22241 1.38875 3.53123 0.41331 4.81595 0.819011C6.39955 1.3191 7.84885 2.17241 9.05443 3.31454L10.0002 4.21053V5.26316H5.86403C5.65971 5.26316 5.4566 5.23185 5.26177 5.17032Z"
                     fill="currentColor"
                     className={`w-6 h-6  ${
                       isActive ? "#fff" : "text-[#2014F]"
                     }`}
                   />
                 </svg>
-                Rates
+                Referals
               </>
             )}
           </NavLink>
         </li>
       </ul>
 
-      <ul>
-        <li className="flex items-center gap-2">
+      <ul className="mb-[15%] flex flex-col gap-2">
+        <li className="flex items-center  ">
           <button className="flex cursor-pointer px-[1rem] py-[10px] justify-center gap-2 text-[#27014F] ">
             <>
               <svg

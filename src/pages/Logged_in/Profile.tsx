@@ -229,7 +229,7 @@ const Profile = () => {
                         {/* Dialog Box */}
                         <div className="p-[1rem] rounded-[20px] bg-[#fff]/10">
                           <div className="bg-white w-[900px] max-w-md  z-[50]  h-[calc(100vh-2rem)] p-6 rounded-[15px] shadow-lg flex flex-col">
-                            <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] justify-between">
+                            <div className="flex items-center  border-b border-b-[#A4A4A4]/50  pb-[1rem] justify-between">
                               <h3 className="text-[17px] font-semibold text-[#27014F] ">
                                 Delete my TWJ Account
                               </h3>
