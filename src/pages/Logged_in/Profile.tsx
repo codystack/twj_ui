@@ -390,7 +390,7 @@ const Profile = () => {
             {/* Dynamic Content Bank*/}
             {activeTab === "bank" && (
               <div className="flex gap-[2.5rem]">
-                <button className="h-[182px] w-[320px] border flex flex-col items-center justify-center cursor-pointer border-[#D0DAE6]  hover:border-[#8003A9] rounded-[10px]">
+                <button className="h-[182px] w-[320px] border flex flex-col items-center justify-center cursor-pointer border-[#D0DAE6]  hover:border-[#8003A9] transition duration-300 rounded-[10px]">
                   <img src={AddRing} alt="" />
                   <p className="text-[#8003A9]">Add bank account</p>
                 </button>
