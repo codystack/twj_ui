@@ -133,7 +133,6 @@ const CrytoTransaction = () => {
   const handleCloseModal = () => {
     setSelectedTransaction(null);
   };
-   console.log(isFormInvalid)
 
   // for report
   // Handle input change
@@ -259,7 +258,7 @@ const CrytoTransaction = () => {
                     </button>
                   </div>
 
-                  <div className="flex justify-between pb-[4%] border-b border-[#E2E8F0] items-center">
+                  <div className="flex justify-between  border-b border-b-[#A4A4A4]/50  pb-[1rem] items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
                       {selectedTransaction.amount}
                     </h2>
@@ -354,18 +353,18 @@ const CrytoTransaction = () => {
                     {selectedTransaction.status === "pending" && (
                       <button
                         onClick={handleReportClick}
-                        className="w-[60%] flex items-center justify-center my-[2rem] cursor-pointer py-2 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
+                        className="w-[360px] gap-1  flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
                       >
-                        <img src={Report} alt="" />
+                        <img className="w-[1.1rem] " src={Report} alt="" />
                         <p> Report Transaction</p>
                       </button>
                     )}
                     {selectedTransaction.status === "failed" && (
                       <button
                         onClick={handleReportClick}
-                        className="w-[60%] flex items-center justify-center my-[2rem] cursor-pointer py-2 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
+                        className="w-[360px] flex items-center gap-1 justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
                       >
-                        <img src={Report} alt="" />
+                        <img className="w-[1.1rem] " src={Report} alt="" />
                         <p> Report Transaction</p>
                       </button>
                     )}
@@ -374,12 +373,12 @@ const CrytoTransaction = () => {
               ) : (
                 /* Report Form UI */
                 <div className="bg-[#fff] w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
-                  <div className="flex justify-between border-b border-[#0A2E65]/40 pb-[0.rem] items-center">
+                  <div className="flex justify-between border-b border-b-[#A4A4A4]/50  py-[1rem]  items-center">
                     <h2 className="text-[20px] font-semibold text-[#27014F] mb-2 ">
                       Report Transaction
                     </h2>
                     <button
-                      className="  cursor-pointer p-[5px] mr-[10px] mb-[2rem] mt-[1rem] "
+                      className="  cursor-pointer p-[5px] mr-[10px]  "
                       onClick={handleClose}
                     >
                       <img src={Delete} alt="" />
@@ -393,55 +392,55 @@ const CrytoTransaction = () => {
                   </p>
                   <div className=" flex items-center justify-center w-full">
                     <div className="flex flex-col gap-4 w-[70%] ">
-                   <div>
-                       {/* Reference Input */}
-                       <input
-                        onBlur={() =>
-                          validateField("reference", message.reference)
-                        }
-                        type="text"
-                        name="reference"
-                        className={` w-full border border-[#A4A4A4] p-2  resize-none h-[40%]  focus:border-2 outline-none rounded-md ${
-                          errors.reference
-                            ? "border border-red-600"
-                            : "focus:border-purple-800"
-                        } `}
-                        value={message.reference}
-                        onChange={handleInputChange}
-                        placeholder="Transaction Reference"
-                      />
-                      {errors.reference && (
-                        <p className="text-red-500 mt-[2px] text-xs">
-                          {errors.reference}
-                        </p>
-                      )}
-                   </div>
+                      <div>
+                        {/* Reference Input */}
+                        <input
+                          onBlur={() =>
+                            validateField("reference", message.reference)
+                          }
+                          type="text"
+                          name="reference"
+                          className={` w-full border border-[#A4A4A4] p-2  resize-none h-[40%]  focus:border-2 outline-none rounded-md ${
+                            errors.reference
+                              ? "border border-red-600"
+                              : "focus:border-purple-800"
+                          } `}
+                          value={message.reference}
+                          onChange={handleInputChange}
+                          placeholder="Transaction Reference"
+                        />
+                        {errors.reference && (
+                          <p className="text-red-500 mt-[2px] text-xs">
+                            {errors.reference}
+                          </p>
+                        )}
+                      </div>
 
-                   <div>
-                       {/* Message Input */}
-                       <textarea
-                        onBlur={() =>
-                          validateField("messageSent", message.messageSent)
-                        }
-                        name="messageSent"
-                        className={` w-full border border-[#A4A4A4] p-2  resize-none h-[7rem] focus:border-2 outline-none rounded-md ${
-                          errors.messageSent
-                            ? "border border-red-600"
-                            : "focus:border-purple-800"
-                        } `}
-                        value={message.messageSent}
-                        onChange={handleInputChange}
-                        placeholder="Add anything else you would like us to know..."
-                      />
-                      {errors.messageSent && (
-                        <p className="text-red-500 text-xs mt-[2px]">
-                          {errors.messageSent}
-                        </p>
-                      )}
-                   </div>
+                      <div>
+                        {/* Message Input */}
+                        <textarea
+                          onBlur={() =>
+                            validateField("messageSent", message.messageSent)
+                          }
+                          name="messageSent"
+                          className={` w-full border border-[#A4A4A4] p-2  resize-none h-[7rem] focus:border-2 outline-none rounded-md ${
+                            errors.messageSent
+                              ? "border border-red-600"
+                              : "focus:border-purple-800"
+                          } `}
+                          value={message.messageSent}
+                          onChange={handleInputChange}
+                          placeholder="Add anything else you would like us to know..."
+                        />
+                        {errors.messageSent && (
+                          <p className="text-red-500 text-xs mt-[2px]">
+                            {errors.messageSent}
+                          </p>
+                        )}
+                      </div>
 
                       {/* Submit & Close Buttons */}
-                      <div className="flex justify-between">
+                      <div className="flex justify-between mb-[2rem]">
                         <button
                           // onClick={handleSubmitReport}
                           className={`bg-[#9605C5] w-full  text-white p-3 rounded-[6px]  ${

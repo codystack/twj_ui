@@ -110,11 +110,56 @@ const UtilityTransaction = () => {
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
 
-  const [showReportForm, setShowReportForm] = useState(false); 
+  const [showReportForm, setShowReportForm] = useState(false);
   const [message, setMessage] = useState({
     reference: "",
     messageSent: "",
-  }); 
+  });
+
+  const [errors, setErrors] = useState({
+    reference: "",
+    messageSent: "",
+  });
+
+  const validateField = (fieldName: string, value: string) => {
+    switch (fieldName) {
+      case "reference":
+        // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!value.trim()) {
+          setErrors((prev) => ({
+            ...prev,
+            reference: "This field is required",
+          }));
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            reference: "",
+          }));
+        }
+        break;
+
+      case "messageSent":
+        if (!value.trim()) {
+          setErrors((prev) => ({
+            ...prev,
+            messageSent: "This field is required",
+          }));
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            messageSent: "",
+          }));
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
+  const isFormInvalid =
+    Object.values(errors).some((error) => error) ||
+    !message.reference ||
+    !message.messageSent;
 
   const handleOpenModal = (transaction: any) => {
     setSelectedTransaction(transaction);
@@ -134,6 +179,8 @@ const UtilityTransaction = () => {
       ...prev,
       [name]: value,
     }));
+
+    validateField(name, value);
   };
 
   // Handle form toggle
@@ -149,6 +196,8 @@ const UtilityTransaction = () => {
 
   // Handle closing the modal
   const handleClose = () => {
+    setMessage({ reference: "", messageSent: "" });
+    setErrors({ reference: "", messageSent: "" });
     setShowReportForm(false);
     handleCloseModal();
   };
@@ -253,7 +302,7 @@ const UtilityTransaction = () => {
                     </button>
                   </div>
 
-                  <div className="flex justify-between pb-[4%] border-b border-[#E2E8F0] items-center">
+                  <div className="flex justify-between pb-[4%] border-b border-b-[#A4A4A4]/50  items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
                       {selectedTransaction.amount}
                     </h2>
@@ -350,18 +399,18 @@ const UtilityTransaction = () => {
                     {selectedTransaction.status === "pending" && (
                       <button
                         onClick={handleReportClick}
-                        className="w-[60%] flex items-center justify-center my-[2rem] cursor-pointer py-2 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
+                        className="w-[360px] gap-1 flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
                       >
-                        <img src={Report} alt="" />
+                        <img className="w-[1.1rem]" src={Report} alt="" />
                         <p> Report Transaction</p>
                       </button>
                     )}
                     {selectedTransaction.status === "failed" && (
                       <button
                         onClick={handleReportClick}
-                        className="w-[60%] flex items-center justify-center my-[2rem] cursor-pointer py-2 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
+                        className="w-[360px] gap-1 flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
                       >
-                        <img src={Report} alt="" />
+                        <img className="w-[1.1rem]" src={Report} alt="" />
                         <p> Report Transaction</p>
                       </button>
                     )}
@@ -370,7 +419,7 @@ const UtilityTransaction = () => {
               ) : (
                 /* Report Form UI */
                 <div className="bg-[#fff] w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
-                  <div className="flex justify-between border-b border-[#0A2E65]/40 pb-[0.rem] items-center">
+                  <div className="flex justify-between border-b border-b-[#A4A4A4]/50  pb-[0.rem] items-center">
                     <h2 className="text-[20px] font-semibold text-[#27014F] mb-2 ">
                       Report Transaction
                     </h2>
@@ -389,30 +438,63 @@ const UtilityTransaction = () => {
                   </p>
                   <div className=" flex items-center justify-center w-full">
                     <div className="flex flex-col gap-4 w-[70%] ">
-                      {/* Reference Input */}
-                      <input
-                        type="text"
-                        name="reference"
-                        className="border border-gray-300 p-2 rounded-lg"
-                        value={message.reference}
-                        onChange={handleInputChange}
-                        placeholder="Transaction Reference"
-                      />
+                      <div>
+                        {/* Reference Input */}
+                        <input
+                          onBlur={() =>
+                            validateField("reference", message.reference)
+                          }
+                          type="text"
+                          name="reference"
+                          className={` w-full border border-[#A4A4A4] p-2  resize-none h-[40%]  focus:border-2 outline-none rounded-md ${
+                            errors.reference
+                              ? "border border-red-600"
+                              : "focus:border-purple-800"
+                          } `}
+                          value={message.reference}
+                          onChange={handleInputChange}
+                          placeholder="Transaction Reference"
+                        />
+                        {errors.reference && (
+                          <p className="text-red-500 mt-[2px] text-xs">
+                            {errors.reference}
+                          </p>
+                        )}
+                      </div>
 
-                      {/* Message Input */}
-                      <textarea
-                        name="userMessage"
-                        className="border border-gray-300 p-2 h-[8rem] rounded-lg"
-                        value={message.messageSent}
-                        onChange={handleInputChange}
-                        placeholder="Add anything else you would like us to know..."
-                      />
+                      <div>
+                        {/* Message Input */}
+                        <textarea
+                          onBlur={() =>
+                            validateField("messageSent", message.messageSent)
+                          }
+                          name="messageSent"
+                          className={` w-full border border-[#A4A4A4] p-2  resize-none h-[7rem] focus:border-2 outline-none rounded-md ${
+                            errors.messageSent
+                              ? "border border-red-600"
+                              : "focus:border-purple-800"
+                          } `}
+                          value={message.messageSent}
+                          onChange={handleInputChange}
+                          placeholder="Add anything else you would like us to know..."
+                        />
+                        {errors.messageSent && (
+                          <p className="text-red-500 text-xs mt-[2px]">
+                            {errors.messageSent}
+                          </p>
+                        )}
+                      </div>
 
                       {/* Submit & Close Buttons */}
                       <div className="flex justify-between">
                         <button
-                          className="py-2 px-4 w-full bg-[#FF3366] hover:bg-[#FF3366]/90 transition duration-300 cursor-pointer text-white rounded-lg"
                           // onClick={handleSubmitReport}
+                          className={`bg-[#9605C5] w-full  text-white p-3 rounded-[6px]  ${
+                            isFormInvalid
+                              ? "opacity-60 cursor-not-allowed"
+                              : "  cursor-pointer"
+                          }`}
+                          disabled={isFormInvalid}
                         >
                           Submit Report
                         </button>
