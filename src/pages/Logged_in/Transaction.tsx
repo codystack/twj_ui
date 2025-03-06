@@ -79,7 +79,7 @@ const Transaction = () => {
             )}
             {/* Dynamic Content Bank*/}
             {activeTab === "utility_bills" && (
-              <div className="w-full cursor-pointer border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
+              <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
               <UtilityTransaction />
             </div>
             )}
