@@ -212,44 +212,46 @@ const Profile = () => {
                     </span>
                     <img src={arrowRightBtn} alt="" />
                   </NavLink>
-                  <div className="relative">
-                    {!showForm ? (
-                      <button
-                        onClick={() => setShowForm(true)} // Fix: Make sure the modal opens
-                        className="pb-[10%] flex text-[#F80004] items-center gap-2 cursor-pointer "
-                      >
-                        <span>
-                          <img src={Delete} alt="" />
-                        </span>
-                        <p>Delete Account</p>
-                      </button>
-                    ) : (
-                      // Fullscreen Dark Overlay with Centered Popup
-                      <div className="fixed inset-0 flex w-[100vw] items-center h-[100vh] justify-center bg-black/40  z-100">
-                        {/* Dialog Box */}
-                        <div className="p-[1rem] rounded-[20px] bg-[#fff]/10">
-                          <div className="bg-white w-[900px] max-w-md  z-[50]  h-[calc(100vh-2rem)] p-6 rounded-[15px] shadow-lg flex flex-col">
-                            <div className="flex items-center  border-b border-b-[#A4A4A4]/50  pb-[1rem] justify-between">
-                              <h3 className="text-[17px] font-semibold text-[#27014F] ">
-                                Delete my TWJ Account
-                              </h3>
-                              <button
-                                className="cursor-pointer"
-                                onClick={() => setShowForm(false)}
-                              >
-                                <img src={Cancel} alt="" />
-                              </button>
-                            </div>
-                            <div className="flex justify-center my-[5%]">
-                              <span className="bg-[#FF3366]/15 rounded-[100%] w-[5rem] h-[5rem] flex justify-center items-center p-[2px] mr-[2px] ">
-                                <img
-                                  src={alarmIcon}
-                                  className="w-[3.5rem] "
-                                  alt=""
-                                />
-                              </span>
-                            </div>
 
+                  {!showForm ? (
+                    <button
+                      onClick={() => setShowForm(true)} // Fix: Make sure the modal opens
+                      className="pb-[10%] flex text-[#F80004] items-center gap-2 cursor-pointer "
+                    >
+                      <span>
+                        <img src={Delete} alt="" />
+                      </span>
+                      <p>Delete Account</p>
+                    </button>
+                  ) : (
+                    // Fullscreen Dark Overlay with Centered   w-[600px]
+                    <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
+                      {/* Dialog Box */}
+                      <div className="p-[1rem] rounded-[20px] bg-[#fff]/20">
+                        <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
+                          <div className="flex items-center  border-b border-b-[#A4A4A4]/50  py-[1rem] pr-[10px] justify-between">
+                            <h3 className="text-[17px] font-semibold text-[#27014F] ">
+                              Delete my TWJ Account
+                            </h3>
+                            <button
+                              className="cursor-pointer"
+                              onClick={() => setShowForm(false)}
+                            >
+                              <img src={Cancel} alt="" />
+                            </button>
+                          </div>
+                          <div className="flex justify-center my-[5%]">
+                            <span className="bg-[#FF3366]/15 rounded-[100%] w-[5rem] h-[5rem] flex justify-center items-center p-[2px] mr-[2px] ">
+                              <img
+                                src={alarmIcon}
+                                className="w-[3.5rem] "
+                                alt=""
+                              />
+                            </span>
+                          </div>
+
+                         <div className="flex justify-center items-center">
+                         <div className="w-[70%]">
                             {/* Textarea */}
                             <textarea
                               onBlur={() =>
@@ -258,13 +260,13 @@ const Profile = () => {
                               name="reason"
                               value={formData.reason}
                               onChange={handleInputChange} // className=""
-                              className={` w-full border border-[#A4A4A4] p-2  resize-none h-[40%] mt-3 focus:border-2 outline-none rounded-md ${
+                              className={`h-[7rem] w-full border border-[#A4A4A4] p-2  resize-none  mt-3 focus:border-2 outline-none rounded-md ${
                                 errors.reason
                                   ? "border border-red-600"
                                   : "focus:border-purple-800"
                               } `}
                               placeholder="Reason for Deletion..."
-                            ></textarea>
+                            />
                             {errors.reason && (
                               <p className="text-red-500 text-xs mt-1">
                                 {errors.reason}
@@ -301,9 +303,9 @@ const Profile = () => {
                             )}
 
                             {/* Buttons */}
-                            <div className="flex justify-between mt-[5%] w-full ">
+                            <div className="flex justify-between w-[100%] mt-[5%]  ">
                               <button
-                                className={`bg-[#9605C5] w-full  text-white p-3 rounded-[6px]  ${
+                                className={`bg-[#9605C5] w-full mb-[2rem] text-white p-3 rounded-[6px]  ${
                                   isFormInvalid
                                     ? "opacity-60 cursor-not-allowed"
                                     : "  cursor-pointer"
@@ -340,10 +342,11 @@ const Profile = () => {
                               </button>
                             </div>
                           </div>
+                         </div>
                         </div>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
