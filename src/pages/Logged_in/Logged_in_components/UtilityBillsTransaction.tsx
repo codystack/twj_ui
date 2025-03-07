@@ -302,7 +302,7 @@ const UtilityTransaction = () => {
                     </button>
                   </div>
 
-                  <div className="flex justify-between pb-[4%] border-b border-b-[#A4A4A4]/50  items-center">
+                  <div className="flex justify-between pb-[4%] border-b border-b-[#A4A4A4]/20  items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
                       {selectedTransaction.amount}
                     </h2>
@@ -419,7 +419,7 @@ const UtilityTransaction = () => {
               ) : (
                 /* Report Form UI */
                 <div className="bg-[#fff] w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
-                  <div className="flex justify-between border-b border-b-[#A4A4A4]/50  pb-[0.rem] items-center">
+                  <div className="flex justify-between border-b border-b-[#A4A4A4]/20  pb-[0.rem] items-center">
                     <h2 className="text-[20px] font-semibold text-[#27014F] mb-2 ">
                       Report Transaction
                     </h2>
@@ -486,7 +486,7 @@ const UtilityTransaction = () => {
                       </div>
 
                       {/* Submit & Close Buttons */}
-                      <div className="flex justify-between">
+                      <div className="flex mb-[2rem] justify-between">
                         <button
                           // onClick={handleSubmitReport}
                           className={`bg-[#9605C5] w-full  text-white p-3 rounded-[6px]  ${

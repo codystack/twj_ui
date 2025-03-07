@@ -5,14 +5,15 @@ import arrowRightBtn from "../../assets/dashboard_img/profile/arrow_rightbtn.svg
 import alarmIcon from "../../assets/dashboard_img/profile/Alarm_duotone.svg";
 import Delete from "../../assets/dashboard_img/profile/Trash_duotone_line.svg";
 import Edit from "../../assets/dashboard_img/profile/Edit_duotone_line.svg";
-import BankIcon from "../../assets/dashboard_img/profile/Bank_icon.svg";
-import AddRing from "../../assets/dashboard_img/profile/Add_ring_light.svg";
 import Cancel from "../../assets/dashboard_img/profile/cancel.svg";
-import BgImage from "../../assets/dashboard_img/profile/atmcard.jpg";
 import eye from "../../assets/auth_imgs/Eye_light.svg";
 import { useState } from "react";
-import ToggleButton from "../../components/ToggleButton";
 import { NavLink } from "react-router";
+import ProfileSecurity from "./Logged_in_components/ProfileSecurity";
+import ProfileBank from "./Logged_in_components/ProfileBank";
+// import { PhoneNumber } from "react-phone-number-input";
+import PhoneEditModal from "./Logged_in_components/PhoneEditModal";
+import "../../App.css";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<"account" | "security" | "bank">(
@@ -27,9 +28,11 @@ const Profile = () => {
   const [formData, setFormData] = useState({
     reason: "",
     password: "",
+    PhoneNumber: "",
   });
   // State for password visibility
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPhoneInputModalOpen, setIsPhoneInputModalOpen] = useState(false);
 
   // Update form field value
   const handleInputChange = (e: any) => {
@@ -92,6 +95,10 @@ const Profile = () => {
     Object.values(errors).some((error) => error) ||
     !formData.reason ||
     !formData.password;
+
+  const handlePhoneNumberChange = (newPhoneNumber: string) => {
+    setFormData((prev) => ({ ...prev, phoneNumber: newPhoneNumber }));
+  };
 
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
@@ -181,8 +188,18 @@ const Profile = () => {
                       <p className="text-[#27014F] text-[14px]  ">
                         +2348105064355
                       </p>
-                      <img src={Edit} alt="" className=" cursor-pointer" />
+
+                      <button onClick={() => setIsPhoneInputModalOpen(true)}>
+                        <img src={Edit} alt="" className=" cursor-pointer" />
+                      </button>
                     </span>
+
+                    <PhoneEditModal
+                      isOpen={isPhoneInputModalOpen}
+                      onClose={() => setIsPhoneInputModalOpen(false)}
+                      phoneNumber={formData.PhoneNumber}
+                      onSave={handlePhoneNumberChange}
+                    />
                   </div>
                   <div className="flex items-center justify-between mb-[7%] ">
                     <p className="text-[#7688B4] text-[14px]  ">
@@ -229,7 +246,7 @@ const Profile = () => {
                       {/* Dialog Box */}
                       <div className="p-[1rem] rounded-[20px] bg-[#fff]/20">
                         <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
-                          <div className="flex items-center  border-b border-b-[#A4A4A4]/50  py-[1rem] pr-[10px] justify-between">
+                          <div className="flex items-center  border-b border-b-[#A4A4A4]/20  pb-[1rem] pr-[10px] justify-between">
                             <h3 className="text-[17px] font-semibold text-[#27014F] ">
                               Delete my TWJ Account
                             </h3>
@@ -240,7 +257,7 @@ const Profile = () => {
                               <img src={Cancel} alt="" />
                             </button>
                           </div>
-                          <div className="flex justify-center my-[5%]">
+                          <div className="flex justify-center my-[5%] mb-[1rem]">
                             <span className="bg-[#FF3366]/15 rounded-[100%] w-[5rem] h-[5rem] flex justify-center items-center p-[2px] mr-[2px] ">
                               <img
                                 src={alarmIcon}
@@ -250,69 +267,79 @@ const Profile = () => {
                             </span>
                           </div>
 
-                         <div className="flex justify-center items-center">
-                         <div className="w-[70%]">
-                            {/* Textarea */}
-                            <textarea
-                              onBlur={() =>
-                                validateField("reason", formData.reason)
-                              }
-                              name="reason"
-                              value={formData.reason}
-                              onChange={handleInputChange} // className=""
-                              className={`h-[7rem] w-full border border-[#A4A4A4] p-2  resize-none  mt-3 focus:border-2 outline-none rounded-md ${
-                                errors.reason
-                                  ? "border border-red-600"
-                                  : "focus:border-purple-800"
-                              } `}
-                              placeholder="Reason for Deletion..."
-                            />
-                            {errors.reason && (
-                              <p className="text-red-500 text-xs mt-1">
-                                {errors.reason}
+                          <div className="flex justify-center items-center">
+                            <div className="w-[70%]">
+                              <p className="text-[14px] text-[#0A2E65]/60 text-center">
+                                You are about to delete this account, the action
+                                is not reversable. Please
+                                <span className="text-[#8003A9]">
+                                  contact support
+                                </span>
+                                if you have any concerns about the app. If you
+                                want to complete this action, enter your reason
+                                and password below.
                               </p>
-                            )}
-
-                            <div className="relative w-full mt-[5%]">
-                              <input
-                                type={isPasswordVisible ? "text" : "password"}
-                                placeholder="Password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleInputChange}
+                              {/* Textarea */}
+                              <textarea
                                 onBlur={() =>
-                                  validateField("password", formData.password)
+                                  validateField("reason", formData.reason)
                                 }
-                                className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
-                                  errors.password
+                                name="reason"
+                                value={formData.reason}
+                                onChange={handleInputChange} // className=""
+                                className={`h-[7rem] w-full border border-[#A4A4A4] p-2  resize-none  mt-3 focus:border-2 outline-none rounded-md ${
+                                  errors.reason
                                     ? "border border-red-600"
                                     : "focus:border-purple-800"
                                 } `}
+                                placeholder="Reason for Deletion..."
                               />
-                              <img
-                                className="absolute cursor-pointer right-[0.8rem] bottom-[0.45rem]"
-                                src={eye}
-                                alt="password visibility toggle"
-                                onClick={togglePasswordVisibility}
-                              />
-                            </div>
-                            {errors.password && (
-                              <p className="text-red-500 text-xs mt-1">
-                                {errors.password}
-                              </p>
-                            )}
+                              {errors.reason && (
+                                <p className="text-red-500 text-xs mt-1">
+                                  {errors.reason}
+                                </p>
+                              )}
 
-                            {/* Buttons */}
-                            <div className="flex justify-between w-[100%] mt-[5%]  ">
-                              <button
-                                className={`bg-[#9605C5] w-full mb-[2rem] text-white p-3 rounded-[6px]  ${
-                                  isFormInvalid
-                                    ? "opacity-60 cursor-not-allowed"
-                                    : "  cursor-pointer"
-                                }`}
-                                disabled={isFormInvalid}
-                              >
-                                {/* {isLoadingLogin ? (
+                              <div className="relative w-full mt-[8px]">
+                                <input
+                                  type={isPasswordVisible ? "text" : "password"}
+                                  placeholder="Password"
+                                  name="password"
+                                  value={formData.password}
+                                  onChange={handleInputChange}
+                                  onBlur={() =>
+                                    validateField("password", formData.password)
+                                  }
+                                  className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                                    errors.password
+                                      ? "border border-red-600"
+                                      : "focus:border-purple-800"
+                                  } `}
+                                />
+                                <img
+                                  className="absolute cursor-pointer right-[0.8rem] bottom-[0.45rem]"
+                                  src={eye}
+                                  alt="password visibility toggle"
+                                  onClick={togglePasswordVisibility}
+                                />
+                              </div>
+                              {errors.password && (
+                                <p className="text-red-500 text-xs mt-1">
+                                  {errors.password}
+                                </p>
+                              )}
+
+                              {/* Buttons */}
+                              <div className="flex justify-between w-[100%] mt-[5%] mb-[1rem]  ">
+                                <button
+                                  className={`bg-[#9605C5] w-full  text-white p-3 rounded-[6px]  ${
+                                    isFormInvalid
+                                      ? "opacity-60 cursor-not-allowed"
+                                      : "  cursor-pointer"
+                                  }`}
+                                  disabled={isFormInvalid}
+                                >
+                                  {/* {isLoadingLogin ? (
                   <div className="flex items-center justify-center">
                     <svg
                       className="animate-spin h-5 w-5 text-white"
@@ -338,11 +365,11 @@ const Profile = () => {
                 ) : (
                   "Log In"
                 )} */}
-                                Delete Account
-                              </button>
+                                  Delete Account
+                                </button>
+                              </div>
                             </div>
                           </div>
-                         </div>
                         </div>
                       </div>
                     </div>
@@ -352,71 +379,9 @@ const Profile = () => {
             )}
 
             {/* Dynamic Content Security*/}
-            {activeTab === "security" && (
-              <div className="mt-[4%] w-[40%]">
-                <div className="flex items-center justify-between leading-[1.2rem]">
-                  <div className=" flex flex-col">
-                    <p className="font-[500]">Update Password</p>
-                    <p className="text-[12px] text-[#7688B4]">
-                      Change your old password to a new one
-                    </p>
-                  </div>
-                  <button className="text-[#8003A9] cursor-pointer">
-                    Change Password
-                  </button>
-                </div>
-                <div className="flex items-center mt-[10%] justify-between leading-[1.2rem]">
-                  <div className=" flex flex-col">
-                    <p className="font-[500]">Update PIN</p>
-                    <p className="text-[12px] text-[#7688B4]">
-                      Change or reset your TWJ PIN
-                    </p>
-                  </div>
-                  <button className="text-[#8003A9] cursor-pointer">
-                    Change Pin
-                  </button>
-                </div>
-                <div className="flex items-center mt-[10%] justify-between leading-[1.2rem]">
-                  <div className=" flex flex-col">
-                    <p className="font-[500]">Two-Factor Authentication</p>
-                    <p className="text-[12px]  text-[#7688B4]">
-                      Protect your TWJ account from unauthorised <br />{" "}
-                      transaction using a software token
-                    </p>
-                  </div>
-                  <button className="text-[#8003A9] cursor-pointer">
-                    <ToggleButton />
-                  </button>
-                </div>
-              </div>
-            )}
+            {activeTab === "security" && <ProfileSecurity />}
             {/* Dynamic Content Bank*/}
-            {activeTab === "bank" && (
-              <div className="flex gap-[2.5rem]">
-                <button className="h-[182px] w-[320px] border flex flex-col items-center justify-center cursor-pointer border-[#D0DAE6]  hover:border-[#8003A9] transition duration-300 rounded-[10px]">
-                  <img src={AddRing} alt="" />
-                  <p className="text-[#8003A9]">Add bank account</p>
-                </button>
-                <div
-                  className="relative h-[182px] w-[320px]  rounded-[10px] overflow-hidden bg-cover bg-center"
-                  style={{ backgroundImage: `url(${BgImage})` }} // Ensure this path is correct
-                >
-                  {/* Overlay with opacity */}
-                  <div className="absolute inset-0 bg-[#8003A9]/80"></div>{" "}
-                  {/* Adjust /60 for more/less opacity */}
-                  {/* Icon (Top-right) */}
-                  <div className="absolute top-3 right-3 text-white text-xl cursor-pointer">
-                    <img src={BankIcon} alt="" />
-                  </div>
-                  {/* Text (Bottom-left) */}
-                  <div className="absolute bottom-3 left-3 leading-[1.1rem] text-white">
-                    <p className="text-[16px] font-semibold">John Doe</p>
-                    <p className="text-[14px] ">2364238745</p>
-                    <p className="text-[12px] ">Sterling Bank</p>
-                  </div>
-                </div>
-              </div>
-            )}
+            {activeTab === "bank" && <ProfileBank />}
           </div>
         </div>
       </div>

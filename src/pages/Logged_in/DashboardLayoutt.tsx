@@ -90,7 +90,7 @@ const DashboardLayoutt = () => {
 
       <div className="bg-[#F5F5F5] h-screen flex w-full ">
         {/* The left Screen */}
-        <div className=" pt-[10%] bg-[#F5F5F5] fixed h-full   w-[20%]">
+        <div className=" pt-[8%] bg-[#F5F5F5] fixed h-full   w-[20%]">
           {/* Top Section - First 5 Items */}
           <Sidebar />
         </div>
