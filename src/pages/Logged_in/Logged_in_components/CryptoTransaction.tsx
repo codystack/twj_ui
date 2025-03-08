@@ -6,6 +6,7 @@ import Delete from "../../../assets/dashboard_img/profile/cancel.svg";
 import Copy from "../../../assets/dashboard_img/profile/transactions/Copy_light.svg";
 import HrtBroken from "../../../assets/dashboard_img/profile/transactions/heartbroken.svg";
 import Report from "../../../assets/dashboard_img/profile/transactions/report.svg";
+// import "../../../App.css";
 
 const transactions = [
   {
@@ -85,6 +86,15 @@ const CrytoTransaction = () => {
     reference: "",
     messageSent: "",
   });
+
+  const [copiedRef, setCopiedRef] = useState<string | null>(null); // Track copied reference
+
+  const handleCopy = (reference: string) => {
+    navigator.clipboard.writeText(reference);
+    setCopiedRef(reference);
+
+    setTimeout(() => setCopiedRef(null), 1000);
+  };
 
   const validateField = (fieldName: string, value: string) => {
     switch (fieldName) {
@@ -258,7 +268,7 @@ const CrytoTransaction = () => {
                     </button>
                   </div>
 
-                  <div className="flex justify-between  border-b border-b-[#A4A4A4]/50  pb-[1rem] items-center">
+                  <div className="flex justify-between  border-b border-b-[#A4A4A4]/20  pb-[1rem] items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
                       {selectedTransaction.amount}
                     </h2>
@@ -331,8 +341,26 @@ const CrytoTransaction = () => {
                       <div className="flex text-[#0A2E65] items-center text-[13px]">
                         <div className="flex items-center">
                           <p>{selectedTransaction.reference}</p>
-                          <button className="flex items-center justify-center cursor-pointer">
+                          <button></button>
+
+                          <button
+                            onClick={() =>
+                              handleCopy(selectedTransaction.reference)
+                            }
+                            className="relative flex items-center justify-center cursor-pointer"
+                          >
                             <img src={Copy} alt="" />
+                            {copiedRef === selectedTransaction.reference && (
+                              <span
+                                className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
+                                  copiedRef === selectedTransaction.reference
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                }`}
+                              >
+                                Copied
+                              </span>
+                            )}
                           </button>
                         </div>
                       </div>
@@ -373,7 +401,7 @@ const CrytoTransaction = () => {
               ) : (
                 /* Report Form UI */
                 <div className="bg-[#fff] w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
-                  <div className="flex justify-between border-b border-b-[#A4A4A4]/50  py-[1rem]  items-center">
+                  <div className="flex justify-between border-b border-b-[#A4A4A4]/20  py-[1rem]  items-center">
                     <h2 className="text-[20px] font-semibold text-[#27014F] mb-2 ">
                       Report Transaction
                     </h2>

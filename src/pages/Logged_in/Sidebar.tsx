@@ -8,7 +8,7 @@ const Sidebar = () => {
 
   return (
     <div className="flex flex-col h-full  justify-between">
-      <ul className="flex flex-col ga ">
+      <ul className="flex flex-col gap-[0.3rem] ">
         <li className="flex items-center gap-2">
           <NavLink
             to="/dashboard"
@@ -279,7 +279,7 @@ const Sidebar = () => {
 
         <li className="flex items-center gap-2">
           <a
-            href="http://rate.twjhub.com"
+            href="http://rates.twjhub.com"
             target="_blank"
             className="flex items-center w-[70%] gap-2 transition-colors  duration-100 py-[10px]    rounded-r-[50px] pl-[1.7rem]  text-[#27014F]"
           >

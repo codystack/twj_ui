@@ -155,14 +155,9 @@ const SignUp = () => {
             phoneNumber: "",
             isChecked: false,
           });
-          // console.log("Error Response Data:", error.response.data);
         }
-      } // finally {
-      // setIsLoading(false); // Stop loading
-      // }
-    } // else {
-    // console.log("Form has errors:", errors);
-    // }
+      }
+    }
   };
 
   const togglePasswordVisibility = () => {
