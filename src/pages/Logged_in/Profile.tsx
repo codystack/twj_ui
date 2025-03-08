@@ -272,7 +272,7 @@ const Profile = () => {
                               <p className="text-[14px] text-[#0A2E65]/60 text-center">
                                 You are about to delete this account, the action
                                 is not reversable. Please
-                                <span className="text-[#8003A9]">
+                                <span className="text-[#8003A9] mx-[5px] cursor-pointer">
                                   contact support
                                 </span>
                                 if you have any concerns about the app. If you
@@ -287,7 +287,7 @@ const Profile = () => {
                                 name="reason"
                                 value={formData.reason}
                                 onChange={handleInputChange} // className=""
-                                className={`h-[7rem] w-full border border-[#A4A4A4] p-2  resize-none  mt-3 focus:border-2 outline-none rounded-md ${
+                                className={`h-[7rem] w-full border border-[#A4A4A4] p-2 text-[13px] resize-none  mt-3 focus:border-2 outline-none rounded-md ${
                                   errors.reason
                                     ? "border border-red-600"
                                     : "focus:border-purple-800"

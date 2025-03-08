@@ -83,6 +83,14 @@ const GiftCardTransaction = () => {
     reference: "",
     messageSent: "",
   });
+  const [copiedRef, setCopiedRef] = useState<string | null>(null); // Track copied reference
+
+  const handleCopy = (reference: string) => {
+    navigator.clipboard.writeText(reference);
+    setCopiedRef(reference);
+
+    setTimeout(() => setCopiedRef(null), 1000);
+  };
 
   const validateField = (fieldName: string, value: string) => {
     switch (fieldName) {
@@ -200,7 +208,9 @@ const GiftCardTransaction = () => {
 
             {/* Transaction Details */}
             <div>
-              <p className="text-[16px] text-[#27014F]">{transaction.type}</p>
+              <p className="text-[16px] text-left text-[#27014F]">
+                {transaction.type}
+              </p>
               <div className="flex items-center gap-2 text-gray-600">
                 {/* Tracking ID */}
                 <span className="text-[11px]  text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
@@ -329,8 +339,24 @@ const GiftCardTransaction = () => {
                     <div className="flex text-[#0A2E65] items-center text-[13px]">
                       <div className="flex items-center">
                         <p>{selectedTransaction.reference}</p>
-                        <button className="flex items-center justify-center cursor-pointer">
+                        <button
+                          onClick={() =>
+                            handleCopy(selectedTransaction.reference)
+                          }
+                          className="relative flex items-center justify-center cursor-pointer"
+                        >
                           <img src={Copy} alt="" />
+                          {copiedRef === selectedTransaction.reference && (
+                            <span
+                              className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
+                                copiedRef === selectedTransaction.reference
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              }`}
+                            >
+                              Copied
+                            </span>
+                          )}
                         </button>
                       </div>
                     </div>

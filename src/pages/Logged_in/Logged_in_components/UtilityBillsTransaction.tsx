@@ -92,21 +92,21 @@ const transactions = [
   },
 ];
 
-const UtilityTransaction = () => {
-  type Transaction = {
-    id: string;
-    name: string;
-    type: string;
-    amount: string;
-    date: string;
-    direction: string;
-    status: string;
-    network: string;
-    quantity: string;
-    time: string;
-    reference: string;
-  };
+type Transaction = {
+  id: string;
+  name: string;
+  type: string;
+  amount: string;
+  date: string;
+  direction: string;
+  status: string;
+  network: string;
+  quantity: string;
+  time: string;
+  reference: string;
+};
 
+const UtilityTransaction = () => {
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
 
@@ -120,6 +120,16 @@ const UtilityTransaction = () => {
     reference: "",
     messageSent: "",
   });
+
+  
+  const [copiedRef, setCopiedRef] = useState<string | null>(null); // Track copied reference
+
+  const handleCopy = (reference: string) => {
+    navigator.clipboard.writeText(reference);
+    setCopiedRef(reference);
+
+    setTimeout(() => setCopiedRef(null), 1000);
+  };
 
   const validateField = (fieldName: string, value: string) => {
     switch (fieldName) {
@@ -388,9 +398,22 @@ const UtilityTransaction = () => {
                     <div className="flex text-[#0A2E65] items-center text-[13px]">
                       <div className="flex items-center">
                         <p>{selectedTransaction.reference}</p>
-                        <button className="flex items-center justify-center cursor-pointer">
-                          <img src={Copy} alt="" />
-                        </button>
+                        <button
+            onClick={() => handleCopy(selectedTransaction.reference)}
+          className="relative flex items-center justify-center cursor-pointer"
+          >
+           <img src={Copy} alt="" />
+            {copiedRef === selectedTransaction.reference && (
+              <span 
+              
+              className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
+                copiedRef === selectedTransaction.reference ? "opacity-100" : "opacity-0"
+              }`}
+              
+              >Copied</span>
+            )}
+          </button>
+
                       </div>
                     </div>
                   </div>
