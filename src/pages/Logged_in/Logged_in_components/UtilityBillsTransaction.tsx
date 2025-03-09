@@ -121,7 +121,6 @@ const UtilityTransaction = () => {
     messageSent: "",
   });
 
-  
   const [copiedRef, setCopiedRef] = useState<string | null>(null); // Track copied reference
 
   const handleCopy = (reference: string) => {
@@ -399,21 +398,24 @@ const UtilityTransaction = () => {
                       <div className="flex items-center">
                         <p>{selectedTransaction.reference}</p>
                         <button
-            onClick={() => handleCopy(selectedTransaction.reference)}
-          className="relative flex items-center justify-center cursor-pointer"
-          >
-           <img src={Copy} alt="" />
-            {copiedRef === selectedTransaction.reference && (
-              <span 
-              
-              className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
-                copiedRef === selectedTransaction.reference ? "opacity-100" : "opacity-0"
-              }`}
-              
-              >Copied</span>
-            )}
-          </button>
-
+                          onClick={() =>
+                            handleCopy(selectedTransaction.reference)
+                          }
+                          className="relative flex items-center justify-center cursor-pointer"
+                        >
+                          <img src={Copy} alt="" />
+                          {copiedRef === selectedTransaction.reference && (
+                            <span
+                              className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
+                                copiedRef === selectedTransaction.reference
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              }`}
+                            >
+                              Copied
+                            </span>
+                          )}
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -442,7 +444,7 @@ const UtilityTransaction = () => {
               ) : (
                 /* Report Form UI */
                 <div className="bg-[#fff] w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
-                  <div className="flex justify-between border-b border-b-[#A4A4A4]/20  pb-[0.rem] items-center">
+                  <div className="flex justify-between border-b border-b-[#E2E8F0]  pb-[0.rem] items-center">
                     <h2 className="text-[20px] font-semibold text-[#27014F] mb-2 ">
                       Report Transaction
                     </h2>

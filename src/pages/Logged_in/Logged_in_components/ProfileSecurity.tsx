@@ -113,84 +113,83 @@ const ProfileSecurity = () => {
         {/* Modal */}
         {isOpen && (
           <div className="fixed inset-0 flex z-20 items-center justify-center bg-black/40 bg-opacity-50">
-       
-       <div className="p-[1rem] rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white p-6 text-[#27014F] w-[600px] rounded-[15px] ">
-              <div className="flex justify-between items-center pb-[1rem] mb-[2rem] mt-[1rem] border-b-[#A4A4A4]/20  border-b border-b-">
-                <h2 className="text-xl pl-[10px] font-semibold ">
-                  Change Password
-                </h2>
-                <button
-                  className="cursor-pointer mr-[10px] p-[10px]"
-                  onClick={closeModal}
-                >
-                  <img src={Cancel} alt="" />
-                </button>
-              </div>
-              {/* Input Fields */}
+            <div className="p-[1rem] rounded-[20px] bg-[#fff]/20">
+              <div className="bg-white p-6 text-[#27014F] w-[600px] rounded-[15px] ">
+                <div className="flex justify-between items-center pb-[1rem] mb-[2rem] mt-[1rem] border-b-[#E2E8F0]  border-b ">
+                  <h2 className="text-xl pl-[10px] font-semibold ">
+                    Change Password
+                  </h2>
+                  <button
+                    className="cursor-pointer mr-[10px] p-[10px]"
+                    onClick={closeModal}
+                  >
+                    <img src={Cancel} alt="" />
+                  </button>
+                </div>
+                {/* Input Fields */}
 
-              <div className=" flex  justify-center items-center]">
-                <div className="w-[70%] flex flex-col gap-[15px]">
-                  <div className="relative w-full">
-                    <input
-                      type={isPasswordVisible ? "text" : "password"}
-                      placeholder="Old Password"
-                      name="oldPassword"
-                      value={formData.oldPassword}
-                      onChange={handleInputChange}
-                      onBlur={() =>
-                        validateField("password", formData.oldPassword)
-                      }
-                      className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
-                        errors.oldPassword
-                          ? "border border-red-600"
-                          : "focus:border-purple-800"
-                      } `}
-                    />
-                    <img
-                      className="absolute cursor-pointer right-[0.8rem] bottom-[0.45rem]"
-                      src={eye}
-                      alt="password visibility toggle"
-                      onClick={togglePasswordVisibility}
-                    />
-                  </div>
+                <div className=" flex  justify-center items-center]">
+                  <div className="w-[70%] flex flex-col gap-[15px]">
+                    <div className="relative w-full">
+                      <input
+                        type={isPasswordVisible ? "text" : "password"}
+                        placeholder="Old Password"
+                        name="oldPassword"
+                        value={formData.oldPassword}
+                        onChange={handleInputChange}
+                        onBlur={() =>
+                          validateField("password", formData.oldPassword)
+                        }
+                        className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                          errors.oldPassword
+                            ? "border border-red-600"
+                            : "focus:border-purple-800"
+                        } `}
+                      />
+                      <img
+                        className="absolute cursor-pointer right-[0.8rem] bottom-[0.45rem]"
+                        src={eye}
+                        alt="password visibility toggle"
+                        onClick={togglePasswordVisibility}
+                      />
+                    </div>
 
-                  <div className="relative w-full">
-                    <input
-                      type={isPasswordVisible ? "text" : "password"}
-                      placeholder="New Password"
-                      name="newPassword"
-                      value={formData.newPassword}
-                      onChange={handleInputChange}
-                      onBlur={() =>
-                        validateField("password", formData.newPassword)
-                      }
-                      className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
-                        errors.newPassword
-                          ? "border border-red-600"
-                          : "focus:border-purple-800"
-                      } `}
-                    />
-                    <img
-                      className="absolute cursor-pointer right-[0.8rem] bottom-[0.45rem]"
-                      src={eye}
-                      alt="password visibility toggle"
-                      onClick={togglePasswordVisibility}
-                    />
+                    <div className="relative w-full">
+                      <input
+                        type={isPasswordVisible ? "text" : "password"}
+                        placeholder="New Password"
+                        name="newPassword"
+                        value={formData.newPassword}
+                        onChange={handleInputChange}
+                        onBlur={() =>
+                          validateField("password", formData.newPassword)
+                        }
+                        className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                          errors.newPassword
+                            ? "border border-red-600"
+                            : "focus:border-purple-800"
+                        } `}
+                      />
+                      <img
+                        className="absolute cursor-pointer right-[0.8rem] bottom-[0.45rem]"
+                        src={eye}
+                        alt="password visibility toggle"
+                        onClick={togglePasswordVisibility}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex justify-center items-center pt-[5%]  ">
-                <button
-                  className={`bg-[#9605C5]  w-[70%] mb-[2rem] text-white p-3 rounded-[6px]  ${
-                    isFormInvalid
-                      ? "opacity-60 cursor-not-allowed"
-                      : "  cursor-pointer"
-                  }`}
-                  disabled={isFormInvalid}
-                >
-                  {/* {isLoadingLogin ? (
+                <div className="flex justify-center items-center pt-[5%]  ">
+                  <button
+                    className={`bg-[#9605C5]  w-[70%] mb-[2rem] text-white p-3 rounded-[6px]  ${
+                      isFormInvalid
+                        ? "opacity-60 cursor-not-allowed"
+                        : "  cursor-pointer"
+                    }`}
+                    disabled={isFormInvalid}
+                  >
+                    {/* {isLoadingLogin ? (
                   <div className="flex items-center justify-center">
                     <svg
                       className="animate-spin h-5 w-5 text-white"
@@ -216,11 +215,11 @@ const ProfileSecurity = () => {
                 ) : (
                   "Log In"
                 )} */}
-                  Change Password
-                </button>
+                    Change Password
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
           </div>
         )}
       </div>

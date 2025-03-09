@@ -183,7 +183,7 @@ const CrytoTransaction = () => {
         <button
           onClick={() => handleOpenModal(transaction)}
           key={transaction.id}
-          className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] p-4"
+          className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0]  p-4"
         >
           {/* Left Side: Static Logo + Transaction Details */}
           <div className="flex items-center gap-4 relative">
@@ -401,7 +401,7 @@ const CrytoTransaction = () => {
               ) : (
                 /* Report Form UI */
                 <div className="bg-[#fff] w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
-                  <div className="flex justify-between border-b border-b-[#A4A4A4]/20  py-[1rem]  items-center">
+                  <div className="flex justify-between border-b border-b-[#E2E8F0]  py-[1rem]  items-center">
                     <h2 className="text-[20px] font-semibold text-[#27014F] mb-2 ">
                       Report Transaction
                     </h2>

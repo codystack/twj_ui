@@ -1,7 +1,9 @@
 import { NavLink, useLocation } from "react-router";
 import Logo from "../../assets/dashboard_img/Logo.svg";
 import Alert from "../../assets/dashboard_img/Bell_pin_light.svg";
-import profileImage from "../../assets/auth_imgs/reset-img.png";
+// import profileImage from "../../assets/auth_imgs/reset-img.png";
+import userIcon from "../../assets/dashboard_img/profile/userIcon.svg";
+
 import { useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
 import Bills from "./Bills";
@@ -13,10 +15,20 @@ import Profile from "./Profile";
 import Rates from "./Rates";
 import AccountUpgrade from "./AccountUpgrade";
 import Referals from "./Referals";
+
+
+
+
 const DashboardLayoutt = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const location = useLocation(); // Get current path
+
+  const locations = useLocation();
+  const pageName = locations.pathname .split("/") 
+  .pop() 
+  ?.replace(/_/g, " ") 
+  .toUpperCase(); 
 
   let CurrentPage;
   switch (location.pathname) {
@@ -44,7 +56,7 @@ const DashboardLayoutt = () => {
     case "/rates":
       CurrentPage = <Rates />;
       break;
-    case "/referals":
+    case "/referrals":
       CurrentPage = <Referals />;
       break;
     default:
@@ -60,12 +72,14 @@ const DashboardLayoutt = () => {
     setName(storedName ?? "");
   }, []);
 
+
   return (
     <nav className="bg-[#F5F5F5] h-full ">
-      <div className="flex   w-full bg-[#F5F5F5] z-[10] fixed items-center justify-between">
+      <div className="flex   w-full bg-[#F5F5F5] z- fixed items-center justify-between">
         <NavLink to="/dashboard" className="p-[12px] cursor-pointer ">
           <img src={Logo} alt="logo image" />
         </NavLink>
+        <h3 className="text-[#0A2E65] text-[16px] font-semibold">{pageName}</h3>
         <div className="flex items-center ">
           <div className="bg-[#fff] rounded-[100%] h-[40px] w-[40px] flex items-center justify-center border mr-[1rem] border-[#8003A9]">
             <img src={Alert} alt="" />
@@ -73,7 +87,7 @@ const DashboardLayoutt = () => {
           <div className=" flex gap-[15px] items-center border border-[#8003A9] mr-[1rem] rounded-r-[50px] rounded-l-[50px] px-[7px] py-[7px]">
             <div>
               <img
-                src={profileImage}
+                src={userIcon}
                 alt="Profile"
                 className="w-[40px] h-[40px] object-cover object-top rounded-full"
               />
