@@ -266,7 +266,7 @@ const GiftCardTransaction = () => {
                     </button>
                   </div>
 
-                  <div className="flex justify-between pb-[4%] border-b border-b-[#A4A4A4]/20 items-center">
+                  <div className="flex justify-between pb-[4%] border-b border-b-[#E2E8F0] items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
                       {selectedTransaction.amount}
                     </h2>
@@ -386,7 +386,7 @@ const GiftCardTransaction = () => {
               ) : (
                 /* Report Form UI */
                 <div className="bg-[#fff] w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
-                  <div className="flex justify-between border-b border-b-[#A4A4A4]/20  py-[1rem]  items-center">
+                  <div className="flex justify-between border-b border-b-[#E2E8F0]  py-[1rem]  items-center">
                     <h2 className="text-[20px] font-semibold text-[#27014F] mb-2 ">
                       Report Transaction
                     </h2>

@@ -94,7 +94,7 @@ const App = () => {
         >
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/bills_payment" element={<Bills />} />
-          <Route path="/referals" element={<Referals />} />
+          <Route path="/referrals" element={<Referals />} />
           <Route path="/giftcards" element={<GiftCards />} />
           <Route path="/crypto" element={<Crypto />} />
           <Route path="/wallet" element={<Wallet />} />

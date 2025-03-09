@@ -8,6 +8,12 @@ type Ref = {
   date: string;
   status: string;
 };
+// const ref: Ref[] = [
+//   { id: "1", name: "ertyuioipo", status: "Pending", date: "2024-03-01" },
+//   { id: "2", name: "iuytretytui", status: "Successfull", date: "2024-03-01" },
+
+// ];
+
 const ref: Ref[] = [
   { id: "1", name: "John Doe", status: "Pending", date: "2024-03-01" },
   { id: "2", name: "Jane Smith", status: "Successful", date: "2024-03-02" },
@@ -28,12 +34,12 @@ const Referals = () => {
   const handleCopy = () => {
     navigator.clipboard.writeText(textToCopy).then(() => {
       setCopied(true);
-      setTimeout(() => setCopied(false), 1000); // Hide message after 1 second
+      setTimeout(() => setCopied(false), 1000);
     });
   };
 
   return (
-    <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
+    <div className="w-full z-10 overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
       <div className="flex-1 overflow-y-auto p-4">
         <div className=" flex p-[1rem] gap-[2rem]">
           <div className="border w-[40%] h-fit rounded-[10px] p-[2rem]  border-[#D0DAE6]">
@@ -47,14 +53,14 @@ const Referals = () => {
                 your referal code.
               </p>
             </div>
-            <div className="relative">
-              <div className="border mt-[1rem] border-[#8A95BF] rounded-[5px] pl-[8px] flex px-0 items-center">
-                <span className="w-[85%] text-[#0A2E65]/60 overflow-hidden text-ellipsis whitespace-nowrap">
+            <div className="relative z-0">
+              <div className="border z-[-1] mt-[1rem] border-[#8A95BF] h-[3rem] rounded-[5px] pl-[8px] flex px-0 items-center">
+                <span className="w-[85%] text-[#0A2E65]/60   text-[15px] overflow-hidden text-ellipsis whitespace-nowrap">
                   {textToCopy}
                 </span>
                 <button
                   onClick={handleCopy}
-                  className="bg-[#8003A9] cursor-pointer p-[10px]"
+                  className="bg-[#8003A9] rounded-tr-[5px] rounded-br-[5px] w-[15%] cursor-pointer h-full p-[10px]"
                 >
                   <img src={Copy} alt="" />
                 </button>
@@ -69,7 +75,7 @@ const Referals = () => {
             </div>
           </div>
 
-          <div className="border w-[60%] rounded-[10px] border-[#D0DAE6]">
+          <div className="border w-[60%] rounded-[10px] h-fit border-[#D0DAE6]">
             <ul className="space-y-3 p-[1rem]">
               {ref.map((ref) => (
                 <li

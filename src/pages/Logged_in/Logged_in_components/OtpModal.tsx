@@ -67,7 +67,7 @@ const OtpModal = ({
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-20 bg-opacity-50">
           <div className="p-[1rem] rounded-[20px] bg-[#fff]/20">
             <div className="bg-white text-[#27014F] w-[600px] p-6 rounded-[20px] ">
-              <div className="flex justify-between border-b-[#A4A4A4]/20 border-b pb-[1rem] items-center">
+              <div className="flex justify-between border-b-[#E2E8F0]  border-b pb-[1rem] items-center">
                 <h2 className="text-xl font-semibold text-center">
                   {step === 1 ? "Change PIN" : "Set New PIN"}
                 </h2>
@@ -79,14 +79,14 @@ const OtpModal = ({
                 </button>
               </div>
 
-              <p className="ml-[6rem] text-[#8A95BF] pt-[1rem]">
+              <p className="ml-[6rem] text-[#8A95BF] pt-[3rem]">
                 {step === 1
                   ? "Enter your old TWJ PIN"
                   : "Enter your new TWJ PIN"}
               </p>
 
               {/* OTP Inputs */}
-              <div className="flex justify-center mt-[2rem] gap-10">
+              <div className="flex justify-center mt-[1rem] gap-10">
                 {otp.map((digit, index) => (
                   <input
                     key={index}
@@ -108,7 +108,7 @@ const OtpModal = ({
 
               {/* Forgot PIN - Only in Step 1 */}
               {step === 1 && (
-                <div className="flex items-center justify-center mt-[10px]">
+                <div className="flex items-center justify-center mt-[2rem]">
                   <p>Forgot Pin?</p>
                   <button className="text-[#8003A9] ml-[3px] cursor-pointer">
                     Reset Your Pin
