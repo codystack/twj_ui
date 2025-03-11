@@ -136,8 +136,6 @@ const SignUp = () => {
       // setIsLoading(true); // Start loading
       try {
         signUp(formData, navigate);
-        // console.log("submitted successfully");
-        // Reset form on success
         setFormData({
           fullName: "",
           email: "",
@@ -148,13 +146,8 @@ const SignUp = () => {
         // setErrors({});
       } catch (error: any) {
         if (error.response) {
-          setFormData({
-            fullName: "",
-            email: "",
-            password: "",
-            phoneNumber: "",
-            isChecked: false,
-          });
+
+          return error;
         }
       }
     }

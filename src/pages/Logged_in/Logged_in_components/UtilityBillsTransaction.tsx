@@ -217,7 +217,7 @@ const UtilityTransaction = () => {
         <button
           onClick={() => handleOpenModal(transaction)}
           key={transaction.id}
-          className="flex justify-between cursor-pointer items-center bg-white border-b  w-full border-[#E2E8F0] p-4"
+          className="flex justify-between cursor-pointer items-center bg-white border-b  w-full border-[#E2E8F0] last:border-b-0 p-4"
         >
           <div className="flex items-center gap-4 relative">
             <div className="relative">
