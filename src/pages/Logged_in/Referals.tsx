@@ -60,7 +60,7 @@ const Referals = () => {
                 </span>
                 <button
                   onClick={handleCopy}
-                  className="bg-[#8003A9] rounded-tr-[5px] rounded-br-[5px] w-[15%] cursor-pointer h-full p-[10px]"
+                  className="bg-[#8003A9] rounded-tr-[5px] rounded-r-[5px] w-[15%] cursor-pointer h-full p-[10px]"
                 >
                   <img src={Copy} alt="" />
                 </button>

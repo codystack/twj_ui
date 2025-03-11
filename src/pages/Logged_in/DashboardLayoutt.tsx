@@ -75,7 +75,7 @@ const DashboardLayoutt = () => {
 
   return (
     <nav className="bg-[#F5F5F5] h-full ">
-      <div className="flex   w-full bg-[#F5F5F5] z- fixed items-center justify-between">
+      <div className="flex   w-full bg-[#F5F5F5] z-5 fixed items-center justify-between">
         <NavLink to="/dashboard" className="p-[12px] cursor-pointer ">
           <img src={Logo} alt="logo image" />
         </NavLink>

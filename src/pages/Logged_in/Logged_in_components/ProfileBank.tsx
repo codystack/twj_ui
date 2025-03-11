@@ -6,6 +6,7 @@ import Select from "react-select";
 import bankIcon from "../../../assets/dashboard_img/profile/Bankicon.svg";
 import Check from "../../../assets/dashboard_img/profile/Check_round_fill (1).svg";
 
+import DeleteAccount from "../../../assets/dashboard_img/profile/Trash_duotone_line.svg";
 import Delete from "../../../assets/dashboard_img/profile/cancel.svg";
 const options = [
   { label: "Access Bank Plc", value: "Access Bank Plc" },
@@ -42,6 +43,27 @@ const options = [
   { label: "Zenith Bank Plc", value: "Zenith Bank Plc" },
 ];
 
+const accounts = [
+  {
+    id: 1,
+    name: "John Doe",
+    accountNumber: "2364238745",
+    bank: "Sterling Bank",
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    accountNumber: "9823746123",
+    bank: "GTBank",
+  },
+  {
+    id: 3,
+    name: "David Johnson",
+    accountNumber: "5678234910",
+    bank: "Access Bank",
+  },
+];
+
 const customStyles = {
   control: (provided: any, state: any) => ({
     ...provided,
@@ -50,9 +72,9 @@ const customStyles = {
     boxShadow: "none",
     outline: "none",
     textAlign: "left",
-    border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4", // Custom focus color
+    border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4", 
     "&:hover": {
-      border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4", // Keep the border same on hover
+      border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4", 
     },
   }),
   option: (provided: any, state: any) => ({
@@ -60,16 +82,6 @@ const customStyles = {
     cursor: "pointer",
     backgroundColor: state.isSelected ? "#8003A9" : "#fff",
   }),
-  // input: (provided: any) => ({
-  //   ...provided,
-  //   boxShadow: "none !important",
-  //   outline: "none !important",
-  // }),
-  // indicatorsContainer: (provided: any) => ({
-  //   ...provided,
-
-  //   // color: "#8003A9", // Custom color for dropdown indicator
-  // }),
 };
 
 const ProfileBank = () => {
@@ -83,6 +95,13 @@ const ProfileBank = () => {
     selectedBank: "",
   });
   const [name, setName] = useState("");
+
+  // const [isFlipped, setIsFlipped] = useState(false);
+  const [flippedId, setFlippedId] = useState<number | null>(null);
+
+  const handleFlip = (id: number) => {
+    setFlippedId(flippedId === id ? null : id);
+  };
 
   const handleAddBank = () => {
     setIsModalOpen(true);
@@ -168,7 +187,8 @@ const ProfileBank = () => {
 
   return (
     <>
-      <div className="flex gap-[2.5rem]">
+      <div className="grid grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] gap-4 justify-center">
+        {/* Add Bank Button Styled Like a Card */}
         <button
           onClick={handleAddBank}
           className="h-[182px] w-[320px] border flex flex-col items-center justify-center cursor-pointer border-[#D0DAE6] hover:border-[#8003A9] transition duration-300 rounded-[10px]"
@@ -177,23 +197,59 @@ const ProfileBank = () => {
           <p className="text-[#8003A9]">Add bank account</p>
         </button>
 
-        <div
-          className="relative h-[182px] w-[320px] rounded-[10px] overflow-hidden bg-cover bg-center"
-          style={{ backgroundImage: `url(${BgImage})` }}
-        >
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-[#8003A9]/80"></div>
-          {/* Icon (Top-right) */}
-          <div className="absolute top-3 right-3 text-white text-xl cursor-pointer">
-            <img src={BankIcon} alt="" />
+        {/* Account Cards */}
+        {accounts.map(({ id, name, accountNumber, bank }) => (
+          <div
+            key={id}
+            className="relative w-[320px] h-[182px] cursor-pointer"
+            onClick={() => handleFlip(id)}
+          >
+            <div
+              className={`relative w-full h-full rounded-[10px] overflow-hidden bg-cover bg-center transition-transform duration-500 ${
+                flippedId === id ? "rotate-y-180" : ""
+              }`}
+              style={{
+                backgroundImage: `url(${BgImage})`,
+                transformStyle: "preserve-3d",
+              }}
+            >
+              {/* Front Side */}
+              <div
+                className={`absolute inset-0 flex flex-col justify-between p-3 bg-[#8003A9]/80 text-white ${
+                  flippedId !== id ? "block" : "hidden"
+                }`}
+              >
+                <div className="absolute top-3 right-3 text-xl">
+                  <img src={BankIcon} alt="Bank Icon" />
+                </div>
+                <div className="absolute bottom-3 left-3 leading-[1.1rem]">
+                  <p className="text-[16px] font-semibold">{name}</p>
+                  <p className="text-[14px]">{accountNumber}</p>
+                  <p className="text-[12px]">{bank}</p>
+                </div>
+              </div>
+
+              {/* Back Side */}
+              <div
+                className={`absolute inset-0 flex items-center justify-center bg-[#D32F2F]/90 text-white transform rotate-y-180 ${
+                  flippedId === id ? "block" : "hidden"
+                }`}
+              >
+                <button className="relative group bg-white p-[0.5rem] flex items-center justify-center rounded-full cursor-pointer">
+                  <img
+                    src={DeleteAccount}
+                    alt="Delete Icon"
+                    className="w-8  h-8"
+                  />
+                  {/* Tooltip */}
+                  <span className="absolute w-full whitespace-nowrap text-[15px] bottom-full mb-0 left-1/2 -translate-x-1/2 text-white text-xs py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    Delete account details
+                  </span>
+                </button>
+              </div>
+            </div>
           </div>
-          {/* Bank Details */}
-          <div className="absolute bottom-3 left-3 leading-[1.1rem] text-white">
-            <p className="text-[16px] font-semibold">John Doe</p>
-            <p className="text-[14px] ">2364238745</p>
-            <p className="text-[12px] ">Sterling Bank</p>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Modal */}
