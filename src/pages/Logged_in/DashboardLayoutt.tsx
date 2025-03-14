@@ -108,7 +108,7 @@ const DashboardLayoutt = () => {
           {/* Top Section - First 5 Items */}
           <Sidebar />
         </div>
-        <div className=" w-[78.5%] ml-[20%]">{CurrentPage}</div>
+        <div className=" w-[79.5%] ml-[20%]">{CurrentPage}</div>
       </div>
     </nav>
   );
