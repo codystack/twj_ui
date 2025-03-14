@@ -1,47 +1,68 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BankIcon from "../../../assets/dashboard_img/profile/Bank_icon.svg";
 import AddRing from "../../../assets/dashboard_img/profile/Add_ring_light.svg";
 import BgImage from "../../../assets/dashboard_img/profile/atmcard.jpg";
 import Select from "react-select";
 import bankIcon from "../../../assets/dashboard_img/profile/Bankicon.svg";
 import Check from "../../../assets/dashboard_img/profile/Check_round_fill (1).svg";
-
 import DeleteAccount from "../../../assets/dashboard_img/profile/Trash_duotone_line.svg";
 import Delete from "../../../assets/dashboard_img/profile/cancel.svg";
-const options = [
-  { label: "Access Bank Plc", value: "Access Bank Plc" },
-  { label: "Citibank Nigeria Ltd", value: "Citibank Nigeria Ltd" },
-  { label: "Ecobank Nigeria Plc", value: "Ecobank Nigeria Plc" },
-  { label: "Fidelity Bank Plc", value: "Fidelity Bank Plc" },
-  { label: "First Bank Nigeria Ltd", value: "First Bank Nigeria Ltd" },
-  {
-    label: "First City Monument Bank Plc",
-    value: "First City Monument Bank Plc",
-  },
-  { label: "Globus Bank Ltd", value: "Globus Bank Ltd" },
-  { label: "Guaranty Trust Bank Plc", value: "Guaranty Trust Bank Plc" },
-  { label: "Keystone Bank Ltd", value: "Keystone Bank Ltd" },
-  { label: "Nova Commercial Bank Ltd", value: "Nova Commercial Bank Ltd" },
-  { label: "Optimus Bank", value: "Optimus Bank" },
-  { label: "Parallex Bank Ltd", value: "Parallex Bank Ltd" },
-  { label: "Polaris Bank Plc", value: "Polaris Bank Plc" },
-  { label: "Premium Trust Bank", value: "Premium Trust Bank" },
-  { label: "Providus Bank Ltd", value: "Providus Bank Ltd" },
-  { label: "Signature Bank Ltd", value: "Signature Bank Ltd" },
-  { label: "Stanbic IBTC Bank Plc", value: "Stanbic IBTC Bank Plc" },
-  {
-    label: "Standard Chartered Bank Nigeria Ltd",
-    value: "Standard Chartered Bank Nigeria Ltd",
-  },
-  { label: "Sterling Bank Plc", value: "Sterling Bank Plc" },
-  { label: "SunTrust Bank Nigeria Ltd", value: "SunTrust Bank Nigeria Ltd" },
-  { label: "Titan Trust Bank Ltd", value: "Titan Trust Bank Ltd" },
-  { label: "Union Bank of Nigeria Plc", value: "Union Bank of Nigeria Plc" },
-  { label: "United Bank For Africa Plc", value: "United Bank For Africa Plc" },
-  { label: "Unity Bank Plc", value: "Unity Bank Plc" },
-  { label: "Wema Bank Plc", value: "Wema Bank Plc" },
-  { label: "Zenith Bank Plc", value: "Zenith Bank Plc" },
-];
+import { useQuery } from "@tanstack/react-query";
+import SuccessModal from "../SuccessModal";
+// import { useBankStore } from "../../../store/useBankStore";
+// import { ActionMeta } from "react-select";
+
+// import { useBankStore } from "./useBankStore"; // Import Zustand store
+
+type Bank = {
+  code: string;
+  name: string;
+};
+
+const fetchBanks = async (): Promise<Bank[]> => {
+  const response = await fetch(
+    "https://twjmobileapi.runasp.net/api/Accounts/getBanksList"
+  ); // Replace with your API URL
+  if (!response.ok) throw new Error("Failed to fetch banks");
+  const data = await response.json();
+  // console.log("Fetched banks:", data.data);
+  return data.data;
+};
+
+// const options = [
+//   { label: "Access Bank Plc", value: "Access Bank Plc" },
+//   { label: "Citibank Nigeria Ltd", value: "Citibank Nigeria Ltd" },
+//   { label: "Ecobank Nigeria Plc", value: "Ecobank Nigeria Plc" },
+//   { label: "Fidelity Bank Plc", value: "Fidelity Bank Plc" },
+//   { label: "First Bank Nigeria Ltd", value: "First Bank Nigeria Ltd" },
+//   {
+//     label: "First City Monument Bank Plc",
+//     value: "First City Monument Bank Plc",
+//   },
+//   { label: "Globus Bank Ltd", value: "Globus Bank Ltd" },
+//   { label: "Guaranty Trust Bank Plc", value: "Guaranty Trust Bank Plc" },
+//   { label: "Keystone Bank Ltd", value: "Keystone Bank Ltd" },
+//   { label: "Nova Commercial Bank Ltd", value: "Nova Commercial Bank Ltd" },
+//   { label: "Optimus Bank", value: "Optimus Bank" },
+//   { label: "Parallex Bank Ltd", value: "Parallex Bank Ltd" },
+//   { label: "Polaris Bank Plc", value: "Polaris Bank Plc" },
+//   { label: "Premium Trust Bank", value: "Premium Trust Bank" },
+//   { label: "Providus Bank Ltd", value: "Providus Bank Ltd" },
+//   { label: "Signature Bank Ltd", value: "Signature Bank Ltd" },
+//   { label: "Stanbic IBTC Bank Plc", value: "Stanbic IBTC Bank Plc" },
+//   {
+//     label: "Standard Chartered Bank Nigeria Ltd",
+//     value: "Standard Chartered Bank Nigeria Ltd",
+//   },
+//   { label: "Sterling Bank Plc", value: "Sterling Bank Plc" },
+//   { label: "SunTrust Bank Nigeria Ltd", value: "SunTrust Bank Nigeria Ltd" },
+//   { label: "Titan Trust Bank Ltd", value: "Titan Trust Bank Ltd" },
+//   { label: "Union Bank of Nigeria Plc", value: "Union Bank of Nigeria Plc" },
+//   { label: "United Bank For Africa Plc", value: "United Bank For Africa Plc" },
+//   { label: "Unity Bank Plc", value: "Unity Bank Plc" },
+//   { label: "Wema Bank Plc", value: "Wema Bank Plc" },
+//   { label: "Zenith Bank Plc", value: "Zenith Bank Plc" },
+// ];
 
 const accounts = [
   {
@@ -72,9 +93,9 @@ const customStyles = {
     boxShadow: "none",
     outline: "none",
     textAlign: "left",
-    border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4", 
+    border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
     "&:hover": {
-      border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4", 
+      border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
     },
   }),
   option: (provided: any, state: any) => ({
@@ -85,20 +106,187 @@ const customStyles = {
 };
 
 const ProfileBank = () => {
+
+//  const [bankList, setBankList] = useState([]); comment
+//  const [loading, setLoading] = useState(false);
+//  const [errorFetchingBanks, setErrorFetchingBanks] = useState(""); comment
+
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [formData, setFormData] = useState({
     accountNumber: "",
     selectedBank: "",
+    bankCode: "",
   });
+  // const [bankCode, setBankCode] = useState();
   const [errors, setErrors] = useState({
     accountNumber: "",
     selectedBank: "",
   });
-  const [name, setName] = useState("");
 
-  // const [isFlipped, setIsFlipped] = useState(false);
+  const [accountName, setAccountName] = useState<string | null>(null);
+  const [accountNameError, setAccountNameError] = useState<string | null>(null);
+
+  const [loading, setLoading] = useState(false);
   const [flippedId, setFlippedId] = useState<number | null>(null);
 
+  // Fetch banks on demand
+  const {
+    data: banks, // Use 'banks' instead of 'data'
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["banks"],
+    queryFn: fetchBanks,
+    enabled: false,
+  });
+
+  const options =
+    banks?.map((bank) => ({
+      value: bank.code,
+      label: bank.name,
+    })) || [];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSelectChange = async (
+    selectedOption: { value: string; label: string } | null
+  ) => {
+    if (!selectedOption) return;
+
+    const selectedBankCode = selectedOption.value;
+    const uniqueBankName = selectedOption.label;
+
+    setFormData((prev) => ({
+      ...prev,
+      bankCode: selectedBankCode,
+      selectedBank: uniqueBankName,
+    }));
+
+    if (formData.accountNumber) {
+      await verifyAccount(selectedBankCode, formData.accountNumber);
+    }
+  };
+
+  // Function to verify account details
+  const verifyAccount = async (bankCode: string, accNumber: string) => {
+    if (!bankCode || !accNumber) return;
+
+    setLoading(true);
+    setAccountNameError(null);
+    setAccountName(null);
+
+    try {
+      const response = await fetch(
+        "https://twjmobileapi.runasp.net/api/Accounts/bankAccountValidation",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            accountNumber: accNumber,
+            bankCode: bankCode,
+          }),
+        }
+      );
+      // console.log(accountName, bankCode);
+      const result = await response.json();
+      // console.log("Backend Response:", result);
+
+      if (!response.ok) {
+        throw new Error(result.message || "Verification failed");
+      }
+
+      const name = result.data.message.details.account_name;
+      // console.log(name);
+      setAccountName(name);
+      // setAccountNameError(null);
+    } catch (error: any) {
+      // console.error("Error verifying account:", error.message); // Now correctly logs error
+      setAccountName(null);
+      setAccountNameError(error.message); // Store backend error message in state
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handliig submit of details to the BE
+  const handleSubmit = async () => {
+    const token = localStorage.getItem("authToken");
+    console.log(token);
+    const payload = {
+      bankName: formData.selectedBank,
+      accountName: accountName,
+      accountNumber: formData.accountNumber,
+      bankCode: formData.bankCode,
+    };
+
+    try {
+      const response = await fetch(
+        "https://twjmobileapi.runasp.net/api/BankAccounts/add-bank",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, 
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const result = await response.json(); // Parse JSON response
+      // console.log("Backend Response:", result);
+
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to submit data");
+      }
+
+      // console.log("Data successfully sent:", payload); // Log success message
+      handleClose();
+      setIsSuccessModal(true)
+    } catch (error: any) {
+      console.error("Error submitting data:", error.message);
+    }
+  };
+
+  // fetching all the banks 
+  // const fetchBankDetails = async () => {
+  //   setLoading(true);
+  //   setErrorFetchingBanks("");
+  
+  //   try {
+  //     const token = localStorage.getItem("authToken") || "";
+  //     const response = await fetch("", {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch banks");
+  //     }
+  
+  //     const data = await response.json();
+  //     setBankList(data); // Use your existing setBanks state
+  //     console.log(bankList)
+  //   } catch (error: any) {
+  //     setErrorFetchingBanks(error.message); // Use your existing setError state
+  //     console.log(errorFetchingBanks)
+  //   } finally {
+  //     setLoading(false); // Use your existing setLoading state
+  //   }
+  // };
+  
+  
   const handleFlip = (id: number) => {
     setFlippedId(flippedId === id ? null : id);
   };
@@ -107,27 +295,13 @@ const ProfileBank = () => {
     setIsModalOpen(true);
   };
 
+ 
+
   const handleClose = () => {
     setIsModalOpen(false);
-    setFormData({ accountNumber: "", selectedBank: "" });
-  };
-
-  // const handleSubmit = () => {
-  //   // console.log("Bank Details:", { formD, selectedBank });
-  //   handleClose(); // Close modal after submission
-  // };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value, // Dynamically update based on input `name`
-    }));
-  };
-
-  const handleSelectChange = (selectedOption: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      selectedBank: selectedOption.value, // Update selected bank
-    }));
+    setAccountName(null);
+    setAccountNameError(null); 
+    setFormData({ accountNumber: "", selectedBank: "", bankCode: "" });
   };
 
   const validateField = (fieldName: string, value: string) => {
@@ -172,25 +346,19 @@ const ProfileBank = () => {
   };
 
   const isFormInvalid =
-    Object.values(errors).some((error) => error) ||
-    !formData.accountNumber ||
-    !formData.selectedBank;
+    Object.values(errors).some((error) => error) || !accountName;
 
-  useEffect(() => {
-    // Get email and name from localStorage
-    // const storedEmail = localStorage.getItem("email");
-    const storedName = localStorage.getItem("name");
-
-    // setEmail(storedEmail ?? ""); // Use empty string if null
-    setName(storedName ?? "");
-  }, []);
-
+  
   return (
     <>
       <div className="grid grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] gap-4 justify-center">
         {/* Add Bank Button Styled Like a Card */}
         <button
-          onClick={handleAddBank}
+          // onClick={handleAddBank}
+          onClick={() => {
+            handleAddBank();
+            refetch();
+          }}
           className="h-[182px] w-[320px] border flex flex-col items-center justify-center cursor-pointer border-[#D0DAE6] hover:border-[#8003A9] transition duration-300 rounded-[10px]"
         >
           <img src={AddRing} alt="" />
@@ -256,7 +424,7 @@ const ProfileBank = () => {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-20 bg-opacity-50">
           <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white p-6 rounded-[20px] text-[#27014F] shadow-lg w-[600px]">
+            <form className="bg-white p-6 rounded-[20px] text-[#27014F] shadow-lg w-[600px]">
               <div className="flex justify-end">
                 <button
                   onClick={handleClose}
@@ -274,13 +442,6 @@ const ProfileBank = () => {
               </div>
               <div className="flex flex-col mt-[10px] items-center justify-center">
                 <div className=" w-[60%] ">
-                  {/* Account Number Input */}
-                  {/* <input
-                  name="accountNumber"
-                  type="text"
-                //  className="w-full  border border-[#a4a4a4]/60 p-2 rounded mb-3"
-                /> */}
-
                   <div className="w-full mb-4">
                     <input
                       type="text"
@@ -291,7 +452,7 @@ const ProfileBank = () => {
                       onBlur={() =>
                         validateField("email", formData.accountNumber)
                       }
-                      className={`p-2.5 pl-3 pr-3 border border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                      className={`p-2.5 pl-3 pr-3 border text-[#27014F] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                         errors.accountNumber
                           ? "border border-red-600"
                           : "focus:border-purple-800"
@@ -307,27 +468,42 @@ const ProfileBank = () => {
                   {/* Select Bank Dropdown */}
                   <Select
                     options={options}
+                    getOptionLabel={(e) => e.label}
+                    getOptionValue={(e) => e.value}
+                    isLoading={isLoading}
                     styles={customStyles}
                     value={options.find(
                       (option) => option.value === formData.selectedBank
-                    )} // Ensure correct value is selected
+                    )}
                     onChange={handleSelectChange}
                     placeholder="Select Bank"
                   />
                 </div>
               </div>
               <div className="ml-[7.2rem] text-[14px] mt-[5px] flex items-center gap-[2px]">
-                <img src={Check} alt="" />
-                <p>{name}</p>
+                {accountName && <img src={Check} alt="Verified" />}
+                <p className={accountNameError ? "text-red-500" : ""}>
+                  {loading
+                    ? "Verifying..."
+                    : accountNameError
+                    ? accountNameError
+                    : accountName}
+                </p>
               </div>
               {/* Buttons */}
               <div className="flex justify-center mb-[2rem]">
                 <button
+                  onClick={() => {
+                    handleSubmit();
+                    // handleClose();
+                    // handleSuccessModal();
+                  }}
                   className={`bg-[#9605C5] mt-[2rem] w-[60%] font-semibold text-white p-3 rounded-[10px]  ${
                     isFormInvalid
                       ? "opacity-60 cursor-not-allowed"
                       : "  cursor-pointer"
                   }`}
+                  type="button"
                   disabled={isFormInvalid}
                 >
                   {/* {isLoadingLogin ? (
@@ -359,9 +535,22 @@ const ProfileBank = () => {
                   Submit
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
+      )}
+
+      {/* Render Modal When Open */}
+      {isSuccessModal && (
+        <SuccessModal
+          title="You, Yes You, Rock!"
+          message="Bank account added."
+          onClose={() => {
+            // fetchBankDetails();
+            setIsSuccessModal(false);
+          }}
+          
+        />
       )}
     </>
   );
