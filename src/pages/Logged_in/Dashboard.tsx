@@ -101,7 +101,7 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                <p className="text-left text-[#27014F] text-[11px]">
+                <p className="text-left text-[#27014F] tracking-normal text-[11px]">
                   Avoid card transaction failures. Use the <br /> TWJ Virtual
                   Card for smooth, relaible <br /> payments on your favourite
                   platforms.

@@ -79,7 +79,7 @@ const DashboardLayoutt = () => {
         <NavLink to="/dashboard" className="p-[12px] cursor-pointer ">
           <img src={Logo} alt="logo image" />
         </NavLink>
-        <h3 className="text-[#0A2E65] text-[16px] font-semibold">{pageName}</h3>
+        <h3 className="text-[#0A2E65] text-[16px] tracking-[2.5px] font-semibold">{pageName}</h3>
         <div className="flex items-center ">
           <div className="bg-[#fff] rounded-[100%] h-[40px] w-[40px] flex items-center justify-center border mr-[1rem] border-[#8003A9]">
             <img src={Alert} alt="" />
