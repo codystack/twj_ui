@@ -13,6 +13,9 @@ import SuccessModal from "../SuccessModal";
 // import { ActionMeta } from "react-select";
 
 // import { useBankStore } from "./useBankStore"; // Import Zustand store
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+// const API_URL = import.meta.env.VITE_API_URL;
 
 type Bank = {
   code: string;
@@ -21,7 +24,7 @@ type Bank = {
 
 const fetchBanks = async (): Promise<Bank[]> => {
   const response = await fetch(
-    "https://twjmobileapi.runasp.net/api/Accounts/getBanksList"
+    `${BASE_URL}/Accounts/getBanksList`
   ); // Replace with your API URL
   if (!response.ok) throw new Error("Failed to fetch banks");
   const data = await response.json();
@@ -107,9 +110,9 @@ const customStyles = {
 
 const ProfileBank = () => {
 
-//  const [bankList, setBankList] = useState([]); comment
+// const [bankList, setBankList] = useState([]); // comment
 //  const [loading, setLoading] = useState(false);
-//  const [errorFetchingBanks, setErrorFetchingBanks] = useState(""); comment
+//  const [errorFetchingBanks, setErrorFetchingBanks] = useState(""); // comment
 
   const [isSuccessModal, setIsSuccessModal] = useState(false);
 
@@ -257,7 +260,7 @@ const ProfileBank = () => {
     }
   };
 
-  // fetching all the banks 
+  // fetching all the bank name
   // const fetchBankDetails = async () => {
   //   setLoading(true);
   //   setErrorFetchingBanks("");

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import { useAuthorizationStore } from "./authorizationStore";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -177,7 +178,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         `${API_URL}/ResetPasswordVerifyOtp?emailOrPhoneNumber=${emailOrPhoneNumber}`,
         { token }
       );
-   
+
       // Check if response contains a success message
       const { message } = response.data;
 
@@ -188,7 +189,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         ForgotOtpError: null,
         ForgotOtpSuccess: true,
       });
-  
+
       navigate("/reset_password");
     } catch (error: any) {
       set({
@@ -209,9 +210,24 @@ export const useAuthStore = create<AuthState>((set) => ({
       const { data } = response;
 
       // Store token
-      localStorage.setItem("authToken", data.data.token.accessToken);
+      // localStorage.setItem("authToken", data.data.token.accessToken);
+      console.log("authToken", data.data);
+
+      // Extract access & refresh tokens from response
+
+      const accessToken = data.data.token.accessToken;
+      const refreshToken = data.data.token.refreshToken;
+
+      if (!accessToken || !refreshToken) {
+        throw new Error("Access or Refresh Token is missing in response");
+      }
+
+      // ✅ Save both tokens in Zustand store (memory)
+      useAuthorizationStore.getState().setTokens(accessToken, refreshToken);
+
       localStorage.setItem("name", data.data.userDetails.fullName);
       localStorage.setItem("email", data.data.userDetails.email);
+      localStorage.setItem("userName", data.data.userDetails.userName);
       localStorage.setItem("isAuthenticated", "true");
       set({
         isAuthenticated: true,

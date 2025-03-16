@@ -7,14 +7,15 @@ import Delete from "../../assets/dashboard_img/profile/Trash_duotone_line.svg";
 import Edit from "../../assets/dashboard_img/profile/Edit_duotone_line.svg";
 import Cancel from "../../assets/dashboard_img/profile/cancel.svg";
 import eye from "../../assets/auth_imgs/Eye_light.svg";
-import {  useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import ProfileSecurity from "./Logged_in_components/ProfileSecurity";
 import ProfileBank from "./Logged_in_components/ProfileBank";
 // import { PhoneNumber } from "react-phone-number-input";
 import PhoneEditModal from "./Logged_in_components/PhoneEditModal";
 import "../../App.css";
-// import { useBankStore } from "../../store/useBankStore";
+import { useBankStore } from "../../store/useBankStore";
+import { useAuthorizationStore } from "../../store/authorizationStore";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<"account" | "security" | "bank">(
@@ -34,16 +35,19 @@ const Profile = () => {
   // State for password visibility
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPhoneInputModalOpen, setIsPhoneInputModalOpen] = useState(false);
-  // const { bankList, isFetchingBanks, fetchError, fetchBanks } = useBankStore(); comment here
+  const {
+    // bankList,
+    // isFetchingBanks,
+    // fetchError,
+    fetchBanks,
+  } = useBankStore(); // comment here
+  const { accessToken } = useAuthorizationStore(); // Get accessToken from Zustand
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("authToken");
-  //   if (token) {
-  //     fetchBanks({ queryKey: ["banks", token] })
-  //       .then((data) => console.log("Fetched Banks:", data))
-  //       .catch((error) => console.error("Error fetching banks:", error));
-  //   }
-  // }, []);             comment here
+  useEffect(() => {
+    if (accessToken) {
+      fetchBanks();
+    }
+  }, [accessToken]);
 
   // Update form field value
   const handleInputChange = (e: any) => {
