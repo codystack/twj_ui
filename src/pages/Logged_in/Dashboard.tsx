@@ -7,8 +7,8 @@ import Bulb from "../../assets/dashboard_img/dashboard_icons/ion_bulb-sharp.svg"
 import TV from "../../assets/dashboard_img/dashboard_icons/wpf_retro-tv.svg";
 import Casino from "../../assets/dashboard_img/dashboard_icons/maki_casino.svg";
 import Support from "../../assets/dashboard_img/dashboard_icons/bx_support.svg";
-import eye_lines from "../../assets/dashboard_img/cross.svg";
-import eye from "../../assets/dashboard_img/View_hide_light (1).svg";
+import eye_lines from "../../assets/dashboard_img/eye_covered.svg";
+import eye from "../../assets/dashboard_img/Eye_open_white.svg";
 import virtualCard from "../../assets/dashboard_img/virtualcardxx 1.svg";
 import ArrowUp from "../../assets/dashboard_img/Arrow_up.svg";
 import ArrowDown from "../../assets/dashboard_img/Arrow_down.svg";
@@ -35,6 +35,9 @@ const Dashboard = () => {
         <div className=" ">
           <div className="flex gap-[1.5rem]">
             <div className="flex ">
+
+
+
               <div className="w-[505px] relative h-[253px] bg-[#27014F] rounded-[10px] flex items-center justify-center">
                 <img
                   src={Lines}
@@ -44,54 +47,56 @@ const Dashboard = () => {
                 <div className="flex flex-col items-center text-[#fff]">
                   <p className="text-[20px] leading-[rem]">Wallet Balance</p>
                   <div className=" relative flex items-center gap-2">
-                    <span className=" absolute left-[-0.8rem] bottom-[1rem] text-[16px]">
+                    <span className=" mb-[8px] mr-[-5px] text-[16px]">
                       {isHidden ? "" : " ₦"}
                     </span>
-                    <p className="text-[32px]">
+                    <p className="text-[32px] font-semibold">
                       {isHidden ? "*******" : "1,550,000"}
                     </p>
-                    <span className="text-[16px] absolute bottom-[5px] left-[9rem] ">
+                    <span className="text-[16px] mt-[12px] ml-[-7px] ">
                       {isHidden ? "" : ".00"}
                     </span>
                     <button
                       onClick={toggleVisibility}
-                      className="relative ml-[1.7rem] cursor-pointer "
+                      className=" ml-[2px] cursor-pointer "
                     >
-                      <img src={eye} className="w-full h-full" alt="" />
-
-                      {isHidden && (
+                      {isHidden ? (
                         <img
                           src={eye_lines}
-                          className="absolute top-[1.5px]  left-[2px]"
+                          className=" top-[1.5px]  left-[2px]"
                           alt=""
                         />
+                      ) : (
+                        <img src={eye} className="w-full h-full" alt="" />
                       )}
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div className=" flex flex-col mt-[3rem] w-[8rem] gap-[1rem] rounded-[10px]">
-                <button className="bg-[#FF3366] relative cursor-pointer text-left text-[#fff] text-[12px] py-[1rem] pr-[2.5rem] w-fit  pl-[5px] rounded-r-[40px] m">
-                  <p> WITHDRAW </p>
-                  <img
-                    className="absolute right-[1rem] bottom-[10px]"
-                    src={ArrowUp}
-                    alt=""
-                  />
-                </button>
-                <button className="bg-[#32A071] relative text-left cursor-pointer text-[#fff] text-[12px] p-[1rem] pl-[5px] rounded-r-[40px]">
-                  <p> TOP UP WALLET</p>
-                  <img
-                    className="absolute right-[7px] bottom-[12px]"
-                    src={ArrowDown}
-                    alt=""
-                  />
-                </button>
+              <div className="flex justify-center items-center">
+                <div className=" flex flex-col  w-[8rem] gap-[1rem] rounded-[10px]">
+                  <button className="bg-[#FF3366] relative cursor-pointer text-left text-[#fff] text-[12px] py-[1rem] pr-[2.5rem] w-fit  pl-[5px] rounded-r-[40px] m">
+                    <p> WITHDRAW </p>
+                    <img
+                      className="absolute right-[1rem] bottom-[10px]"
+                      src={ArrowUp}
+                      alt=""
+                    />
+                  </button>
+                  <button className="bg-[#32A071] relative text-left cursor-pointer text-[#fff] text-[12px] p-[1rem] pl-[5px] rounded-r-[40px]">
+                    <p> TOP UP WALLET</p>
+                    <img
+                      className="absolute right-[7px] bottom-[12px]"
+                      src={ArrowDown}
+                      alt=""
+                    />
+                  </button>
+                </div>
               </div>
             </div>
             <div className="w-[423px] h-[253] bg-[#FBEEFF] rounded-[10px] ">
-              <div className=" pt-[1rem] pl-[1.5rem]">
+              <div className=" pt-[1.5rem] pl-[1.5rem]">
                 <div className="flex  items-center">
                   <h5 className="font-bold text-[24px] mr-[5px]">
                     Virtual Card
@@ -101,15 +106,15 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                <p className="text-left text-[#27014F] tracking-normal text-[11px]">
+                <p className="text-left text-[#27014F] leading-[13px] tracking-normal text-[11px]">
                   Avoid card transaction failures. Use the <br /> TWJ Virtual
-                  Card for smooth, relaible <br /> payments on your favourite
-                  platforms.
+                  USD Card for smooth, relaible <br /> payments on your
+                  favourite platforms.
                 </p>
               </div>
               <img
                 src={virtualCard}
-                className="rounded-bl-[10px] rounded-br-[10px]"
+                className="rounded-bl-[10px]  rounded-br-[10px]"
                 alt=""
               />
             </div>
@@ -117,74 +122,74 @@ const Dashboard = () => {
 
           <div className=" flex w-full mt-[3rem]  justify-start">
             <div className="grid grid-cols-4 grid-rows-2 gap-[1rem] ">
-              <button className="cursor-pointer relative h-[146px] w-[252px] border border-[#F8E0FF] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
+              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
                 <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
                   <img src={crypto} alt="" />
                 </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[5px]">
+                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
                   Crypto
                 </p>
                 <img src={CryptoBG} className="absolute right-0" alt="" />
               </button>
-              <button className="cursor-pointer relative h-[146px] w-[252px] border border-[#F8E0FF] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
+              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
                 <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
                   <img src={Giftcard} alt="" />
                 </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px] mt-[5px]">
+                <p className="text-[#27014F] tracking-[0.6px] text-[20px] mt-[1rem]">
                   Gift Cards
                 </p>
                 <img src={giftcardsbg} className="absolute right-0" alt="" />
               </button>
-              <button className="cursor-pointer relative h-[146px] w-[252px] border border-[#F8E0FF] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
+              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
                 <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
                   <img src={Airtime} alt="" />
                 </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[5px]">
+                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
                   Airtime
                 </p>
                 <img src={airtimebg} className="absolute right-0" alt="" />
               </button>
-              <button className="cursor-pointer relative h-[146px] w-[252px] border border-[#F8E0FF] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
+              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
                 <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
                   <img src={Data} alt="" />
                 </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[5px]">
+                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
                   Data
                 </p>
                 <img src={dataBg} className="absolute right-0" alt="" />
               </button>
-              <button className="cursor-pointer relative h-[146px] w-[252px] border border-[#F8E0FF] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
+              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
                 <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
                   <img src={Bulb} alt="" />
                 </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[5px]">
+                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
                   Electricity
                 </p>
                 <img src={Bulbbg} className="absolute right-0" alt="" />
               </button>
-              <button className="cursor-pointer relative h-[146px] w-[252px] border border-[#F8E0FF] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
+              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
                 <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
                   <img src={TV} alt="" />
                 </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[5px]">
+                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
                   Cable TV
                 </p>
                 <img src={Tvbg} className="absolute right-0" alt="" />
               </button>
-              <button className="cursor-pointer relative h-[146px] w-[252px] border border-[#F8E0FF] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
+              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
                 <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
                   <img src={Casino} alt="" />
                 </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[5px]">
+                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
                   Betting
                 </p>
                 <img src={Casinobg} className="absolute right-0" alt="" />
               </button>
-              <button className="cursor-pointer relative h-[146px] w-[252px] border border-[#F8E0FF] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
+              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
                 <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
                   <img src={Support} alt="" />
                 </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px] mt-[5px]">
+                <p className="text-[#27014F] tracking-[0.6px] text-[20px] mt-[1rem]">
                   Support
                 </p>
                 <img src={Supportbg} className="absolute right-0" alt="" />

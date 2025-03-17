@@ -311,7 +311,7 @@ const UtilityTransaction = () => {
                     </button>
                   </div>
 
-                  <div className="flex justify-between pb-[4%] border-b border-b-[#A4A4A4]/20  items-center">
+                  <div className="flex justify-between pb-[4%] border-b border-b-[#E2E8F0]  items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
                       {selectedTransaction.amount}
                     </h2>
