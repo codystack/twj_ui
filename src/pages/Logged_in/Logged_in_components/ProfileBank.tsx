@@ -9,6 +9,8 @@ import DeleteAccount from "../../../assets/dashboard_img/profile/Trash_duotone_l
 import Delete from "../../../assets/dashboard_img/profile/cancel.svg";
 import { useQuery } from "@tanstack/react-query";
 import SuccessModal from "../SuccessModal";
+import { useAuthorizationStore } from "../../../store/authorizationStore";
+import api from "../../../services/api";
 // import { useBankStore } from "../../../store/useBankStore";
 // import { ActionMeta } from "react-select";
 
@@ -16,16 +18,25 @@ import SuccessModal from "../SuccessModal";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // const API_URL = import.meta.env.VITE_API_URL;
+interface BankAccount {
+  id: string;
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+  bankCode: string;
+}
 
 type Bank = {
   code: string;
   name: string;
 };
 
+interface BankDetailsProps {
+  bankList: BankAccount[];
+}
+
 const fetchBanks = async (): Promise<Bank[]> => {
-  const response = await fetch(
-    `${BASE_URL}/Accounts/getBanksList`
-  ); // Replace with your API URL
+  const response = await fetch(`${BASE_URL}/Accounts/getBanksList`); // Replace with your API URL
   if (!response.ok) throw new Error("Failed to fetch banks");
   const data = await response.json();
   // console.log("Fetched banks:", data.data);
@@ -67,26 +78,6 @@ const fetchBanks = async (): Promise<Bank[]> => {
 //   { label: "Zenith Bank Plc", value: "Zenith Bank Plc" },
 // ];
 
-const accounts = [
-  {
-    id: 1,
-    name: "John Doe",
-    accountNumber: "2364238745",
-    bank: "Sterling Bank",
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    accountNumber: "9823746123",
-    bank: "GTBank",
-  },
-  {
-    id: 3,
-    name: "David Johnson",
-    accountNumber: "5678234910",
-    bank: "Access Bank",
-  },
-];
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -108,11 +99,12 @@ const customStyles = {
   }),
 };
 
-const ProfileBank = () => {
+const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
+  // console.log("Bank List in ProfileBank:", bankList);
 
-// const [bankList, setBankList] = useState([]); // comment
-//  const [loading, setLoading] = useState(false);
-//  const [errorFetchingBanks, setErrorFetchingBanks] = useState(""); // comment
+  // const [bankList, setBankList] = useState([]); // comment
+  //  const [loading, setLoading] = useState(false);
+  //  const [errorFetchingBanks, setErrorFetchingBanks] = useState(""); // comment
 
   const [isSuccessModal, setIsSuccessModal] = useState(false);
 
@@ -131,9 +123,11 @@ const ProfileBank = () => {
 
   const [accountName, setAccountName] = useState<string | null>(null);
   const [accountNameError, setAccountNameError] = useState<string | null>(null);
-
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [flippedId, setFlippedId] = useState<number | null>(null);
+  // const [flippedId, setFlippedId] = useState<number | null>(null);
+  const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
 
   // Fetch banks on demand
   const {
@@ -222,9 +216,49 @@ const ProfileBank = () => {
   };
 
   // Handliig submit of details to the BE
+  // const handleSubmit = async () => {
+  //   const token = localStorage.getItem("authToken");
+  //   console.log(token);
+  //   const payload = {
+  //     bankName: formData.selectedBank,
+  //     accountName: accountName,
+  //     accountNumber: formData.accountNumber,
+  //     bankCode: formData.bankCode,
+  //   };
+
+  //   try {
+  //     const response = await fetch(
+  //       "https://twjmobileapi.runasp.net/api/BankAccounts/add-bank",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         body: JSON.stringify(payload),
+  //       }
+  //     );
+
+  //     const result = await response.json(); // Parse JSON response
+  //     // console.log("Backend Response:", result);
+
+  //     if (!response.ok) {
+  //       throw new Error(result.message || "Failed to submit data");
+  //     }
+
+  //     // console.log("Data successfully sent:", payload); // Log success message
+  //     handleClose();
+  //     setIsSuccessModal(true)
+  //   } catch (error: any) {
+  //     console.error("Error submitting data:", error.message);
+  //   }
+  // };
+
   const handleSubmit = async () => {
-    const token = localStorage.getItem("authToken");
-    console.log(token);
+    setLoading(true);
+    const { accessToken } = useAuthorizationStore.getState(); // Get token from Zustand store
+    // console.log("Access Token:", accessToken);
+
     const payload = {
       bankName: formData.selectedBank,
       accountName: accountName,
@@ -233,38 +267,33 @@ const ProfileBank = () => {
     };
 
     try {
-      const response = await fetch(
-        "https://twjmobileapi.runasp.net/api/BankAccounts/add-bank",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, 
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await api.post("/BankAccounts/add-bank", payload, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-      const result = await response.json(); // Parse JSON response
-      // console.log("Backend Response:", result);
-
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to submit data");
+      if (!response.data.success) {
+        throw new Error(response.data.message || "An error occurred");
       }
 
-      // console.log("Data successfully sent:", payload); // Log success message
+      // If the request is successful
+      setSuccessMessage(response.data.message);
       handleClose();
-      setIsSuccessModal(true)
+      setIsSuccessModal(true);
     } catch (error: any) {
-      console.error("Error submitting data:", error.message);
+      // console.log("Error submitting data:", error.response?.data?.message || error.message);
+
+      setErrorMessage(error.response?.data?.message || "Something went wrong");
     }
+    setLoading(false);
   };
 
   // fetching all the bank name
   // const fetchBankDetails = async () => {
   //   setLoading(true);
   //   setErrorFetchingBanks("");
-  
+
   //   try {
   //     const token = localStorage.getItem("authToken") || "";
   //     const response = await fetch("", {
@@ -273,11 +302,11 @@ const ProfileBank = () => {
   //         Authorization: `Bearer ${token}`,
   //       },
   //     });
-  
+
   //     if (!response.ok) {
   //       throw new Error("Failed to fetch banks");
   //     }
-  
+
   //     const data = await response.json();
   //     setBankList(data); // Use your existing setBanks state
   //     console.log(bankList)
@@ -288,22 +317,21 @@ const ProfileBank = () => {
   //     setLoading(false); // Use your existing setLoading state
   //   }
   // };
+
   
-  
-  const handleFlip = (id: number) => {
-    setFlippedId(flippedId === id ? null : id);
+  const handleFlip = (index: number) => {
+    setFlippedIndex(flippedIndex === index ? null : index);
   };
 
   const handleAddBank = () => {
     setIsModalOpen(true);
   };
 
- 
-
   const handleClose = () => {
+    setErrorMessage("");
     setIsModalOpen(false);
     setAccountName(null);
-    setAccountNameError(null); 
+    setAccountNameError(null);
     setFormData({ accountNumber: "", selectedBank: "", bankCode: "" });
   };
 
@@ -351,7 +379,6 @@ const ProfileBank = () => {
   const isFormInvalid =
     Object.values(errors).some((error) => error) || !accountName;
 
-  
   return (
     <>
       <div className="grid grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] gap-4 justify-center">
@@ -367,17 +394,16 @@ const ProfileBank = () => {
           <img src={AddRing} alt="" />
           <p className="text-[#8003A9]">Add bank account</p>
         </button>
-
         {/* Account Cards */}
-        {accounts.map(({ id, name, accountNumber, bank }) => (
+        {bankList.map((banks, index) => (
           <div
-            key={id}
+            key={banks.id}
             className="relative w-[320px] h-[182px] cursor-pointer"
-            onClick={() => handleFlip(id)}
+            onClick={() => handleFlip(index)}
           >
             <div
               className={`relative w-full h-full rounded-[10px] overflow-hidden bg-cover bg-center transition-transform duration-500 ${
-                flippedId === id ? "rotate-y-180" : ""
+                flippedIndex === index ? "rotate-y-180" : ""
               }`}
               style={{
                 backgroundImage: `url(${BgImage})`,
@@ -387,23 +413,23 @@ const ProfileBank = () => {
               {/* Front Side */}
               <div
                 className={`absolute inset-0 flex flex-col justify-between p-3 bg-[#8003A9]/80 text-white ${
-                  flippedId !== id ? "block" : "hidden"
+                  flippedIndex !== index ? "block" : "hidden"
                 }`}
               >
                 <div className="absolute top-3 right-3 text-xl">
                   <img src={BankIcon} alt="Bank Icon" />
                 </div>
                 <div className="absolute bottom-3 left-3 leading-[1.1rem]">
-                  <p className="text-[16px] font-semibold">{name}</p>
-                  <p className="text-[14px]">{accountNumber}</p>
-                  <p className="text-[12px]">{bank}</p>
+                  <p className="text-[16px] ">{banks.accountName}</p>
+                  <p className="text-[14px]">{banks.accountNumber}</p>
+                  <p className="text-[12px]">{banks.bankName}</p>
                 </div>
               </div>
 
               {/* Back Side */}
               <div
                 className={`absolute inset-0 flex items-center justify-center bg-[#D32F2F]/90 text-white transform rotate-y-180 ${
-                  flippedId === id ? "block" : "hidden"
+                  flippedIndex === index ? "block" : "hidden"
                 }`}
               >
                 <button className="relative group bg-white p-[0.5rem] flex items-center justify-center rounded-full cursor-pointer">
@@ -483,7 +509,7 @@ const ProfileBank = () => {
                   />
                 </div>
               </div>
-              <div className="ml-[7.2rem] text-[14px] mt-[5px] flex items-center gap-[2px]">
+              <div className="ml-[7.2rem] text-[14px] mt-[5px] flex  items-center gap-[2px]">
                 {accountName && <img src={Check} alt="Verified" />}
                 <p className={accountNameError ? "text-red-500" : ""}>
                   {loading
@@ -493,6 +519,10 @@ const ProfileBank = () => {
                     : accountName}
                 </p>
               </div>
+              <p className="text-red-500 ml-[7.2rem] text-[14px]">
+                {errorMessage}
+              </p>
+
               {/* Buttons */}
               <div className="flex justify-center mb-[2rem]">
                 <button
@@ -509,33 +539,32 @@ const ProfileBank = () => {
                   type="button"
                   disabled={isFormInvalid}
                 >
-                  {/* {isLoadingLogin ? (
-                  <div className="flex items-center justify-center">
-                    <svg
-                      className="animate-spin h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                      ></path>
-                    </svg>
-                  </div>
-                ) : (
-                  "Log In"
-                )} */}
-                  Submit
+                  {loading ? (
+                    <div className="flex items-center justify-center">
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                        ></path>
+                      </svg>
+                    </div>
+                  ) : (
+                    "  Submit"
+                  )}
                 </button>
               </div>
             </form>
@@ -547,12 +576,11 @@ const ProfileBank = () => {
       {isSuccessModal && (
         <SuccessModal
           title="You, Yes You, Rock!"
-          message="Bank account added."
+          message={successMessage} // Pass success message
           onClose={() => {
             // fetchBankDetails();
             setIsSuccessModal(false);
           }}
-          
         />
       )}
     </>

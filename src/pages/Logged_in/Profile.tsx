@@ -17,6 +17,9 @@ import "../../App.css";
 import { useBankStore } from "../../store/useBankStore";
 import { useAuthorizationStore } from "../../store/authorizationStore";
 
+
+
+
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<"account" | "security" | "bank">(
     "account"
@@ -36,7 +39,7 @@ const Profile = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPhoneInputModalOpen, setIsPhoneInputModalOpen] = useState(false);
   const {
-    // bankList,
+    bankList,
     // isFetchingBanks,
     // fetchError,
     fetchBanks,
@@ -46,6 +49,7 @@ const Profile = () => {
   useEffect(() => {
     if (accessToken) {
       fetchBanks();
+      // console.log("Fetching banks... in useEffect:", bankList);
     }
   }, [accessToken]);
 
@@ -398,7 +402,7 @@ const Profile = () => {
             {/* Dynamic Content Security*/}
             {activeTab === "security" && <ProfileSecurity />}
             {/* Dynamic Content Bank*/}
-            {activeTab === "bank" && <ProfileBank />}
+            {activeTab === "bank" && <ProfileBank bankList={bankList} />}
           </div>
         </div>
       </div>

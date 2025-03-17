@@ -50,7 +50,7 @@ const Referals = () => {
     <div className="w-full z-10 overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
       <div className="flex-1 overflow-y-auto p-4">
         <div className=" flex p-[1rem] gap-[2rem]">
-          <div className=" flex flex-col gap-[2rem]  w-[40%] ">
+          <div className=" flex flex-col gap-[1.5rem]  w-[40%] ">
             <div className="w-full border  border-[#D0DAE6] relative h-[179px] bg-[#F5F5F5] rounded-[10px] flex items-center justify-center">
               <div className="flex flex-col items-center justify-center text-[#fff]">
                 <p className="text-[15px] text-[#27014F] leading-[rem]">

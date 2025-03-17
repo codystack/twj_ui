@@ -10,9 +10,9 @@ const api = axios.create({
 // Request Interceptor: Attach Access Token to Requests
 api.interceptors.request.use(
   (config) => {
-    const { accessToken, refreshToken } = useAuthorizationStore.getState();
-    console.log("accessToken", accessToken);
-    console.log("refreshToken", refreshToken); // remove this line after the check is done
+    const { accessToken } = useAuthorizationStore.getState();
+    // console.log("accessToken", accessToken);
+    // console.log("refreshToken", refreshToken); // remove this line after the check is done
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -56,14 +56,14 @@ api.interceptors.response.use(
         useAuthorizationStore
           .getState()
           .setTokens(newAccessToken, newRefreshToken);
-          console.log("newAccessToken", newAccessToken);
-          console.log("newRefreshToken", newRefreshToken);
+          // console.log("newAccessToken", newAccessToken);
+          // console.log("newRefreshToken", newRefreshToken);
 
         // Retry the original request with new access token
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return axios(originalRequest);
       } catch (refreshError) {
-        console.error("Refresh token expired. Logging out...");
+        // console.error("Refresh token expired. Logging out...");
         useAuthorizationStore.getState().clearTokens(); // Clear tokens from store
         window.location.href = "/"; // Redirect to login
 
