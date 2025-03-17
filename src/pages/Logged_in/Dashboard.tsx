@@ -95,7 +95,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="w-[423px] h-[253] bg-[#FBEEFF] rounded-[10px] ">
+            <div className="relative w-[423px] h-[253] bg-[#FBEEFF] rounded-[10px] ">
               <div className=" pt-[1.5rem] pl-[1.5rem]">
                 <div className="flex  items-center">
                   <h5 className="font-bold text-[24px] mr-[5px]">
@@ -114,7 +114,7 @@ const Dashboard = () => {
               </div>
               <img
                 src={virtualCard}
-                className="rounded-bl-[10px]  rounded-br-[10px]"
+                className=" absolute bottom-0 rounded-bl-[10px]  rounded-br-[10px]"
                 alt=""
               />
             </div>

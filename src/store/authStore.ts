@@ -211,7 +211,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       // Store token
       // localStorage.setItem("authToken", data.data.token.accessToken);
-      console.log("authToken", data.data);
+      // console.log("authToken", data.data);
 
       // Extract access & refresh tokens from response
 
