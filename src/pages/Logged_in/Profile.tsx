@@ -117,47 +117,49 @@ const Profile = () => {
 
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto pb-4 px-4">
         {/* Nav */}
-        <div className=" flex flex-col mt-[2.3%] ml-[4%] ">
+        <div className=" flex flex-col ml-[4%] ">
           {/* Tab Buttons */}
-          <div className="bg-[#F5F7FA] w-[35%] flex items-center rounded-[50px] justify-between p-[7px]">
-            <button
-              className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${
-                activeTab === "account"
-                  ? "bg-[#fff] text-[#8003A9] "
-                  : "bg-transparent text-[#7688B4]"
-              }`}
-              onClick={() => setActiveTab("account")}
-            >
-              Account
-            </button>
+          <div className="py-[2.3%] fixed w-[74.5%] z-20 bg-[#fff]  ">
+            <div className="bg-[#F5F7FA] w-[35%] h-[3rem] flex items-center rounded-[50px] justify-between px-[7px]">
+              <button
+                className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${
+                  activeTab === "account"
+                    ? "bg-[#fff] text-[#8003A9] "
+                    : "bg-transparent text-[#7688B4]"
+                }`}
+                onClick={() => setActiveTab("account")}
+              >
+                Account
+              </button>
 
-            <button
-              className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${
-                activeTab === "security"
-                  ? "bg-[#fff] text-[#8003A9] "
-                  : "bg-transparent  text-[#7688B4]"
-              }`}
-              onClick={() => setActiveTab("security")}
-            >
-              Security
-            </button>
+              <button
+                className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${
+                  activeTab === "security"
+                    ? "bg-[#fff] text-[#8003A9] "
+                    : "bg-transparent  text-[#7688B4]"
+                }`}
+                onClick={() => setActiveTab("security")}
+              >
+                Security
+              </button>
 
-            <button
-              className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px]  ${
-                activeTab === "bank"
-                  ? "bg-[#fff] text-[#8003A9] "
-                  : "bg-transparent  text-[#7688B4]"
-              }`}
-              onClick={() => setActiveTab("bank")}
-            >
-              Bank
-            </button>
+              <button
+                className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px]  ${
+                  activeTab === "bank"
+                    ? "bg-[#fff] text-[#8003A9] "
+                    : "bg-transparent  text-[#7688B4]"
+                }`}
+                onClick={() => setActiveTab("bank")}
+              >
+                Bank
+              </button>
+            </div>
           </div>
 
           {/* Dynamic Content profile*/}
-          <div className=" h-[100%]  mt-[3%] ">
+          <div className=" h-[100%]  mt-[12%] ">
             {activeTab === "account" && (
               <div className="w-[40%]">
                 <div className=" px-[1rem] flex items-center gap-4">
@@ -189,7 +191,7 @@ const Profile = () => {
                 <div className="mt-[8%] px-[0.6rem]">
                   <div className="flex items-center justify-between mb-[6%] ">
                     <p className="text-[#7688B4] text-[14px] ">Unique ID</p>
-                    <p className="text-[#27014F] text-[14px]  ">TWJ62425</p>
+                    <p className="text-[#27014F] text-[14px]  ">TWJ624825</p>
                   </div>
                   <div className="flex items-center justify-between mb-[6%] ">
                     <p className="text-[#7688B4] text-[14px] ">Email address</p>
@@ -228,8 +230,8 @@ const Profile = () => {
                     to="/profile/account_upgrade"
                     className="flex cursor-pointer items-center w-full justify-between bg-[#FF3366]/13 hover:bg-[#FF3366]/20 transition-colors duration-300 p-[5px] py-[8px] rounded-[10px] border border-[#FF3366] mb-[12%] "
                   >
-                    <span className="flex items-center">
-                      <span className="bg-[#FF3366]/20 rounded-[100%] p-[2px] mr-[2px] ">
+                    <span className="flex items-center gap-[9px] ">
+                      <span className="bg-[#FF3366]/20 rounded-[100%] ml-[5px] p-[2px] mr-[2px] ">
                         <img src={alarmIcon} alt="" />
                       </span>
                       <span className="leading-[0.8rem]">
@@ -242,7 +244,7 @@ const Profile = () => {
                         </p>
                       </span>
                     </span>
-                    <img src={arrowRightBtn} alt="" />
+                    <img src={arrowRightBtn} className="mr-[10px]" alt="" />
                   </NavLink>
 
                   {!showForm ? (
@@ -250,7 +252,7 @@ const Profile = () => {
                       onClick={() => setShowForm(true)} // Fix: Make sure the modal opens
                       className="pb-[10%] flex text-[#F80004] items-center gap-2 cursor-pointer "
                     >
-                      <span>
+                      <span className="bg-[#F80004]/10 flex justify-between items-center p-[12px] mr-2 rounded-[100%] ">
                         <img src={Delete} alt="" />
                       </span>
                       <p>Delete Account</p>
@@ -261,7 +263,7 @@ const Profile = () => {
                       {/* Dialog Box */}
                       <div className="p-[1rem] rounded-[20px] bg-[#fff]/20">
                         <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
-                          <div className="flex items-center  border-b border-b-[#A4A4A4]/20  pb-[1rem] pr-[10px] justify-between">
+                          <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
                             <h3 className="text-[17px] font-semibold text-[#27014F] ">
                               Delete my TWJ Account
                             </h3>
