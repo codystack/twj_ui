@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {  useState } from "react";
 import BankIcon from "../../../assets/dashboard_img/profile/Bank_icon.svg";
 import AddRing from "../../../assets/dashboard_img/profile/Add_ring_light.svg";
 import BgImage from "../../../assets/dashboard_img/profile/atmcard.jpg";
@@ -11,13 +11,10 @@ import { useQuery } from "@tanstack/react-query";
 import SuccessModal from "../SuccessModal";
 import { useAuthorizationStore } from "../../../store/authorizationStore";
 import api from "../../../services/api";
-// import { useBankStore } from "../../../store/useBankStore";
-// import { ActionMeta } from "react-select";
+import { useBankStore } from "../../../store/useBankStore";
 
-// import { useBankStore } from "./useBankStore"; // Import Zustand store
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-// const API_URL = import.meta.env.VITE_API_URL;
 interface BankAccount {
   id: string;
   bankName: string;
@@ -35,49 +32,13 @@ interface BankDetailsProps {
   bankList: BankAccount[];
 }
 
-const fetchBanks = async (): Promise<Bank[]> => {
+const fetchBank = async (): Promise<Bank[]> => {
   const response = await fetch(`${BASE_URL}/Accounts/getBanksList`); // Replace with your API URL
   if (!response.ok) throw new Error("Failed to fetch banks");
   const data = await response.json();
   // console.log("Fetched banks:", data.data);
   return data.data;
 };
-
-// const options = [
-//   { label: "Access Bank Plc", value: "Access Bank Plc" },
-//   { label: "Citibank Nigeria Ltd", value: "Citibank Nigeria Ltd" },
-//   { label: "Ecobank Nigeria Plc", value: "Ecobank Nigeria Plc" },
-//   { label: "Fidelity Bank Plc", value: "Fidelity Bank Plc" },
-//   { label: "First Bank Nigeria Ltd", value: "First Bank Nigeria Ltd" },
-//   {
-//     label: "First City Monument Bank Plc",
-//     value: "First City Monument Bank Plc",
-//   },
-//   { label: "Globus Bank Ltd", value: "Globus Bank Ltd" },
-//   { label: "Guaranty Trust Bank Plc", value: "Guaranty Trust Bank Plc" },
-//   { label: "Keystone Bank Ltd", value: "Keystone Bank Ltd" },
-//   { label: "Nova Commercial Bank Ltd", value: "Nova Commercial Bank Ltd" },
-//   { label: "Optimus Bank", value: "Optimus Bank" },
-//   { label: "Parallex Bank Ltd", value: "Parallex Bank Ltd" },
-//   { label: "Polaris Bank Plc", value: "Polaris Bank Plc" },
-//   { label: "Premium Trust Bank", value: "Premium Trust Bank" },
-//   { label: "Providus Bank Ltd", value: "Providus Bank Ltd" },
-//   { label: "Signature Bank Ltd", value: "Signature Bank Ltd" },
-//   { label: "Stanbic IBTC Bank Plc", value: "Stanbic IBTC Bank Plc" },
-//   {
-//     label: "Standard Chartered Bank Nigeria Ltd",
-//     value: "Standard Chartered Bank Nigeria Ltd",
-//   },
-//   { label: "Sterling Bank Plc", value: "Sterling Bank Plc" },
-//   { label: "SunTrust Bank Nigeria Ltd", value: "SunTrust Bank Nigeria Ltd" },
-//   { label: "Titan Trust Bank Ltd", value: "Titan Trust Bank Ltd" },
-//   { label: "Union Bank of Nigeria Plc", value: "Union Bank of Nigeria Plc" },
-//   { label: "United Bank For Africa Plc", value: "United Bank For Africa Plc" },
-//   { label: "Unity Bank Plc", value: "Unity Bank Plc" },
-//   { label: "Wema Bank Plc", value: "Wema Bank Plc" },
-//   { label: "Zenith Bank Plc", value: "Zenith Bank Plc" },
-// ];
-
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -100,13 +61,6 @@ const customStyles = {
 };
 
 const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
-  // console.log("Bank List in ProfileBank:", bankList);
-
-  // const [bankList, setBankList] = useState([]); // comment
-  //  const [loading, setLoading] = useState(false);
-  //  const [errorFetchingBanks, setErrorFetchingBanks] = useState(""); // comment
-
-  const [isSuccessModal, setIsSuccessModal] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -115,19 +69,20 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
     selectedBank: "",
     bankCode: "",
   });
-  // const [bankCode, setBankCode] = useState();
-  const [errors, setErrors] = useState({
+ const [errors, setErrors] = useState({
     accountNumber: "",
     selectedBank: "",
   });
-
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [accountName, setAccountName] = useState<string | null>(null);
   const [accountNameError, setAccountNameError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
   // const [flippedId, setFlippedId] = useState<number | null>(null);
   const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
+  const { fetchBanks } = useBankStore();
 
   // Fetch banks on demand
   const {
@@ -136,7 +91,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
     refetch,
   } = useQuery({
     queryKey: ["banks"],
-    queryFn: fetchBanks,
+    queryFn: fetchBank,
     enabled: false,
   });
 
@@ -216,50 +171,9 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
   };
 
   // Handliig submit of details to the BE
-  // const handleSubmit = async () => {
-  //   const token = localStorage.getItem("authToken");
-  //   console.log(token);
-  //   const payload = {
-  //     bankName: formData.selectedBank,
-  //     accountName: accountName,
-  //     accountNumber: formData.accountNumber,
-  //     bankCode: formData.bankCode,
-  //   };
-
-  //   try {
-  //     const response = await fetch(
-  //       "https://twjmobileapi.runasp.net/api/BankAccounts/add-bank",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //         body: JSON.stringify(payload),
-  //       }
-  //     );
-
-  //     const result = await response.json(); // Parse JSON response
-  //     // console.log("Backend Response:", result);
-
-  //     if (!response.ok) {
-  //       throw new Error(result.message || "Failed to submit data");
-  //     }
-
-  //     // console.log("Data successfully sent:", payload); // Log success message
-  //     handleClose();
-  //     setIsSuccessModal(true)
-  //   } catch (error: any) {
-  //     console.error("Error submitting data:", error.message);
-  //   }
-  // };
-
   const handleSubmit = async () => {
-    setLoading(true);
-    const { accessToken } = useAuthorizationStore.getState(); // Get token from Zustand store
-    // console.log("Access Token:", accessToken);
-
-    const payload = {
+   const { accessToken } = useAuthorizationStore.getState(); 
+   const payload = {
       bankName: formData.selectedBank,
       accountName: accountName,
       accountNumber: formData.accountNumber,
@@ -272,21 +186,51 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-
+      setSuccessMessage(
+        response.data.message || "Bank account added successfully"
+      );
+      handleClose();
+      setIsSuccessModal(true);
       if (!response.data.success) {
         throw new Error(response.data.message || "An error occurred");
       }
 
       // If the request is successful
-      setSuccessMessage(response.data.message);
-      handleClose();
       setIsSuccessModal(true);
     } catch (error: any) {
-      // console.log("Error submitting data:", error.response?.data?.message || error.message);
-
-      setErrorMessage(error.response?.data?.message || "Something went wrong");
+      setErrorMessage(error.response?.data?.message);
+      // setLoading(false);
+      fetchBanks();
     }
-    setLoading(false);
+  };
+
+  // here is the delete function
+  const deleteBankAccount = async (bankId: string) => {
+    setLoadingDelete(true);
+    const { accessToken } = useAuthorizationStore.getState(); // Get token from Zustand store
+
+    try {
+      const response = await api.delete(`/BankAccounts/delete-bank/${bankId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // console.log("Delete Response:", response.data);
+
+      if (response.data?.success === false) {
+        throw new Error(response.data.message || "Failed to delete account");
+      }
+
+      // Success message
+      setSuccessMessage("Bank account deleted successfully");
+      fetchBanks(); // Refresh the bank list
+    } catch (error: any) {
+      // console.log("Error Deleting Bank:", error);
+      setErrorMessage(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoadingDelete(false);
+    }
   };
 
   // fetching all the bank name
@@ -318,7 +262,6 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
   //   }
   // };
 
-  
   const handleFlip = (index: number) => {
     setFlippedIndex(flippedIndex === index ? null : index);
   };
@@ -432,7 +375,10 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
                   flippedIndex === index ? "block" : "hidden"
                 }`}
               >
-                <button className="relative group bg-white p-[0.5rem] flex items-center justify-center rounded-full cursor-pointer">
+                <button
+                  onClick={() => deleteBankAccount(banks.id)}
+                  className="relative group bg-white p-[0.5rem] flex items-center justify-center rounded-full cursor-pointer"
+                >
                   <img
                     src={DeleteAccount}
                     alt="Delete Icon"
@@ -572,11 +518,18 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
         </div>
       )}
 
+      {loadingDelete && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
+          <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
+        </div>
+      )}
+
       {/* Render Modal When Open */}
       {isSuccessModal && (
         <SuccessModal
           title="You, Yes You, Rock!"
           message={successMessage} // Pass success message
+          // message="Bank successfully added!" // Pass success message
           onClose={() => {
             // fetchBankDetails();
             setIsSuccessModal(false);
