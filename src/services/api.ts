@@ -65,7 +65,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // console.error("Refresh token expired. Logging out...");
         useAuthorizationStore.getState().clearTokens(); // Clear tokens from store
-        window.location.href = "/"; // Redirect to login
+        //window.location.href="/"; // Redirect to login
 
         return Promise.reject(refreshError);
       }

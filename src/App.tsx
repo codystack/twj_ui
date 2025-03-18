@@ -37,13 +37,15 @@ import RegSuccessful from "./pages/RegSuccessful.tsx";
 import RecoverAccount from "./pages/RecoverAccount.tsx";
 import AccountUpgrade from "./pages/Logged_in/AccountUpgrade.tsx";
 import Referals from "./pages/Logged_in/Referals.tsx";
+import { useAuthStore } from "./store/authStore.ts";
+import { useEffect } from "react";
 
 const App = () => {
-  // const checkAuth = useAuthStore((state) => state.checkAuth);
+  const checkAuth = useAuthStore((state) => state.checkAuth);
 
-  //   useEffect(() => {
-  //     checkAuth();
-  //   }, [checkAuth]);
+    useEffect(() => {
+      checkAuth();
+    }, [checkAuth]);
 
   //   return (
   //     <AuthWrapper>
