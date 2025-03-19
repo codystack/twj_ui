@@ -234,33 +234,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
   };
 
   // fetching all the bank name
-  // const fetchBankDetails = async () => {
-  //   setLoading(true);
-  //   setErrorFetchingBanks("");
-
-  //   try {
-  //     const token = localStorage.getItem("authToken") || "";
-  //     const response = await fetch("", {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch banks");
-  //     }
-
-  //     const data = await response.json();
-  //     setBankList(data); // Use your existing setBanks state
-  //     console.log(bankList)
-  //   } catch (error: any) {
-  //     setErrorFetchingBanks(error.message); // Use your existing setError state
-  //     console.log(errorFetchingBanks)
-  //   } finally {
-  //     setLoading(false); // Use your existing setLoading state
-  //   }
-  // };
+  
 
   const handleFlip = (index: number) => {
     setFlippedIndex(flippedIndex === index ? null : index);

@@ -1,7 +1,8 @@
 // import { create } from "zustand";
 import api from "../services/api";
 import { create } from "zustand";
-import { useAuthorizationStore } from "./authorizationStore";
+// import { useAuthorizationStore } from "./authorizationStore";
+import { decryptData } from "../services/utils/crypto-utils";
 
 // interface Bank {
 //   bankName: string;
@@ -29,7 +30,13 @@ export const useBankStore = create<BankStore>((set) => ({
   fetchError: null,
 
   fetchBanks: async () => {
-    const accessToken = useAuthorizationStore.getState().accessToken;
+    // const accessToken = useAuthorizationStore.getState().accessToken;
+    const getAccessToken = () => {
+      const storedToken = localStorage.getItem('accessToken');
+      return storedToken ? decryptData(storedToken) : null;
+  };
+  
+  const accessToken = getAccessToken();
     // console.log("Access Token in fetch store:", accessToken);
 
     if (!accessToken) {
