@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
-import { useAuthorizationStore } from "./authorizationStore";
+// import { useAuthorizationStore } from "./authorizationStore";
+import { decryptData, encryptData } from "../services/utils/crypto-utils";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -222,8 +223,23 @@ export const useAuthStore = create<AuthState>((set) => ({
         throw new Error("Access or Refresh Token is missing in response");
       }
 
-      // ✅ Save both tokens in Zustand store (memory)
-      useAuthorizationStore.getState().setTokens(accessToken, refreshToken);
+      // // ✅ Save both tokens in Zustand store (memory)
+      // useAuthorizationStore.getState().setTokens(accessToken, refreshToken);
+      // console.log("accessToken:", accessToken, "refreshToken:", refreshToken);
+
+      // Encrypt tokens to local storage
+      const encryptedAccessToken = encryptData(accessToken);
+      const encryptedRefreshToken = encryptData(refreshToken);
+
+      // Store encrypted tokens in localStorage
+      localStorage.setItem("accessToken", encryptedAccessToken);
+      localStorage.setItem("refreshToken", encryptedRefreshToken);
+
+      // console.log(
+      //   "Tokens encrypted and stored securely:",
+      //   encryptedAccessToken,
+      //  "refreshToken:", encryptedRefreshToken
+      // );
 
       localStorage.setItem("name", data.data.userDetails.fullName);
       localStorage.setItem("email", data.data.userDetails.email);
@@ -292,7 +308,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   checkAuth: () => {
-    const token = localStorage.getItem("authToken");
+    const getAccessToken = () => {
+      const storedToken = localStorage.getItem("accessToken");
+      return storedToken ? decryptData(storedToken) : null;
+    };
+
+    const token = getAccessToken();
     const authState = localStorage.getItem("isAuthenticated");
 
     if (token && authState === "true") {

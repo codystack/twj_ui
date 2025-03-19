@@ -20,7 +20,7 @@ import Bulbbg from "../../assets/dashboard_img/Bulbbg.svg";
 import Tvbg from "../../assets/dashboard_img/tvbg.svg";
 import Casinobg from "../../assets/dashboard_img/casinobg.svg";
 import Supportbg from "../../assets/dashboard_img/supportbg.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // import { data } from "react-router"; comment
 const Dashboard = () => {
   const [isHidden, setIsHidden] = useState(false);
@@ -29,10 +29,7 @@ const Dashboard = () => {
     setIsHidden((prev) => !prev);
   };
 
-  useEffect(() => {
-    console.log("Local Storage isAuthenticated:", localStorage.getItem("isAuthenticated"));
-  }, []);
-  
+ 
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
       <div className="flex-1 overflow-y-auto py-[1.5rem] px-[1rem]">

@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useAuthorizationStore } from "../store/authorizationStore";
+// import { useAuthorizationStore } from "../store/authorizationStore";
+import { decryptData, encryptData } from "./utils/crypto-utils";
 
 // Create Axios instance
 const api = axios.create({
@@ -10,10 +11,12 @@ const api = axios.create({
 // Request Interceptor: Attach Access Token to Requests
 api.interceptors.request.use(
   (config) => {
-    const { accessToken } = useAuthorizationStore.getState();
-    // console.log("accessToken", accessToken);
-    // console.log("refreshToken", refreshToken); // remove this line after the check is done
+    const getAccessToken = () => {
+      const storedToken = localStorage.getItem("accessToken");
+      return storedToken ? decryptData(storedToken) : null;
+    };
 
+    const accessToken = getAccessToken();
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -24,7 +27,7 @@ api.interceptors.request.use(
 
 // Response Interceptor: Handle Expired Tokens
 api.interceptors.response.use(
-  (response) => response, // Return response if request succeeds
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
@@ -33,8 +36,12 @@ api.interceptors.response.use(
       originalRequest._retry = true; // Prevent infinite loops
 
       try {
-        // Get refresh token from Zustand store
-        const { refreshToken } = useAuthorizationStore.getState();
+        const getRefreshToken = () => {
+          const storedToken = localStorage.getItem("refreshToken");
+          return storedToken ? decryptData(storedToken) : null;
+        };
+
+        const refreshToken = getRefreshToken();
         if (!refreshToken) throw new Error("No refresh token available");
 
         // Request new access token using payload
@@ -51,22 +58,24 @@ api.interceptors.response.use(
         // Extract new tokens from response
         const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
           refreshResponse.data;
+        console.log("Refresh Response:", refreshResponse.data);
 
-        // ✅ Update Zustand store with new tokens
-        useAuthorizationStore
-          .getState()
-          .setTokens(newAccessToken, newRefreshToken);
-          // console.log("newAccessToken", newAccessToken);
-          // console.log("newRefreshToken", newRefreshToken);
+        // ✅ Store the new tokens in local storage
+        localStorage.setItem("accessToken", encryptData(newAccessToken));
+        localStorage.setItem("refreshToken", encryptData(newRefreshToken));
 
         // Retry the original request with new access token
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return axios(originalRequest);
       } catch (refreshError) {
-        // console.error("Refresh token expired. Logging out...");
-        useAuthorizationStore.getState().clearTokens(); // Clear tokens from store
-        //window.location.href="/"; // Redirect to login
-
+        // Logout user if refresh fails
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("name");
+        localStorage.removeItem("email");
+        localStorage.removeItem("userName");
+        localStorage.removeItem("isAuthenticated");
+        window.location.href = "/"; // Redirect to login page
         return Promise.reject(refreshError);
       }
     }
