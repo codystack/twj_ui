@@ -17,9 +17,6 @@ import "../../App.css";
 import { useBankStore } from "../../store/useBankStore";
 import { useAuthorizationStore } from "../../store/authorizationStore";
 
-
-
-
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<"account" | "security" | "bank">(
     "account"
@@ -38,6 +35,10 @@ const Profile = () => {
   // State for password visibility
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPhoneInputModalOpen, setIsPhoneInputModalOpen] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [uniqueID, setUniqueID] = useState("");
   const {
     bankList,
     // isFetchingBanks,
@@ -119,6 +120,20 @@ const Profile = () => {
     setFormData((prev) => ({ ...prev, phoneNumber: newPhoneNumber }));
   };
 
+  useEffect(() => {
+    // Get email and name from localStorage
+    const phoneNumber = localStorage.getItem("phoneNumber");
+    const uniqueTWJID = localStorage.getItem("uniqueTWJID");
+    const userName = localStorage.getItem("userName");
+    const email = localStorage.getItem("email");
+
+    setUniqueID(uniqueTWJID ?? "");
+    setEmail(email ?? "");
+    setPhone(phoneNumber ?? "");
+    setUserName(userName ?? "");
+    // setName(storedName ?? "");
+  }, []);
+
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
       <div className="flex-1 overflow-y-auto pb-4 px-4">
@@ -155,7 +170,11 @@ const Profile = () => {
                     ? "bg-[#fff] text-[#8003A9] "
                     : "bg-transparent  text-[#7688B4]"
                 }`}
-                onClick={() => setActiveTab("bank")}
+                // onClick={() => setActiveTab("bank")}
+                onClick={() => {
+                  fetchBanks();
+                  setActiveTab("bank");
+                }}
               >
                 Bank
               </button>
@@ -165,7 +184,7 @@ const Profile = () => {
           {/* Dynamic Content profile*/}
           <div className=" h-[100%]  mt-[12%] ">
             {activeTab === "account" && (
-              <div className="w-[40%]">
+              <div className="w-[38%]">
                 <div className=" px-[1rem] flex items-center gap-4">
                   <div className="imgdiv  relative rounded-[100%] w-[7rem] ">
                     <img
@@ -181,7 +200,8 @@ const Profile = () => {
                   </div>
                   <div>
                     <p className="text-[#27014F] text-[24px] font-bold ">
-                      John Doe
+                      {userName}
+                      {/* John Doe */}
                     </p>
                     <NavLink
                       to="/profile/account_upgrade"
@@ -195,20 +215,16 @@ const Profile = () => {
                 <div className="mt-[8%] px-[0.6rem]">
                   <div className="flex items-center justify-between mb-[6%] ">
                     <p className="text-[#7688B4] text-[14px] ">Unique ID</p>
-                    <p className="text-[#27014F] text-[14px]  ">TWJ624825</p>
+                    <p className="text-[#27014F] text-[14px]  ">{uniqueID}</p>
                   </div>
                   <div className="flex items-center justify-between mb-[6%] ">
                     <p className="text-[#7688B4] text-[14px] ">Email address</p>
-                    <p className="text-[#27014F] text-[14px]  ">
-                      aromej@gmail.com
-                    </p>
+                    <p className="text-[#27014F] text-[14px]  ">{email}</p>
                   </div>
                   <div className="flex items-center justify-between mb-[6%] ">
                     <p className="text-[#7688B4] text-[14px]  ">Phone</p>
                     <span className="flex gap-[2px]">
-                      <p className="text-[#27014F] text-[14px]  ">
-                        +2348105064355
-                      </p>
+                      <p className="text-[#27014F] text-[14px]  ">{phone}</p>
 
                       <button onClick={() => setIsPhoneInputModalOpen(true)}>
                         <img src={Edit} alt="" className=" cursor-pointer" />

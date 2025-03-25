@@ -40,8 +40,8 @@ const transactions = [
 
   {
     id: "ABCD7890JK",
-    name: "Gift Card Sale",
-    type: "gift",
+    name: "Betting",
+    type: "betting",
     amount: "₦7,500",
     date: "Mar 2, 2025",
     direction: "outward",
@@ -92,6 +92,8 @@ const transactions = [
   },
 ];
 
+
+
 type Transaction = {
   id: string;
   name: string;
@@ -105,6 +107,21 @@ type Transaction = {
   time: string;
   reference: string;
 };
+
+
+// interface TransactionType {
+//   id: string;
+//   amount: number;
+//   description: string;
+//   date: string;
+//   type: string;
+// }
+
+// interface Transaction {
+//   transactions: TransactionType[];
+// }
+
+
 
 const UtilityTransaction = () => {
   const [selectedTransaction, setSelectedTransaction] =
@@ -245,14 +262,14 @@ const UtilityTransaction = () => {
                   className="w-12 h-12"
                 />
               )}
-              {transaction.type === "gift" && (
+              {transaction.type === "betting" && (
                 <img src={Gift} alt="Transaction Logo" className="w-12 h-12" />
               )}
             </div>
 
             {/* Transaction Details */}
             <div>
-              <p className="text-[16px] text-[#27014F]">{transaction.name}</p>
+              <p className="text-[16px] text-left text-[#27014F]">{transaction.name}</p>
               <div className="flex items-center gap-2 text-gray-600">
                 {/* Tracking ID */}
                 <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
@@ -344,7 +361,7 @@ const UtilityTransaction = () => {
                         className="w-12 h-12"
                       />
                     )}
-                    {selectedTransaction.type === "gift" && (
+                    {selectedTransaction.type === "betting" && (
                       <img
                         src={Gift}
                         alt="Transaction Logo"

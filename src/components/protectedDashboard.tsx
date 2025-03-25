@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate } from "react-router";
+import { Navigate} from "react-router";
 import { useAuthStore } from "../store/authStore";
 import { decryptData } from "../services/utils/crypto-utils";
 
@@ -11,7 +11,7 @@ const ProtectedDashboard: React.FC<ProtectedDashboardProps> = ({
   children,
 }) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-
+ 
   // ✅ Check localStorage in case Zustand state resets on refresh
   const getAccessToken = () => {
     const storedToken = localStorage.getItem("accessToken");
@@ -26,7 +26,6 @@ const ProtectedDashboard: React.FC<ProtectedDashboardProps> = ({
     localStorage.removeItem("email");
     localStorage.removeItem("userName");
     localStorage.removeItem("isAuthenticated");
-
     return <Navigate to="/" replace />;
   }
 

@@ -16,7 +16,7 @@ const SignUp = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const [formData, setFormData] = useState({
-    fullName: "",
+    userName: "",
     email: "",
     password: "",
     phoneNumber: "",
@@ -24,7 +24,7 @@ const SignUp = () => {
   });
 
   const [errors, setErrors] = useState({
-    fullName: "",
+    userName: "",
     email: "",
     password: "",
     phoneNumber: "",
@@ -39,7 +39,7 @@ const SignUp = () => {
     let error = "";
 
     switch (name) {
-      case "fullName":
+      case "userName":
         if (!value) error = "fullname is required";
         break;
 
@@ -114,7 +114,7 @@ const SignUp = () => {
   // Check all fields for errors before submission
   const validateForm = () => {
     const newErrors = {
-      fullName: validateField("fullname", formData.fullName),
+      userName: validateField("fullname", formData.userName),
       email: validateField("email", formData.email),
       password: validateField("password", formData.password),
       phoneNumber: validateField("phoneNumber", formData.phoneNumber),
@@ -135,9 +135,10 @@ const SignUp = () => {
     if (isValid) {
       // setIsLoading(true); // Start loading
       try {
+        // console.log({ formData });
         signUp(formData, navigate);
         setFormData({
-          fullName: "",
+          userName: "",
           email: "",
           password: "",
           phoneNumber: "",
@@ -146,7 +147,6 @@ const SignUp = () => {
         // setErrors({});
       } catch (error: any) {
         if (error.response) {
-
           return error;
         }
       }
@@ -160,7 +160,7 @@ const SignUp = () => {
   // checks to disable the button.
   const isFormInvalid =
     Object.values(errors).some((error) => error) ||
-    !formData.fullName ||
+    !formData.userName ||
     !formData.email ||
     !formData.password ||
     !formData.phoneNumber ||
@@ -200,21 +200,21 @@ const SignUp = () => {
               <div className="w-full mb-4">
                 <input
                   type="text"
-                  placeholder="Full name"
-                  name="fullName"
-                  value={formData.fullName}
+                  placeholder="Username"
+                  name="userName"
+                  value={formData.userName}
                   onChange={handleChange}
-                  onBlur={() => validateField("fullName", formData.fullName)}
+                  onBlur={() => validateField("fullName", formData.userName)}
                   className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
-                    errors.fullName
+                    errors.userName
                       ? "border border-red-600"
                       : "focus:border-purple-800"
                   } `}
                 />
 
-                {errors.fullName && (
+                {errors.userName && (
                   <p className="text-red-500 text-[13px] mt-[2px]">
-                    {errors.fullName}
+                    {errors.userName}
                   </p>
                 )}
               </div>

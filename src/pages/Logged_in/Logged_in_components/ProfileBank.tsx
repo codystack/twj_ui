@@ -172,6 +172,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
 
   // Handliig submit of details to the BE
   const handleSubmit = async () => {
+    setLoading(true);
    const { accessToken } = useAuthorizationStore.getState(); 
    const payload = {
       bankName: formData.selectedBank,
@@ -199,7 +200,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
       setIsSuccessModal(true);
     } catch (error: any) {
       setErrorMessage(error.response?.data?.message);
-      // setLoading(false);
+      setLoading(false);
       fetchBanks();
     }
   };

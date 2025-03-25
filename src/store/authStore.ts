@@ -79,7 +79,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true, signUpError: null });
 
     try {
-      const response = await axios.post(`${API_URL}/register-user`, {
+      const response = await axios.post(`${API_URL}/registerUser`, {
         ...formData,
       });
 
@@ -212,7 +212,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       // Store token
       // localStorage.setItem("authToken", data.data.token.accessToken);
-      // console.log("authToken", data.data);
+      console.log( data.data);
 
       // Extract access & refresh tokens from response
 
@@ -223,10 +223,8 @@ export const useAuthStore = create<AuthState>((set) => ({
         throw new Error("Access or Refresh Token is missing in response");
       }
 
-      // // ✅ Save both tokens in Zustand store (memory)
-      // useAuthorizationStore.getState().setTokens(accessToken, refreshToken);
-      // console.log("accessToken:", accessToken, "refreshToken:", refreshToken);
-
+      // Retrieve last visited page
+      
       // Encrypt tokens to local storage
       const encryptedAccessToken = encryptData(accessToken);
       const encryptedRefreshToken = encryptData(refreshToken);
@@ -244,7 +242,14 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem("name", data.data.userDetails.fullName);
       localStorage.setItem("email", data.data.userDetails.email);
       localStorage.setItem("userName", data.data.userDetails.userName);
+      localStorage.setItem("uniqueTWJID", data.data.userDetails.uniqueTWJID);
+      localStorage.setItem("referralLink", data.data.userDetails.referralLink);
+      localStorage.setItem("phoneNumber", data.data.userDetails.phoneNumber);
       localStorage.setItem("isAuthenticated", "true");
+      const lastVisitedRoute = localStorage.getItem("lastVisitedRoute") || "/dashboard";
+      // Clear the stored route after redirecting
+      localStorage.removeItem("lastVisitedRoute");
+  
       set({
         isAuthenticated: true,
         isLoadingLogin: false,
@@ -252,7 +257,11 @@ export const useAuthStore = create<AuthState>((set) => ({
         loginError: null,
       });
 
-      navigate("/dashboard");
+     
+      // Navigate to the last page the user was on
+      navigate(lastVisitedRoute);
+   
+      // navigate("/dashboard");
     } catch (error: any) {
       set({
         loginError:
@@ -292,10 +301,14 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: (navigate: (path: string) => void) => {
     // Clear local storage
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("name");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("uniqueTWJID");
     localStorage.removeItem("email");
     localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("phoneNumber");
+    localStorage.removeItem("referralLink");
 
     // Update authentication state
     set({
