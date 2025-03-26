@@ -1,6 +1,6 @@
 import Referal from "../../assets/dashboard_img/profile/giftbox-referal.svg";
 import Copy from "../../assets/dashboard_img/profile/Copy_ref.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import eye_lines from "../../assets/dashboard_img/Eye_hide_dark.svg";
 import eye from "../../assets/dashboard_img/Eye_opne_dark.svg";
 
@@ -32,15 +32,28 @@ const ref: Ref[] = [
 const Referals = () => {
   const [copied, setCopied] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+  const [referral, SetReferral] = useState('');
 
   const toggleVisibility = () => {
     setIsHidden((prev) => !prev);
   };
 
-  const textToCopy = "https://twjhub.com/sign-up-ref/uw78721567";
+
+  
+ useEffect(() => {
+  // Get email and name from localStorage
+  const referralLink = localStorage.getItem("referralLink");
+
+  SetReferral(referralLink ?? ""); 
+  // setName(storedName ?? "");
+}, []);
+
+
+
+
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(textToCopy).then(() => {
+    navigator.clipboard.writeText(referral).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1000);
     });
@@ -97,7 +110,7 @@ const Referals = () => {
                 <div className="relative z-0">
                   <div className="border z-[-1] mt-[1rem] border-[#8A95BF] h-[3rem] rounded-[5px] pl-[8px] flex px-0 items-center">
                     <span className="w-[85%] text-[#0A2E65]/60   text-[15px] overflow-hidden text-ellipsis whitespace-nowrap">
-                      {textToCopy}
+                      {referral}
                     </span>
                     <button
                       onClick={handleCopy}

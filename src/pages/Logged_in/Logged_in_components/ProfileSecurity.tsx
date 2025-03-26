@@ -16,10 +16,59 @@ const ProfileSecurity = () => {
   // State for password visibility
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const validateField = (fieldName: string, value: string) => {
+  // const validateField = (fieldName: string, value: string) => {
+
+  //   switch (fieldName) {
+  //     case "oldPassword":
+  //       if (value.length === 0) {
+  //         setErrors((prev) => ({
+  //           ...prev,
+  //           oldPassword: "This field is required",
+  //         }));
+  //       } else if (value.length < 8) {
+  //         setErrors((prev) => ({
+  //           ...prev,
+  //           oldPassword: "Please enter a valid password",
+  //         }));
+  //       } else {
+  //         setErrors((prev) => ({
+  //           ...prev,
+  //           oldPassword: "",
+  //         }));
+  //       }
+  //       break;
+  //     case "newPassword":
+  //       if (value.length === 0) {
+  //         setErrors((prev) => ({
+  //           ...prev,
+  //           newPassword: "This field is required",
+  //         }));
+  //       } else if (value.length < 8) {
+  //         setErrors((prev) => ({
+  //           ...prev,
+  //           newPassword: "Please enter a valid password",
+  //         }));
+  //       } else {
+  //         setErrors((prev) => ({
+  //           ...prev,
+  //           newPassword: "",
+  //         }));
+  //       }
+  //       break;
+
+  //     default:
+  //       break;
+  //   }
+  // };
+
+  const validateField = (
+    fieldName: string,
+    value: string,
+    formData: { oldPassword: string; newPassword: string }
+  ) => {
     switch (fieldName) {
       case "oldPassword":
-        if (value.length === 0) {
+        if (!value) {
           setErrors((prev) => ({
             ...prev,
             oldPassword: "This field is required",
@@ -29,15 +78,19 @@ const ProfileSecurity = () => {
             ...prev,
             oldPassword: "Please enter a valid password",
           }));
-        } else {
+        } else if (formData.newPassword && value === formData.newPassword) {
           setErrors((prev) => ({
             ...prev,
-            oldPassword: "",
+            newPassword: "Old password must be different from the new password",
           }));
         }
+         else {
+          setErrors((prev) => ({ ...prev, oldPassword: "" }));
+        }
         break;
+
       case "newPassword":
-        if (value.length === 0) {
+        if (!value) {
           setErrors((prev) => ({
             ...prev,
             newPassword: "This field is required",
@@ -47,11 +100,13 @@ const ProfileSecurity = () => {
             ...prev,
             newPassword: "Please enter a valid password",
           }));
-        } else {
+        } else if (formData.oldPassword && value === formData.oldPassword) {
           setErrors((prev) => ({
             ...prev,
-            newPassword: "",
+            newPassword: "New password must be different from the old password",
           }));
+        } else {
+          setErrors((prev) => ({ ...prev, newPassword: "" }));
         }
         break;
 
@@ -66,17 +121,29 @@ const ProfileSecurity = () => {
   };
 
   // Update form field value
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  // const handleInputChange = (e: any) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
 
-    validateField(name, value);
+  //   validateField(name, value, );
+
+  //   // validateField(name, value);
+  // };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => {
+      const updatedFormData = { ...prev, [name]: value };
+      validateField(name, value, updatedFormData); // ✅ Pass updated formData
+      return updatedFormData;
+    });
   };
 
   const closeModal = () => {
+    setFormData({ oldPassword: "", newPassword: "" });
     setErrors({ oldPassword: "", newPassword: "" });
     setIsOpen(false);
   };
@@ -129,7 +196,7 @@ const ProfileSecurity = () => {
                 {/* Input Fields */}
 
                 <div className=" flex  justify-center items-center]">
-                  <div className="w-[70%] flex flex-col gap-[15px]">
+                  <div className="w-[70%] flex flex-col ">
                     <div className="relative w-full">
                       <input
                         type={isPasswordVisible ? "text" : "password"}
@@ -137,8 +204,15 @@ const ProfileSecurity = () => {
                         name="oldPassword"
                         value={formData.oldPassword}
                         onChange={handleInputChange}
+                        // onBlur={() =>
+                        //   validateField("password", formData.oldPassword)
+                        // }
                         onBlur={() =>
-                          validateField("password", formData.oldPassword)
+                          validateField(
+                            "oldPassword",
+                            formData.oldPassword,
+                            formData
+                          )
                         }
                         className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
                           errors.oldPassword
@@ -153,16 +227,28 @@ const ProfileSecurity = () => {
                         onClick={togglePasswordVisibility}
                       />
                     </div>
+                    {errors.oldPassword && (
+                      <p className="text-red-500 text-[13px] ">
+                        {errors.oldPassword}
+                      </p>
+                    )}
 
-                    <div className="relative w-full">
+                    <div className="relative mt-[15px] w-full">
                       <input
                         type={isPasswordVisible ? "text" : "password"}
                         placeholder="New Password"
                         name="newPassword"
                         value={formData.newPassword}
                         onChange={handleInputChange}
+                        // onBlur={() =>
+                        //   validateField("password", formData.newPassword)
+                        // }
                         onBlur={() =>
-                          validateField("password", formData.newPassword)
+                          validateField(
+                            "newPassword",
+                            formData.newPassword,
+                            formData
+                          )
                         }
                         className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
                           errors.newPassword
@@ -177,6 +263,11 @@ const ProfileSecurity = () => {
                         onClick={togglePasswordVisibility}
                       />
                     </div>
+                    {errors.newPassword && (
+                      <p className="text-red-500 text-[13px] mt-[px]">
+                        {errors.newPassword}
+                      </p>
+                    )}
                   </div>
                 </div>
 

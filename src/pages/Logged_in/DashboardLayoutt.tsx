@@ -66,7 +66,7 @@ const DashboardLayoutt = () => {
   useEffect(() => {
     // Get email and name from localStorage
     const storedEmail = localStorage.getItem("email");
-    const storedName = localStorage.getItem("name");
+    const storedName = localStorage.getItem("userName");
 
     setEmail(storedEmail ?? ""); // Use empty string if null
     setName(storedName ?? "");
