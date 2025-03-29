@@ -10,122 +10,130 @@ import Copy from "../../../assets/dashboard_img/profile/transactions/Copy_light.
 import Report from "../../../assets/dashboard_img/profile/transactions/report.svg";
 import HrtBroken from "../../../assets/dashboard_img/profile/transactions/heartbroken.svg";
 
-const transactions = [
-  {
-    id: "XYZ123456",
-    name: "Data Purchase",
-    type: "data",
-    amount: "₦20,500",
-    date: "Mar 3, 2025",
-    direction: "outward",
-    status: "failed",
-    network: "AIRTEL",
-    quantity: "10GB Data",
-    time: "1:45",
-    reference: "21345467800000653",
-  },
-  {
-    id: "QYWTU578HG",
-    name: "Electricity Purchase",
-    type: "electricity",
-    amount: "₦30,500",
-    date: "Mar 4, 2025",
-    direction: "inward",
-    status: "success",
-    network: "AIRTEL",
-    quantity: "4GB Data",
-    time: "1:45",
-    reference: "000005234567865443",
-  },
+// const transactions = [
+//   {
+//     id: "XYZ123456",
+//     name: "Data Purchase",
+//     type: "data",
+//     amount: "₦20,500",
+//     date: "Mar 3, 2025",
+//     direction: "outward",
+//     status: "failed",
+//     network: "AIRTEL",
+//     quantity: "10GB Data",
+//     time: "1:45",
+//     reference: "21345467800000653",
+//   },
+//   {
+//     id: "QYWTU578HG",
+//     name: "Electricity Purchase",
+//     type: "electricity",
+//     amount: "₦30,500",
+//     date: "Mar 4, 2025",
+//     direction: "inward",
+//     status: "success",
+//     network: "AIRTEL",
+//     quantity: "4GB Data",
+//     time: "1:45",
+//     reference: "000005234567865443",
+//   },
 
-  {
-    id: "ABCD7890JK",
-    name: "Betting",
-    type: "betting",
-    amount: "₦7,500",
-    date: "Mar 2, 2025",
-    direction: "outward",
-    status: "failed",
-    network: "AIRTEL",
-    quantity: "3GB Data",
-    time: "12:05",
-    reference: "1111123450653",
-  },
-  {
-    id: "LMNO09896",
-    name: "Data Purchase",
-    type: "data",
-    amount: "₦10,750",
-    date: "Mar 1, 2025",
-    direction: "inward",
-    status: "success",
-    network: "GLO",
-    quantity: "10GB Data",
-    time: "4:43",
-    reference: "42356001234000",
-  },
-  {
-    id: "LMNOP4FDYT7",
-    name: "Airtime Purchase",
-    type: "airtime",
-    amount: "₦1,250",
-    date: "Mar 1, 2025",
-    direction: "inward",
-    status: "pending",
-    network: "MTN",
-    quantity: "1.5GB Data",
-    time: "11:35",
-    reference: "00000111234567",
-  },
-  {
-    id: "LMN34WRT4567",
-    name: "Cable TV Subscriton",
-    type: "Cable_tv",
-    amount: "₦2,750",
-    date: "Mar 1, 2025",
-    direction: "inward",
-    status: "success",
-    network: "AIRTEL",
-    quantity: "4GB Data",
-    time: "1:45",
-    reference: "203429400000000112",
-  },
-];
+//   {
+//     id: "ABCD7890JK",
+//     name: "Betting",
+//     type: "betting",
+//     amount: "₦7,500",
+//     date: "Mar 2, 2025",
+//     direction: "outward",
+//     status: "failed",
+//     network: "AIRTEL",
+//     quantity: "3GB Data",
+//     time: "12:05",
+//     reference: "1111123450653",
+//   },
+//   {
+//     id: "LMNO09896",
+//     name: "Data Purchase",
+//     type: "data",
+//     amount: "₦10,750",
+//     date: "Mar 1, 2025",
+//     direction: "inward",
+//     status: "success",
+//     network: "GLO",
+//     quantity: "10GB Data",
+//     time: "4:43",
+//     reference: "42356001234000",
+//   },
+//   {
+//     id: "LMNOP4FDYT7",
+//     name: "Airtime Purchase",
+//     type: "airtime",
+//     amount: "₦1,250",
+//     date: "Mar 1, 2025",
+//     direction: "inward",
+//     status: "pending",
+//     network: "MTN",
+//     quantity: "1.5GB Data",
+//     time: "11:35",
+//     reference: "00000111234567",
+//   },
+//   {
+//     id: "LMN34WRT4567",
+//     name: "Cable TV Subscriton",
+//     type: "Cable_tv",
+//     amount: "₦2,750",
+//     date: "Mar 1, 2025",
+//     direction: "inward",
+//     status: "success",
+//     network: "AIRTEL",
+//     quantity: "4GB Data",
+//     time: "1:45",
+//     reference: "203429400000000112",
+//   },
+// ];
 
+// type Transaction = {
+//   id: string;
+//   name: string;
+//   type: string;
+//   amount: string;
+//   date: string;
+//   direction: string;
+//   status: string;
+//   network: string;
+//   quantity: string;
+//   time: string;
+//   reference: string;
+// };
 
-
-type Transaction = {
-  id: string;
+interface TransactionType {
   name: string;
-  type: string;
-  amount: string;
-  date: string;
-  direction: string;
+  id: string;
+  time: string;
+  amount: number;
+  description: string;
   status: string;
+  date: string;
+  type: string;
+
+  direction: string;
+
   network: string;
   quantity: string;
-  time: string;
+
   reference: string;
-};
-
-
-// interface TransactionType {
-//   id: string;
-//   amount: number;
-//   description: string;
-//   date: string;
-//   type: string;
-// }
+}
 
 // interface Transaction {
 //   transactions: TransactionType[];
 // }
-
-
-
-const UtilityTransaction = () => {
+const UtilityTransaction: React.FC<{
+  transactions: TransactionType[];
+  noTransaction: string | null;
+}> = ({ transactions, noTransaction }) => {
+  // const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [selectedTransaction, setSelectedTransaction] =
-    useState<Transaction | null>(null);
+    useState<TransactionType | null>(null);
 
   const [showReportForm, setShowReportForm] = useState(false);
   const [message, setMessage] = useState({
@@ -230,83 +238,99 @@ const UtilityTransaction = () => {
 
   return (
     <div className="space-y-4 p-4">
-      {transactions.map((transaction) => (
-        <button
-          onClick={() => handleOpenModal(transaction)}
-          key={transaction.id}
-          className="flex justify-between cursor-pointer items-center bg-white border-b  w-full border-[#E2E8F0] last:border-b-0 p-4"
-        >
-          <div className="flex items-center gap-4 relative">
-            <div className="relative">
-              {transaction.type === "data" && (
-                <img src={Data} alt="Transaction Logo" className="w-12 h-12" />
-              )}
-              {transaction.type === "electricity" && (
-                <img
-                  src={Electricity}
-                  alt="Transaction Logo"
-                  className="w-12 h-12"
-                />
-              )}
-              {transaction.type === "airtime" && (
-                <img
-                  src={Airtime}
-                  alt="Transaction Logo"
-                  className="w-12 h-12"
-                />
-              )}
-              {transaction.type === "Cable_tv" && (
-                <img
-                  src={Television}
-                  alt="Transaction Logo"
-                  className="w-12 h-12"
-                />
-              )}
-              {transaction.type === "betting" && (
-                <img src={Gift} alt="Transaction Logo" className="w-12 h-12" />
-              )}
-            </div>
-
-            {/* Transaction Details */}
-            <div>
-              <p className="text-[16px] text-left text-[#27014F]">{transaction.name}</p>
-              <div className="flex items-center gap-2 text-gray-600">
-                {/* Tracking ID */}
-                <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
-                  {transaction.id}
-                </span>
-
-                {/* Unique Status Icon */}
-                {transaction.status === "success" && (
-                  <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                    SUCCESSLL
-                  </div>
+      {transactions.length > 0 ? (
+        transactions.map((transaction) => (
+          <button
+            onClick={() => handleOpenModal(transaction)}
+            key={transaction.id}
+            className="flex justify-between cursor-pointer items-center bg-white border-b  w-full border-[#E2E8F0] last:border-b-0 p-4"
+          >
+            <div className="flex items-center gap-4 relative">
+              <div className="relative">
+                {transaction.type === "data" && (
+                  <img
+                    src={Data}
+                    alt="Transaction Logo"
+                    className="w-12 h-12"
+                  />
                 )}
-                {transaction.status === "pending" && (
-                  <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
-                    PENDING
-                  </div>
+                {transaction.type === "electricity" && (
+                  <img
+                    src={Electricity}
+                    alt="Transaction Logo"
+                    className="w-12 h-12"
+                  />
                 )}
-                {transaction.status === "failed" && (
-                  <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
-                    FAILED
-                  </div>
+                {transaction.type === "airtime" && (
+                  <img
+                    src={Airtime}
+                    alt="Transaction Logo"
+                    className="w-12 h-12"
+                  />
+                )}
+                {transaction.type === "Cable_tv" && (
+                  <img
+                    src={Television}
+                    alt="Transaction Logo"
+                    className="w-12 h-12"
+                  />
+                )}
+                {transaction.type === "betting" && (
+                  <img
+                    src={Gift}
+                    alt="Transaction Logo"
+                    className="w-12 h-12"
+                  />
                 )}
               </div>
-            </div>
-          </div>
 
-          {/* Right Side: Date & Amount */}
-          <div className="text-right">
-            <p className="font-semibold text-[#27014F]  ">
-              {transaction.amount}
-            </p>
-            <p className="text-sm text-[#27014F] text-[11px]">
-              {transaction.date}
-            </p>
-          </div>
-        </button>
-      ))}
+              {/* Transaction Details */}
+              <div>
+                <p className="text-[16px] text-left text-[#27014F]">
+                  {transaction.name}
+                </p>
+                <div className="flex items-center gap-2 text-gray-600">
+                  {/* Tracking ID */}
+                  <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
+                    {transaction.id}
+                  </span>
+
+                  {/* Unique Status Icon */}
+                  {transaction.status === "success" && (
+                    <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                      SUCCESSLL
+                    </div>
+                  )}
+                  {transaction.status === "pending" && (
+                    <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
+                      PENDING
+                    </div>
+                  )}
+                  {transaction.status === "failed" && (
+                    <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
+                      FAILED
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side: Date & Amount */}
+            <div className="text-right">
+              <p className="font-semibold text-[#27014F]  ">
+                {transaction.amount}
+              </p>
+              <p className="text-sm text-[#27014F] text-[11px]">
+                {transaction.date}
+              </p>
+            </div>
+          </button>
+        ))
+      ) : (
+        <div className="flex items-center justify-center h-[calc(100vh-18rem)]">
+          <p className="text-gray-500 text-lg">{noTransaction}</p>
+        </div>
+      )}
 
       {/* Modal */}
       {selectedTransaction && (

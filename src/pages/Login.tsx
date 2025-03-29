@@ -8,6 +8,7 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router";
 import { useAuthStore } from "../store/authStore";
 import "../App.css";
+import eye_lines from "../assets/dashboard_img/Eye_hide_dark.svg";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -183,12 +184,29 @@ const Login = () => {
                       : "focus:border-purple-800"
                   } `}
                 />
-                <img
+
+                <div
+                  className={`absolute  cursor-pointer right-[0.8rem] bottom-[0.45rem] 
+                  }`}
+                  onClick={togglePasswordVisibility}
+                >
+                  {isPasswordVisible ? (
+                    <img src={eye} className="w-full h-full" alt="" />
+                  ) : (
+                    <img
+                      src={eye_lines}
+                      className=" top-[1.5px]  left-[px]"
+                      alt=""
+                    />
+                  )}
+                </div>
+
+                {/* <img
                   className="absolute cursor-pointer right-[0.8rem] bottom-[0.45rem]"
                   src={eye}
                   alt="password visibility toggle"
                   onClick={togglePasswordVisibility}
-                />
+                /> */}
               </div>
               {errors.password && (
                 <p className="text-red-500 text-xs mt-1">{errors.password}</p>

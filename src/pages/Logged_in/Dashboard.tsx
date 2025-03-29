@@ -1,11 +1,6 @@
 import Lines from "../../assets/dashboard_img/Polygon.svg";
 import crypto from "../../assets/dashboard_img/dashboard_icons/akar-icons_bitcoin-fill.svg";
 import Giftcard from "../../assets/dashboard_img/dashboard_icons/fluent_gift-card-20-filled.svg";
-import Airtime from "../../assets/dashboard_img/dashboard_icons/ic_round-phone-iphone.svg";
-import Data from "../../assets/dashboard_img/dashboard_icons/ooui_network.svg";
-import Bulb from "../../assets/dashboard_img/dashboard_icons/ion_bulb-sharp.svg";
-import TV from "../../assets/dashboard_img/dashboard_icons/wpf_retro-tv.svg";
-import Casino from "../../assets/dashboard_img/dashboard_icons/maki_casino.svg";
 import Support from "../../assets/dashboard_img/dashboard_icons/bx_support.svg";
 import eye_lines from "../../assets/dashboard_img/eye_covered.svg";
 import eye from "../../assets/dashboard_img/Eye_open_white.svg";
@@ -14,13 +9,13 @@ import ArrowUp from "../../assets/dashboard_img/Arrow_up.svg";
 import ArrowDown from "../../assets/dashboard_img/Arrow_down.svg";
 import CryptoBG from "../../assets/dashboard_img/crptobg.svg";
 import giftcardsbg from "../../assets/dashboard_img/giftcardbg.svg";
-import airtimebg from "../../assets/dashboard_img/airtimebg.svg";
-import dataBg from "../../assets/dashboard_img/databg.svg";
-import Bulbbg from "../../assets/dashboard_img/Bulbbg.svg";
-import Tvbg from "../../assets/dashboard_img/tvbg.svg";
-import Casinobg from "../../assets/dashboard_img/casinobg.svg";
 import Supportbg from "../../assets/dashboard_img/supportbg.svg";
 import { useState } from "react";
+import Betting from "./Logged_in_components/someUtilityComponent/Betting";
+import CableTv from "./Logged_in_components/someUtilityComponent/CableTv";
+import Electricity from "./Logged_in_components/someUtilityComponent/Electricity";
+import Data from "./Logged_in_components/someUtilityComponent/Data";
+import Airtime from "./Logged_in_components/someUtilityComponent/Airtime";
 // import { data } from "react-router"; comment
 const Dashboard = () => {
   const [isHidden, setIsHidden] = useState(false);
@@ -29,16 +24,13 @@ const Dashboard = () => {
     setIsHidden((prev) => !prev);
   };
 
- 
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
-      <div className="flex-1 overflow-y-auto py-[1.5rem] px-[1rem]">
+      <div className="flex-1 overflow-y-auto pb-[1.5rem] px-[1rem]">
+        <div className="h-[1rem] bg-[white] w-[78%] fixed z-20 "></div>
         <div className=" ">
-          <div className="flex gap-[1.5rem]">
+          <div className="flex gap-[1.5rem] mt-[1.2rem]">
             <div className="flex ">
-
-
-
               <div className="w-[505px] relative h-[253px] bg-[#27014F] rounded-[10px] flex items-center justify-center">
                 <img
                   src={Lines}
@@ -141,51 +133,15 @@ const Dashboard = () => {
                 </p>
                 <img src={giftcardsbg} className="absolute right-0" alt="" />
               </button>
-              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
-                <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
-                  <img src={Airtime} alt="" />
-                </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
-                  Airtime
-                </p>
-                <img src={airtimebg} className="absolute right-0" alt="" />
-              </button>
-              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
-                <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
-                  <img src={Data} alt="" />
-                </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
-                  Data
-                </p>
-                <img src={dataBg} className="absolute right-0" alt="" />
-              </button>
-              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
-                <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
-                  <img src={Bulb} alt="" />
-                </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
-                  Electricity
-                </p>
-                <img src={Bulbbg} className="absolute right-0" alt="" />
-              </button>
-              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
-                <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
-                  <img src={TV} alt="" />
-                </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
-                  Cable TV
-                </p>
-                <img src={Tvbg} className="absolute right-0" alt="" />
-              </button>
-              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
-                <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
-                  <img src={Casino} alt="" />
-                </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
-                  Betting
-                </p>
-                <img src={Casinobg} className="absolute right-0" alt="" />
-              </button>
+
+              {/* some card component here */}
+              <Airtime />
+              <Data />
+              <Electricity />
+              <CableTv />
+
+              <Betting />
+
               <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
                 <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
                   <img src={Support} alt="" />

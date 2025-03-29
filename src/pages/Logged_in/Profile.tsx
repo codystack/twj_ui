@@ -281,10 +281,10 @@ const Profile = () => {
                     // Fullscreen Dark Overlay with Centered   w-[600px]
                     <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
                       {/* Dialog Box */}
-                      <div className="p-[1rem] rounded-[20px] bg-[#fff]/20">
+                      <div className="p-[0.8rem] rounded-[20px] bg-[#fff]/20">
                         <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
                           <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
-                            <h3 className="text-[17px] font-semibold text-[#27014F] ">
+                            <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
                               Delete my TWJ Account
                             </h3>
                             <button
@@ -367,7 +367,7 @@ const Profile = () => {
                               )}
 
                               {/* Buttons */}
-                              <div className="flex justify-between w-[100%] mt-[5%] mb-[1rem]  ">
+                              <div className="flex justify-between w-[100%] mt-[5%] mb-[2rem]  ">
                                 <button
                                   className={`bg-[#9605C5] w-full  text-white p-3 rounded-[6px]  ${
                                     isFormInvalid
