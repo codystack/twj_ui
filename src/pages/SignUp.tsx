@@ -11,6 +11,8 @@ import eye from "../assets/auth_imgs/Eye_light.svg";
 import "../App.css";
 import { useAuthStore } from "../store/authStore";
 
+import eye_lines from "../assets/dashboard_img/Eye_hide_dark.svg";
+
 const SignUp = () => {
   const navigate = useNavigate();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -283,13 +285,27 @@ const SignUp = () => {
                       : "focus:border-purple-800"
                   }`}
                 />
-                <img
+                <div
                   className={`absolute  cursor-pointer right-[0.8rem] bottom-[0.45rem] 
                   }`}
+                  onClick={togglePasswordVisibility}
+                >
+                  {isPasswordVisible ? (
+                    <img src={eye} className="w-full h-full" alt="" />
+                  ) : (
+                    <img
+                      src={eye_lines}
+                      className=" top-[1.5px]  left-[px]"
+                      alt=""
+                    />
+                  )}
+                </div>
+
+                {/* <img
+               
                   src={eye}
                   alt="password visibility toggle"
-                  onClick={togglePasswordVisibility}
-                />
+                /> */}
               </div>
               {errors.password && (
                 <p className="text-red-500 text-xs mt-1">{errors.password}</p>

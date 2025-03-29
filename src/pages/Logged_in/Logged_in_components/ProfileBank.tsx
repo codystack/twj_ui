@@ -53,10 +53,21 @@ const customStyles = {
       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
     },
   }),
+  // option: (provided: any, state: any) => ({
+  //   ...provided,
+  //   cursor: "pointer",
+  //   backgroundColor: state.isSelected ? "#8003A9" : "#fff",
+  // }),
   option: (provided: any, state: any) => ({
     ...provided,
     cursor: "pointer",
-    backgroundColor: state.isSelected ? "#8003A9" : "#fff",
+    textAlign: "left",
+    backgroundColor: state.isSelected
+      ? "#8003A9"
+      : state.isFocused
+      ? "#F8E0FF" 
+      : "#fff",
+    color: state.isSelected ? "#fff" : "#27014F",
   }),
 };
 

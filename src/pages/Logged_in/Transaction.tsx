@@ -4,7 +4,6 @@ import GiftCardTransaction from "./Logged_in_components/GiftcardTransaction";
 import UtilityTransaction from "./Logged_in_components/UtilityBillsTransaction";
 import api from "../../services/api";
 
-
 const BASE_URL = import.meta.env.VITE_BASE_URL; // Access VITE env variable
 interface TransactionType {
   id: string;
@@ -12,16 +11,25 @@ interface TransactionType {
   description: string;
   date: string;
   type: string;
-}
+  status: string;
+  time: string;
+  name: string;
+  direction: string;
+  
+  network: string;
+  quantity: string;
 
+  reference: string;
+}
 
 const Transaction = () => {
   const [activeTab, setActiveTab] = useState<
     "Crypto" | "GiftCard" | "BillsPayment"
   >("Crypto");
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [transactions, setTransactions] = useState<TransactionType[]>([]);
+  // const [error, setError] = useState<string | null>(null);
+  const [noTransaction, setNoTransaction] = useState<string | null>(null);
+  const [transaction, setTransaction] = useState<TransactionType[]>([]);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -35,18 +43,21 @@ const Transaction = () => {
   const fetchTransactions = async (type: string) => {
     setLoading(true);
     setLoading(true);
-    setError(null);
+    // setError(null);
     try {
       const response = await api.get(
         `${BASE_URL}/Transaction/allTransactions?TransactionType=${type}`
       );
-    
+
       // console.log(response.data.data.data);
       const transactions: TransactionType[] = response.data.data.data; // Ensure correct data structure
-    console.log(transactions);
-      setTransactions(transactions); // Assuming response.data contains the list of transactions
+      const NoTransactionResponse = response.data.message
+      console.log('response for empty transaction',NoTransactionResponse);
+      console.log(transactions);
+      setTransaction(transactions); 
+      setNoTransaction(NoTransactionResponse); 
     } catch (err) {
-      setError("Failed to fetch transactions");
+      // setError("Failed to fetch transactions");
     } finally {
       setLoading(false);
     }
@@ -109,8 +120,8 @@ const Transaction = () => {
           <div className=" h-[100%]  mt-[10%] ">
             {activeTab === "Crypto" && (
               <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
-                <CrytoTransaction 
-                // transactions={transactions || []} 
+                <CrytoTransaction
+                // transactions={transactions || []}
                 />
               </div>
             )}
@@ -118,27 +129,27 @@ const Transaction = () => {
             {/* Dynamic Content Security*/}
             {activeTab === "GiftCard" && (
               <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
-                <GiftCardTransaction 
-                // transactions={transactions || []} 
+                <GiftCardTransaction
+                // transactions={transactions || []}
                 />
               </div>
             )}
             {/* Dynamic Content Bank*/}
             {activeTab === "BillsPayment" && (
               <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
-                <UtilityTransaction 
-                // transactions={transactions || []} 
+                <UtilityTransaction
+                transactions={transaction || []}
+                noTransaction={noTransaction}
                 />
               </div>
             )}
           </div>
-          
-      {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
-          <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
-        </div>
-      )}
 
+          {loading && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
+              <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
+            </div>
+          )}
         </div>
       </div>
     </div>
