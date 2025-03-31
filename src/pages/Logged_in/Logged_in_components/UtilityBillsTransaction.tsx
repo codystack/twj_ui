@@ -10,101 +10,6 @@ import Copy from "../../../assets/dashboard_img/profile/transactions/Copy_light.
 import Report from "../../../assets/dashboard_img/profile/transactions/report.svg";
 import HrtBroken from "../../../assets/dashboard_img/profile/transactions/heartbroken.svg";
 
-// const transactions = [
-//   {
-//     id: "XYZ123456",
-//     name: "Data Purchase",
-//     type: "data",
-//     amount: "₦20,500",
-//     date: "Mar 3, 2025",
-//     direction: "outward",
-//     status: "failed",
-//     network: "AIRTEL",
-//     quantity: "10GB Data",
-//     time: "1:45",
-//     reference: "21345467800000653",
-//   },
-//   {
-//     id: "QYWTU578HG",
-//     name: "Electricity Purchase",
-//     type: "electricity",
-//     amount: "₦30,500",
-//     date: "Mar 4, 2025",
-//     direction: "inward",
-//     status: "success",
-//     network: "AIRTEL",
-//     quantity: "4GB Data",
-//     time: "1:45",
-//     reference: "000005234567865443",
-//   },
-
-//   {
-//     id: "ABCD7890JK",
-//     name: "Betting",
-//     type: "betting",
-//     amount: "₦7,500",
-//     date: "Mar 2, 2025",
-//     direction: "outward",
-//     status: "failed",
-//     network: "AIRTEL",
-//     quantity: "3GB Data",
-//     time: "12:05",
-//     reference: "1111123450653",
-//   },
-//   {
-//     id: "LMNO09896",
-//     name: "Data Purchase",
-//     type: "data",
-//     amount: "₦10,750",
-//     date: "Mar 1, 2025",
-//     direction: "inward",
-//     status: "success",
-//     network: "GLO",
-//     quantity: "10GB Data",
-//     time: "4:43",
-//     reference: "42356001234000",
-//   },
-//   {
-//     id: "LMNOP4FDYT7",
-//     name: "Airtime Purchase",
-//     type: "airtime",
-//     amount: "₦1,250",
-//     date: "Mar 1, 2025",
-//     direction: "inward",
-//     status: "pending",
-//     network: "MTN",
-//     quantity: "1.5GB Data",
-//     time: "11:35",
-//     reference: "00000111234567",
-//   },
-//   {
-//     id: "LMN34WRT4567",
-//     name: "Cable TV Subscriton",
-//     type: "Cable_tv",
-//     amount: "₦2,750",
-//     date: "Mar 1, 2025",
-//     direction: "inward",
-//     status: "success",
-//     network: "AIRTEL",
-//     quantity: "4GB Data",
-//     time: "1:45",
-//     reference: "203429400000000112",
-//   },
-// ];
-
-// type Transaction = {
-//   id: string;
-//   name: string;
-//   type: string;
-//   amount: string;
-//   date: string;
-//   direction: string;
-//   status: string;
-//   network: string;
-//   quantity: string;
-//   time: string;
-//   reference: string;
-// };
 
 interface TransactionType {
   name: string;
@@ -115,12 +20,9 @@ interface TransactionType {
   status: string;
   date: string;
   type: string;
-
   direction: string;
-
   network: string;
   quantity: string;
-
   reference: string;
 }
 
