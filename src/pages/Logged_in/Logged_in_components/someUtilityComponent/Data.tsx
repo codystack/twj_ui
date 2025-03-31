@@ -81,7 +81,7 @@ const Data = () => {
     plans: "",
   });
 
-  const [activeImage, setActiveImage] = useState<string>("MTN");
+  const [activeImage, setActiveImage] = useState<string | null>  (null);
 
   const images = [
     { id: "MTN", src: MTN, alt: "MTN" },
@@ -207,6 +207,9 @@ const Data = () => {
 
   const closeModal = () => {
     // Clear form logic can be added here
+    setActiveImage(null);
+    setFormData({phoneNumber: "", amount: "", plans: ""});
+    setErrors({ phoneNumber: "", customerId: "", amount: "", plans: "" });
     setIsModalOpen(false);
   };
   const isFormInvalid =
@@ -243,6 +246,7 @@ const Data = () => {
       {isModalOpen && (
         <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
           {/* Dialog Box */}
+          
           <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
             <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
               <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">

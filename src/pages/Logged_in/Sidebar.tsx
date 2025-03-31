@@ -1,10 +1,13 @@
 import { NavLink, useNavigate } from "react-router";
 import { useAuthStore } from "../../store/authStore";
 import { useState } from "react";
+import alarmIcon from "../../assets/dashboard_img/profile/Alarm_duotone.svg";
+import Cancel from "../../assets/dashboard_img/profile/cancel.svg";
 
 const Sidebar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // const [showForm, setShowForm] = useState(false);
   // Get logout function from store
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout); // Get logout function from store
@@ -13,7 +16,9 @@ const Sidebar = () => {
   //   logout(navigate);
   //   setIsModalOpen(false);
   // };
-
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
   return (
     <>
       <div className="flex flex-col h-full  justify-between">
@@ -391,74 +396,102 @@ const Sidebar = () => {
             </button>
           </li>
           <li className="flex  items-center gap-2">
-            <button
-               onClick={() => logout(navigate)}
-               className="flex cursor-pointer pl-[1.7rem] pb-[10px] justify-center gap-2 text-[#27014F] "
-            >
-              <>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <ellipse
-                    cx="6"
-                    cy="6"
-                    rx="6"
-                    ry="6"
-                    transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 21 18)"
-                    fill="#7E869E"
-                    fillOpacity="0.25"
-                  />
-                  <path
-                    d="M8.7 12C8.7 8.52061 11.5206 5.7 15 5.7C18.4794 5.7 21.3 8.52061 21.3 12C21.3 15.4794 18.4794 18.3 15 18.3C11.5206 18.3 8.7 15.4794 8.7 12Z"
-                    stroke="#7E869E"
-                    strokeOpacity="0.25"
-                    strokeWidth="0.6"
-                  />
-                  <path
-                    d="M9 18.9282C10.2162 19.6303 11.5957 20 13 20C14.4043 20 15.7838 19.6303 17 18.9282C18.2162 18.2261 19.2261 17.2162 19.9282 16C20.6303 14.7838 21 13.4043 21 12C21 10.5957 20.6303 9.21615 19.9282 8C19.2261 6.78385 18.2162 5.77394 17 5.0718C15.7838 4.36965 14.4043 4 13 4C11.5957 4 10.2162 4.36965 9 5.0718"
-                    stroke="#27014F"
-                    strokeWidth="1.5"
-                  />
-                  <path
-                    d="M3 12L2.41435 11.5315L2.03953 12L2.41435 12.4685L3 12ZM12 12.75C12.4142 12.75 12.75 12.4142 12.75 12C12.75 11.5858 12.4142 11.25 12 11.25V12.75ZM6.41435 6.53148L2.41435 11.5315L3.58565 12.4685L7.58565 7.46852L6.41435 6.53148ZM2.41435 12.4685L6.41435 17.4685L7.58565 16.5315L3.58565 11.5315L2.41435 12.4685ZM3 12.75H12V11.25H3V12.75Z"
-                    fill="#27014F"
-                  />
-                </svg>
-                Log Out
-              </>
-            </button>
+            <div className="relative">
+              <div
+                onClick={() => {
+                  // /console.log("Button clicked"); // Debugging
+                  setIsModalOpen(true);
+                }}
+                className=" flex cursor-pointer  pl-[1.7rem] pb-[10px] justify-center gap-2 text-[#27014F] "
+              >
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <ellipse
+                      cx="6"
+                      cy="6"
+                      rx="6"
+                      ry="6"
+                      transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 21 18)"
+                      fill="#7E869E"
+                      fillOpacity="0.25"
+                    />
+                    <path
+                      d="M8.7 12C8.7 8.52061 11.5206 5.7 15 5.7C18.4794 5.7 21.3 8.52061 21.3 12C21.3 15.4794 18.4794 18.3 15 18.3C11.5206 18.3 8.7 15.4794 8.7 12Z"
+                      stroke="#7E869E"
+                      strokeOpacity="0.25"
+                      strokeWidth="0.6"
+                    />
+                    <path
+                      d="M9 18.9282C10.2162 19.6303 11.5957 20 13 20C14.4043 20 15.7838 19.6303 17 18.9282C18.2162 18.2261 19.2261 17.2162 19.9282 16C20.6303 14.7838 21 13.4043 21 12C21 10.5957 20.6303 9.21615 19.9282 8C19.2261 6.78385 18.2162 5.77394 17 5.0718C15.7838 4.36965 14.4043 4 13 4C11.5957 4 10.2162 4.36965 9 5.0718"
+                      stroke="#27014F"
+                      strokeWidth="1.5"
+                    />
+                    <path
+                      d="M3 12L2.41435 11.5315L2.03953 12L2.41435 12.4685L3 12ZM12 12.75C12.4142 12.75 12.75 12.4142 12.75 12C12.75 11.5858 12.4142 11.25 12 11.25V12.75ZM6.41435 6.53148L2.41435 11.5315L3.58565 12.4685L7.58565 7.46852L6.41435 6.53148ZM2.41435 12.4685L6.41435 17.4685L7.58565 16.5315L3.58565 11.5315L2.41435 12.4685ZM3 12.75H12V11.25H3V12.75Z"
+                      fill="#27014F"
+                    />
+                  </svg>
+                  Log Out
+                </>
+              </div>
+              {/* Logout Modal */}
+              {isModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center   bg-black/40 bg-opacity-50 !z-50">
+                  <div className="   rounded-[10px]  bg-[#fff]/20 p-[0.7rem]  bg-opacity-50">
+                    <div className=" p-6 w-[600px]  rounded-[10px]  bg-white  shadow-lg  text-center">
+                      
+                    <div className="flex r-[-3rem]  flex-row-reverse ">
+                          <button
+                            onClick={handleClose}
+                            className="px-4 py-2 cursor-pointer"
+                          >
+                            <img src={Cancel} alt="" />
+                          </button>
+                        </div>
+                      
+                      <div className=" flex items-center justify-center">
+                    
+                     
+                        <div className=" w-[25rem]">
+                          <div className="flex flex-col mt-3 items-center justify-center">
+                            <div className="flex justify-center my-[5%] mb-[1rem]">
+                              <span className="bg-[#FF3366]/15 rounded-[100%] w-[5rem] h-[5rem] flex justify-center items-center p-[2px] mr-[2px] ">
+                                <img
+                                  src={alarmIcon}
+                                  className="w-[3.5rem] "
+                                  alt=""
+                                />
+                              </span>
+                            </div>
+                            <h3 className="text-lg w-full text-[#27014F] ">
+                              Are you sure you want to logout?
+                            </h3>
+                          </div>
+                          <div className="flex justify-between mt-4">
+                          <button
+                              onClick={() => logout(navigate)}
+                              className="px-4 py-3 transition duration-500 ease-in-out bg-red-600 mb-[2rem] cursor-pointer text-white rounded-lg w-full hover:bg-red-700"
+                            >
+                              Yes, Logout
+                            </button>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </li>
         </ul>
       </div>
-
-      {/* Logout Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 top-0 isolate left-0 flex items-center justify-center bg-black z-[99999999] bg-opacity-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80 text-center">
-            <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">
-              Are you sure you want to logout?
-            </h3>
-            <div className="flex justify-between mt-4">
-              <button
-                // onClick={handleLogout} // Call handleLogout when confirmed
-             className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-              >
-                Yes, Logout
-              </button>
-              <button
-                onClick={() => setIsModalOpen(false)} // Close modal on cancel
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

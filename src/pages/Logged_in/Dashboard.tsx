@@ -1,21 +1,18 @@
 import Lines from "../../assets/dashboard_img/Polygon.svg";
-import crypto from "../../assets/dashboard_img/dashboard_icons/akar-icons_bitcoin-fill.svg";
-import Giftcard from "../../assets/dashboard_img/dashboard_icons/fluent_gift-card-20-filled.svg";
-import Support from "../../assets/dashboard_img/dashboard_icons/bx_support.svg";
 import eye_lines from "../../assets/dashboard_img/eye_covered.svg";
 import eye from "../../assets/dashboard_img/Eye_open_white.svg";
 import virtualCard from "../../assets/dashboard_img/virtualcardxx 1.svg";
 import ArrowUp from "../../assets/dashboard_img/Arrow_up.svg";
 import ArrowDown from "../../assets/dashboard_img/Arrow_down.svg";
-import CryptoBG from "../../assets/dashboard_img/crptobg.svg";
-import giftcardsbg from "../../assets/dashboard_img/giftcardbg.svg";
-import Supportbg from "../../assets/dashboard_img/supportbg.svg";
 import { useState } from "react";
 import Betting from "./Logged_in_components/someUtilityComponent/Betting";
 import CableTv from "./Logged_in_components/someUtilityComponent/CableTv";
 import Electricity from "./Logged_in_components/someUtilityComponent/Electricity";
 import Data from "./Logged_in_components/someUtilityComponent/Data";
 import Airtime from "./Logged_in_components/someUtilityComponent/Airtime";
+import Crypto from "./Logged_in_components/someUtilityComponent/Crypto";
+import GiftCard from "./Logged_in_components/someUtilityComponent/GiftCard";
+import Support from "./Logged_in_components/someUtilityComponent/Support";
 // import { data } from "react-router"; comment
 const Dashboard = () => {
   const [isHidden, setIsHidden] = useState(false);
@@ -27,9 +24,9 @@ const Dashboard = () => {
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
       <div className="flex-1 overflow-y-auto pb-[1.5rem] px-[1rem]">
-        <div className="h-[1rem] bg-[white] w-[78%] fixed z-20 "></div>
-        <div className=" ">
-          <div className="flex gap-[1.5rem] mt-[1.2rem]">
+        <div className="h-[2rem] bg-[white] w-[78%] fixed z-20 "></div>
+        <div className=" ml-[2%] py-[2.3%] bg-[#fff]  ">
+          <div className="flex gap-[1.5rem] mt-[1rem]">
             <div className="flex ">
               <div className="w-[505px] relative h-[253px] bg-[#27014F] rounded-[10px] flex items-center justify-center">
                 <img
@@ -115,42 +112,14 @@ const Dashboard = () => {
 
           <div className=" flex w-full mt-[3rem]  justify-start">
             <div className="grid grid-cols-4 grid-rows-2 gap-[1rem] ">
-              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
-                <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
-                  <img src={crypto} alt="" />
-                </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
-                  Crypto
-                </p>
-                <img src={CryptoBG} className="absolute right-0" alt="" />
-              </button>
-              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
-                <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
-                  <img src={Giftcard} alt="" />
-                </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px] mt-[1rem]">
-                  Gift Cards
-                </p>
-                <img src={giftcardsbg} className="absolute right-0" alt="" />
-              </button>
-
-              {/* some card component here */}
+              <Crypto />
+              <GiftCard />
               <Airtime />
               <Data />
               <Electricity />
               <CableTv />
-
               <Betting />
-
-              <button className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]">
-                <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
-                  <img src={Support} alt="" />
-                </div>
-                <p className="text-[#27014F] tracking-[0.6px] text-[20px] mt-[1rem]">
-                  Support
-                </p>
-                <img src={Supportbg} className="absolute right-0" alt="" />
-              </button>
+              <Support />
             </div>
           </div>
         </div>

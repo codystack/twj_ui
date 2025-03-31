@@ -113,8 +113,10 @@ const Referals = () => {
 
   return (
     <div className="w-full z-10 overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
-      <div className="flex-1 overflow-y-auto p-4">
-        <div className=" flex p-[1rem] gap-[2rem]">
+      <div className="flex-1 overflow-y-auto px-4">
+        
+      <div className="h-[2rem] bg-[white] w-[78%] fixed  z-20 "></div>
+        <div className=" flex py-[2.3%] ml-[3%] mt-[1rem] gap-[2rem]">
           <div className=" flex flex-col gap-[1.5rem]  w-[40%] ">
             <div className="w-full border  border-[#D0DAE6] relative h-[179px] bg-[#fff] rounded-[10px] flex items-center justify-center">
               <div className="flex flex-col items-center justify-center text-[#fff]">
@@ -221,7 +223,7 @@ const Referals = () => {
               </div>
             )}
 
-            <div className="h-fit border rounded-[10px] p-[2rem]  border-[#D0DAE6]">
+            <div className="h-fit border w-full rounded-[10px] p-[2rem]  border-[#D0DAE6]">
               <div className="flex flex-col items-center gap[2rem]">
                 <img className="w-[8rem]" src={Referal} alt="" />
                 <h5 className="text-[#27014F] text-[20px] font-[600] py-[0.2rem]">
@@ -231,8 +233,8 @@ const Referals = () => {
                   Enjoy zero fees on transactions when your friends signup, with
                   your referal code.
                 </p>
-                <div className="relative z-0">
-                  <div className="border z-[-1] mt-[1rem] border-[#8A95BF] h-[3rem] rounded-[5px] pl-[8px] flex px-0 items-center">
+                <div className="relative w-full z-0">
+                  <div className="border z-[-1] mt-[1rem] border-[#8A95BF] w-full h-[3rem] rounded-[5px] pl-[8px] flex px-0 items-center">
                     <span className="w-[85%] text-[#0A2E65]/60   text-[15px] overflow-hidden text-ellipsis whitespace-nowrap">
                       {referral}
                     </span>

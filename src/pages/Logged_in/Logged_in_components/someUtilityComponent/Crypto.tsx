@@ -1,15 +1,18 @@
-import { useState } from "react";
-import airtimebg from "../../../../assets/dashboard_img/airtimebg.svg";
-import Airtimeimg from "../../../../assets/dashboard_img/dashboard_icons/ic_round-phone-iphone.svg";
-import Cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
-import MTN from "../../../../assets/dashboard_img/profile/MTN-icon 1.svg";
-import ninemobile from "../../../../assets/dashboard_img/profile/9mobile-icon 1.svg";
-import gloo from "../../../../assets/dashboard_img/profile/glo-icon 1.svg";
-import airtel from "../../../../assets/dashboard_img/profile/airtel-icon 1.svg";
+// import { useState } from "react";
+import CryptoBG from "../../../../assets/dashboard_img/crptobg.svg";
+import crypto from "../../../../assets/dashboard_img/dashboard_icons/akar-icons_bitcoin-fill.svg";
+// import Cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
+// import MTN from "../../../../assets/dashboard_img/profile/MTN-icon 1.svg";
+// import ninemobile from "../../../../assets/dashboard_img/profile/9mobile-icon 1.svg";
+// import gloo from "../../../../assets/dashboard_img/profile/glo-icon 1.svg";
+// import airtel from "../../../../assets/dashboard_img/profile/airtel-icon 1.svg";
 
-import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
-// import Select from "react-select";
-import Button from "../../../../components/Button";
+// import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+
+
+
+
+// import Button from "../../../../components/Button";
 // import check from "../../../../assets/dashboard_img/profile/Check_round_fill (1).svg";
 
 // const options = [
@@ -57,25 +60,27 @@ import Button from "../../../../components/Button";
 //   }),
 // };
 
-const Airtime = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    amount: "",
-    phoneNumber: "",
-  });
+const Crypto = () => {
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+//   const [formData, setFormData] = useState({
+//     amount: "",
+//     phoneNumber: "",
+//   });
 
-  const [errors, setErrors] = useState({
-    amount: "",
-    phoneNumber: "",
-  });
-  const [activeImage, setActiveImage] = useState<string | null>(null);
+//   const [errors, setErrors] = useState({
+//     amount: "",
+//     phoneNumber: "",
+//   });
 
-  const images = [
-    { id: "MTN", src: MTN, alt: "MTN" },
-    { id: "gloo", src: gloo, alt: "Glo" },
-    { id: "airtel", src: airtel, alt: "Airtel" },
-    { id: "ninemobile", src: ninemobile, alt: "9Mobile" },
-  ];
+
+//   const [activeImage, setActiveImage] = useState<string>("MTN");
+
+//   const images = [
+//     { id: "MTN", src: MTN, alt: "MTN" },
+//     { id: "gloo", src: gloo, alt: "Glo" },
+//     { id: "airtel", src: airtel, alt: "Airtel" },
+//     { id: "ninemobile", src: ninemobile, alt: "9Mobile" },
+//   ];
   //   const handleSelectChange = async (
   //     selectedOption: { value: string; label: string } | null
   //   ) => {
@@ -96,97 +101,96 @@ const Airtime = () => {
   //   };
 
   // Validation function
-  const validateField = (name: string, value: string | boolean | undefined) => {
-    let error = "";
 
-    switch (name) {
-      case "amount":
-        if (!value) error = "please enter a valid amount";
-        else if (isNaN(Number(value))) error = "Amount must be a number";
-        break;
 
-      case "phoneNumber":
-        if (!value) error = "Phone number is required";
-        else if (typeof value === "string" && !isValidPhoneNumber(value)) {
-          error = "Invalid phone number";
-        }
-        break;
 
-      default:
-        break;
-    }
+//   const validateField = (name: string, value: string | boolean | undefined) => {
+//     let error = "";
 
-    setErrors((prevState) => ({
-      ...prevState,
-      [name]: error,
-    }));
+//     switch (name) {
+//       case "amount":
+//         if (!value) error = "please enter a valid amount";
+//         else if (isNaN(Number(value))) error = "Amount must be a number";
+//         break;
 
-    return error;
-  };
+//       case "phoneNumber":
+//         if (!value) error = "Phone number is required";
+//         else if (typeof value === "string" && !isValidPhoneNumber(value)) {
+//           error = "Invalid phone number";
+//         }
+//         break;
 
-  const handlePhoneNumberChange = (value: string | undefined) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      phoneNumber: value || "",
-    }));
+//       default:
+//         break;
+//     }
 
-    validateField("phoneNumber", value);
-  };
+//     setErrors((prevState) => ({
+//       ...prevState,
+//       [name]: error,
+//     }));
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
+//     return error;
+//   };
 
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: newValue,
-    }));
+//   const handlePhoneNumberChange = (value: string | undefined) => {
+//     setFormData((prevState) => ({
+//       ...prevState,
+//       phoneNumber: value || "",
+//     }));
 
-    validateField(name, newValue);
-  };
+//     validateField("phoneNumber", value);
+//   };
 
-  const handleAmountClick = (amount: number) => {
-    setFormData((prev) => ({ ...prev, amount: amount.toString() }));
-  };
+//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     const { name, value, type, checked } = e.target;
+//     const newValue = type === "checkbox" ? checked : value;
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+//     setFormData((prevState) => ({
+//       ...prevState,
+//       [name]: newValue,
+//     }));
 
-  const closeModal = () => {
-    // Clear form logic can be added here
-    setFormData({
-      amount: "",
-      phoneNumber: "",
-    });
-    setErrors({ amount: "", phoneNumber: "" });
-    setActiveImage(null);
+//     validateField(name, newValue);
+//   };
 
-    setIsModalOpen(false);
-  };
-  const isFormInvalid =
-    Object.values(errors).some((error) => error) ||
-    !formData.amount ||
-    !formData.phoneNumber;
+//   const handleAmountClick = (amount: number) => {
+//     setFormData((prev) => ({ ...prev, amount: amount.toString() }));
+//   };
+
+//   const openModal = () => {
+//     setIsModalOpen(true);
+//   };
+
+//   const closeModal = () => {
+//     // Clear form logic can be added here
+//     setIsModalOpen(false);
+//   };
+
+//   const isFormInvalid =
+//     Object.values(errors).some((error) => error) ||
+//     !formData.amount ||
+//     !formData.phoneNumber;
 
   return (
     <>
       <button
-        onClick={openModal}
+        // onClick={openModal}
+        type="button"
         className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]"
       >
         <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
-          <img src={Airtimeimg} alt="" />
+          <img src={crypto} alt="" />
         </div>
         <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
-          Airtime
+          Crypto
         </p>
-        <img src={airtimebg} className="absolute right-0" alt="" />
+        <img src={CryptoBG} className="absolute right-0" alt="" />
       </button>
-
+{/* 
       {isModalOpen && (
+   
         <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
-          {/* Dialog Box */}
+         
           <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
             <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
               <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
@@ -200,7 +204,7 @@ const Airtime = () => {
 
               <div className="flex justify-center mt-[1.5rem] items-center">
                 <div className="w-[65%]">
-                  {/* Input Fields */}
+                 
                   <form action="">
                     <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left mt-[10px] ">
                       Choose Network
@@ -235,7 +239,7 @@ const Airtime = () => {
                             "--PhoneInputCountrySelect-marginRight": "0em",
                             borderRadius: "0.375rem",
                             ...(errors.phoneNumber && {
-                              border: "1px solid red", // Override with red border if there's an error
+                              border: "1px solid red", 
                             }),
                           } as React.CSSProperties
                         }
@@ -295,21 +299,20 @@ const Airtime = () => {
                       <Button
                         type="submit"
                         isDisabled={isFormInvalid}
-                        // isLoading={isSubmitting}
                       >
                         Buy Airtime
                       </Button>
                     </div>
                   </form>
-                  {/* Buttons */}
+                 
                 </div>
               </div>
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 };
 
-export default Airtime;
+export default Crypto;
