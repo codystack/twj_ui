@@ -27,53 +27,100 @@ const PinModal = ({
   };
 
   // Validate PIN and Submit
+  //   const validatePin = async () => {
+  //     if (pin.length !== 4) {
+  //       setError("Enter a valid 4-digit PIN");
+  //       return;
+  //     }
+
+  //     try {
+  //       const pinResponse = await fetch(`${BASE_URL}/Authentication/validatePasscode`, {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ pin }),
+  //       });
+
+  //       console.log("formData", formData);
+
+  //       const pinData = await pinResponse.json();
+  //       if (!pinData.success) {
+  //         setError("Invalid PIN. Please try again.");
+  //         return;
+  //       }
+
+  //       //   const purchaseResponse = await fetch("/api/airtime-purchase", {
+  //       //     method: "POST",
+  //       //     headers: { "Content-Type": "application/json" },
+  //       //     body: JSON.stringify({ ...formData, pin }),
+  //       //   });
+
+  //       const response = await api.post(
+  //         `${BASE_URL}/BillsPayment/purchaseAirtime`,
+  //         formData
+  //       );
+
+  //       if (!response.data.success) {
+  //         throw new Error(response.data.message || "An error occurred");
+  //       }
+
+  //       console.log(response);
+
+  //       //   const purchaseData = await purchaseResponse.json();
+  //       if (response.data.success) {
+  //         alert("Airtime purchase successful!");
+  //         onClose();
+  //       } else {
+  //         setError(response.data.message || "Failed to complete purchase.");
+  //       }
+  //     } catch (error) {
+  //       setError("An error occurred. Please try again.");
+  //     }
+  //   };
+
   const validatePin = async () => {
-    if (pin.length !== 4) {
-      setError("Enter a valid 4-digit PIN");
-      return;
-    }
+    // if (pin.length !== 4) {
+    //   setError("Enter a valid 4-digit PIN");
+    //   return;
+    // }
 
     try {
-      const pinResponse = await fetch("/api/validate-pin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pin }),
-      });
+      const payload = { passCode: pin };
+      // Validate PIN
+      console.log("my four-digit PIN:", payload);
+      const pinResponse = await api.post(
+        `${BASE_URL}/Authentication/validatePasscode/`,
+        { passCode: pin }
+      );
 
-      console.log("formData", formData);
+      console.log("formData", pinResponse);
 
-      const pinData = await pinResponse.json();
-      if (!pinData.success) {
+      if (!pinResponse.data.success) {
+        console.log("Invalid PIN. Please try again.");
         setError("Invalid PIN. Please try again.");
         return;
       }
 
-      //   const purchaseResponse = await fetch("/api/airtime-purchase", {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify({ ...formData, pin }),
-      //   });
-
-      const response = await api.post(
+      // Proceed with Airtime Purchase
+      const purchaseResponse = await api.post(
         `${BASE_URL}/BillsPayment/purchaseAirtime`,
-        formData
+        {
+          ...formData,
+          pin,
+        }
       );
 
-      if (!response.data.success) {
-        throw new Error(response.data.message || "An error occurred");
+      if (!purchaseResponse.data.success) {
+        throw new Error(purchaseResponse.data.message || "An error occurred");
       }
 
-      console.log(response);
+      console.log(purchaseResponse);
 
-      //   const purchaseData = await purchaseResponse.json();
-      if (response.data.success) {
-        alert("Airtime purchase successful!");
-        onClose();
-      } else {
-        setError(response.data.message || "Failed to complete purchase.");
-      }
-    } catch (error) {
-      setError("An error occurred. Please try again.");
+      alert("Airtime purchase successful!");
+      onClose();
+    } catch (error: any) {
+      setError(
+        error.response?.data?.message || "An error occurred. Please try again."
+      );
     }
   };
 
@@ -129,7 +176,7 @@ const PinModal = ({
                 {[...Array(4)].map((_, i) => (
                   <div
                     key={i}
-                    className={`w-[10px] h-[10px] rounded-md flex items-center justify-center text-lg font-bold
+                    className={`w-[10px] h-[10px]  rounded-md flex items-center justify-center text-lg font-bold
                      ${pin[i] ? "bg-[#27014F]" : "bg-gray-300"}`}
                   >
                     {/* {pin[i] ? "●" : ""} */}
@@ -142,7 +189,7 @@ const PinModal = ({
                 {[..."123456789"].map((num) => (
                   <button
                     key={num}
-                    className="w-16 h-16 bg-gray-200 text-lg text-[#27014F] font-bold rounded-full hover:bg-gray-300"
+                    className="w-16 h-16 bg-gray-200 text-lg cursor-pointer text-[#27014F] font-bold rounded-full hover:bg-gray-300"
                     onClick={() => handleKeyPress(num)}
                   >
                     {num}
@@ -154,7 +201,7 @@ const PinModal = ({
 
                 {/* "0" centered below 8 */}
                 <button
-                  className="w-16 h-16 bg-gray-200 text-lg text-[#27014F] font-bold rounded-full hover:bg-gray-300"
+                  className="w-16 h-16 bg-gray-200 text-lg cursor-pointer text-[#27014F] font-bold rounded-full hover:bg-gray-300"
                   onClick={() => handleKeyPress("0")}
                 >
                   0
@@ -162,7 +209,7 @@ const PinModal = ({
 
                 {/* Backspace button under 9 */}
                 <button
-                  className="w-16 h-16 bg-white rounded-full flex items-center justify-center"
+                  className="w-16 h-16 bg-white rounded-full cursor-pointer flex items-center justify-center"
                   onClick={() => handleKeyPress("del")}
                 >
                   <img src={Backspace} alt="Backspace" />

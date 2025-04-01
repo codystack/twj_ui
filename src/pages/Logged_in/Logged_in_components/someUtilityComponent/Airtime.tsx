@@ -165,11 +165,15 @@ const Airtime = () => {
     // };
 
     console.log("Airtime component",formData);
+
+
     closeModal();
     setTimeout(() => {
       setShowPinModal(true);
     }, 200); // Small delay to ensure smooth transition
 
+
+    
     // try {
     //   const response = await api.post(
     //     `${BASE_URL}/BillsPayment/purchaseAirtime`,
