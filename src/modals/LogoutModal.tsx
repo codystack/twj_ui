@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 // import Cancel from "../assets/dashboard_img/Cancel.svg";
-import Cancel from "../assets/dashboard_img/profile/Cancel.svg";
+import Cancel from "../assets/dashboard_img/profile/cancel.svg";
 import alarmIcon from "../assets/dashboard_img/profile/Alarm_duotone.svg";
 
 interface ModalProps {
