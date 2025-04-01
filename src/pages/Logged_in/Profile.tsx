@@ -200,7 +200,7 @@ const Profile = () => {
                   </div>
                   <div>
                     <p className="text-[#27014F] text-[24px] font-bold ">
-                      {userName}
+                     
                       {/* John Doe */}
                     </p>
                     <NavLink
@@ -213,6 +213,10 @@ const Profile = () => {
                   </div>
                 </div>
                 <div className="mt-[8%] px-[0.6rem]">
+                  <div className="flex items-center justify-between mb-[6%] ">
+                    <p className="text-[#7688B4] text-[14px] ">Username</p>
+                    <p className="text-[#27014F] text-[14px]  "> {userName}</p>
+                  </div>
                   <div className="flex items-center justify-between mb-[6%] ">
                     <p className="text-[#7688B4] text-[14px] ">Unique ID</p>
                     <p className="text-[#27014F] text-[14px]  ">{uniqueID}</p>
@@ -243,7 +247,7 @@ const Profile = () => {
                       Date of birth
                     </p>
                     <p className="text-[#27014F] text-[14px]  ">
-                      18th Nov 2000
+                      {/* 18th Nov 2000 */}
                     </p>
                   </div>
                   <NavLink

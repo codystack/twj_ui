@@ -245,6 +245,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem("uniqueTWJID", data.data.userDetails.uniqueTWJID);
       localStorage.setItem("referralLink", data.data.userDetails.referralLink);
       localStorage.setItem("phoneNumber", data.data.userDetails.phoneNumber);
+      localStorage.setItem("passcodeSet", data.data.passcodeSet);
       localStorage.setItem("isAuthenticated", "true");
       const lastVisitedRoute = localStorage.getItem("lastVisitedRoute") || "/dashboard";
       // Clear the stored route after redirecting
@@ -309,6 +310,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("phoneNumber");
     localStorage.removeItem("referralLink");
+    localStorage.removeItem("passcodeSet");
 
     // Update authentication state
     set({

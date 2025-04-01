@@ -24,6 +24,7 @@ api.interceptors.request.use(
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
+    // console.log(accessToken);
     return config;
   },
   (error) => Promise.reject(error)
@@ -36,7 +37,9 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     // If access token is expired (401)
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const status = error.response?.status;
+    // console.log("401 error", status);
+    if (status === 401 && !originalRequest._retry) {
       originalRequest._retry = true; // Prevent infinite loops
 
       try {
@@ -60,9 +63,16 @@ api.interceptors.response.use(
         );
 
         // Extract new tokens from response
+        // const newAccessToken = refreshResponse
         const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-          refreshResponse.data;
-        console.log("Refresh Response:", refreshResponse.data);
+          refreshResponse.data.data.token;
+        // console.log(
+        //   "new token:",
+        //   newAccessToken,
+        //   "new refresh:",
+        //   newRefreshToken
+        // );
+        // console.log("Refresh Response:", refreshResponse.data.data.token);
 
         // ✅ Store the new tokens in local storage
         localStorage.setItem("accessToken", encryptData(newAccessToken));
@@ -79,7 +89,7 @@ api.interceptors.response.use(
         localStorage.removeItem("email");
         localStorage.removeItem("userName");
         localStorage.removeItem("isAuthenticated");
-    localStorage.setItem("lastVisitedRoute", location.pathname); // Store last route
+        localStorage.setItem("lastVisitedRoute", location.pathname); // Store last route
         window.location.href = "/"; // Redirect to login page
         return Promise.reject(refreshError);
       }
@@ -89,70 +99,4 @@ api.interceptors.response.use(
   }
 );
 
- export default api;
-// // Function to store last visited route
-// const storeLastVisitedRoute = (path: string) => {
-//   localStorage.setItem("lastVisitedRoute", path);
-// };
-
-// api.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     const originalRequest = error.config;
-
-//     // If access token is expired (401)
-//     if (error.response?.status === 401 && !originalRequest._retry) {
-//       originalRequest._retry = true;
-
-//       try {
-//         const getRefreshToken = () => {
-//           const storedToken = localStorage.getItem("refreshToken");
-//           return storedToken ? decryptData(storedToken) : null;
-//         };
-
-//         const refreshToken = getRefreshToken();
-//         if (!refreshToken) throw new Error("No refresh token available");
-
-//         // Request new access token
-//         const payload = {
-//           userName: localStorage.getItem("userName"),
-//           refreshToken: refreshToken,
-//         };
-
-//         const refreshResponse = await axios.post(
-//           "/Authentication/refressAccessToken",
-//           payload
-//         );
-
-//         const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-//           refreshResponse.data;
-
-//         // ✅ Store new tokens
-//         localStorage.setItem("accessToken", encryptData(newAccessToken));
-//         localStorage.setItem("refreshToken", encryptData(newRefreshToken));
-
-//         // Retry request with new token
-//         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-//         return axios(originalRequest);
-//       } catch (refreshError) {
-//         // ❌ Logout & store last visited route
-//         storeLastVisitedRoute(window.location.pathname);
-
-//         localStorage.removeItem("accessToken");
-//         localStorage.removeItem("refreshToken");
-//         localStorage.removeItem("name");
-//         localStorage.removeItem("email");
-//         localStorage.removeItem("userName");
-//         localStorage.removeItem("isAuthenticated");
-
-//         // window.location.href = "/"; // Redirect to login
-//         return Promise.reject(refreshError);
-//       }
-//     }
-
-//     return Promise.reject(error);
-//   }
-// );
-
-
-// export default api;
+export default api;

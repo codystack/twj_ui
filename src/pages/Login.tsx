@@ -261,7 +261,9 @@ const Login = () => {
             </div>
           </div>
         </div>
+        
       </form>
+     
 
       {/* Right: Image with Overlay */}
       <div className="relative w-[641px] h-[calc(100vh-2rem)] m-[1rem]">
