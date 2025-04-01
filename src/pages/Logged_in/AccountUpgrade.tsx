@@ -15,12 +15,8 @@ const AccountUpgrade = () => {
             <p>Back</p>
          
           </NavLink>
-
-          <h3 className="text-[#27014F] text-[20px] font-[600] mt-[2%] mb-[4%] ">
-            UPGRADE ACCOUNT
-            </h3>
         </div>
-        <div className="flex w-full pl-[2%] gap-[1.5rem] ">
+        <div className="flex w-full pl-[2%] mt-[2rem] gap-[1.5rem] ">
           <div className="relative w-[30%] flex flex-col border border-[#009933] rounded-[10px] px-[1.5rem] py-[2.5rem]">
             <img
               src={checkIcon}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import airtimebg from "../../../../assets/dashboard_img/airtimebg.svg";
 import Airtimeimg from "../../../../assets/dashboard_img/dashboard_icons/ic_round-phone-iphone.svg";
 import Cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
@@ -6,75 +6,33 @@ import MTN from "../../../../assets/dashboard_img/profile/MTN-icon 1.svg";
 import ninemobile from "../../../../assets/dashboard_img/profile/9mobile-icon 1.svg";
 import gloo from "../../../../assets/dashboard_img/profile/glo-icon 1.svg";
 import airtel from "../../../../assets/dashboard_img/profile/airtel-icon 1.svg";
-
-import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
-// import Select from "react-select";
 import Button from "../../../../components/Button";
-// import check from "../../../../assets/dashboard_img/profile/Check_round_fill (1).svg";
-
-// const options = [
-//   { value: "bet365", label: "Bet365" },
-//   { value: "fanduel", label: "FanDuel" },
-//   { value: "draftkings", label: "DraftKings" },
-//   { value: "betway", label: "Betway" },
-//   { value: "williamhill", label: "William Hill" },
-//   { value: "betfair", label: "Betfair" },
-//   { value: "unibet", label: "Unibet" },
-//   { value: "888sport", label: "888Sport" },
-//   { value: "paddypower", label: "Paddy Power" },
-//   { value: "caesars", label: "Caesars Sportsbook" },
-// ];
-
-// const customStyles = {
-//   control: (provided: any, state: any) => ({
-//     ...provided,
-//     borderRadius: "8px",
-//     padding: "4px",
-//     boxShadow: "none",
-//     outline: "none",
-//     textAlign: "left",
-//     border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
-//     "&:hover": {
-//       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
-//     },
-//   }),
-//   // option: (provided: any, state: any) => ({
-//   //   ...provided,
-//   //   cursor: "pointer",
-//   //   textAlign: "left",
-//   //   backgroundColor: state.isSelected ? "#8003A9" : "#fff",
-//   // }),
-//   option: (provided: any, state: any) => ({
-//     ...provided,
-//     cursor: "pointer",
-//     textAlign: "left",
-//     backgroundColor: state.isSelected
-//       ? "#8003A9"
-//       : state.isFocused
-//       ? "#F8E0FF" // Hover background color
-//       : "#fff",
-//     color: state.isSelected ? "#fff" : "#27014F", // Text color change on selection
-//   }),
-// };
+import PinModal from "./PinModal";
 
 const Airtime = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [loading, setLoading] = useState(false);
+
+  const [showPinModal, setShowPinModal] = useState(false);
+  // const [successMessage, setSuccessMessage] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState(false);
   const [formData, setFormData] = useState({
+    network: "",
     amount: "",
-    phoneNumber: "",
+    recipient: "",
   });
 
   const [errors, setErrors] = useState({
     amount: "",
-    phoneNumber: "",
+    recipient: "",
   });
   const [activeImage, setActiveImage] = useState<string | null>(null);
 
   const images = [
-    { id: "MTN", src: MTN, alt: "MTN" },
-    { id: "gloo", src: gloo, alt: "Glo" },
+    { id: "mtn", src: MTN, alt: "MTN" },
+    { id: "glo", src: gloo, alt: "Glo" },
     { id: "airtel", src: airtel, alt: "Airtel" },
-    { id: "ninemobile", src: ninemobile, alt: "9Mobile" },
+    { id: "9mobile", src: ninemobile, alt: "9Mobile" },
   ];
   //   const handleSelectChange = async (
   //     selectedOption: { value: string; label: string } | null
@@ -95,20 +53,26 @@ const Airtime = () => {
   //     // }
   //   };
 
-  // Validation function
   const validateField = (name: string, value: string | boolean | undefined) => {
     let error = "";
 
     switch (name) {
       case "amount":
-        if (!value) error = "please enter a valid amount";
-        else if (isNaN(Number(value))) error = "Amount must be a number";
+        if (!value) {
+          error = "Please enter a valid amount";
+        } else if (isNaN(Number(value))) {
+          error = "Amount must be a number";
+        }
         break;
 
-      case "phoneNumber":
-        if (!value) error = "Phone number is required";
-        else if (typeof value === "string" && !isValidPhoneNumber(value)) {
-          error = "Invalid phone number";
+      case "recipient":
+        if (!value) {
+          error = "Phone number is required";
+        } else if (
+          typeof value === "string" &&
+          (value.length < 11 || value.length > 11)
+        ) {
+          error = "Invalid phone number. Must be exactly 11 digits.";
         }
         break;
 
@@ -118,20 +82,20 @@ const Airtime = () => {
 
     setErrors((prevState) => ({
       ...prevState,
-      [name]: error,
+      [name]: error, // Update only the specific field
     }));
 
     return error;
   };
 
-  const handlePhoneNumberChange = (value: string | undefined) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      phoneNumber: value || "",
-    }));
+  // const handlePhoneNumberChange = (value: string | undefined) => {
+  //   setFormData((prevState) => ({
+  //     ...prevState,
+  //     recipient: value || "",
+  //   }));
 
-    validateField("phoneNumber", value);
-  };
+  //   validateField("recipient", value);
+  // };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -155,19 +119,81 @@ const Airtime = () => {
 
   const closeModal = () => {
     // Clear form logic can be added here
-    setFormData({
-      amount: "",
-      phoneNumber: "",
-    });
-    setErrors({ amount: "", phoneNumber: "" });
+
+    setErrors({ amount: "", recipient: "" });
     setActiveImage(null);
 
     setIsModalOpen(false);
+       
   };
+
+
+    // Automatically call validatePin when 4 digits are entered
+    useEffect(() => {
+      if (isModalOpen === true) {
+        setFormData({
+          network: "",
+          amount: "",
+          recipient: "",
+        });
+      }
+    }, [isModalOpen]); // Runs when isModalOpen changes
+    
+
+  const setImage = (imageId: string) => {
+    setActiveImage(imageId);
+    setFormData((prevData) => ({
+      ...prevData,
+      network: imageId,
+    }));
+  };
+
+  // const handleSubmit = (event: React.FormEvent) => {
+  //   event.preventDefault();
+  //   console.log("Form Data:", formData);
+  // };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); // Prevent page reload
+
+    // setLoading(true);
+    // const { accessToken } = useAuthorizationStore.getState();
+
+    // Construct payload
+    // const payload = {
+    //   formData,
+    // };
+
+    console.log("Airtime component",formData);
+    closeModal();
+    setTimeout(() => {
+      setShowPinModal(true);
+    }, 200); // Small delay to ensure smooth transition
+
+    // try {
+    //   const response = await api.post(
+    //     `${BASE_URL}/BillsPayment/purchaseAirtime`,
+    //     formData
+    //   );
+
+    //   if (!response.data.success) {
+    //     throw new Error(response.data.message || "An error occurred");
+    //   }
+
+    //   console.log(response);
+    //   // setSuccessMessage(response.data.message || "");
+    // } catch (error: any) {
+    //   setErrorMessage(error.response?.data?.message || "");
+    // } finally {
+    //   setLoading(false);
+    // }
+  };
+
   const isFormInvalid =
     Object.values(errors).some((error) => error) ||
     !formData.amount ||
-    !formData.phoneNumber;
+    !formData.network ||
+    !formData.recipient;
 
   return (
     <>
@@ -201,7 +227,7 @@ const Airtime = () => {
               <div className="flex justify-center mt-[1.5rem] items-center">
                 <div className="w-[65%]">
                   {/* Input Fields */}
-                  <form action="">
+                  <form onSubmit={handleSubmit}>
                     <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left mt-[10px] ">
                       Choose Network
                     </p>
@@ -214,7 +240,7 @@ const Airtime = () => {
                               ? "border-3 border-[#9605C5]"
                               : "border-transparent"
                           }`}
-                          onClick={() => setActiveImage(image.id)}
+                          onClick={() => setImage(image.id)}
                         >
                           <img src={image.src} alt={image.alt} />
                         </div>
@@ -224,29 +250,35 @@ const Airtime = () => {
                     <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left mt-[10px] ">
                       Phone Number
                     </p>
-                    <div className="w-full ">
-                      <PhoneInput
-                        placeholder=""
-                        defaultCountry="NG"
-                        value={formData.phoneNumber}
-                        onChange={handlePhoneNumberChange}
-                        style={
-                          {
-                            "--PhoneInputCountrySelect-marginRight": "0em",
-                            borderRadius: "0.375rem",
-                            ...(errors.phoneNumber && {
-                              border: "1px solid red", // Override with red border if there's an error
-                            }),
-                          } as React.CSSProperties
+
+                    <div className="w-full">
+                      <input
+                        type="text"
+                        placeholder="08153235634"
+                        name="recipient"
+                        value={formData.recipient}
+                        onChange={handleChange}
+                        onBlur={() =>
+                          validateField("recipient", formData.recipient)
                         }
+                        className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                          errors.recipient
+                            ? "border border-red-600"
+                            : "focus:border-purple-800"
+                        }`}
                       />
+                      {errors.recipient && (
+                        <p className="text-red-500 text-[13px] text-left">
+                          {errors.recipient}
+                        </p>
+                      )}
                     </div>
-                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left mt-[5px]">
+                    <p className="text-[#0A2E65]/60 mt-[10px] pb-[3px] pl-[5px] text-[15px] text-left ">
                       Choose an amount
                     </p>
 
                     <div className="grid grid-cols-3 gap-4">
-                      {[100, 200, 500, 1000, 2500, 5000].map((amount) => (
+                      {[100, 200, 500, 1000, 3000, 5000].map((amount) => (
                         <div
                           key={amount}
                           className="text-[#8A95BF] border border-[#8A95BF] py-[10px] cursor-pointer rounded-[5px] flex justify-center items-center transition-all duration-300  hover:scale-105"
@@ -307,6 +339,10 @@ const Airtime = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {showPinModal && (
+        <PinModal onClose={() => setShowPinModal(false)} formData={formData} />
       )}
     </>
   );
