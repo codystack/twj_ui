@@ -8,14 +8,12 @@ import gloo from "../../../../assets/dashboard_img/profile/glo-icon 1.svg";
 import airtel from "../../../../assets/dashboard_img/profile/airtel-icon 1.svg";
 import Button from "../../../../components/Button";
 import PinModal from "./PinModal";
+import SetPinModal from "./SetPinModal";
+import { useModalStore } from "../../../../store/modalStore.ts";
+import SuccessModal from "../../SuccessModal.tsx";
 
 const Airtime = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [loading, setLoading] = useState(false);
-
-  const [showPinModal, setShowPinModal] = useState(false);
-  // const [successMessage, setSuccessMessage] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState(false);
   const [formData, setFormData] = useState({
     network: "",
     amount: "",
@@ -27,6 +25,10 @@ const Airtime = () => {
     recipient: "",
   });
   const [activeImage, setActiveImage] = useState<string | null>(null);
+  const isSuccessModal = useModalStore((state) => state.isSuccessModal);
+  const { passcodeSet, showPinModal, setSetPinModal, setShowPinModal } =
+    useModalStore();
+
 
   const images = [
     { id: "mtn", src: MTN, alt: "MTN" },
@@ -34,28 +36,9 @@ const Airtime = () => {
     { id: "airtel", src: airtel, alt: "Airtel" },
     { id: "9mobile", src: ninemobile, alt: "9Mobile" },
   ];
-  //   const handleSelectChange = async (
-  //     selectedOption: { value: string; label: string } | null
-  //   ) => {
-  //     if (!selectedOption) return;
-
-  //     const selectedBankCode = selectedOption.value;
-  //     const uniqueBankName = selectedOption.label;
-
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       bankCode: selectedBankCode,
-  //       selectedBank: uniqueBankName,
-  //     }));
-
-  //     // if (formData.betProvider) {
-  //     //   await verifyAccount(selectedBankCode, formData.betProvider);
-  //     // }
-  //   };
 
   const validateField = (name: string, value: string | boolean | undefined) => {
     let error = "";
-
     switch (name) {
       case "amount":
         if (!value) {
@@ -88,15 +71,6 @@ const Airtime = () => {
     return error;
   };
 
-  // const handlePhoneNumberChange = (value: string | undefined) => {
-  //   setFormData((prevState) => ({
-  //     ...prevState,
-  //     recipient: value || "",
-  //   }));
-
-  //   validateField("recipient", value);
-  // };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
@@ -124,21 +98,18 @@ const Airtime = () => {
     setActiveImage(null);
 
     setIsModalOpen(false);
-       
   };
 
-
-    // Automatically call validatePin when 4 digits are entered
-    useEffect(() => {
-      if (isModalOpen === true) {
-        setFormData({
-          network: "",
-          amount: "",
-          recipient: "",
-        });
-      }
-    }, [isModalOpen]); // Runs when isModalOpen changes
-    
+  // Automatically call validatePin when 4 digits are entered
+  useEffect(() => {
+    if (isModalOpen === true) {
+      setFormData({
+        network: "",
+        amount: "",
+        recipient: "",
+      });
+    }
+  }, [isModalOpen]);
 
   const setImage = (imageId: string) => {
     setActiveImage(imageId);
@@ -148,49 +119,14 @@ const Airtime = () => {
     }));
   };
 
-  // const handleSubmit = (event: React.FormEvent) => {
-  //   event.preventDefault();
-  //   console.log("Form Data:", formData);
-  // };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Prevent page reload
-
-    // setLoading(true);
-    // const { accessToken } = useAuthorizationStore.getState();
-
-    // Construct payload
-    // const payload = {
-    //   formData,
-    // };
-
-    console.log("Airtime component",formData);
-
+    event.preventDefault();
+    console.log("Airtime component", formData);
 
     closeModal();
     setTimeout(() => {
       setShowPinModal(true);
-    }, 200); // Small delay to ensure smooth transition
-
-
-    
-    // try {
-    //   const response = await api.post(
-    //     `${BASE_URL}/BillsPayment/purchaseAirtime`,
-    //     formData
-    //   );
-
-    //   if (!response.data.success) {
-    //     throw new Error(response.data.message || "An error occurred");
-    //   }
-
-    //   console.log(response);
-    //   // setSuccessMessage(response.data.message || "");
-    // } catch (error: any) {
-    //   setErrorMessage(error.response?.data?.message || "");
-    // } finally {
-    //   setLoading(false);
-    // }
+    }, 200);
   };
 
   const isFormInvalid =
@@ -198,6 +134,11 @@ const Airtime = () => {
     !formData.amount ||
     !formData.network ||
     !formData.recipient;
+
+  console.log(
+    "Stored airtime component passcodeSet:",
+    localStorage.getItem("passcodeSet")
+  );
 
   return (
     <>
@@ -345,8 +286,26 @@ const Airtime = () => {
         </div>
       )}
 
-      {showPinModal && (
-        <PinModal onClose={() => setShowPinModal(false)} formData={formData} />
+      {showPinModal &&
+        (passcodeSet ? (
+          <PinModal
+            onClose={() => setShowPinModal(false)}
+            formData={formData}
+          />
+        ) : (
+          <SetPinModal
+            onClose={() => {
+              setSetPinModal(false);
+            }}
+          />
+        ))}
+
+      {isSuccessModal && (
+        <SuccessModal
+          title="Recharged"
+          message="Your airtime is on its way"
+          onClose={() => useModalStore.getState().setSuccessModal(false)} // Hide modal on close
+        />
       )}
     </>
   );

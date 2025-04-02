@@ -9,7 +9,6 @@ import DeleteAccount from "../../../assets/dashboard_img/profile/Trash_duotone_l
 import Delete from "../../../assets/dashboard_img/profile/cancel.svg";
 import { useQuery } from "@tanstack/react-query";
 import SuccessModal from "../SuccessModal";
-import { useAuthorizationStore } from "../../../store/authorizationStore";
 import api from "../../../services/api";
 import { useBankStore } from "../../../store/useBankStore";
 
@@ -53,11 +52,8 @@ const customStyles = {
       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
     },
   }),
-  // option: (provided: any, state: any) => ({
-  //   ...provided,
-  //   cursor: "pointer",
-  //   backgroundColor: state.isSelected ? "#8003A9" : "#fff",
-  // }),
+
+
   option: (provided: any, state: any) => ({
     ...provided,
     cursor: "pointer",
@@ -91,13 +87,12 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
-  // const [flippedId, setFlippedId] = useState<number | null>(null);
   const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
   const { fetchBanks } = useBankStore();
 
   // Fetch banks on demand
   const {
-    data: banks, // Use 'banks' instead of 'data'
+    data: banks, 
     isLoading,
     refetch,
   } = useQuery({
@@ -148,7 +143,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
 
     try {
       const response = await fetch(
-        "https://twjmobileapi.runasp.net/api/Accounts/bankAccountValidation",
+        `${BASE_URL}/Accounts/bankAccountValidation`,
         {
           method: "POST",
           headers: {
@@ -181,72 +176,61 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
     }
   };
 
-  // Handliig submit of details to the BE
+  // Handling submit of details to the Bankend 
+
   const handleSubmit = async () => {
     setLoading(true);
-   const { accessToken } = useAuthorizationStore.getState(); 
-   const payload = {
+  
+    const payload = {
       bankName: formData.selectedBank,
       accountName: accountName,
       accountNumber: formData.accountNumber,
       bankCode: formData.bankCode,
     };
-
+  
     try {
-      const response = await api.post("/BankAccounts/add-bank", payload, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      setSuccessMessage(
-        response.data.message || "Bank account added successfully"
-      );
+      const response = await api.post(`${BASE_URL}/BankAccounts/addBank`, payload);
+  
+      setSuccessMessage(response.data.message || "Bank account added successfully");
       handleClose();
       setIsSuccessModal(true);
+  
       if (!response.data.success) {
         throw new Error(response.data.message || "An error occurred");
       }
-
-      // If the request is successful
-      setIsSuccessModal(true);
     } catch (error: any) {
       setErrorMessage(error.response?.data?.message);
       setLoading(false);
       fetchBanks();
     }
   };
+  
+
+
+
 
   // here is the delete function
   const deleteBankAccount = async (bankId: string) => {
     setLoadingDelete(true);
-    const { accessToken } = useAuthorizationStore.getState(); // Get token from Zustand store
-
+  
     try {
-      const response = await api.delete(`/BankAccounts/delete-bank/${bankId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+      const response = await api.delete(`/BankAccounts/deleteBank`, {
+        params: { bankId }, // Pass bankId as a query parameter
       });
-
-      // console.log("Delete Response:", response.data);
-
+  
       if (response.data?.success === false) {
         throw new Error(response.data.message || "Failed to delete account");
       }
-
+  
       // Success message
       setSuccessMessage("Bank account deleted successfully");
       fetchBanks(); // Refresh the bank list
     } catch (error: any) {
-      // console.log("Error Deleting Bank:", error);
       setErrorMessage(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoadingDelete(false);
     }
   };
-
-  // fetching all the bank name
-  
 
   const handleFlip = (index: number) => {
     setFlippedIndex(flippedIndex === index ? null : index);
@@ -313,7 +297,6 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
       <div className="grid grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] gap-4 justify-center">
         {/* Add Bank Button Styled Like a Card */}
         <button
-          // onClick={handleAddBank}
           onClick={() => {
             handleAddBank();
             refetch();
@@ -514,10 +497,8 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
       {isSuccessModal && (
         <SuccessModal
           title="You, Yes You, Rock!"
-          message={successMessage} // Pass success message
-          // message="Bank successfully added!" // Pass success message
+          message={successMessage} 
           onClose={() => {
-            // fetchBankDetails();
             setIsSuccessModal(false);
           }}
         />

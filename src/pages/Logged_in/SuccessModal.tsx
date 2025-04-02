@@ -13,32 +13,24 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
   onClose,
 }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-20 bg-black/40 bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center z-40 bg-black/40 bg-opacity-50">
       <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
-        <div className="bg-white rounded-lg shadow-lg px-6 py-[2rem] w-[600px] text-center">
+        <div className="bg-white rounded-lg shadow-lg px-6 pb-[2rem] w-[500px] text-center">
           {/* Close Button */}
           <div className="flex justify-end">
-            <button onClick={onClose} className="cursor-pointer p-[10px]">
-              <img src={DeleteAccount} className="w-[1rem]" alt="" />
+            <button onClick={onClose} className="cursor-pointer pt-[20px] p-[1px]">
+              <img src={DeleteAccount} className="w-[1reM]" alt="" />
             </button>
           </div>
 
           {/* Constant Image */}
-          <img src={Check} alt="Success" className="mx-auto  mt-[2rem] mb-4" />
+          <img src={Check} alt="Success" className="mx-auto  mt-[1rem] mb-4" />
 
           {/* Dynamic Text */}
           <h5 className="text-[24px] mt-[1rem] font-semibold text-[#27014F]">
             {title}
           </h5>
-          <p className="text-[#0A2E65]/60 mt- mb-[2rem]">{message}</p>
-
-          {/* Close Button */}
-          {/* <button
-          onClick={onClose}
-          className="mt-4 bg-[#9605C5] text-white px-4 py-2 rounded-md hover:bg-purple-800"
-        >
-          OK
-        </button> */}
+          <p className="text-[#0A2E65]/60 mt- mb-[1rem]">{message}</p>
         </div>
       </div>
     </div>
