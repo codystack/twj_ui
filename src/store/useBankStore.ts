@@ -1,13 +1,9 @@
-// import { create } from "zustand";
+
 import api from "../services/api";
 import { create } from "zustand";
-// import { useAuthorizationStore } from "./authorizationStore";
 import { decryptData } from "../services/utils/crypto-utils";
 
-// interface Bank {
-//   bankName: string;
-//   bankCode: string;
-// }
+
 
 interface BankAccount {
   id: string;
@@ -48,7 +44,7 @@ export const useBankStore = create<BankStore>((set) => ({
       set({ isFetchingBanks: true, fetchError: null });
       // console.log("Fetching banks...");
 
-      const response = await api.get("/BankAccounts/get-all-bank-for-users", {
+      const response = await api.get("/BankAccounts/getAllBankForUsers", {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Attach token to request
         },

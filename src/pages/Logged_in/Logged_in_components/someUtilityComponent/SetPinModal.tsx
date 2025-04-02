@@ -2,94 +2,119 @@ import { useState, useEffect } from "react";
 import Backspace from "../../../../assets/dashboard_img/profile/icon-park-solid_delete-two.svg";
 import lock from "../../../../assets/dashboard_img/profile/Lock.svg";
 import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
-import { useModalStore } from "../../../../store/modalStore.ts";
 import api from "../../../../services/api";
+import { useModalStore } from "../../../../store/modalStore";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const PinModal = ({
-  onClose,
-  formData,
-}: {
-  onClose: () => void;
-  formData: any;
-}) => {
+const SetPinModal = ({ onClose }: { onClose: () => void }) => {
   const [pin, setPin] = useState("");
+  const [confirmPin, setConfirmPin] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState<"enter" | "confirm">("enter"); // Track step
 
   // Handle number input and backspace
   const handleKeyPress = (value: string) => {
-    if (value === "del") {
-      setPin((prev) => prev.slice(0, -1)); // Remove last digit
-    } else if (pin.length < 4) {
-      setPin((prev) => prev + value);
+    if (step === "enter") {
+      if (value === "del") {
+        setPin((prev) => prev.slice(0, -1)); // Remove last digit
+      } else if (pin.length < 4) {
+        setPin((prev) => prev + value);
+      }
+    } else {
+      // Confirm PIN step
+      if (value === "del") {
+        setConfirmPin((prev) => prev.slice(0, -1));
+      } else if (confirmPin.length < 4) {
+        setConfirmPin((prev) => prev + value);
+      }
     }
   };
+
+  // Move to confirmation step when first PIN is entered
+  useEffect(() => {
+    if (pin.length === 4) {
+      setTimeout(() => setStep("confirm"), 300); // Delay for UX
+    }
+  }, [pin]);
+
+  // Automatically check if PINs match
+  useEffect(() => {
+    if (confirmPin.length === 4) {
+      if (confirmPin !== pin) {
+        setError("PINs do not match. Try again.");
+
+        // Reset after a delay
+        setTimeout(() => {
+          setConfirmPin("");
+          setPin(""); // Reset PIN to empty
+          setStep("enter"); // Reset to entering PIN step
+        }, 1500);
+      } else {
+        validatePin();
+      }
+    }
+  }, [confirmPin]);
+
 
   const validatePin = async () => {
     setLoading(true);
     try {
-      const payload = { passCode: pin };
-      // Validate PIN
-      console.log("my four-digit PIN:", payload);
+      const email = localStorage.getItem("email");
+  
       const pinResponse = await api.post(
-        `${BASE_URL}/Authentication/validatePasscode`,
-        { passCode: pin }
+        `${BASE_URL}/Authentication/createPin`,
+        {
+          passCode: pin,
+          email: email,
+        }
       );
-
+  
+      console.log(pinResponse);
+  
       if (!pinResponse.data.isSuccessful) {
         setError("Invalid PIN. Please try again.");
-        setPin("");
+        setTimeout(() => {
+          setConfirmPin("");
+          setPin("");
+          setStep("enter");
+        }, 1500);
         setLoading(false);
         return;
       }
-
-      // Proceed with Airtime Purchase
-      const { network, amount, recipient } = formData;
-
-      const purchaseResponse = await api.post(
-        `${BASE_URL}/BillsPayment/purchaseAirtime`,
-        {
-          network: network,
-          amount: Number(amount),
-          recipient: recipient,
-        }
-      );
-
-      if (!purchaseResponse.data.isSuccessful) {
-        throw new Error(purchaseResponse.data.message || "An error occurred");
-      }
-
-      console.log("submit response", purchaseResponse);
-
-      setLoading(false);
-      onClose();
-      useModalStore.getState().setSuccessModal(true);
-
-      // Close modal after a delay
-      // 1 second delay before closing
-
-      setError("");
+  
+      // ✅ Get Zustand functions
+      const { setPasscodeSet, setSetPinModal } = useModalStore.getState();
+  
+      // ✅ Set passcode in Zustand and localStorage
+      setPasscodeSet(true);
+  
       setPin("");
+      setConfirmPin("");
+      setStep("enter");
+  
+      // ✅ Close SetPinModal only, keep showPinModal open if needed
+      setSetPinModal(false);
+  
+      return;
     } catch (error: any) {
-      console.log("error from endpoint:", error.response);
-      setPin("");
       setError(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.errors?.email ||
+          "An error occurred. Please try again."
       );
-      setLoading(false);
+  
+      setTimeout(() => {
+        setConfirmPin("");
+        setPin("");
+        setStep("enter");
+      }, 1500);
     }
+  
+    setLoading(false);
   };
+ 
 
-  // Automatically call validatePin when 4 digits are entered
-  useEffect(() => {
-    if (pin.length === 4) {
-      validatePin();
-    }
-  }, [pin]);
-
-  // Handle keyboard input
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key >= "0" && e.key <= "9") {
@@ -104,11 +129,13 @@ const PinModal = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [pin]);
+  }, [pin, confirmPin, step]);
 
   const handleClose = () => {
     setError("");
     setPin("");
+    setConfirmPin("");
+    setStep("enter");
     onClose();
   };
 
@@ -129,10 +156,12 @@ const PinModal = ({
               <div className="px-6 pt-4 rounded-lg w-[300px] flex flex-col mb-[2rem] items-center">
                 <img src={lock} alt="" />
                 <h2 className="text-[20px] font-semibold text-[#27014F] mt-4">
-                  Enter PIN
+                  {step === "enter" ? "Set a new PIN code" : "Confirm your PIN"}
                 </h2>
                 <p className="text-[16px] text-[#3E4666] text-center mb-3 ">
-                  Enter your secure four-digit PIN
+                  {step === "enter"
+                    ? "Enter a secure four-digit transaction PIN"
+                    : "Re-enter your PIN to confirm"}
                 </p>
 
                 {/* PIN Input Fields */}
@@ -141,10 +170,16 @@ const PinModal = ({
                     <div
                       key={i}
                       className={`w-[10px] h-[10px]  rounded-md flex items-center justify-center text-lg font-bold
-                     ${pin[i] ? "bg-[#27014F]" : "bg-gray-300"}`}
-                    >
-                      {/* {pin[i] ? "●" : ""} */}
-                    </div>
+                     ${
+                       step === "enter"
+                         ? pin[i]
+                           ? "bg-[#27014F]"
+                           : "bg-gray-300"
+                         : confirmPin[i]
+                         ? "bg-[#27014F]"
+                         : "bg-gray-300"
+                     }`}
+                    />
                   ))}
                 </div>
 
@@ -185,25 +220,19 @@ const PinModal = ({
                     {error}
                   </p>
                 )}
+
+                {loading && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
+                    <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-      {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
-          <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
-        </div>
-      )}
-      {/* {isSuccessModal && (
-        <SuccessModal
-          title="Recharged"
-          message="Your airtime is on its way"
-          onClose={() => setIsSuccessModal(false)}
-        />
-      )} */}
     </>
   );
 };
 
-export default PinModal;
+export default SetPinModal;
