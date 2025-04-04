@@ -10,7 +10,6 @@ import Copy from "../../../assets/dashboard_img/profile/transactions/Copy_light.
 import Report from "../../../assets/dashboard_img/profile/transactions/report.svg";
 import HrtBroken from "../../../assets/dashboard_img/profile/transactions/heartbroken.svg";
 
-
 interface TransactionType {
   name: string;
   id: string;
@@ -18,6 +17,11 @@ interface TransactionType {
   amount: number;
   description: string;
   status: string;
+  transactionStatus: string;
+  billPaymentCategory: string;
+  transactionDate: string;
+  transactionReference: string;
+
   date: string;
   type: string;
   direction: string;
@@ -139,7 +143,7 @@ const UtilityTransaction: React.FC<{
   };
 
   return (
-    <div className="space-y-4 p-4">
+    <div className="space-y-1 p-4">
       {transactions.length > 0 ? (
         transactions.map((transaction) => (
           <button
@@ -149,35 +153,35 @@ const UtilityTransaction: React.FC<{
           >
             <div className="flex items-center gap-4 relative">
               <div className="relative">
-                {transaction.type === "data" && (
+                {transaction.billPaymentCategory === "data" && (
                   <img
                     src={Data}
                     alt="Transaction Logo"
                     className="w-12 h-12"
                   />
                 )}
-                {transaction.type === "electricity" && (
+                {transaction.billPaymentCategory === "electricity" && (
                   <img
                     src={Electricity}
                     alt="Transaction Logo"
                     className="w-12 h-12"
                   />
                 )}
-                {transaction.type === "airtime" && (
+                {transaction.billPaymentCategory === "Airtime" && (
                   <img
                     src={Airtime}
                     alt="Transaction Logo"
                     className="w-12 h-12"
                   />
                 )}
-                {transaction.type === "Cable_tv" && (
+                {transaction.billPaymentCategory === "Cable_tv" && (
                   <img
                     src={Television}
                     alt="Transaction Logo"
                     className="w-12 h-12"
                   />
                 )}
-                {transaction.type === "betting" && (
+                {transaction.billPaymentCategory === "betting" && (
                   <img
                     src={Gift}
                     alt="Transaction Logo"
@@ -189,7 +193,7 @@ const UtilityTransaction: React.FC<{
               {/* Transaction Details */}
               <div>
                 <p className="text-[16px] text-left text-[#27014F]">
-                  {transaction.name}
+                  {transaction.billPaymentCategory} Purchase
                 </p>
                 <div className="flex items-center gap-2 text-gray-600">
                   {/* Tracking ID */}
@@ -198,17 +202,17 @@ const UtilityTransaction: React.FC<{
                   </span>
 
                   {/* Unique Status Icon */}
-                  {transaction.status === "success" && (
+                  {transaction.transactionStatus === "success" && (
                     <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
                       SUCCESSLL
                     </div>
                   )}
-                  {transaction.status === "pending" && (
+                  {transaction.transactionStatus === "processing" && (
                     <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
                       PENDING
                     </div>
                   )}
-                  {transaction.status === "failed" && (
+                  {transaction.transactionStatus === "failed" && (
                     <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
                       FAILED
                     </div>
@@ -220,10 +224,13 @@ const UtilityTransaction: React.FC<{
             {/* Right Side: Date & Amount */}
             <div className="text-right">
               <p className="font-semibold text-[#27014F]  ">
-                {transaction.amount}
+                ₦{transaction.amount}
               </p>
               <p className="text-sm text-[#27014F] text-[11px]">
-                {transaction.date}
+                {new Date(transaction.transactionDate).toLocaleString("en-US", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                })}
               </p>
             </div>
           </button>
@@ -247,7 +254,7 @@ const UtilityTransaction: React.FC<{
                   <div className=" flex flex-row-reverse">
                     {/* Close Button */}
                     <button
-                      className="  cursor-pointer p-[5px] mr-[10px] mb-[2rem] mt-[1rem] "
+                      className="  cursor-pointer p-[5px] mr-[10px] mb-[2rem] mt-[rem] "
                       onClick={handleCloseModal}
                     >
                       <img src={Delete} alt="" />
@@ -256,7 +263,7 @@ const UtilityTransaction: React.FC<{
 
                   <div className="flex justify-between pb-[4%] border-b border-b-[#E2E8F0]  items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
-                      {selectedTransaction.amount}
+                    ₦{selectedTransaction.amount}
                     </h2>
 
                     {selectedTransaction.type === "data" && (
@@ -273,7 +280,7 @@ const UtilityTransaction: React.FC<{
                         className="w-12 h-12"
                       />
                     )}
-                    {selectedTransaction.type === "airtime" && (
+                    {selectedTransaction.billPaymentCategory === "Airtime" && (
                       <img
                         src={Airtime}
                         alt="Transaction Logo"
@@ -307,28 +314,30 @@ const UtilityTransaction: React.FC<{
                     <div>
                       <p className="text-[#0A2E65]/60 mb-[10px]">Date</p>
                       <div className="flex text-[#0A2E65] items-center text-[13px]">
-                        <p>{selectedTransaction.date}</p>
-                        <div className="w-[5px] h-[5px] rounded-full mx-[4px] bg-[#0A2E65]/70  ">
-                          .
-                        </div>
-                        <p>{selectedTransaction.time}</p>
+                        {new Date(
+                          selectedTransaction.transactionDate
+                        ).toLocaleString("en-US", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })}
                       </div>
                     </div>
                     <div>
                       <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
 
                       {/* Unique Status Icon */}
-                      {selectedTransaction.status === "success" && (
-                        <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                          SUCCESSLL
-                        </div>
+                      {selectedTransaction.transactionStatus === "success" && (
+                            <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                            SUCCESSLL
+                          </div>
                       )}
-                      {selectedTransaction.status === "pending" && (
+                      {selectedTransaction.transactionStatus ===
+                        "processing" && (
                         <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
                           PENDING
                         </div>
                       )}
-                      {selectedTransaction.status === "failed" && (
+                      {selectedTransaction.transactionStatus === "failed" && (
                         <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
                           FAILED
                         </div>
@@ -339,18 +348,18 @@ const UtilityTransaction: React.FC<{
                     <p className="text-[#0A2E65]/60 mb-[10px]">Reference</p>
                     <div className="flex text-[#0A2E65] items-center text-[13px]">
                       <div className="flex items-center">
-                        <p>{selectedTransaction.reference}</p>
+                        <p>{selectedTransaction.transactionReference}</p>
                         <button
                           onClick={() =>
-                            handleCopy(selectedTransaction.reference)
+                            handleCopy(selectedTransaction.transactionReference)
                           }
                           className="relative flex items-center justify-center cursor-pointer"
                         >
                           <img src={Copy} alt="" />
-                          {copiedRef === selectedTransaction.reference && (
+                          {copiedRef === selectedTransaction.transactionReference && (
                             <span
                               className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
-                                copiedRef === selectedTransaction.reference
+                                copiedRef === selectedTransaction.transactionReference
                                   ? "opacity-100"
                                   : "opacity-0"
                               }`}

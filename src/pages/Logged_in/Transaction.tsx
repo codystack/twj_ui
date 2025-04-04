@@ -3,6 +3,7 @@ import CrytoTransaction from "./Logged_in_components/CryptoTransaction";
 import GiftCardTransaction from "./Logged_in_components/GiftcardTransaction";
 import UtilityTransaction from "./Logged_in_components/UtilityBillsTransaction";
 import api from "../../services/api";
+import ReactPaginate from "react-paginate";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL; // Access VITE env variable
 interface TransactionType {
@@ -12,10 +13,14 @@ interface TransactionType {
   date: string;
   type: string;
   status: string;
+  transactionStatus: string;
   time: string;
   name: string;
   direction: string;
-  
+  billPaymentCategory: string;
+  transactionDate: string;
+  transactionReference: string;
+
   network: string;
   quantity: string;
 
@@ -31,6 +36,8 @@ const Transaction = () => {
   const [noTransaction, setNoTransaction] = useState<string | null>(null);
   const [transaction, setTransaction] = useState<TransactionType[]>([]);
 
+  const [page, setPage] = useState(0); // react-paginate starts from 0
+  const [totalPages, setTotalPages] = useState(1);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const handleScrollToTop = () => {
@@ -40,33 +47,66 @@ const Transaction = () => {
   };
 
   // Function to fetch transactions based on the activeTab
-  const fetchTransactions = async (type: string) => {
+  // const fetchTransactions = async (type: string) => {
+  //   setLoading(true);
+  //   setLoading(true);
+  //   // setError(null);
+  //   try {
+  //     const response = await api.get(
+  //       `${BASE_URL}/Transaction/allTransactions?TransactionType=${type}`
+  //     );
+
+  //     // console.log(response.data.data.data);
+  //     const transactions: TransactionType[] = response.data.data.data; // Ensure correct data structure
+  //     const NoTransactionResponse = response.data.message
+  //     console.log('response for empty transaction',NoTransactionResponse);
+  //     console.log(transactions);
+  //     setTransaction(transactions);
+  //     setNoTransaction(NoTransactionResponse);
+  //   } catch (err) {
+  //     // setError("Failed to fetch transactions");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const pageSize = 20;
+
+  const fetchTransactions = async (type: string, page: number) => {
     setLoading(true);
-    setLoading(true);
-    // setError(null);
     try {
       const response = await api.get(
-        `${BASE_URL}/Transaction/allTransactions?TransactionType=${type}`
+        `${BASE_URL}/Transaction/allTransactions?TransactionType=${type}&page=${page}&pageSize=${pageSize}`
       );
 
-      // console.log(response.data.data.data);
-      const transactions: TransactionType[] = response.data.data.data; // Ensure correct data structure
-      const NoTransactionResponse = response.data.message
-      console.log('response for empty transaction',NoTransactionResponse);
-      console.log(transactions);
-      setTransaction(transactions); 
-      setNoTransaction(NoTransactionResponse); 
+      const transactions: TransactionType[] = response.data.data.data;
+      const noTransactionMessage = response.data.message;
+      const totalRecords = response.data.data.totalRecords;
+
+      setTransaction(transactions);
+      setTotalPages(Math.ceil(totalRecords / pageSize));
+      setNoTransaction(noTransactionMessage);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
-      // setError("Failed to fetch transactions");
+      console.error("Error fetching transactions:", err);
     } finally {
       setLoading(false);
     }
   };
 
   // Fetch transactions whenever the activeTab changes
+  // useEffect(() => {
+  //   fetchTransactions(activeTab);
+  // }, [activeTab]);
+
   useEffect(() => {
-    fetchTransactions(activeTab);
-  }, [activeTab]);
+    fetchTransactions(activeTab, page + 1); // backend expects 1-based index
+  }, [page, activeTab]);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPage(selectedItem.selected);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <div
@@ -76,7 +116,7 @@ const Transaction = () => {
       <div className="flex-1 overflow-y-auto pb-4 px-4">
         <div className=" flex flex-col  ml-[3%] ">
           {/* Tab Buttons */}
-          <div className="py-[2.3%] fixed w-[76%]  z-20 bg-[#fff]  ">
+          <div className="py-[2.3%] fixed w-[75%]  z-20 bg-[#fff]  ">
             <div className="bg-[#F5F7FA]/99  backdrop-blur-lg  w-[calc(100%-63%)] bg-blur-md flex items-center rounded-[50px] justify-between p-[7px]">
               <button
                 className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${
@@ -138,12 +178,88 @@ const Transaction = () => {
             {activeTab === "BillsPayment" && (
               <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
                 <UtilityTransaction
-                transactions={transaction || []}
-                noTransaction={noTransaction}
+                  transactions={transaction || []}
+                  noTransaction={noTransaction}
                 />
               </div>
             )}
           </div>
+
+          {totalPages >= 2 && (
+          <ReactPaginate
+          previousLabel={"previous"}
+          nextLabel={"next"}
+          breakLabel={"..."}
+          pageCount={totalPages}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={2}
+          onPageChange={handlePageChange}
+          forcePage={page}
+          containerClassName="flex items-center justify-center mt-4 space-x-2"
+        
+          // Styles for <li> wrapper
+          pageClassName="border border-[#8003A9] rounded-[5px]"
+          previousClassName="border border-[#8003A9] rounded-[5px]"
+          nextClassName="border  border-[#8003A9] rounded-[5px]"
+          breakClassName=""
+        
+          // Styles for <a> inside
+          pageLinkClassName="px-3 py-1 w text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
+          previousLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
+          nextLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
+          breakLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-default"
+        
+          activeLinkClassName="bg-[#8003A9] text-white"
+        />
+        
+//             <ReactPaginate
+//   previousLabel={"previous"}
+//   nextLabel={"next"}
+//   breakLabel={"..."}
+//   pageCount={totalPages}
+//   marginPagesDisplayed={2}
+//   pageRangeDisplayed={2}
+//   onPageChange={handlePageChange}
+//   containerClassName="flex items-center justify-center mt-4 space-x-2"
+//   pageClassName="border rounded-md" // wrapper <li>
+//   pageLinkClassName="px-3 py-1 text-[#27014F] hover:bg-[#8003A9]/15 hover:text-[#27014F]" // inner <a>
+//   activeClassName="bg-[#8003A9] text-white"
+//   previousClassName="border rounded-md"
+//   previousLinkClassName="px-3 py-1 text-[#27014F] hover:bg-[#8003A9]/15"
+//   nextClassName="border rounded-md"
+//   nextLinkClassName="px-3 py-1 text-[#27014F] hover:bg-[#8003A9]/15"
+//   breakClassName="px-3 py-1"
+//   breakLinkClassName="px-3 py-1"
+// />
+
+          )}
+
+
+
+          {/* <ReactPaginate
+            previousLabel={"previous"}
+            nextLabel={"next"}
+            breakLabel={"..."}
+            pageCount={totalPages}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={2}
+            onPageChange={handlePageChange}
+            containerClassName={
+              "flex items-center justify-center mt-4 space-x-2"
+            }
+            pageClassName={
+              "px-3 py-1 border border-[#8003A9] text-[#27014F] cursor-pointer hover:text-[#27014F] rounded-[5px] hover:bg-[#8003A9]/15"
+            }
+            activeClassName={"bg-[#8003A9] text-white"}
+            previousClassName={
+              "px-3 py-1 cursor-pointer border text-[#27014F] hover:text-[#27014F] border-[#8003A9] hover:bg-[#8003A9]/15 rounded-[5px]"
+            }
+            nextClassName={
+              "px-3 py-1 border border-[#8003A9] text-[#27014F] cursor-pointer hover:text-[#27014F] hover:bg-[#8003A9]/15 rounded-[5px]"
+            }
+            breakClassName={"px-3 py-1"}
+            forcePage={page}
+          /> */}
 
           {loading && (
             <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
