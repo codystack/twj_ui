@@ -11,6 +11,8 @@ import PinModal from "./PinModal";
 import SetPinModal from "./SetPinModal";
 import { useModalStore } from "../../../../store/modalStore.ts";
 import SuccessModal from "../../SuccessModal.tsx";
+import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
+import alarmIcon from "../../../../assets/dashboard_img/profile/Alarm_duotone.svg";
 
 const Airtime = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,9 +28,15 @@ const Airtime = () => {
   });
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const isSuccessModal = useModalStore((state) => state.isSuccessModal);
-  const { passcodeSet, showPinModal, setSetPinModal, setShowPinModal } =
-    useModalStore();
 
+  const [proceedToSetPin, setProceedToSetPin] = useState(false); // NEW
+  const {
+    // passcodeSet,
+    // setSetPinModal,
+    setShowPinModal,
+  } = useModalStore();
+  const showPinModal = useModalStore((state) => state.showPinModal);
+  const [shouldCheckPasscode, setShouldCheckPasscode] = useState(false);
 
   const images = [
     { id: "mtn", src: MTN, alt: "MTN" },
@@ -36,6 +44,10 @@ const Airtime = () => {
     { id: "airtel", src: airtel, alt: "Airtel" },
     { id: "9mobile", src: ninemobile, alt: "9Mobile" },
   ];
+
+  // const isPasscodeSet = () => localStorage.getItem("passcodeSet") === "true";
+
+  const isPasscodeSet = () => localStorage.getItem("passcodeSet") === "true";
 
   const validateField = (name: string, value: string | boolean | undefined) => {
     let error = "";
@@ -119,15 +131,50 @@ const Airtime = () => {
     }));
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log("Airtime component", formData);
+  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   console.log("Airtime component", formData);
 
+  //   closeModal();
+  //   console.log(isPasscodeSet, "passcodeSet from airtime component");
+
+  //   setTimeout(() => {
+  //     setShowPinModal(true);
+  //     setShouldCheckPasscode(true); // Start checking after button click
+  //   }, 0);
+  // };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     closeModal();
+
     setTimeout(() => {
       setShowPinModal(true);
+      setShouldCheckPasscode(true);
+      setProceedToSetPin(false); // reset to false so it shows info modal first
     }, 200);
   };
+
+  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   console.log("Airtime component", formData);
+
+  //   closeModal();
+  //   setTimeout(() => {
+  //     setShowPinModal(true);
+  //   }, 200);
+  // };
+
+  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   closeModal();
+  //   console.log(passcodeSet, "passcodeSet from airtime component");
+  //   setTimeout(() => {
+  //     if (passcodeSet) {
+  //       setShowPinModal(true);
+  //     }
+  //   }, 200);
+  // };
 
   const isFormInvalid =
     Object.values(errors).some((error) => error) ||
@@ -135,10 +182,10 @@ const Airtime = () => {
     !formData.network ||
     !formData.recipient;
 
-  console.log(
-    "Stored airtime component passcodeSet:",
-    localStorage.getItem("passcodeSet")
-  );
+  // console.log(
+  //   "Stored airtime component passcodeSet:",
+  //   localStorage.getItem("passcodeSet")
+  // );
 
   return (
     <>
@@ -154,7 +201,6 @@ const Airtime = () => {
         </p>
         <img src={airtimebg} className="absolute right-0" alt="" />
       </button>
-
       {isModalOpen && (
         <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
           {/* Dialog Box */}
@@ -285,20 +331,82 @@ const Airtime = () => {
           </div>
         </div>
       )}
+      {/* {showPinModal && (
+        <PinModal onClose={() => setShowPinModal(false)} formData={formData} />
+      )}
 
+      {showPinModal && (
+        <SetPinModal
+          onClose={() => {
+            setShowPinModal(false);
+            setSetPinModal(false);
+          }}
+        />
+      )} */}
+      {/* if ({showPinModal && passcodeSet} )
+      {<PinModal onClose={() => setShowPinModal(false)} formData={formData} />}
+      else if ( {showPinModal && !passcodeSet})
+      {<SetPinModal onClose={() => setSetPinModal(false)} />}
+ */}
+
+      {showPinModal && isPasscodeSet() && (
+        <PinModal onClose={() => setShowPinModal(false)} formData={formData} />
+      )}
+
+      {/* Inline Info Modal (before SetPinModal) */}
       {showPinModal &&
-        (passcodeSet ? (
-          <PinModal
-            onClose={() => setShowPinModal(false)}
-            formData={formData}
-          />
-        ) : (
-          <SetPinModal
-            onClose={() => {
-              setSetPinModal(false);
-            }}
-          />
-        ))}
+        shouldCheckPasscode &&
+        !isPasscodeSet() &&
+        !proceedToSetPin && (
+          <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-2xl  w-[500px] text-center">
+             <div className="flex justify-end">
+             <button
+                onClick={() => setShowPinModal(false)}
+                className="px-4 py-2 mr-[5px] cursor-pointer "
+              >
+                <img src={cancel} alt="" />
+              </button>
+             </div>
+              <div className="flex flex-col items-center mt-4">
+                <div className="w-[70%] flex flex-col justify-center items-center">
+                  <div className="my-5">
+                    <span className="bg-[#FF3366]/15 rounded-full w-[5rem] h-[5rem] flex justify-center items-center p-[2px]">
+                      <img
+                        src={alarmIcon}
+                        className="w-[3.5rem]"
+                        alt="Alarm Icon"
+                      />
+                    </span>
+                  </div>
+                  <p className="text-[#0A2E65]/60 tracking-[1px] leading-[1.5rem] text-[20px] mb-6">
+                    Setup transation PIN to complete transaction.
+                  </p>
+                  <div className="flex w-full justify-center gap-4">
+                    <button
+                      onClick={() => setProceedToSetPin(true)}
+                      className="bg-[#8003A9] text-white px-4 w-full text-[18px] py-2 mb-[2rem]  ease-in-out duration-300 cursor-pointer rounded-[5px]  hover:bg-[#8003A9]/90 transition"
+                    >
+                      Setup PIN
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+      {/* After Proceed: Show SetPinModal */}
+      {showPinModal &&
+        shouldCheckPasscode &&
+        !isPasscodeSet() &&
+        proceedToSetPin && (
+          <SetPinModal onClose={() => setShowPinModal(false)} />
+        )}
+
+      {/* {showPinModal && shouldCheckPasscode && !isPasscodeSet() && (
+        <SetPinModal onClose={() => setShowPinModal(false)} />
+      )} */}
 
       {isSuccessModal && (
         <SuccessModal
