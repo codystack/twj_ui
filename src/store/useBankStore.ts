@@ -40,27 +40,22 @@ export const useBankStore = create<BankStore>((set) => ({
       return;
     }
 
+
     try {
       set({ isFetchingBanks: true, fetchError: null });
-      // console.log("Fetching banks...");
-
-      const response = await api.get("/BankAccounts/getAllBankForUsers", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`, // Attach token to request
-        },
-      });
-
+    
+      const response = await api.get("/BankAccounts/getAllBankForUsers");
+    
       set({
         bankList: response.data.data.bankAccounts,
         isFetchingBanks: false,
       });
-      // console.log("Fetched banks:", response.data.data.bankAccounts);
     } catch (error: any) {
       set({
         fetchError: error.response?.data?.message || error.message,
         isFetchingBanks: false,
       });
-      // console.error("Error fetching banks:", error);
     }
+    
   },
 }));
