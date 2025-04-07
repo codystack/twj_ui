@@ -9,10 +9,12 @@ import airtel from "../../../../assets/dashboard_img/profile/airtel-icon 1.svg";
 import Button from "../../../../components/Button";
 import PinModal from "./PinModal";
 import SetPinModal from "./SetPinModal";
-import { useModalStore } from "../../../../store/modalStore.ts";
 import SuccessModal from "../../SuccessModal.tsx";
 import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
 import alarmIcon from "../../../../assets/dashboard_img/profile/Alarm_duotone.svg";
+import api from "../../../../services/api";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Airtime = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,15 +29,11 @@ const Airtime = () => {
     recipient: "",
   });
   const [activeImage, setActiveImage] = useState<string | null>(null);
-  const isSuccessModal = useModalStore((state) => state.isSuccessModal);
+  const [proceedToSetPin, setProceedToSetPin] = useState(false); // State to track if the user should proceed to set a PIN
 
-  const [proceedToSetPin, setProceedToSetPin] = useState(false); // NEW
-  const {
-    // passcodeSet,
-    // setSetPinModal,
-    setShowPinModal,
-  } = useModalStore();
-  const showPinModal = useModalStore((state) => state.showPinModal);
+  const [showPinModal, setShowPinModal] = useState(false);
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
+
   const [shouldCheckPasscode, setShouldCheckPasscode] = useState(false);
 
   const images = [
@@ -44,8 +42,6 @@ const Airtime = () => {
     { id: "airtel", src: airtel, alt: "Airtel" },
     { id: "9mobile", src: ninemobile, alt: "9Mobile" },
   ];
-
-  // const isPasscodeSet = () => localStorage.getItem("passcodeSet") === "true";
 
   const isPasscodeSet = () => localStorage.getItem("passcodeSet") === "true";
 
@@ -104,15 +100,11 @@ const Airtime = () => {
   };
 
   const closeModal = () => {
-    // Clear form logic can be added here
-
     setErrors({ amount: "", recipient: "" });
     setActiveImage(null);
-
     setIsModalOpen(false);
   };
 
-  // Automatically call validatePin when 4 digits are entered
   useEffect(() => {
     if (isModalOpen === true) {
       setFormData({
@@ -131,19 +123,6 @@ const Airtime = () => {
     }));
   };
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   console.log("Airtime component", formData);
-
-  //   closeModal();
-  //   console.log(isPasscodeSet, "passcodeSet from airtime component");
-
-  //   setTimeout(() => {
-  //     setShowPinModal(true);
-  //     setShouldCheckPasscode(true); // Start checking after button click
-  //   }, 0);
-  // };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     closeModal();
@@ -151,41 +130,44 @@ const Airtime = () => {
     setTimeout(() => {
       setShowPinModal(true);
       setShouldCheckPasscode(true);
-      setProceedToSetPin(false); // reset to false so it shows info modal first
+      setProceedToSetPin(false); 
     }, 200);
   };
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   console.log("Airtime component", formData);
+  const onVerify = () =>
+    new Promise<void>((resolve, reject) => {
+      (async () => {
+        try {
+          // Proceed with Airtime Purchase
+          const { network, amount, recipient } = formData;
 
-  //   closeModal();
-  //   setTimeout(() => {
-  //     setShowPinModal(true);
-  //   }, 200);
-  // };
+          const purchaseResponse = await api.post(
+            `${BASE_URL}/BillsPayment/purchaseAirtime`,
+            {
+              network: network,
+              amount: Number(amount),
+              recipient: recipient,
+            }
+          );
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   closeModal();
-  //   console.log(passcodeSet, "passcodeSet from airtime component");
-  //   setTimeout(() => {
-  //     if (passcodeSet) {
-  //       setShowPinModal(true);
-  //     }
-  //   }, 200);
-  // };
+          if (!purchaseResponse.data.isSuccessful) {
+            throw new Error(
+              purchaseResponse.data.message || "An error occurred"
+            );
+          }
+          setIsSuccessModal(true);
+          resolve();
+        } catch (e) {
+          reject(e);
+        }
+      })();
+    });
 
   const isFormInvalid =
     Object.values(errors).some((error) => error) ||
     !formData.amount ||
     !formData.network ||
     !formData.recipient;
-
-  // console.log(
-  //   "Stored airtime component passcodeSet:",
-  //   localStorage.getItem("passcodeSet")
-  // );
 
   return (
     <>
@@ -318,39 +300,26 @@ const Airtime = () => {
                       <Button
                         type="submit"
                         isDisabled={isFormInvalid}
-                        // isLoading={isSubmitting}
                       >
                         Buy Airtime
                       </Button>
                     </div>
                   </form>
-                  {/* Buttons */}
                 </div>
               </div>
             </div>
           </div>
         </div>
       )}
-      {/* {showPinModal && (
-        <PinModal onClose={() => setShowPinModal(false)} formData={formData} />
-      )}
-
-      {showPinModal && (
-        <SetPinModal
-          onClose={() => {
-            setShowPinModal(false);
-            setSetPinModal(false);
-          }}
-        />
-      )} */}
-      {/* if ({showPinModal && passcodeSet} )
-      {<PinModal onClose={() => setShowPinModal(false)} formData={formData} />}
-      else if ( {showPinModal && !passcodeSet})
-      {<SetPinModal onClose={() => setSetPinModal(false)} />}
- */}
 
       {showPinModal && isPasscodeSet() && (
-        <PinModal onClose={() => setShowPinModal(false)} formData={formData} />
+        <PinModal
+          onClose={() => {
+            setShowPinModal(false);
+            closeModal();
+          }}
+          onVerify={onVerify}
+        />
       )}
 
       {/* Inline Info Modal (before SetPinModal) */}
@@ -360,14 +329,14 @@ const Airtime = () => {
         !proceedToSetPin && (
           <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-2xl  w-[500px] text-center">
-             <div className="flex justify-end">
-             <button
-                onClick={() => setShowPinModal(false)}
-                className="px-4 py-2 mr-[5px] cursor-pointer "
-              >
-                <img src={cancel} alt="" />
-              </button>
-             </div>
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowPinModal(false)}
+                  className="px-4 py-2 mr-[5px] cursor-pointer "
+                >
+                  <img src={cancel} alt="" />
+                </button>
+              </div>
               <div className="flex flex-col items-center mt-4">
                 <div className="w-[70%] flex flex-col justify-center items-center">
                   <div className="my-5">
@@ -384,7 +353,10 @@ const Airtime = () => {
                   </p>
                   <div className="flex w-full justify-center gap-4">
                     <button
-                      onClick={() => setProceedToSetPin(true)}
+                      onClick={() => {
+                        setProceedToSetPin(true);
+                        closeModal();
+                      }}
                       className="bg-[#8003A9] text-white px-4 w-full text-[18px] py-2 mb-[2rem]  ease-in-out duration-300 cursor-pointer rounded-[5px]  hover:bg-[#8003A9]/90 transition"
                     >
                       Setup PIN
@@ -398,21 +370,17 @@ const Airtime = () => {
 
       {/* After Proceed: Show SetPinModal */}
       {showPinModal &&
-        shouldCheckPasscode &&
         !isPasscodeSet() &&
         proceedToSetPin && (
           <SetPinModal onClose={() => setShowPinModal(false)} />
         )}
 
-      {/* {showPinModal && shouldCheckPasscode && !isPasscodeSet() && (
-        <SetPinModal onClose={() => setShowPinModal(false)} />
-      )} */}
-
+      {/* Success Modal */}
       {isSuccessModal && (
         <SuccessModal
           title="Recharged"
           message="Your airtime is on its way"
-          onClose={() => useModalStore.getState().setSuccessModal(false)} // Hide modal on close
+          onClose={() =>   setIsSuccessModal(false)} 
         />
       )}
     </>

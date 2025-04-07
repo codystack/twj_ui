@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Airtime from "../../../assets/dashboard_img/profile//transactions/airitime.svg";
 import Data from "../../../assets/dashboard_img/profile//transactions/data.svg";
 import Electricity from "../../../assets/dashboard_img/profile//transactions/electricity.svg";
@@ -142,6 +142,17 @@ const UtilityTransaction: React.FC<{
     handleCloseModal();
   };
 
+
+
+  useEffect(() => {
+    if (transactions.length > 0) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 500); // short delay lets the DOM update
+    }
+  }, [transactions]);
+  
+
   return (
     <div className="space-y-1 p-4">
       {transactions.length > 0 ? (
@@ -153,7 +164,7 @@ const UtilityTransaction: React.FC<{
           >
             <div className="flex items-center gap-4 relative">
               <div className="relative">
-                {transaction.billPaymentCategory === "data" && (
+                {transaction.billPaymentCategory === "Data" && (
                   <img
                     src={Data}
                     alt="Transaction Logo"
