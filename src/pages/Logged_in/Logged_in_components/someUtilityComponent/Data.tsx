@@ -95,15 +95,11 @@ const Data = () => {
   });
 
   const [activeImage, setActiveImage] = useState<string | null>(null);
-  const isSuccessModal = useModalStore((state) => state.isSuccessModal);
   const [proceedToSetPin, setProceedToSetPin] = useState(false); // State to track if the user should proceed to set a PIN
-  const {
-    // passcodeSet,
-    // setSetPinModal,
-    setShowPinModal,
-  } = useModalStore();
-  const showPinModal = useModalStore((state) => state.showPinModal);
   const [shouldCheckPasscode, setShouldCheckPasscode] = useState(false);
+
+  const [showPinModal, setShowPinModal] = useState(false);
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
 
   const fetchPlan = useModalStore((state) => state.fetchPlan);
   const { plan } = useModalStore();
@@ -114,65 +110,7 @@ const Data = () => {
     { id: "airtel", src: airtel, alt: "Airtel" },
     { id: "9mobile", src: ninemobile, alt: "9Mobile" },
   ];
-  //   const handleSelectChange = async (
-  //     selectedOption: { value: string; label: string } | null
-  //   ) => {
-  //     if (!selectedOption) return;
-
-  //     const selectedBankCode = selectedOption.value;
-  //     const uniqueBankName = selectedOption.label;
-
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       bankCode: selectedBankCode,
-  //       selectedBank: uniqueBankName,
-  //     }));
-
-  //     // if (formData.betProvider) {
-  //     //   await verifyAccount(selectedBankCode, formData.betProvider);
-  //     // }
-  //   };
-
-  //   switch (fieldName) {
-  //     case "accountNumber":
-  //       const accountNumberRegex = /^[0-9]+$/; // Only allows numbers
-  //       if (!value.trim()) {
-  //         setErrors((prev) => ({
-  //           ...prev,
-  //           accountNumber: "This field is required",
-  //         }));
-  //       } else if (!accountNumberRegex.test(value)) {
-  //         setErrors((prev) => ({
-  //           ...prev,
-  //           accountNumber: "Please enter a valid account number",
-  //         }));
-  //       } else {
-  //         setErrors((prev) => ({
-  //           ...prev,
-  //           accountNumber: "",
-  //         }));
-  //       }
-  //       break;
-
-  //     case "selectedBank":
-  //       if (!value.trim()) {
-  //         setErrors((prev) => ({
-  //           ...prev,
-  //           selectedBank: "Please select a bank",
-  //         }));
-  //       } else {
-  //         setErrors((prev) => ({
-  //           ...prev,
-  //           selectedBank: "",
-  //         }));
-  //       }
-  //       break;
-
-  //     default:
-  //       break;
-  //   }
-  // };
-
+  
   // Validation function
   const validateField = (name: string, value: string | boolean | undefined) => {
     let error = "";
@@ -221,21 +159,12 @@ const Data = () => {
     validateField(name, numericValue);
   };
 
-  // const handlePhoneNumberChange = (value: string | undefined) => {
-  //   setFormData((prevState) => ({
-  //     ...prevState,
-  //     phoneNumber: value || "",
-  //   }));
-
-  //   validateField("phoneNumber", value);
-  // };
 
   const openModal = () => {
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    // Clear form logic can be added here
     setActiveImage(null);
     setFormData({ recipient: "", amount: "", plans: "", network: "" });
     setErrors({ recipient: "", amount: "", plans: "" });
@@ -248,15 +177,6 @@ const Data = () => {
     !formData.recipient ||
     !formData.network ||
     !formData.plans;
-
-  // Handle selection change
-  // const handleSelectChange = (selectedOption: any) => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     plans: selectedOption.value,
-  //     amount: selectedOption.amount.toString(),
-  //   }));
-  // };
 
   const handleSelectChange = (selectedOption: any) => {
     if (!selectedOption) {
@@ -273,9 +193,7 @@ const Data = () => {
   };
 
   const handleImageSelect = (id: string) => {
-    console.log("Selected network:", id);
     fetchPlan(id);
-    // console.log("Fetched plan:", plan);
   };
 
   useEffect(() => {
@@ -296,29 +214,15 @@ const Data = () => {
   const isPasscodeSet = () => localStorage.getItem("passcodeSet") === "true";
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevents page reload
-
-    // Optional: Basic validation
-    if (!formData.plans || !formData.amount || !formData.recipient) {
-      alert("Please fill in all required fields");
-      return;
-    }
-
-    // Log or send form data
-    console.log("Form submitted with data:", formData);
+    e.preventDefault();
+    closeModal();
 
     setTimeout(() => {
       setShowPinModal(true);
       setShouldCheckPasscode(true);
-      setProceedToSetPin(false); // reset to false so it shows info modal first
+      setProceedToSetPin(false); 
     }, 200);
   };
-
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     closeModal();
-
-  //   };
 
   const onVerify = () =>
     new Promise<void>((resolve, reject) => {
@@ -342,6 +246,7 @@ const Data = () => {
               purchaseResponse.data.message || "An error occurred"
             );
           }
+          setIsSuccessModal(true);
           resolve();
         } catch (e) {
           reject(e);
@@ -485,16 +390,11 @@ const Data = () => {
                     </div>
 
                     <div className="w-full mt-[1.5rem] mb-[2rem]">
-                      <Button
-                        type="submit"
-                        isDisabled={isFormInvalid}
-                        // isLoading={isSubmitting}
-                      >
+                      <Button type="submit" isDisabled={isFormInvalid}>
                         Buy Data
                       </Button>
                     </div>
                   </form>
-                  {/* Buttons */}
                 </div>
               </div>
             </div>
@@ -570,8 +470,11 @@ const Data = () => {
       {isSuccessModal && (
         <SuccessModal
           title="Recharged"
-          message="Your airtime is on its way"
-          onClose={() => useModalStore.getState().setSuccessModal(false)} // Hide modal on close
+          message="Your data is on its way"
+          onClose={() => {
+            closeModal();
+            setIsSuccessModal(false);
+          }}
         />
       )}
     </>

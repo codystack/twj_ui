@@ -39,7 +39,7 @@ api.interceptors.response.use(
     // If access token is expired (401)
     const status = error.response?.status;
     // console.log("401 error", status);
-    if ((status === 401 || status === 400) && !originalRequest._retry) {
+    if ((status === 401) && !originalRequest._retry) {
       originalRequest._retry = true; // Prevent infinite loops
 
       try {
