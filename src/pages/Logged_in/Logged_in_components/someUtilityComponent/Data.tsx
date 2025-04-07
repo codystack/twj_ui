@@ -215,7 +215,7 @@ const Data = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    closeModal();
+    setIsModalOpen(false);
 
     setTimeout(() => {
       setShowPinModal(true);
