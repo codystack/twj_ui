@@ -185,7 +185,7 @@ const UtilityTransaction: React.FC<{
                     className="w-12 h-12"
                   />
                 )}
-                {transaction.billPaymentCategory === "Cable_tv" && (
+                {transaction.billPaymentCategory === "CableTV" && (
                   <img
                     src={Television}
                     alt="Transaction Logo"
@@ -298,7 +298,7 @@ const UtilityTransaction: React.FC<{
                         className="w-12 h-12"
                       />
                     )}
-                    {selectedTransaction.billPaymentCategory === "Cable_tv" && (
+                    {selectedTransaction.billPaymentCategory === "CableTV" && (
                       <img
                         src={Television}
                         alt="Transaction Logo"
