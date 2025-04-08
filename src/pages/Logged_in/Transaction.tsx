@@ -156,8 +156,8 @@ const Transaction = () => {
 
           {totalPages >= 2 && (
             <ReactPaginate
-              previousLabel={"previous"}
-              nextLabel={"next"}
+              previousLabel={"<"}
+              nextLabel={">"}
               breakLabel={"..."}
               pageCount={totalPages}
               marginPagesDisplayed={2}

@@ -175,7 +175,7 @@ const Betting = () => {
 
       setOptions(
         options.map((provider) => ({
-          value: provider.id, 
+          value: provider.id,
           title: provider.title,
         }))
       );
@@ -218,7 +218,7 @@ const Betting = () => {
       setAccountName(null);
       setAccountNameError(error.message);
 
-      console.error("Error:", error);
+      // console.error("Error:", error);
       setIsLoading(false);
     }
   };
@@ -352,7 +352,7 @@ const Betting = () => {
                       )}
                     </div>
 
-                    <div className=" text-[14px] mt-[3px] flex  items-center gap-[2px]">
+                    {/* <div className=" text-[14px] mt-[3px] flex  items-center gap-[2px]">
                       {accountName && <img src={check} alt="Verified" />}
                       <p className={accountNameError ? "text-red-500" : ""}>
                         {isLoading ? "Verifying..." : ""}
@@ -361,6 +361,29 @@ const Betting = () => {
                           <span className="text-[#0A2E65]">{accountName}</span>
                         )}
                       </p>
+                    </div> */}
+
+                    <div className="flex mb-2 gap-1.5">
+                      {isLoading && (
+                        <p className="text-[#27014F] font-medium">
+                          Verifying...
+                        </p>
+                      )}
+
+                      {!isLoading && accountNameError && (
+                        <p className="text-red-500 font-medium">
+                          {accountNameError}
+                        </p>
+                      )}
+
+                      {!isLoading && accountName && !accountNameError && (
+                        <>
+                          <img src={check} alt="Verified" />
+                          <p className="text-[#27014F] font-medium">
+                            {accountName}
+                          </p>
+                        </>
+                      )}
                     </div>
 
                     <div className=" mt-[10px] flex justify-between items-center">

@@ -115,10 +115,10 @@ const PinModal = ({
         ("response" in error && error.response?.data?.message) ||
         error.message ||
         "An error occurred. Please try again.";
-      console.log(
-        "error from endpoint:",
-        "response" in error && error.response
-      );
+      // console.log(
+      //   "error from endpoint:",
+      //   "response" in error && error.response
+      // );
       setPin("");
       setError(errorMessage);
       setLoading(false);

@@ -13,6 +13,7 @@ import Airtime from "./Logged_in_components/someUtilityComponent/Airtime";
 import Crypto from "./Logged_in_components/someUtilityComponent/Crypto";
 import GiftCard from "./Logged_in_components/someUtilityComponent/GiftCard";
 import Support from "./Logged_in_components/someUtilityComponent/Support";
+import ErrorBoundary from "../../components/error/ErrorBoundry";
 // import { data } from "react-router"; comment
 const Dashboard = () => {
   const [isHidden, setIsHidden] = useState(false);
@@ -117,7 +118,10 @@ const Dashboard = () => {
               <Airtime />
               <Data />
               <Electricity />
+
+              <ErrorBoundary>
               <CableTv />
+              </ErrorBoundary>
               <Betting />
               <Support />
             </div>
