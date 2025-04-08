@@ -1,4 +1,3 @@
-
 import { create } from "zustand";
 import api from "../services/api";
 
@@ -10,7 +9,10 @@ interface ModalState {
   isSuccessModal: boolean;
   showPinModal: boolean;
   setPinModal: boolean;
-  
+
+  // loading state
+  isloading: boolean;
+  setIsLoading: (value: boolean) => void;
   // Data Pin Modal
   setDataPinModal: boolean;
   showDataPinModal: boolean;
@@ -19,7 +21,7 @@ interface ModalState {
   // passcode state
   setPasscodeSet: (value: boolean) => void;
 
-// Airtime Modal
+  // Airtime Modal
   setSuccessModal: (value: boolean) => void;
   setShowPinModal: (value: boolean) => void;
   setSetPinModal: (value: boolean) => void;
@@ -30,28 +32,31 @@ interface ModalState {
   setDataSuccessModal: (value: boolean) => void;
 
   // Plan-related state
-  plan: any ; 
+  plan: any;
   isFetchingPlan: boolean;
   planError: string | null;
   fetchPlan: (network: string) => Promise<void>;
 }
 
 export const useModalStore = create<ModalState>((set) => ({
-
-// Passcode state
+  // Passcode state
   passcodeSet: localStorage.getItem("passcodeSet") === "true",
 
   // airtime Modal state
   isSuccessModal: false,
   showPinModal: false,
   setPinModal: false,
-  
+
   // Data Pin Modal state
   isDataSuccessModal: false,
   showDataPinModal: false,
   setDataPinModal: false,
 
-// Passcode state
+  // loading state
+  isloading: false,
+  setIsLoading: (value: boolean) => set({ isloading: value }),
+
+  // Passcode state
   setPasscodeSet: (value: boolean) => {
     localStorage.setItem("passcodeSet", JSON.stringify(value));
     set({ passcodeSet: value });

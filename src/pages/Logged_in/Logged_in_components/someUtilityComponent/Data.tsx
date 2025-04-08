@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Dataimg from "../../../../assets/dashboard_img/dashboard_icons/ooui_network.svg";
 import dataBg from "../../../../assets/dashboard_img/databg.svg";
 import Cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
@@ -102,7 +102,7 @@ const Data = () => {
   const [isSuccessModal, setIsSuccessModal] = useState(false);
 
   const fetchPlan = useModalStore((state) => state.fetchPlan);
-  const { plan } = useModalStore();
+  const { plan, isFetchingPlan } = useModalStore();
 
   const images = [
     { id: "mtn", src: MTN, alt: "MTN" },
@@ -110,7 +110,7 @@ const Data = () => {
     { id: "airtel", src: airtel, alt: "Airtel" },
     { id: "9mobile", src: ninemobile, alt: "9Mobile" },
   ];
-  
+
   // Validation function
   const validateField = (name: string, value: string | boolean | undefined) => {
     let error = "";
@@ -159,7 +159,6 @@ const Data = () => {
     validateField(name, numericValue);
   };
 
-
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -196,13 +195,6 @@ const Data = () => {
     fetchPlan(id);
   };
 
-  useEffect(() => {
-    if (plan) {
-      console.log("Fetched plan (now available):", plan);
-      // Do something with plan
-    }
-  }, [plan]);
-
   const setImage = (imageId: string) => {
     setActiveImage(imageId);
     setFormData((prevData) => ({
@@ -220,7 +212,7 @@ const Data = () => {
     setTimeout(() => {
       setShowPinModal(true);
       setShouldCheckPasscode(true);
-      setProceedToSetPin(false); 
+      setProceedToSetPin(false);
     }, 200);
   };
 
@@ -316,6 +308,7 @@ const Data = () => {
                     <div>
                       <Select
                         options={plan}
+                        isLoading={isFetchingPlan}
                         getOptionLabel={getOptionLabel}
                         getOptionValue={(e) => e.value}
                         styles={customStyles}
