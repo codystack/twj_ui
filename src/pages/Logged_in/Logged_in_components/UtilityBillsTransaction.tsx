@@ -192,7 +192,7 @@ const UtilityTransaction: React.FC<{
                     className="w-12 h-12"
                   />
                 )}
-                {transaction.billPaymentCategory === "betting" && (
+                {transaction.billPaymentCategory === "Betting" && (
                   <img
                     src={Gift}
                     alt="Transaction Logo"
@@ -277,14 +277,14 @@ const UtilityTransaction: React.FC<{
                     ₦{selectedTransaction.amount}
                     </h2>
 
-                    {selectedTransaction.type === "data" && (
+                    {selectedTransaction.billPaymentCategory === "Data" && (
                       <img
                         src={Data}
                         alt="Transaction Logo"
                         className="w-12 h-12"
                       />
                     )}
-                    {selectedTransaction.type === "electricity" && (
+                    {selectedTransaction.billPaymentCategory === "electricity" && (
                       <img
                         src={Electricity}
                         alt="Transaction Logo"
@@ -298,14 +298,14 @@ const UtilityTransaction: React.FC<{
                         className="w-12 h-12"
                       />
                     )}
-                    {selectedTransaction.type === "Cable_tv" && (
+                    {selectedTransaction.billPaymentCategory === "Cable_tv" && (
                       <img
                         src={Television}
                         alt="Transaction Logo"
                         className="w-12 h-12"
                       />
                     )}
-                    {selectedTransaction.type === "betting" && (
+                    {selectedTransaction.billPaymentCategory === "Betting" && (
                       <img
                         src={Gift}
                         alt="Transaction Logo"

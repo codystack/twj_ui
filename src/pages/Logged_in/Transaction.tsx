@@ -35,6 +35,7 @@ const Transaction = () => {
   const [page, setPage] = useState(0); // react-paginate starts from 0
   const [totalPages, setTotalPages] = useState(1);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const scrollContainer = useRef<HTMLDivElement | null>(null);
 
   const handleScrollToTop = () => {
     setTimeout(() => {
@@ -43,7 +44,6 @@ const Transaction = () => {
   };
 
   // Function to fetch transactions based on the activeTab and page
-
   const pageSize = 20;
 
   const fetchTransactions = async (type: string, page: number) => {
@@ -60,8 +60,7 @@ const Transaction = () => {
       setTransaction(transactions);
       setTotalPages(Math.ceil(totalRecords / pageSize));
       setNoTransaction(noTransactionMessage);
-      // window.scrollTo({ top: 0, behavior: "smooth" });
-   
+      scrollContainer.current?.scrollTo({ top: 0,});
     } catch (err) {
       console.error("Error fetching transactions:", err);
     } finally {
@@ -73,8 +72,6 @@ const Transaction = () => {
     fetchTransactions(activeTab, page + 1);
   }, [page, activeTab]);
 
-
-
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPage(selectedItem.selected);
     // window.scrollTo({ top: 0, behavior: "smooth" });
@@ -85,7 +82,7 @@ const Transaction = () => {
       ref={containerRef}
       className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff]  flex flex-col"
     >
-      <div className="flex-1 overflow-y-auto pb-4 px-4">
+      <div ref={scrollContainer} className="flex-1 overflow-y-auto pb-4 px-4">
         <div className=" flex flex-col  ml-[3%] ">
           {/* Tab Buttons */}
           <div className="py-[2.3%] fixed w-[75%]  z-20 bg-[#fff]  ">
