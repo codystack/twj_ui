@@ -3,7 +3,6 @@ import Cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
 import Select from "react-select";
 import Button from "../../../../components/Button";
 import check from "../../../../assets/dashboard_img/profile/Check_round_fill (1).svg";
-import api from "../../../../services/api";
 import Tvbg from "../../../../assets/dashboard_img/tvbg.svg";
 import TV from "../../../../assets/dashboard_img/dashboard_icons/wpf_retro-tv.svg";
 import { AxiosError } from "axios";
@@ -12,6 +11,8 @@ import SetPinModal from "./SetPinModal";
 import PinModal from "./PinModal";
 import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
 import alarmIcon from "../../../../assets/dashboard_img/profile/Alarm_duotone.svg";
+import api from "../../../../services/api";
+
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -196,6 +197,8 @@ const CableTv = () => {
     }
   }, [serviceDetails]);
 
+
+
   const handleBlur = async (service: any) => {
     setIsLoading(true);
     const selectedValue = service;
@@ -222,12 +225,8 @@ const CableTv = () => {
         }
       );
 
-      // if (!response.ok) {
-      //   throw new Error("Failed to submit data");
-      // }
-
       const data = await response.json();
-      console.log("API response:", data.data.details.customer_name);
+      // console.log("API response:", data.data.details.customer_name);
       const name = data.data.details.customer_name;
       setAccName(name);
       // setError(data.message)
@@ -240,7 +239,7 @@ const CableTv = () => {
         error.message ||
         "An error occurred. Please try again.";
       setError(errorMessage);
-      console.log(errorMessage);
+      // console.log(errorMessage);
       setIsLoading(false);
       return;
     }
