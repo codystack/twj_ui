@@ -1,26 +1,14 @@
+import { BrowserRouter, Routes, Route } from "react-router";
+import { useAuthStore } from "./store/authStore.ts";
+import { useEffect } from "react";
+import useIdleTimer from "./hooks/useIdleTimer.ts";
+import { useNavigate } from "react-router-dom";
+
 import ResetPassword from "./pages/ResetPassword.tsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProtectedDashboard from "./components/protectedDashboard";
 import Dashboard from "./pages/Logged_in/Dashboard.tsx";
 import Bills from "./pages/Logged_in/Bills.tsx";
-
-// function App() {
-//   const checkAuth = useAuthStore((state) => state.checkAuth);
-
-//   useEffect(() => {
-//     checkAuth();
-//   }, [checkAuth]);
-
-//   return (
-//     <AuthWrapper>
-//       <RouterProvider router={router} />
-//     </AuthWrapper>
-//   );
-// }
-
-// export default App;
-
-import { BrowserRouter, Routes, Route } from "react-router";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import VerifyOtp from "./pages/VerifyOtp";
@@ -37,24 +25,30 @@ import RegSuccessful from "./pages/RegSuccessful.tsx";
 import RecoverAccount from "./pages/RecoverAccount.tsx";
 import AccountUpgrade from "./pages/Logged_in/AccountUpgrade.tsx";
 import Referals from "./pages/Logged_in/Referals.tsx";
-import { useAuthStore } from "./store/authStore.ts";
-import { useEffect } from "react";
 
 const App = () => {
-  const checkAuth = useAuthStore((state) => state.checkAuth);
-
-    useEffect(() => {
-      checkAuth();
-    }, [checkAuth]);
-
-  //   return (
-  //     <AuthWrapper>
-  //       <RouterProvider router={router} />
-  //     </AuthWrapper>
-  //   );
-  // }
   return (
     <BrowserRouter>
+      <AppWithRoutes />
+    </BrowserRouter>
+  );
+};
+
+export default App;
+
+const AppWithRoutes = () => {
+  const checkAuth = useAuthStore((state) => state.checkAuth);
+
+  const navigate = useNavigate();
+  const logout = useAuthStore((state) => state.logout);
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  useIdleTimer(() => logout(navigate), 10 * 60 * 1000);
+
+  return (
+ 
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
@@ -107,7 +101,6 @@ const App = () => {
           <Route path="/rates" element={<Rates />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+
   );
 };
-export default App;
