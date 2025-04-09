@@ -1,16 +1,21 @@
 import React from "react";
 import Check from "../../assets/dashboard_img/dashboard_icons/greenCheck.svg";
 import DeleteAccount from "../../assets/dashboard_img/profile/cancel.svg";
+
+
 interface SuccessModalProps {
   title: string;
   message: string;
   onClose: () => void;
+  button?: React.ReactNode; // Optional button
 }
+
 
 const SuccessModal: React.FC<SuccessModalProps> = ({
   title,
   message,
   onClose,
+  button,
 }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-40 bg-black/40 bg-opacity-50">
@@ -31,6 +36,8 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
             {title}
           </h5>
           <p className="text-[#0A2E65]/60 mt- mb-[1rem]">{message}</p>
+          
+{button && <div className="mt-4">{button}</div>}
         </div>
       </div>
     </div>

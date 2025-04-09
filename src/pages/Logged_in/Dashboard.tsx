@@ -117,11 +117,11 @@ const Dashboard = () => {
               <GiftCard />
               <Airtime />
               <Data />
-              <Electricity />
-
               <ErrorBoundary>
-              <CableTv />
+              <Electricity />
               </ErrorBoundary>
+
+              <CableTv />
               <Betting />
               <Support />
             </div>
