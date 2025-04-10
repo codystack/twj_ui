@@ -226,6 +226,11 @@ const CableTv = () => {
       );
 
       const data = await response.json();
+     
+      if (!response.ok) {
+        // throw the error manually
+        throw new Error(data.message || "Validati failed");
+      }
       // console.log("API response:", data.data.details.customer_name);
       const name = data.data.details.customer_name;
       setAccName(name);
@@ -233,11 +238,15 @@ const CableTv = () => {
       setIsLoading(false);
       return;
     } catch (e) {
+      // const errorMessage = error?.message || "Something went wrong";
+      // console.error("Error:", errorMessage);
+      // setIsLoading(false);
       const error = e as AxiosError<{ message: string }> | Error;
       const errorMessage =
         ("response" in error && error.response?.data?.message) ||
         error.message ||
         "An error occurred. Please try again.";
+      //   console.log("log",error.message)
       setError(errorMessage);
       // console.log(errorMessage);
       setIsLoading(false);
@@ -431,6 +440,7 @@ const CableTv = () => {
                         type="amount"
                         placeholder="₦0.00"
                         name="amount"
+                        readOnly
                         value={amount}
                         onChange={handleInputChange}
                         onBlur={() => validateField("email", formData.amount)}
@@ -452,7 +462,7 @@ const CableTv = () => {
                         type="submit"
                         isDisabled={isFormInvalid}
                       >
-                        Pay for Subcription
+                        Pay for Subscription
                       </Button>
                     </div>
                   </form>

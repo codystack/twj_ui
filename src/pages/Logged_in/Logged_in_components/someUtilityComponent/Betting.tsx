@@ -210,6 +210,10 @@ const Betting = () => {
         }
       );
       const data = await response.json();
+       
+      if (!response.ok) {
+        throw new Error(data.message || "Validati failed");
+      }
       const name = data.data.message.details.name;
       setAccountName(name);
       setIsLoading(false);

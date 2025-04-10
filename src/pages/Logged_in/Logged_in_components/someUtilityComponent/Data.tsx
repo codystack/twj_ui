@@ -100,7 +100,7 @@ const Data = () => {
 
   const [showPinModal, setShowPinModal] = useState(false);
   const [isSuccessModal, setIsSuccessModal] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const fetchPlan = useModalStore((state) => state.fetchPlan);
   const { plan, isFetchingPlan } = useModalStore();
 
@@ -191,8 +191,10 @@ const Data = () => {
     }));
   };
 
-  const handleImageSelect = (id: string) => {
-    fetchPlan(id);
+  const handleImageSelect = async (id: string) => {
+    setIsLoading(true);
+   await fetchPlan(id);
+    setIsLoading(false);
   };
 
   const setImage = (imageId: string) => {
@@ -366,6 +368,7 @@ const Data = () => {
                         type="text"
                         placeholder="₦0.00"
                         name="amount"
+                        readOnly
                         value={formData.amount}
                         onChange={handleChange}
                         // onBlur={() => validateField("email", formData.customerId)}
@@ -469,6 +472,12 @@ const Data = () => {
             setIsSuccessModal(false);
           }}
         />
+      )}
+
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
+          <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
+        </div>
       )}
     </>
   );
