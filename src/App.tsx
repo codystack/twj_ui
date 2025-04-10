@@ -25,6 +25,7 @@ import RegSuccessful from "./pages/RegSuccessful.tsx";
 import RecoverAccount from "./pages/RecoverAccount.tsx";
 import AccountUpgrade from "./pages/Logged_in/AccountUpgrade.tsx";
 import Referals from "./pages/Logged_in/Referals.tsx";
+import RouteChangeHandler from "./components/RouteChangeHandler.tsx";
 
 const App = () => {
   return (
@@ -48,7 +49,8 @@ const AppWithRoutes = () => {
   useIdleTimer(() => logout(navigate), 10 * 60 * 1000);
 
   return (
- 
+    <>
+      <RouteChangeHandler />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
@@ -101,6 +103,6 @@ const AppWithRoutes = () => {
           <Route path="/rates" element={<Rates />} />
         </Route>
       </Routes>
-
+    </>
   );
 };

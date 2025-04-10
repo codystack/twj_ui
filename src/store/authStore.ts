@@ -246,6 +246,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem("referralLink", data.data.userDetails.referralLink);
       localStorage.setItem("phoneNumber", data.data.userDetails.phoneNumber);
       localStorage.setItem("passcodeSet", data.data.passcodeSet);
+      localStorage.setItem("kycComplete", data.data.kycComplete);
       localStorage.setItem("isAuthenticated", "true");
       const lastVisitedRoute = localStorage.getItem("lastVisitedRoute") || "/dashboard";
       // Clear the stored route after redirecting

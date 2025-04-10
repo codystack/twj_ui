@@ -2,14 +2,12 @@ import React from "react";
 import Check from "../../assets/dashboard_img/dashboard_icons/greenCheck.svg";
 import DeleteAccount from "../../assets/dashboard_img/profile/cancel.svg";
 
-
 interface SuccessModalProps {
   title: string;
   message: string;
   onClose: () => void;
   button?: React.ReactNode; // Optional button
 }
-
 
 const SuccessModal: React.FC<SuccessModalProps> = ({
   title,
@@ -23,7 +21,10 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
         <div className="bg-white rounded-lg shadow-lg px-6 pb-[2rem] w-[500px] text-center">
           {/* Close Button */}
           <div className="flex justify-end">
-            <button onClick={onClose} className="cursor-pointer pt-[20px] p-[1px]">
+            <button
+              onClick={onClose}
+              className="cursor-pointer pt-[20px] p-[1px]"
+            >
               <img src={DeleteAccount} className="w-[1reM]" alt="" />
             </button>
           </div>
@@ -36,8 +37,8 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
             {title}
           </h5>
           <p className="text-[#0A2E65]/60 mt- mb-[1rem]">{message}</p>
-          
-{button && <div className="mt-4">{button}</div>}
+
+          {button && <div className="mt-4">{button}</div>}
         </div>
       </div>
     </div>

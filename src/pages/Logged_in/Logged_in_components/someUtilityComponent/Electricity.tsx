@@ -65,15 +65,16 @@ const Electricity = () => {
     provider: "",
   });
 
-  const [accName, setAccName] = useState("");
-  const [error, setError] = useState("");
-  const [providers, setProviders] = useState<any>([]);
   const [errors, setErrors] = useState({
     powerProvider: "",
     meterNumber: "",
     amount: "",
     provider: "",
   });
+  const [accName, setAccName] = useState("");
+  const [error, setError] = useState("");
+  const [providers, setProviders] = useState<any>([]);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [proceedToSetPin, setProceedToSetPin] = useState(false); // State to track if the user should proceed to set a PIN
@@ -274,6 +275,10 @@ const Electricity = () => {
       );
 
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Validati failed");
+      }
       console.log(data.data.message.details.customer_name);
       const name = data.data.message.details.customer_name;
       setAccName(name);
@@ -414,7 +419,7 @@ const Electricity = () => {
                       />
                     </div>
                     <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left  mt-[10px] ">
-                      Smart Card Number
+                      Meter Number
                     </p>
                     <div className="w-full ">
                       <input

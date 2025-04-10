@@ -171,7 +171,7 @@ const UtilityTransaction: React.FC<{
                     className="w-12 h-12"
                   />
                 )}
-                {transaction.billPaymentCategory === "electricity" && (
+                {transaction.billPaymentCategory === "Electricity" && (
                   <img
                     src={Electricity}
                     alt="Transaction Logo"
@@ -284,7 +284,7 @@ const UtilityTransaction: React.FC<{
                         className="w-12 h-12"
                       />
                     )}
-                    {selectedTransaction.billPaymentCategory === "electricity" && (
+                    {selectedTransaction.billPaymentCategory === "Electricity" && (
                       <img
                         src={Electricity}
                         alt="Transaction Logo"
