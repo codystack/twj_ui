@@ -13,6 +13,7 @@ import SuccessModal from "../../SuccessModal.tsx";
 import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
 import alarmIcon from "../../../../assets/dashboard_img/profile/Alarm_duotone.svg";
 import api from "../../../../services/api";
+import RouteChangeHandler from "../../../../components/RouteChangeHandler.tsx";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -33,7 +34,7 @@ const Airtime = () => {
 
   const [showPinModal, setShowPinModal] = useState(false);
   const [isSuccessModal, setIsSuccessModal] = useState(false);
-
+  const [showKycPrompt, setShowKycPrompt] = useState(false);
   const [shouldCheckPasscode, setShouldCheckPasscode] = useState(false);
 
   const images = [
@@ -95,8 +96,20 @@ const Airtime = () => {
     setFormData((prev) => ({ ...prev, amount: amount.toString() }));
   };
 
+  // const openModal = () => {
+  //   setIsModalOpen(true);
+  // };
+
   const openModal = () => {
-    setIsModalOpen(true);
+    const completeKyc = localStorage.getItem("kycComplete");
+
+    if (completeKyc === "true") {
+      setIsModalOpen(true);
+      setShowKycPrompt(false);
+    } else {
+      setIsModalOpen(false);
+      setShowKycPrompt(true);
+    }
   };
 
   const closeModal = () => {
@@ -130,7 +143,7 @@ const Airtime = () => {
     setTimeout(() => {
       setShowPinModal(true);
       setShouldCheckPasscode(true);
-      setProceedToSetPin(false); 
+      setProceedToSetPin(false);
     }, 200);
   };
 
@@ -183,6 +196,16 @@ const Airtime = () => {
         </p>
         <img src={airtimebg} className="absolute right-0" alt="" />
       </button>
+
+      {showKycPrompt && (
+        <RouteChangeHandler
+          isVisible={showKycPrompt}
+          onClose={() => {
+            setShowKycPrompt(false);
+          }}
+        />
+      )}
+
       {isModalOpen && (
         <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
           {/* Dialog Box */}
@@ -297,10 +320,7 @@ const Airtime = () => {
                     </div>
 
                     <div className="w-full mt-[1.5rem] mb-[2rem]">
-                      <Button
-                        type="submit"
-                        isDisabled={isFormInvalid}
-                      >
+                      <Button type="submit" isDisabled={isFormInvalid}>
                         Buy Airtime
                       </Button>
                     </div>
@@ -369,18 +389,16 @@ const Airtime = () => {
         )}
 
       {/* After Proceed: Show SetPinModal */}
-      {showPinModal &&
-        !isPasscodeSet() &&
-        proceedToSetPin && (
-          <SetPinModal onClose={() => setShowPinModal(false)} />
-        )}
+      {showPinModal && !isPasscodeSet() && proceedToSetPin && (
+        <SetPinModal onClose={() => setShowPinModal(false)} />
+      )}
 
       {/* Success Modal */}
       {isSuccessModal && (
         <SuccessModal
           title="Recharged"
           message="Your airtime is on its way"
-          onClose={() =>   setIsSuccessModal(false)} 
+          onClose={() => setIsSuccessModal(false)}
         />
       )}
     </>
