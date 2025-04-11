@@ -18,12 +18,10 @@ const customStyles = {
       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
     },
   }),
-  // option: (provided: any, state: any) => ({
-  //   ...provided,
-  //   cursor: "pointer",
-  //   textAlign: "left",
-  //   backgroundColor: state.isSelected ? "#8003A9" : "#fff",
-  // }),
+  menuPortal: (base: any) => ({
+    ...base,
+    zIndex: 9999,
+  }),
   option: (provided: any, state: any) => ({
     ...provided,
     cursor: "pointer",
@@ -82,7 +80,14 @@ const options = [
   { value: "nin", label: "NIN" },
 ];
 
-const RouteChangeHandler = () => {
+type KycModalProps = {
+  isVisible?: boolean;
+  onClose?: () => void;
+};
+
+const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
+  if (!isVisible) return null;
+
   const location = useLocation();
   //   const navigate = useNavigate();
   const [selectedVerificationMeans, setSelectedVerificationMeans] =
@@ -113,13 +118,12 @@ const RouteChangeHandler = () => {
     const timeout = setTimeout(() => {
       const kycComplete = localStorage.getItem("kycComplete");
       if (
-        kycComplete !=="true" &&
-        location.pathname !== "/" &&
-        location.pathname !== "/signup"
+        kycComplete !== "true" &&
+        location.pathname === "/dashboard"
       ) {
         setShowModal(true);
       }
-    }, 1000);
+    }, 100);
 
     return () => clearTimeout(timeout);
   }, [location.pathname]);
@@ -222,9 +226,22 @@ const RouteChangeHandler = () => {
   };
   // Navigate to the KYC completion page
   const proceedToKyc = () => {
+    setSelectedVerificationMeans("");
     setShowModal(false);
     setShowKycModal(true);
     // navigate("/complete-kyc");
+  };
+  const closeShowKyc = () => {
+    setShowKycModal(false);
+    setFormData({
+      verificationMeans: "",
+      bvn: "",
+      nin: "",
+      address: "",
+      state: "",
+      city: "",
+      postalCode: "",
+    });
   };
 
   return (
@@ -235,7 +252,10 @@ const RouteChangeHandler = () => {
             <div className="bg-white rounded-[15px] w-[500px]  p-6 shadow-xl text-center">
               <div className="flex mr-[5px] mt-[5px] flex-row-reverse ">
                 <button
-                  onClick={closeModal}
+                  onClick={() => {
+                    closeModal();
+                    onClose?.();
+                  }}
                   className="text-gray-500 cursor-pointer p-[5px] hover:text-gray-700 text-sm"
                 >
                   <img src={cancel} alt="" />
@@ -276,7 +296,10 @@ const RouteChangeHandler = () => {
                 </h3>
                 <button
                   className="cursor-pointer"
-                  onClick={() => setShowKycModal(false)}
+                  onClick={() => {
+                    closeShowKyc();
+                    onClose?.();
+                  }}
                 >
                   <img src={cancel} alt="" />
                 </button>
@@ -395,6 +418,7 @@ const RouteChangeHandler = () => {
                         options={stateOptions}
                         getOptionLabel={(e) => e.label}
                         getOptionValue={(e) => e.value}
+                        menuPortalTarget={document.body}
                         styles={customStyles}
                         value={options.find((p) => p.value === formData.state)}
                         // onChange={handleSelectChange}
@@ -451,7 +475,7 @@ const RouteChangeHandler = () => {
                       </div>
                     </div>
 
-                    <div className="w-full mt-[1.5rem] mb-[2rem]">
+                    <div className="w-full mt-[0.5rem] mb-[1.5rem]">
                       <Button
                         type="submit"
                         //   isDisabled={isFormInvalid}
