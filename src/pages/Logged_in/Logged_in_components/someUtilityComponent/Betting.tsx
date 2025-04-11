@@ -11,6 +11,7 @@ import api from "../../../../services/api";
 import SuccessModal from "../../SuccessModal";
 import SetPinModal from "./SetPinModal";
 import PinModal from "./PinModal";
+import { useUserStore } from "../../../../store/useUserStore";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const customStyles = {
@@ -46,6 +47,8 @@ const customStyles = {
 };
 
 const Betting = () => {
+  
+    const { user, fetchUser } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     betProvider: "",
@@ -399,7 +402,8 @@ const Betting = () => {
                           Balance:
                         </span>
                         <span className="text-[#0A2E65]/60">₦</span>
-                        <span className="text-[#0A2E65]/60">234,500</span>
+                        <span className="text-[#0A2E65]/60">    {user?.accountBalance.toLocaleString("en-US")}
+                        </span>
                       </div>
                     </div>
                     <div className="w-full mb-4">
@@ -516,6 +520,7 @@ const Betting = () => {
           title="Acount Funded"
           message="The money is on it's way"
           onClose={() => {
+            fetchUser()
             closeModal();
             setIsSuccessModal(false);
           }}

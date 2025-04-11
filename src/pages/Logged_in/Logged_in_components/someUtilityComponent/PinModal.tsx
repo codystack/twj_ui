@@ -29,61 +29,6 @@ const PinModal = ({
     }
   };
 
-  // const validatePin = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const payload = { passCode: pin };
-  //     // Validate PIN
-  //     console.log("my four-digit PIN:", payload);
-  //     const pinResponse = await api.post(
-  //       `${BASE_URL}/Authentication/validatePasscode`,
-  //       { passCode: pin }
-  //     );
-
-  //     if (!pinResponse.data.isSuccessful) {
-  //       setError("Invalid PIN. Please try again.");
-  //       setPin("");
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     // Proceed with Airtime Purchase
-  //     const { network, amount, recipient } = formData;
-
-  //     const purchaseResponse = await api.post(
-  //       `${BASE_URL}/BillsPayment/purchaseAirtime`,
-  //       {
-  //         network: network,
-  //         amount: Number(amount),
-  //         recipient: recipient,
-  //       }
-  //     );
-
-  //     if (!purchaseResponse.data.isSuccessful) {
-  //       throw new Error(purchaseResponse.data.message || "An error occurred");
-  //     }
-
-  //     console.log("submit response", purchaseResponse);
-
-  //     setLoading(false);
-  //     onClose();
-  //     useModalStore.getState().setSuccessModal(true);
-
-  //     // Close modal after a delay
-  //     // 1 second delay before closing
-
-  //     setError("");
-  //     setPin("");
-  //   } catch (error: any) {
-  //     console.log("error from endpoint:", error.response);
-  //     setPin("");
-  //     setError(
-  //       error.response?.data?.message || "An error occurred. Please try again."
-  //     );
-  //     setLoading(false);
-  //   }
-  // };
-
   // Automatically call validatePin when 4 digits are entered
 
   const validatePin = async () => {
@@ -115,10 +60,6 @@ const PinModal = ({
         ("response" in error && error.response?.data?.message) ||
         error.message ||
         "An error occurred. Please try again.";
-      // console.log(
-      //   "error from endpoint:",
-      //   "response" in error && error.response
-      // );
       setPin("");
       setError(errorMessage);
       setLoading(false);

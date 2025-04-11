@@ -12,7 +12,7 @@ import PinModal from "./PinModal";
 import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
 import alarmIcon from "../../../../assets/dashboard_img/profile/Alarm_duotone.svg";
 import api from "../../../../services/api";
-
+import { useUserStore } from "../../../../store/useUserStore";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -61,6 +61,7 @@ type FormData = {
 };
 
 const CableTv = () => {
+  const { user, fetchUser } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     betProvider: "",
@@ -197,8 +198,6 @@ const CableTv = () => {
     }
   }, [serviceDetails]);
 
-
-
   const handleBlur = async (service: any) => {
     setIsLoading(true);
     const selectedValue = service;
@@ -226,7 +225,7 @@ const CableTv = () => {
       );
 
       const data = await response.json();
-     
+
       if (!response.ok) {
         // throw the error manually
         throw new Error(data.message || "Validati failed");
@@ -432,7 +431,10 @@ const CableTv = () => {
                           Balance:
                         </span>
                         <span className="text-[#0A2E65]/60">₦</span>
-                        <span className="text-[#0A2E65]/60">234,500</span>
+                        <span className="text-[#0A2E65]/60">
+
+                          {user?.accountBalance.toLocaleString("en-US")}
+                        </span>
                       </div>
                     </div>
                     <div className="w-full mb-4">
@@ -458,10 +460,7 @@ const CableTv = () => {
                     </div>
 
                     <div className="w-full mt-[1.5rem] mb-[2rem]">
-                      <Button
-                        type="submit"
-                        isDisabled={isFormInvalid}
-                      >
+                      <Button type="submit" isDisabled={isFormInvalid}>
                         Pay for Subscription
                       </Button>
                     </div>
@@ -539,7 +538,10 @@ const CableTv = () => {
         <SuccessModal
           title="Subscribed"
           message="Your subscription is on its way"
-          onClose={() => setIsSuccessModal(false)}
+          onClose={() => {
+            fetchUser();
+            setIsSuccessModal(false);
+          }}
         />
       )}
 

@@ -12,6 +12,7 @@ import api from "../../../../services/api";
 import SuccessModal from "../../SuccessModal";
 import SetPinModal from "./SetPinModal";
 import PinModal from "./PinModal";
+import { useUserStore } from "../../../../store/useUserStore";
 
 const options = [
   { value: "postpaid", label: "postpaid" },
@@ -57,6 +58,7 @@ const customStyles = {
 };
 
 const Electricity = () => {
+  const { user, fetchUser } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     powerProvider: "",
@@ -485,7 +487,9 @@ const Electricity = () => {
                           Balance:
                         </span>
                         <span className="text-[#0A2E65]/60">₦</span>
-                        <span className="text-[#0A2E65]/60">234,500</span>
+                        <span className="text-[#0A2E65]/60">
+                          {user?.accountBalance.toLocaleString("en-US")}
+                        </span>
                       </div>
                     </div>
                     <div className="w-full mb-4">
@@ -593,7 +597,10 @@ const Electricity = () => {
         <SuccessModal
           title="Up Nepa!"
           message="Your electricity token is on its way"
-          onClose={() => setIsSuccessModal(false)}
+          onClose={() => {
+            fetchUser();
+            setIsSuccessModal(false);
+          }}
           button={
             <button className="bg-[#8003A9] text-[16px] cursor-pointer w-[65%] text-white px-4 py-2 rounded">
               View Transaction Detail

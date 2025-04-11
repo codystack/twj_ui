@@ -15,6 +15,7 @@ import SetPinModal from "./SetPinModal";
 import SuccessModal from "../../SuccessModal";
 import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
 import alarmIcon from "../../../../assets/dashboard_img/profile/Alarm_duotone.svg";
+import { useUserStore } from "../../../../store/useUserStore";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -80,6 +81,7 @@ const customStyles = {
 const getOptionLabel = (e: Option) => `${e.name} -  ₦${e.amount}`;
 
 const Data = () => {
+  const { user, fetchUser } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     recipient: "",
@@ -193,7 +195,7 @@ const Data = () => {
 
   const handleImageSelect = async (id: string) => {
     setIsLoading(true);
-   await fetchPlan(id);
+    await fetchPlan(id);
     setIsLoading(false);
   };
 
@@ -360,7 +362,10 @@ const Data = () => {
                           Balance:
                         </span>
                         <span className="text-[#0A2E65]/60">₦</span>
-                        <span className="text-[#0A2E65]/60">234,500</span>
+                        <span className="text-[#0A2E65]/60">
+                          {" "}
+                          {user?.accountBalance.toLocaleString("en-US")}
+                        </span>
                       </div>
                     </div>
                     <div className="w-full mb-4">
@@ -468,6 +473,7 @@ const Data = () => {
           title="Recharged"
           message="Your data is on its way"
           onClose={() => {
+            fetchUser();
             closeModal();
             setIsSuccessModal(false);
           }}

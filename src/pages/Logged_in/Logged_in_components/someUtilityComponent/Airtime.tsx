@@ -14,10 +14,12 @@ import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
 import alarmIcon from "../../../../assets/dashboard_img/profile/Alarm_duotone.svg";
 import api from "../../../../services/api";
 import RouteChangeHandler from "../../../../components/RouteChangeHandler.tsx";
+import { useUserStore } from "../../../../store/useUserStore.ts";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Airtime = () => {
+  const { user, fetchUser } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     network: "",
@@ -294,7 +296,9 @@ const Airtime = () => {
                           Balance:
                         </span>
                         <span className="text-[#0A2E65]/60">₦</span>
-                        <span className="text-[#0A2E65]/60">234,500</span>
+                        <span className="text-[#0A2E65]/60">
+                          {user?.accountBalance.toLocaleString("en-US")}
+                        </span>
                       </div>
                     </div>
 
@@ -398,7 +402,10 @@ const Airtime = () => {
         <SuccessModal
           title="Recharged"
           message="Your airtime is on its way"
-          onClose={() => setIsSuccessModal(false)}
+          onClose={() => {
+            setIsSuccessModal(false);
+            fetchUser();
+          }}
         />
       )}
     </>

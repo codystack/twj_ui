@@ -16,13 +16,20 @@ import Support from "./Logged_in_components/someUtilityComponent/Support";
 import ErrorBoundary from "../../components/error/ErrorBoundry";
 import RouteChangeHandler from "../../components/RouteChangeHandler";
 import { useLocation } from "react-router-dom";
-// import { data } from "react-router"; comment
+import cancel from "../../assets/dashboard_img/profile/cancel.svg"
+import { useUserStore } from "../../store/useUserStore";
+
+
+
+
+
 const Dashboard = () => {
   const location = useLocation();
   const [isHidden, setIsHidden] = useState(false);
   const [showKycModal, setShowKycModal] = useState(false);
   const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
 
+  const { user , fetchUser, } = useUserStore();
   const toggleVisibility = () => {
     setIsHidden((prev) => !prev);
   };
@@ -40,6 +47,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    fetchUser()
     const timeout = setTimeout(() => {
       const kycComplete = localStorage.getItem("kycComplete");
       if (kycComplete !== "true" && location.pathname === "/dashboard") {
@@ -57,10 +65,10 @@ const Dashboard = () => {
           <div className="bg-white p-6 rounded-2xl  w-[500px] text-center">
             <div className="flex justify-end">
               <button
-                // onClick={() => setShowPinModal(false)}
+                onClick={() => setShowWithdrawalModal(false)}
                 className="px-4 py-2 mr-[5px] cursor-pointer "
               >
-                {/* <img src={cancel} alt="" /> */}
+                <img src={cancel} alt="" />
               </button>
             </div>
             <div className="flex flex-col items-center mt-4">
@@ -122,7 +130,7 @@ const Dashboard = () => {
                         {isHidden ? "" : " ₦"}
                       </span>
                       <p className="text-[32px] font-semibold">
-                        {isHidden ? "*******" : "1,550,000"}
+                        {isHidden ? "*******" : user?.accountBalance?.toLocaleString()}
                       </p>
                       <span className="text-[16px] mt-[12px] ml-[-7px] ">
                         {isHidden ? "" : ".00"}
