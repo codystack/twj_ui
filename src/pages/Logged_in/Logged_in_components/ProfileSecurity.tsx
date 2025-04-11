@@ -1,5 +1,5 @@
 // import React from 'react'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ToggleButton from "../../../components/ToggleButton";
 import eye from "../../../assets/auth_imgs/Eye_light.svg";
 import Cancel from "../../../assets/dashboard_img/profile/cancel.svg";
@@ -15,6 +15,17 @@ const ProfileSecurity = () => {
   const [errors, setErrors] = useState({ oldPassword: "", newPassword: "" });
   // State for password visibility
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasscodeSet, setIsPasscodeSet] = useState(false);
+
+  useEffect(() => {
+    const passcodeSet = localStorage.getItem("passcodeSet");
+
+    if (passcodeSet === "true") {
+      setIsPasscodeSet(true);
+    } else {
+      setIsPasscodeSet(false);
+    }
+  }, []);
 
   // const validateField = (fieldName: string, value: string) => {
 
@@ -83,8 +94,7 @@ const ProfileSecurity = () => {
             ...prev,
             newPassword: "Old password must be different from the new password",
           }));
-        }
-         else {
+        } else {
           setErrors((prev) => ({ ...prev, oldPassword: "" }));
         }
         break;
@@ -321,12 +331,29 @@ const ProfileSecurity = () => {
             Change or reset your TWJ PIN
           </p>
         </div>
-        <button
+        {/* <button
           onClick={openChangePinModal}
           className="text-[#8003A9] cursor-pointer"
         >
           Change Pin
-        </button>
+        </button> */}
+        <>
+          {isPasscodeSet ? (
+            <button
+              onClick={openChangePinModal}
+              className="text-[#8003A9] cursor-pointer"
+            >
+              Change PIN
+            </button>
+          ) : (
+            <button
+              // onClick={openSetPinModal}
+              className="text-[#8003A9] cursor-pointer"
+            >
+              Set PIN
+            </button>
+          )}
+        </>
         {/* OTP Modal */}
         <OtpModal
           changePinModal={changePinModal}

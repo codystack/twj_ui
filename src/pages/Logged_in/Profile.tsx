@@ -16,6 +16,7 @@ import PhoneEditModal from "./Logged_in_components/PhoneEditModal";
 import "../../App.css";
 import { useBankStore } from "../../store/useBankStore";
 import { useAuthorizationStore } from "../../store/authorizationStore";
+import { useUserStore } from "../../store/useUserStore";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<"account" | "security" | "bank">(
@@ -38,18 +39,22 @@ const Profile = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
+  const [name, setName] = useState("");
   const [uniqueID, setUniqueID] = useState("");
   const {
     bankList,
     // isFetchingBanks,
     // fetchError,
     fetchBanks,
-  } = useBankStore(); // comment here
+  } = useBankStore();
+
+  const { user, fetchUser } = useUserStore();
   const { accessToken } = useAuthorizationStore(); // Get accessToken from Zustand
 
   useEffect(() => {
     if (accessToken) {
       fetchBanks();
+      fetchUser();
       // console.log("Fetching banks... in useEffect:", bankList);
     }
   }, [accessToken]);
@@ -126,13 +131,25 @@ const Profile = () => {
     const uniqueTWJID = localStorage.getItem("uniqueTWJID");
     const userName = localStorage.getItem("userName");
     const email = localStorage.getItem("email");
+    const name = localStorage.getItem("fullname");
 
     setUniqueID(uniqueTWJID ?? "");
-    setEmail(email ?? "");
     setPhone(phoneNumber ?? "");
     setUserName(userName ?? "");
+    setName(name ?? "");
+    setEmail(email ?? "");
     // setName(storedName ?? "");
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email);
+      setName(`${user.firstName} ${user.lastName}`);
+      setUniqueID(user.twjUserId);
+      setPhone(user.phoneNumber);
+      setUserName(user.userName);
+    }
+  }, [user]);
 
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
@@ -200,8 +217,7 @@ const Profile = () => {
                   </div>
                   <div>
                     <p className="text-[#27014F] text-[24px] font-bold ">
-                     
-                      {/* John Doe */}
+                      {name}
                     </p>
                     <NavLink
                       to="/profile/account_upgrade"
@@ -246,8 +262,17 @@ const Profile = () => {
                     <p className="text-[#7688B4] text-[14px]  ">
                       Date of birth
                     </p>
-                    <p className="text-[#27014F] text-[14px]  ">
-                      {/* 18th Nov 2000 */}
+                    <p className="text-[#27014F] text-[14px]">
+                      {user?.dateOfBirth
+                        ? new Date(user.dateOfBirth).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )
+                        : ""}
                     </p>
                   </div>
                   <NavLink

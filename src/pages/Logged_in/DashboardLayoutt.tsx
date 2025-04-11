@@ -16,12 +16,14 @@ import Referals from "./Referals";
 import LogoutModal from "../../modals/LogoutModal";
 
 import { useAuthStore } from "../../store/authStore";
+import { useUserStore } from "../../store/useUserStore";
 
 const DashboardLayoutt = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const { user } = useUserStore();
   // Get logout function from store
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout); 
@@ -77,6 +79,15 @@ const DashboardLayoutt = () => {
     setEmail(storedEmail ?? ""); // Use empty string if null
     setName(storedName ?? "");
   }, []);
+
+
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email);
+      setName(`${user.firstName} ${user.lastName}`);
+    }
+  }, [user]);
+
 
   return (
     <>

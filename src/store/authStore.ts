@@ -2,6 +2,7 @@ import { create } from "zustand";
 import axios from "axios";
 // import { useAuthorizationStore } from "./authorizationStore";
 import { decryptData, encryptData } from "../services/utils/crypto-utils";
+import { useUserStore } from "./useUserStore";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -204,17 +205,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   login: async (formData, navigate) => {
+    const { fetchUser } = useUserStore.getState();
+
     set({ isLoadingLogin: true, loginError: null });
 
     try {
       const response = await axios.post(`${API_URL}/login`, formData);
       const { data } = response;
-
-      // Store token
-      // localStorage.setItem("authToken", data.data.token.accessToken);
-      console.log( data.data);
-
-      // Extract access & refresh tokens from response
 
       const accessToken = data.data.token.accessToken;
       const refreshToken = data.data.token.refreshToken;
@@ -224,7 +221,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
 
       // Retrieve last visited page
-      
+
       // Encrypt tokens to local storage
       const encryptedAccessToken = encryptData(accessToken);
       const encryptedRefreshToken = encryptData(refreshToken);
@@ -248,21 +245,21 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem("passcodeSet", data.data.passcodeSet);
       localStorage.setItem("kycComplete", data.data.kycComplete);
       localStorage.setItem("isAuthenticated", "true");
-      const lastVisitedRoute = localStorage.getItem("lastVisitedRoute") || "/dashboard";
+      const lastVisitedRoute =
+        localStorage.getItem("lastVisitedRoute") || "/dashboard";
       // Clear the stored route after redirecting
       localStorage.removeItem("lastVisitedRoute");
-  
+
       set({
         isAuthenticated: true,
         isLoadingLogin: false,
         loginSuccess: true,
         loginError: null,
       });
-
-     
+      await fetchUser();
       // Navigate to the last page the user was on
       navigate(lastVisitedRoute);
-   
+
       // navigate("/dashboard");
     } catch (error: any) {
       set({
