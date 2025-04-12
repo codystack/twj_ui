@@ -16,12 +16,10 @@ import Support from "./Logged_in_components/someUtilityComponent/Support";
 import ErrorBoundary from "../../components/error/ErrorBoundry";
 import RouteChangeHandler from "../../components/RouteChangeHandler";
 import { useLocation } from "react-router-dom";
-import cancel from "../../assets/dashboard_img/profile/cancel.svg"
+import cancel from "../../assets/dashboard_img/profile/cancel.svg";
 import { useUserStore } from "../../store/useUserStore";
-
-
-
-
+import copyImg from "../../assets/dashboard_img/withdrawal-copy-.svg";
+import bankImg from "../../assets/dashboard_img/withdrawal_bank-icon.svg";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -29,7 +27,7 @@ const Dashboard = () => {
   const [showKycModal, setShowKycModal] = useState(false);
   const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
 
-  const { user , fetchUser, } = useUserStore();
+  const { user, fetchUser } = useUserStore();
   const toggleVisibility = () => {
     setIsHidden((prev) => !prev);
   };
@@ -47,7 +45,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    fetchUser()
+    fetchUser();
     const timeout = setTimeout(() => {
       const kycComplete = localStorage.getItem("kycComplete");
       if (kycComplete !== "true" && location.pathname === "/dashboard") {
@@ -62,30 +60,35 @@ const Dashboard = () => {
     <>
       {showWithdrawalModal && (
         <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-2xl  w-[500px] text-center">
-            <div className="flex justify-end">
-              <button
-                onClick={() => setShowWithdrawalModal(false)}
-                className="px-4 py-2 mr-[5px] cursor-pointer "
-              >
-                <img src={cancel} alt="" />
-              </button>
-            </div>
-            <div className="flex flex-col items-center mt-4">
-              <div className="w-[70%] flex flex-col justify-center items-center">
-                <div className="my-5">
-                  <span className="bg-[#FF3366]/15 rounded-full w-[5rem] h-[5rem] flex justify-center items-center p-[2px]">
-                    <img
-                      // src={alarmIcon}
-                      className="w-[3.5rem]"
-                      alt="Alarm Icon"
-                    />
-                  </span>
-                </div>
-                <p className="text-[#0A2E65]/60 tracking-[1px] leading-[1.5rem] text-[20px] mb-6">
-                  Setup transation PIN to complete transaction.
-                </p>
-                <div className="flex w-full justify-center gap-4">
+          <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
+            <div className="bg-white p-6 rounded-2xl  w-[600px] text-center">
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowWithdrawalModal(false)}
+                  className="px-4 py-2 mr-[5px] cursor-pointer "
+                >
+                  <img src={cancel} alt="" />
+                </button>
+              </div>
+              <div className="flex flex-col items-center ">
+                <div className="w-[70%] flex flex-col justify-center items-center">
+                  <div className="mt-5 mb-2 ">
+                    <span className="  rounded-full flex justify-center flex-col items-center p-[2px]">
+                      <img
+                        src={bankImg}
+                        className="w-[3.5rem]"
+                        alt="Alarm Icon"
+                      />
+                      <h4 className="text-[#27014F] font-semibold mt-[1rem] text-[24px] ">
+                        Account Top-up
+                      </h4>
+                      <p className="text-[#0A2E65]/60 tracking-[1px]  leading-[1.5rem]  mb-6">
+                        Transfer money to your virtual account wallet
+                        <br /> using the account number below.
+                      </p>
+                    </span>
+                  </div>
+                  {/* <div className="flex w-full justify-center gap-4">
                   <button
                     onClick={() => {
                       // setProceedToSetPin(true);
@@ -95,6 +98,25 @@ const Dashboard = () => {
                   >
                     Setup PIN
                   </button>
+                </div> */}
+                </div>
+
+                <div className="w-[80%]">
+                  <div className="text-[#022B69] w-full flex justify-between   ">
+                    <p>Account Name</p>
+                    <p> TWJHUB/ADEMOLA DONALD</p>
+                  </div>
+                  <div className="text-[#022B69] mt-[10px] w-full flex justify-between   ">
+                    <p>Account Number</p>
+                    <div className="flex items-center justify-center text-[#8003A9]">
+                      <p> 992178539810</p>
+                      <img src={copyImg} alt="" />
+                    </div>
+                  </div>
+                  <div className="text-[#022B69] mt-[10px] mb-[2rem] w-full flex justify-between   ">
+                    <p>Bank Name</p>
+                    <p> Palmpay</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -130,7 +152,9 @@ const Dashboard = () => {
                         {isHidden ? "" : " ₦"}
                       </span>
                       <p className="text-[32px] font-semibold">
-                        {isHidden ? "*******" : user?.accountBalance?.toLocaleString()}
+                        {isHidden
+                          ? "*******"
+                          : user?.accountBalance?.toLocaleString()}
                       </p>
                       <span className="text-[16px] mt-[12px] ml-[-7px] ">
                         {isHidden ? "" : ".00"}

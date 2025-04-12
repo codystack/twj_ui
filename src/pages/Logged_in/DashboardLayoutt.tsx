@@ -43,7 +43,7 @@ const DashboardLayoutt = () => {
     case "/dashboard":
       CurrentPage = <Dashboard />;
       break;
-  
+      case "/wallet":
       CurrentPage = <Wallet />;
       break;
     case "/transactions":
