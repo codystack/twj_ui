@@ -169,21 +169,31 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
     setIsLoading(true);
 
     const { verificationMeans, nin, bvn } = formData;
+
+    const kycValue = verificationMeans === "bvn" ? bvn : nin;
+
     const payload = {
       kycType: verificationMeans,
       kycValue: verificationMeans === "bvn" ? bvn : nin,
     };
 
+    if (!kycValue) {
+      setAccountNameError("Field is required");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await api.post("/Onboarding/verifyIdentity", payload);
-      const data = response;
+      // const data = response;
 
-      const firstName = data?.data.data.firstName;
-      const lastName = data?.data.data.lastName;
+      const firstName = response?.data?.data?.firstName || "";
+      const lastName = response?.data?.data?.lastName || "";
+
       setAccountName(firstName);
       setAccountLastName(lastName);
       // console.log(firstName, lastName);
-      setAccountNameError(null);
+      setAccountNameError("");
       setIsLoading(false);
       return;
     } catch (e) {
@@ -192,7 +202,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
         ("response" in error && error.response?.data?.message) ||
         error.message ||
         "An error occurred. Please try again.";
-      setAccountName(null);
+      setAccountName("");
       // console.log(error);
       setAccountNameError(errorMessage);
     } finally {
@@ -376,7 +386,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
       {isSuccessModal && (
         <SuccessModal
           title=""
-          message="Your verifications details have been submitted successfully."
+          message="Your verification details have been submitted successfully."
           onClose={() => {
             setIsSuccessModal(false);
           }}

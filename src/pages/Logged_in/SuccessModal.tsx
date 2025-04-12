@@ -36,8 +36,11 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
           <h5 className="text-[24px] mt-[1rem] font-semibold text-[#27014F]">
             {title}
           </h5>
-       <div className="w-full flex justify-center ">   <p className="text-[#0A2E65]/60 w-[65%] text-center mt- mb-[1rem]">{message}</p>
-       </div>
+          <div className="w-full flex justify-center ">
+            <p className="text-[#0A2E65]/60 w-[70%] text-[20px] text-center mt- mb-[1rem]">
+              {message}
+            </p>
+          </div>
           {button && <div className="mt-4">{button}</div>}
         </div>
       </div>
