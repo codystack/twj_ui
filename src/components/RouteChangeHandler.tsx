@@ -213,12 +213,9 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
       postalCode: postalCode,
     };
 
-    // console.log(payload);
-
     try {
       const response = await api.post("/Onboarding/completeKyc", payload);
-
-      console.log(response);
+      
       setShowKycModal(false);
       setIsSuccessModal(true);
       localStorage.setItem("kycComplete", "true");
@@ -234,7 +231,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
       setAccountLastName("");
       setAccountName("");
       setLoading(false);
-      return;
+      return response
     } catch (e) {
       const error = e as AxiosError<{ message: string }> | Error;
       const errorMessage =
