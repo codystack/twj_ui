@@ -47,8 +47,7 @@ const customStyles = {
 };
 
 const Betting = () => {
-  
-    const { user, fetchUser } = useUserStore();
+  const { user, fetchUser } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     betProvider: "",
@@ -213,7 +212,7 @@ const Betting = () => {
         }
       );
       const data = await response.json();
-       
+
       if (!response.ok) {
         throw new Error(data.message || "Validati failed");
       }
@@ -358,18 +357,6 @@ const Betting = () => {
                         </p>
                       )}
                     </div>
-
-                    {/* <div className=" text-[14px] mt-[3px] flex  items-center gap-[2px]">
-                      {accountName && <img src={check} alt="Verified" />}
-                      <p className={accountNameError ? "text-red-500" : ""}>
-                        {isLoading ? "Verifying..." : ""}
-                        {accountNameError ? accountNameError : ""}
-                        {accountName && !accountNameError && (
-                          <span className="text-[#0A2E65]">{accountName}</span>
-                        )}
-                      </p>
-                    </div> */}
-
                     <div className="flex mb-2 gap-1.5">
                       {isLoading && (
                         <p className="text-[#27014F] font-medium">
@@ -402,7 +389,8 @@ const Betting = () => {
                           Balance:
                         </span>
                         <span className="text-[#0A2E65]/60">₦</span>
-                        <span className="text-[#0A2E65]/60">    {user?.accountBalance.toLocaleString("en-US")}
+                        <span className="text-[#0A2E65]/60">
+                          {user?.accountBalance.toLocaleString("en-US")}
                         </span>
                       </div>
                     </div>
@@ -520,7 +508,7 @@ const Betting = () => {
           title="Acount Funded"
           message="The money is on it's way"
           onClose={() => {
-            fetchUser()
+            fetchUser();
             closeModal();
             setIsSuccessModal(false);
           }}

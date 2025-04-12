@@ -4,13 +4,13 @@ import Alert from "../../assets/dashboard_img/Bell_pin_light.svg";
 import userIcon from "../../assets/dashboard_img/profile/userIcon.svg";
 import { useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
-import Bills from "./Bills";
-import Crypto from "./Crypto";
+// import Bills from "./Bills";
+// import Crypto from "./Crypto";
 import Wallet from "./Wallet";
 // import Sidebar from "./Sidebar";
 import Transaction from "./Transaction";
 import Profile from "./Profile";
-import Rates from "./Rates";
+// import Rates from "./Rates";
 import AccountUpgrade from "./AccountUpgrade";
 import Referals from "./Referals";
 import LogoutModal from "../../modals/LogoutModal";
@@ -43,13 +43,7 @@ const DashboardLayoutt = () => {
     case "/dashboard":
       CurrentPage = <Dashboard />;
       break;
-    case "/bills_payment":
-      CurrentPage = <Bills />;
-      break;
-    case "/crypto":
-      CurrentPage = <Crypto />;
-      break;
-    case "/wallet":
+  
       CurrentPage = <Wallet />;
       break;
     case "/transactions":
@@ -61,9 +55,9 @@ const DashboardLayoutt = () => {
     case "/profile/account_upgrade":
       CurrentPage = <AccountUpgrade />;
       break;
-    case "/rates":
-      CurrentPage = <Rates />;
-      break;
+    // case "/rates":
+    //   CurrentPage = <Rates />;
+    //   break;
     case "/referrals":
       CurrentPage = <Referals />;
       break;
@@ -164,114 +158,6 @@ const DashboardLayoutt = () => {
                   </NavLink>
                 </li>
 
-                {/* <li className="flex items-center gap-2">
-          <NavLink
-            to="/bills_payment"
-            className={({ isActive }) =>
-              `flex items-center gap-2 transition-colors w-[70%] rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
-                isActive
-                  ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
-                  : "text-[#27014F]"
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M2 21V7C2 5.11438 2 4.17157 2.58579 3.58579C3.17157 3 4.11438 3 6 3H16C16.8317 3 17.4778 3 18.0037 3.02706C15.7519 3.2741 14 5.18245 14 7.5V11.0002L13.9012 20.9671L11 20L8 21L5 20L2 21ZM21 11L16 11V7.5C16 6.11929 17.1193 5 18.5 5C19.8807 5 21 6.11929 21 7.5V11ZM4 7C4 6.44772 4.44772 6 5 6H11C11.5523 6 12 6.44772 12 7C12 7.55228 11.5523 8 11 8H5C4.44772 8 4 7.55228 4 7ZM4 11C4 10.4477 4.44772 10 5 10H7C7.55228 10 8 10.4477 8 11C8 11.5523 7.55228 12 7 12H5C4.44772 12 4 11.5523 4 11ZM4 15C4 14.4477 4.44772 14 5 14H9C9.55228 14 10 14.4477 10 15C10 15.5523 9.55228 16 9 16H5C4.44772 16 4 15.5523 4 15Z"
-                    fill="currentColor" // Ensures color is controlled by CSS
-                    className={`w-6 h-6  ${
-                      isActive ? "#fff" : "text-[#2014F]"
-                    }`}
-                  />
-                </svg>
-                Bills Payment
-              </>
-            )}
-          </NavLink>
-        </li> */}
-
-                {/* <li className="flex items-center gap-2">
-          <NavLink
-            to="/giftcards"
-            className={({ isActive }) =>
-              `flex items-center gap-2 w-[70%] transition-colors rounded-r-[50px] duration-100 py-[10px]  p-[1rem] ${
-                isActive
-                  ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
-                  : "text-[#27014F]"
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="14"
-                  viewBox="0 0 18 14"
-                  fill="none"
-                >
-                  <path
-                    d="M5.625 0.159912H3.09375C2.27324 0.159912 1.48633 0.490206 0.906138 1.07813C0.325948 1.66606 0 2.46346 0 3.29491V5.85991H2.5515C2.30389 5.42526 2.20473 4.91995 2.26939 4.42237C2.33406 3.92479 2.55893 3.46273 2.90914 3.10785C3.25936 2.75296 3.71534 2.52509 4.20637 2.45957C4.69741 2.39404 5.19606 2.49452 5.625 2.74543V0.159912ZM6.75 4.71991V5.85991H7.875C8.0975 5.85991 8.31501 5.79305 8.50002 5.66779C8.68502 5.54252 8.82922 5.36448 8.91436 5.15617C8.99951 4.94786 9.02179 4.71865 8.97838 4.49751C8.93498 4.27637 8.82783 4.07324 8.6705 3.91381C8.51316 3.75438 8.31271 3.6458 8.09448 3.60182C7.87625 3.55783 7.65005 3.58041 7.44448 3.66669C7.23891 3.75297 7.06321 3.89909 6.9396 4.08656C6.81598 4.27403 6.75 4.49444 6.75 4.71991ZM9.8235 5.85991C10.0711 5.42526 10.1703 4.91995 10.1056 4.42237C10.0409 3.92479 9.81607 3.46273 9.46585 3.10785C9.11564 2.75296 8.65966 2.52509 8.16863 2.45957C7.67759 2.39404 7.17894 2.49452 6.75 2.74543V0.159912H14.9063C15.7268 0.159912 16.5137 0.490206 17.0939 1.07813C17.6741 1.66606 18 2.46346 18 3.29491V5.85991H9.8235ZM7.54537 6.99991L9.39825 8.87635C9.50387 8.98338 9.56321 9.12855 9.56321 9.27991C9.56321 9.43128 9.50387 9.57644 9.39825 9.68347C9.29263 9.7905 9.14937 9.85063 9 9.85063C8.85063 9.85063 8.70737 9.7905 8.60175 9.68347L6.75 7.80589V13.8399H14.9063C15.7268 13.8399 16.5137 13.5096 17.0939 12.9217C17.6741 12.3338 18 11.5364 18 10.7049V6.99991H7.54537ZM5.625 13.8399V7.80589L3.77325 9.68347C3.66763 9.7905 3.52437 9.85063 3.375 9.85063C3.22563 9.85063 3.08237 9.7905 2.97675 9.68347C2.87113 9.57644 2.81179 9.43128 2.81179 9.27991C2.81179 9.12855 2.87113 8.98338 2.97675 8.87635L4.82963 6.99991H0V10.7049C0 11.5364 0.325948 12.3338 0.906138 12.9217C1.48633 13.5096 2.27324 13.8399 3.09375 13.8399H5.625ZM5.625 4.71991C5.625 4.49444 5.55902 4.27403 5.4354 4.08656C5.31179 3.89909 5.13609 3.75297 4.93052 3.66669C4.72495 3.58041 4.49875 3.55783 4.28052 3.60182C4.06229 3.6458 3.86184 3.75438 3.70451 3.91381C3.54717 4.07324 3.44002 4.27637 3.39662 4.49751C3.35321 4.71865 3.37549 4.94786 3.46064 5.15617C3.54578 5.36448 3.68998 5.54252 3.87498 5.66779C4.05999 5.79305 4.2775 5.85991 4.5 5.85991H5.625V4.71991Z"
-                    fill="currentColor" // Ensures color is controlled by CSS
-                    className={`w-6 h-6  ${
-                      isActive ? "#fff" : "text-[#2014F]"
-                    }`}
-                  />
-                </svg>
-                Gift Cards
-              </>
-            )}
-          </NavLink>
-        </li> */}
-                {/* <li className="flex items-center gap-2">
-          <NavLink
-            to="/crypto"
-            className={({ isActive }) =>
-              `flex w-[70%] items-center  gap-2 transition-colors rounded-r-[50px] duration-100 py-[10px] p-[1rem] ${
-                isActive
-                  ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
-                  : "text-[#27014F]"
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M9.4875 12.7292C10.4133 12.7258 12.4375 12.7183 12.4142 11.4308C12.3917 10.1142 10.4475 10.1933 9.5 10.2325C9.39334 10.2375 9.30111 10.2406 9.22334 10.2417L9.26667 12.7308C9.33 12.7292 9.40361 12.7286 9.4875 12.7292ZM9.38917 9.10167C10.1617 9.10084 11.8475 9.09917 11.8275 7.92834C11.8058 6.73084 10.1867 6.80167 9.39584 6.83667C9.30695 6.84112 9.22972 6.84389 9.16417 6.845L9.20334 9.1025L9.38917 9.10167Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M7.58013 19.7009C12.9385 21.0367 18.3651 17.7759 19.701 12.4192C21.0368 7.06174 17.7751 1.63508 12.4168 0.300076C7.0618 -1.03659 1.63513 2.22508 0.300134 7.58341C-1.0357 12.9401 2.22513 18.3667 7.58097 19.7017M11.1493 5.51841C12.611 5.62174 13.7743 6.05008 13.9268 7.38674C14.0401 8.36508 13.6401 8.96091 12.991 9.30591C14.0743 9.54591 14.7618 10.1751 14.6535 11.6151C14.5193 13.4026 13.1968 13.9051 11.2985 14.0476L11.3301 15.9226L10.2001 15.9426L10.1676 14.0926C9.87541 14.0981 9.5743 14.1004 9.2643 14.0992L9.29764 15.9576L8.16763 15.9776L8.1343 14.0992L7.81514 14.1017C7.65291 14.1017 7.49014 14.1034 7.3268 14.1067L5.85513 14.1317L6.05597 12.7784C6.05597 12.7784 6.89264 12.7767 6.87764 12.7642C7.19764 12.7576 7.27847 12.5267 7.29597 12.3817L7.2443 9.41674L7.32514 9.41508H7.36347C7.32366 9.41025 7.28356 9.4083 7.24347 9.40924L7.2068 7.29258C7.1593 7.06424 7.00597 6.80091 6.54847 6.80924C6.56097 6.79258 5.7268 6.82341 5.7268 6.82341L5.70514 5.61674L7.26514 5.59008V5.59591C7.50014 5.59146 7.73986 5.58424 7.9843 5.57424L7.95264 3.71674L9.08264 3.69758L9.1143 5.51758C9.41597 5.50674 9.7193 5.49508 10.0168 5.49008L9.98514 3.68174L11.116 3.66174L11.1493 5.51841Z"
-                    fill="currentColor" // Ensures color is controlled by CSS
-                    className={`w-6 h-6  ${
-                      isActive ? "#fff" : "text-[#2014F]"
-                    }`}
-                  />
-                </svg>
-                Crypto
-              </>
-            )}
-          </NavLink>
-        </li> */}
                 <li className="flex items-center gap-2">
                   <NavLink
                     to="/wallet"

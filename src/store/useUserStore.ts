@@ -12,7 +12,7 @@ type User = {
   dateOfBirth: string;
   userName: string;
   twjUserId: string;
-  accountBalance: number;
+  accountBalance: 0;
 };
 
 type UserStore = {
@@ -40,7 +40,7 @@ export const useUserStore = create<UserStore>((set) => ({
           phoneNumber: data.data.phoneNumber,
           dateOfBirth: data.data.dateOfBirth,
           twjUserId: data.data.twjUserId,
-          accountBalance: data.data.walletBalance,
+          accountBalance: data.data.walletBalance ?? 0,
           userName: data.data.username,
         },
         loading: false,

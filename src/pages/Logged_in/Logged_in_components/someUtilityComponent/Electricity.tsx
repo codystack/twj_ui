@@ -195,7 +195,7 @@ const Electricity = () => {
 
   const handleSelectChange = (selectedOption: SingleValue<optionType>) => {
     if (selectedOption) {
-      console.log("Selected ID (value):", selectedOption.value);
+      // console.log("Selected ID (value):", selectedOption.value);
       //   console.log("Selected Title:", selectedOption.title);
       if (selectedOption) {
         setFormData((prev) => ({
@@ -262,7 +262,7 @@ const Electricity = () => {
       service: meterType,
     };
 
-    console.log(requestBody);
+    // console.log(requestBody);
 
     try {
       const response = await fetch(
