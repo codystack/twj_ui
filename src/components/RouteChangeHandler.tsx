@@ -4,6 +4,11 @@ import kyc from "../assets/dashboard_img/kyc.svg";
 import cancel from "../assets/dashboard_img/profile/cancel.svg";
 import Button from "./Button";
 import Select from "react-select";
+import { AxiosError } from "axios";
+import api from "../services/api";
+import { SingleValue } from "react-select";
+import check from "../assets/dashboard_img/profile/Check_round_fill (1).svg";
+import SuccessModal from "../pages/Logged_in/SuccessModal";
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -85,6 +90,8 @@ type KycModalProps = {
   onClose?: () => void;
 };
 
+// const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   if (!isVisible) return null;
 
@@ -92,7 +99,14 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   //   const navigate = useNavigate();
   const [selectedVerificationMeans, setSelectedVerificationMeans] =
     useState("");
+
+  const [accountName, setAccountName] = useState<string | null>(null);
+  const [accountLastName, setAccountLastName] = useState<string | null>(null);
+  const [accountNameError, setAccountNameError] = useState<string | null>(null);
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showKycModal, setShowKycModal] = useState(false);
   const [formData, setFormData] = useState({
     verificationMeans: "",
@@ -117,10 +131,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       const kycComplete = localStorage.getItem("kycComplete");
-      if (
-        kycComplete !== "true" &&
-        location.pathname === "/dashboard"
-      ) {
+      if (kycComplete !== "true" && location.pathname === "/dashboard") {
         setShowModal(true);
       }
     }, 100);
@@ -141,7 +152,99 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
 
   // Close the modal
   const closeModal = () => {
+    setFormData({
+      verificationMeans: "",
+      bvn: "",
+      nin: "",
+      address: "",
+      state: "",
+      city: "",
+      postalCode: "",
+    });
     setShowModal(false);
+  };
+
+  // API logic for onBlur and handlwSubmit
+  const handleBlur = async () => {
+    setIsLoading(true);
+
+    const { verificationMeans, nin, bvn } = formData;
+    const payload = {
+      kycType: verificationMeans,
+      kycValue: verificationMeans === "bvn" ? bvn : nin,
+    };
+
+    try {
+      const response = await api.post("/Onboarding/verifyIdentity", payload);
+      const data = response;
+
+      const firstName = data?.data.data.firstName;
+      const lastName = data?.data.data.lastName;
+      setAccountName(firstName);
+      setAccountLastName(lastName);
+      console.log(firstName, lastName);
+      setAccountNameError(null);
+      setIsLoading(false);
+      return;
+    } catch (e) {
+      const error = e as AxiosError<{ message: string }> | Error;
+      const errorMessage =
+        ("response" in error && error.response?.data?.message) ||
+        error.message ||
+        "An error occurred. Please try again.";
+      setAccountName(null);
+      setAccountNameError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle submit below
+  const handleSubmitt = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const { address, state, city, postalCode } = formData;
+
+    const payload = {
+      street: address,
+      city: city,
+      state: state,
+      postalCode: postalCode,
+    };
+
+    // console.log(payload);
+
+    try {
+      const response = await api.post("/Onboarding/completeKyc", payload);
+
+      console.log(response);
+      setShowKycModal(false);
+      setIsSuccessModal(true);
+      localStorage.setItem("kycComplete", "true");
+      setFormData({
+        verificationMeans: "",
+        bvn: "",
+        nin: "",
+        address: "",
+        state: "",
+        city: "",
+        postalCode: "",
+      });
+      setAccountLastName("");
+      setAccountName("");
+      setLoading(false);
+      return;
+    } catch (e) {
+      const error = e as AxiosError<{ message: string }> | Error;
+      const errorMessage =
+        ("response" in error && error.response?.data?.message) ||
+        error.message ||
+        "An error occurred. Please try again.";
+      console.log(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const validateField = (fieldName: string, value: string) => {
@@ -218,12 +321,25 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
     });
   };
 
+  // const  = (
+  const handleStateSelectChange = (
+    newValue: SingleValue<{ value: string; label: string }>
+  ) => {
+    if (newValue) {
+      setFormData((prev) => ({
+        ...prev,
+        state: newValue.value,
+      }));
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     validateField(name, value);
   };
+
   // Navigate to the KYC completion page
   const proceedToKyc = () => {
     setSelectedVerificationMeans("");
@@ -231,8 +347,11 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
     setShowKycModal(true);
     // navigate("/complete-kyc");
   };
+
   const closeShowKyc = () => {
     setShowKycModal(false);
+    setAccountLastName("");
+    setAccountName("");
     setFormData({
       verificationMeans: "",
       bvn: "",
@@ -244,10 +363,36 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
     });
   };
 
+  const isFormInvalid =
+    Object.values(errors).some((error) => error) ||
+    !formData.city ||
+    !formData.state ||
+    !formData.address ||
+    !formData.postalCode ||
+    !accountName ||
+    !accountLastName;
+
   return (
     <>
+      {/* Success Modal */}
+      {isSuccessModal && (
+        <SuccessModal
+          title=""
+          message="Your verifications details have been submitted successfully."
+          onClose={() => {
+            setIsSuccessModal(false);
+          }}
+        />
+      )}
+
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-[999999]">
+          <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
+        </div>
+      )}
+
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
             <div className="bg-white rounded-[15px] w-[500px]  p-6 shadow-xl text-center">
               <div className="flex mr-[5px] mt-[5px] flex-row-reverse ">
@@ -308,9 +453,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
               <div className="flex justify-center w-full items-center">
                 <div className="w-[70%]">
                   {/* Input Fields */}
-                  <form
-                  //  onSubmit={handleSubmit}
-                  >
+                  <form onSubmit={handleSubmitt}>
                     <p className="text-[#0A2E65]/60 pb-[1px] pl-[5px] text-[15px] text-left mt-[1.5rem] ">
                       Means of Verification
                     </p>
@@ -339,6 +482,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                             name="bvn"
                             value={formData.bvn}
                             onChange={handleInputChange}
+                            onBlur={handleBlur}
                             className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                               errors.bvn
                                 ? "border border-red-600"
@@ -361,6 +505,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                             name="nin"
                             value={formData.nin}
                             onChange={handleInputChange}
+                            onBlur={handleBlur}
                             className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                               errors.nin
                                 ? "border border-red-600"
@@ -371,27 +516,28 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                       </>
                     )}
 
-                    {/*       
-                          <div className="flex mb-2 gap-1.5">
-                            {isLoading && (
-                              <p className="text-[#27014F] font-medium">
-                                Verifying...
-                              </p>
-                            )}
-      
-                            {!isLoading && error && (
-                              <p className="text-red-500 font-medium">{error}</p>
-                            )}
-      
-                            {!isLoading && accName && !error && (
-                              <>
-                                <img src={check} alt="Verified" />
-                                <p className="text-[#27014F] font-medium">
-                                  {accName}
-                                </p>
-                              </>
-                            )}
-                          </div> */}
+                    <div className="flex mb-2 gap-1.5">
+                      {isLoading && (
+                        <p className="text-[#27014F] font-medium">
+                          Verifying...
+                        </p>
+                      )}
+
+                      {!isLoading && accountNameError && (
+                        <p className="text-red-500 font-medium">
+                          {accountNameError}
+                        </p>
+                      )}
+
+                      {!isLoading && accountName && !accountNameError && (
+                        <>
+                          <img src={check} alt="Verified" />
+                          <p className="text-[#27014F] font-medium">
+                            {accountName} {accountLastName}
+                          </p>
+                        </>
+                      )}
+                    </div>
 
                     <p className="text-[#0A2E65]/60 pb-[1px] pl-[5px] text-[15px] text-left  mt-[10px] ">
                       Address
@@ -421,7 +567,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                         menuPortalTarget={document.body}
                         styles={customStyles}
                         value={options.find((p) => p.value === formData.state)}
-                        // onChange={handleSelectChange}
+                        onChange={handleStateSelectChange}
                         placeholder="Select State"
                       />
                     </div>
@@ -433,15 +579,25 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                           City
                         </p>
                         <div className="w-full">
-                          <Select
-                            options={options}
-                            getOptionLabel={(e) => e.label}
-                            getOptionValue={(e) => e.value}
-                            styles={customStyles}
-                            value={options.find(
-                              (option) => option.value === formData.city
-                            )}
-                            placeholder="Provider type"
+                          <input
+                            type="text"
+                            placeholder="Enter City"
+                            name="city"
+                            value={formData.city}
+                            onChange={handleInputChange}
+                            className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                              errors.city
+                                ? "border border-red-600"
+                                : "focus:border-purple-800"
+                            }`}
+                            // options={options}
+                            // getOptionLabel={(e) => e.label}
+                            // getOptionValue={(e) => e.value}
+                            // styles={customStyles}
+                            // value={options.find(
+                            //   (option) => option.value === formData.city
+                            // )}
+                            // placeholder="city"
                           />
                         </div>
                       </div>
@@ -478,7 +634,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                     <div className="w-full mt-[0.5rem] mb-[1.5rem]">
                       <Button
                         type="submit"
-                        //   isDisabled={isFormInvalid}
+                        isDisabled={isFormInvalid}
                         // isLoading={isSubmitting}
                       >
                         Complete KYC
