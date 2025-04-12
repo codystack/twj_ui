@@ -100,9 +100,9 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   const [selectedVerificationMeans, setSelectedVerificationMeans] =
     useState("");
 
-  const [accountName, setAccountName] = useState<string | null>(null);
-  const [accountLastName, setAccountLastName] = useState<string | null>(null);
-  const [accountNameError, setAccountNameError] = useState<string | null>(null);
+  const [accountName, setAccountName] = useState<string | null>("");
+  const [accountLastName, setAccountLastName] = useState<string | null>("");
+  const [accountNameError, setAccountNameError] = useState<string | null>("");
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -182,7 +182,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
       const lastName = data?.data.data.lastName;
       setAccountName(firstName);
       setAccountLastName(lastName);
-      console.log(firstName, lastName);
+      // console.log(firstName, lastName);
       setAccountNameError(null);
       setIsLoading(false);
       return;
@@ -193,6 +193,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
         error.message ||
         "An error occurred. Please try again.";
       setAccountName(null);
+      // console.log(error);
       setAccountNameError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -215,7 +216,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
 
     try {
       const response = await api.post("/Onboarding/completeKyc", payload);
-      
+
       setShowKycModal(false);
       setIsSuccessModal(true);
       localStorage.setItem("kycComplete", "true");
@@ -231,7 +232,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
       setAccountLastName("");
       setAccountName("");
       setLoading(false);
-      return response
+      return response;
     } catch (e) {
       const error = e as AxiosError<{ message: string }> | Error;
       const errorMessage =

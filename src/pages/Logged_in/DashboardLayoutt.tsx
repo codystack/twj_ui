@@ -65,6 +65,14 @@ const DashboardLayoutt = () => {
       CurrentPage = <Dashboard />; 
   }
 
+
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email);
+      setName(`${user.firstName ?? name } ${user.lastName ?? ""}`);
+    }
+  }, [user]);
+
   useEffect(() => {
     // Get email and name from localStorage
     const storedEmail = localStorage.getItem("email");
@@ -75,12 +83,6 @@ const DashboardLayoutt = () => {
   }, []);
 
 
-  useEffect(() => {
-    if (user) {
-      setEmail(user.email);
-      setName(`${user.firstName} ${user.lastName}`);
-    }
-  }, [user]);
 
 
   return (

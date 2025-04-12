@@ -138,13 +138,14 @@ const Profile = () => {
     setUserName(userName ?? "");
     setName(name ?? "");
     setEmail(email ?? "");
+    // console.log(user?.dateOfBirth)
     // setName(storedName ?? "");
   }, []);
 
   useEffect(() => {
     if (user) {
       setEmail(user.email);
-      setName(`${user.firstName} ${user.lastName}`);
+      setName(`${user.firstName ?? ""} ${user.lastName ?? ""}`);
       setUniqueID(user.twjUserId);
       setPhone(user.phoneNumber);
       setUserName(user.userName);
@@ -263,7 +264,8 @@ const Profile = () => {
                       Date of birth
                     </p>
                     <p className="text-[#27014F] text-[14px]">
-                      {user?.dateOfBirth
+                      {user?.dateOfBirth &&
+                      !isNaN(new Date(user.dateOfBirth).getTime())
                         ? new Date(user.dateOfBirth).toLocaleDateString(
                             "en-US",
                             {
