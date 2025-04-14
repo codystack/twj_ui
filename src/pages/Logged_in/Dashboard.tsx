@@ -181,6 +181,12 @@ const Dashboard = () => {
     return () => clearTimeout(timeout);
   }, [location.pathname]);
 
+  const isFormInvalid =
+  Object.values(errors).some((error) => error) ||
+  !formData.amount ||
+  !formData.bank;
+  
+
   return (
     <>
       {showWithdrawalModal && (
@@ -276,7 +282,7 @@ const Dashboard = () => {
                   <div className="w-full mt-[1.5rem] mb-[2rem]">
                     <Button
                       type="submit"
-                      // isDisabled={isFormInvalid}
+                      isDisabled={isFormInvalid}
                       // isLoading={isSubmitting}
                     >
                       Make Withdrawal
