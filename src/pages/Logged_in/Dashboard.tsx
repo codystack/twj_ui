@@ -20,14 +20,80 @@ import cancel from "../../assets/dashboard_img/profile/cancel.svg";
 import { useUserStore } from "../../store/useUserStore";
 import copyImg from "../../assets/dashboard_img/withdrawal-copy-.svg";
 import bankImg from "../../assets/dashboard_img/withdrawal_bank-icon.svg";
+import Select from "react-select";
+import Button from "../../components/Button";
+import { useBankStore } from "../../store/useBankStore";
+
+// const options = [
+//   { value: "postpaid", label: "postpaid" },
+//   { value: "prepaid", label: "prepaid" },
+// ];
+
+const customStyles = {
+  control: (provided: any, state: any) => ({
+    ...provided,
+    borderRadius: "8px",
+    padding: "4px",
+    boxShadow: "none",
+    outline: "none",
+    textAlign: "left",
+    border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
+    "&:hover": {
+      border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
+    },
+  }),
+  // option: (provided: any, state: any) => ({
+  //   ...provided,
+  //   cursor: "pointer",
+  //   textAlign: "left",
+  //   backgroundColor: state.isSelected ? "#8003A9" : "#fff",
+  // }),
+  option: (provided: any, state: any) => ({
+    ...provided,
+    cursor: "pointer",
+    textAlign: "left",
+    backgroundColor: state.isSelected
+      ? "#8003A9"
+      : state.isFocused
+      ? "#F8E0FF" // Hover background color
+      : "#fff",
+    color: state.isSelected ? "#fff" : "#27014F", // Text color change on selection
+  }),
+};
 
 const Dashboard = () => {
   const location = useLocation();
   const [isHidden, setIsHidden] = useState(false);
   const [showKycModal, setShowKycModal] = useState(false);
   const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
-
+  const [showTopupModal, setShowTopupModal] = useState(false);
   const { user, fetchUser } = useUserStore();
+  const { bankList, fetchBanks } = useBankStore();
+  const [copied, setCopied] = useState(false);
+  const [formData, setFormData] = useState({
+    amount: "",
+    bank: "",
+  });
+
+  const [errors, setErrors] = useState({
+    amount: "",
+    bank: "",
+  });
+
+  // const textToCopy = user?.accountNumber ?? "";
+  const textToCopy = user?.accountNumber?.toString() ?? "No account number";
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(String(textToCopy));
+      console.log(textToCopy);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // Hide after 2s
+    } catch (err) {
+      console.error("Failed to copy text: ", err);
+    }
+  };
+
   const toggleVisibility = () => {
     setIsHidden((prev) => !prev);
   };
@@ -36,16 +102,75 @@ const Dashboard = () => {
     const completeKyc = localStorage.getItem("kycComplete");
 
     if (completeKyc === "true") {
-      setShowWithdrawalModal(true);
+      setShowTopupModal(true);
       setShowKycModal(false);
     } else {
-      setShowWithdrawalModal(false);
+      setShowTopupModal(false);
       setShowKycModal(true);
     }
   };
 
+  const openWithdrawalModal = () => {
+    // const completeKyc = localStorage.getItem("kycComplete");
+    fetchBanks();
+    setShowWithdrawalModal(true);
+    // console.log(bankList);
+    // if (completeKyc === "true") {
+    //   setShowTopupModal(true);
+    //   setShowKycModal(false);
+    // } else {
+    //   setShowTopupModal(false);
+    //   setShowKycModal(true);
+    // }
+  };
+
+  const options = bankList.map((bank) => ({
+    label: `${bank.accountNumber} - ${bank.bankName}`,
+    value: bank.accountNumber,
+  }));
+
+  const validateField = (fieldName: string, value: string) => {
+    switch (fieldName) {
+      case "amount":
+        const amountValue = Number(value);
+        if (!value.trim()) {
+          setErrors((prev) => ({
+            ...prev,
+            amount: "Amount is required",
+          }));
+        } else if (isNaN(amountValue)) {
+          setErrors((prev) => ({
+            ...prev,
+            amount: "Amount must be a number",
+          }));
+        } else if (amountValue < 1000) {
+          setErrors((prev) => ({
+            ...prev,
+            amount: "Amount must be greater than or equal to ₦1000",
+          }));
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            amount: "",
+          }));
+        }
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Validate the field on change
+    validateField(name, value);
+  };
+
   useEffect(() => {
     fetchUser();
+    // console.log(textToCopy);
     const timeout = setTimeout(() => {
       const kycComplete = localStorage.getItem("kycComplete");
       if (kycComplete !== "true" && location.pathname === "/dashboard") {
@@ -64,7 +189,112 @@ const Dashboard = () => {
             <div className="bg-white p-6 rounded-2xl  w-[600px] text-center">
               <div className="flex justify-end">
                 <button
-                  onClick={() => setShowWithdrawalModal(false)}
+                  onClick={() => {
+                    setErrors({
+                      amount: "",
+                      bank: "",
+                    });
+                    setFormData({
+                      amount: "",
+                      bank: "",
+                    });
+                    setShowWithdrawalModal(false);
+                  }}
+                  className="px-4 py-2 mr-[5px] cursor-pointer "
+                >
+                  <img src={cancel} alt="" />
+                </button>
+              </div>
+              <form className="flex flex-col items-center ">
+                <div className="w-[70%] flex flex-col justify-center">
+                  <h5 className="text-[#0A2E65]/60  ">Available Balance</h5>
+
+                  <div className="flex items-center justify-center">
+                    <div className=" relative flex items-center gap-2">
+                      <span className=" mb-[8px] mr-[-5px] text-[16px]">₦</span>
+                      <p className="text-[32px] text-center font-semibold">
+                        {user?.accountBalance?.toLocaleString() ?? ""}
+                      </p>
+                      <span className="text-[16px] mt-[12px] ml-[-7px] ">
+                        .00
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className="text-[#0A2E65]/60  ">
+                    How much do you want to withdraw?
+                  </p>
+                  <p className="text-[#0A2E65]/60 mt-[1rem] pl-[5px] text-[15px] pb-[3px] text-left   ">
+                    Amount
+                  </p>
+                  <div className="w-full mb-4">
+                    <input
+                      type="amount"
+                      placeholder="₦0.00"
+                      name="amount"
+                      value={formData.amount}
+                      onChange={handleInputChange}
+                      onBlur={() => validateField("amount", formData.amount)}
+                      className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                        errors.amount
+                          ? "border border-red-600"
+                          : "focus:border-purple-800"
+                      } `}
+                    />
+                    {errors.amount && (
+                      <p className="text-red-500 text-left text-[13px] mt-1">
+                        {errors.amount}
+                      </p>
+                    )}
+                  </div>
+                  <p className="text-[#0A2E65]/60  pl-[5px] text-[15px] pb-[3px] text-left   ">
+                    Bank Account
+                  </p>
+                  <div className="w-full">
+                    <Select
+                      options={options}
+                      getOptionLabel={(e) => e.label}
+                      getOptionValue={(e) => e.value}
+                      // isLoading={isLoading}
+                      onChange={(selected) => {
+                        if (selected) {
+                          setFormData((prev) => ({
+                            ...prev,
+                            bank: selected.value,
+                          }));
+                        }
+                      }}
+                      styles={customStyles}
+                      value={options.find(
+                        (option) => option.value === formData.bank
+                      )}
+                      // onChange={handleSelectChangee}
+                      placeholder="Select Bank Account"
+                    />
+                  </div>
+
+                  <div className="w-full mt-[1.5rem] mb-[2rem]">
+                    <Button
+                      type="submit"
+                      // isDisabled={isFormInvalid}
+                      // isLoading={isSubmitting}
+                    >
+                      Make Withdrawal
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+      {showTopupModal && (
+        <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
+            <div className="bg-white p-6 rounded-2xl  w-[600px] text-center">
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowTopupModal(false)}
                   className="px-4 py-2 mr-[5px] cursor-pointer "
                 >
                   <img src={cancel} alt="" />
@@ -74,11 +304,7 @@ const Dashboard = () => {
                 <div className="w-[70%] flex flex-col justify-center items-center">
                   <div className="mt-5 mb-2 ">
                     <span className="  rounded-full flex justify-center flex-col items-center p-[2px]">
-                      <img
-                        src={bankImg}
-                        className="w-[3.5rem]"
-                        alt="Alarm Icon"
-                      />
+                      <img src={bankImg} className="w-[]" alt="Alarm Icon" />
                       <h4 className="text-[#27014F] font-semibold mt-[1rem] text-[24px] ">
                         Account Top-up
                       </h4>
@@ -88,34 +314,34 @@ const Dashboard = () => {
                       </p>
                     </span>
                   </div>
-                  {/* <div className="flex w-full justify-center gap-4">
-                  <button
-                    onClick={() => {
-                      // setProceedToSetPin(true);
-                      // closeModal();
-                    }}
-                    className="bg-[#8003A9] text-white px-4 w-full text-[18px] py-2 mb-[2rem]  ease-in-out duration-300 cursor-pointer rounded-[5px]  hover:bg-[#8003A9]/90 transition"
-                  >
-                    Setup PIN
-                  </button>
-                </div> */}
                 </div>
 
-                <div className="w-[80%]">
+                <div className="w-[77%]">
                   <div className="text-[#022B69] w-full flex justify-between   ">
                     <p>Account Name</p>
-                    <p> TWJHUB/ADEMOLA DONALD</p>
+                    <p> {user?.accountName ?? ""}</p>
                   </div>
-                  <div className="text-[#022B69] mt-[10px] w-full flex justify-between   ">
+                  <div className="text-[#022B69] mt-[16px] w-full flex justify-between   ">
                     <p>Account Number</p>
-                    <div className="flex items-center justify-center text-[#8003A9]">
-                      <p> 992178539810</p>
-                      <img src={copyImg} alt="" />
+                    <div className="flex reltive items-center justify-center text-[#8003A9]">
+                      <p>{textToCopy}</p>
+                      <button
+                        onClick={handleCopy}
+                        className="ml-[2px] relative cursor-pointer"
+                      >
+                        <img src={copyImg} alt="" />
+                      </button>
+                      {copied && (
+                        <div className="bg-[#32A071]/20 absolute px-[5px] py-[1px] rounded-[2px] bottom-[12.5rem] text-[14px] left-[54rem] text-[#32A071]">
+                          Copied!
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <div className="text-[#022B69] mt-[10px] mb-[2rem] w-full flex justify-between   ">
+
+                  <div className="text-[#022B69] mt-[16px] mb-[2rem] w-full flex justify-between   ">
                     <p>Bank Name</p>
-                    <p> Palmpay</p>
+                    <p> {user?.bankName ?? ""}</p>
                   </div>
                 </div>
               </div>
@@ -180,7 +406,7 @@ const Dashboard = () => {
                 <div className="flex justify-center items-center">
                   <div className=" flex flex-col  w-[8rem] gap-[1rem] rounded-[10px]">
                     <button
-                      // onClick={openModal}
+                      onClick={openWithdrawalModal}
                       className="bg-[#FF3366] relative cursor-pointer text-left text-[#fff] text-[12px] py-[1rem] pr-[2.5rem] w-fit  pl-[5px] rounded-r-[40px] m"
                     >
                       <p> WITHDRAW </p>

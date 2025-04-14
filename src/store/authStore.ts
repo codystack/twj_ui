@@ -300,15 +300,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: (navigate: (path: string) => void) => {
     // Clear local storage
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("uniqueTWJID");
-    localStorage.removeItem("email");
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("phoneNumber");
-    localStorage.removeItem("referralLink");
-    localStorage.removeItem("passcodeSet");
+    localStorage.clear()
 
     // Update authentication state
     set({

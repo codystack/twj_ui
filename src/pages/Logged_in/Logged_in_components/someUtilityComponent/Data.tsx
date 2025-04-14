@@ -119,8 +119,13 @@ const Data = () => {
 
     switch (name) {
       case "amount":
-        if (!value) error = "please enter a valid amount";
-        else if (isNaN(Number(value))) error = "Amount must be a number";
+        if (!value) {
+          error = "Please enter a valid amount";
+        } else if (isNaN(Number(value))) {
+          error = "Amount must be a number";
+        } else if (Number(value) <= 100) {
+          error = "Amount must be greater than 100";
+        }
         break;
 
       case "recipient":
@@ -363,7 +368,7 @@ const Data = () => {
                         </span>
                         <span className="text-[#0A2E65]/60">₦</span>
                         <span className="text-[#0A2E65]/60">
-                          {" "}
+              
                           {user?.accountBalance.toLocaleString("en-US")}
                         </span>
                       </div>
