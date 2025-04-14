@@ -56,6 +56,8 @@ const Airtime = () => {
           error = "Please enter a valid amount";
         } else if (isNaN(Number(value))) {
           error = "Amount must be a number";
+        } else if (Number(value) < 100) {
+          error = "Amount must be greater than ₦100";
         }
         break;
 

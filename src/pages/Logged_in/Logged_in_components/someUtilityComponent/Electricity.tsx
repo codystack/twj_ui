@@ -144,7 +144,7 @@ const Electricity = () => {
         } else if (amountValue < 1000) {
           setErrors((prev) => ({
             ...prev,
-            amount: "Amount must be greater than or equal to 1000",
+            amount: "Amount must be greater than or equal to ₦1000",
           }));
         } else {
           setErrors((prev) => ({

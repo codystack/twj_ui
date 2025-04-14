@@ -110,6 +110,25 @@ const Betting = () => {
         }
         break;
 
+      case "amount":
+        if (!value) {
+          setErrors((prev) => ({
+            ...prev,
+            amount: "This field is required",
+          }));
+        } else if (isNaN(Number(value))) {
+          setErrors((prev) => ({
+            ...prev,
+            amount: "Amount must be a number",
+          }));
+        } else if (Number(value) < 100) {
+          setErrors((prev) => ({
+            ...prev,
+            amount: "Amount must be greater than ₦100",
+          }));
+        }
+        break;
+
       case "betProvider":
         if (!value.trim()) {
           setErrors((prev) => ({
@@ -150,6 +169,10 @@ const Betting = () => {
       ...prevFormData,
       [name]: value,
     }));
+
+
+    
+    validateField(name, value);
   };
 
   // API logics here
@@ -401,7 +424,7 @@ const Betting = () => {
                         name="amount"
                         value={formData.amount}
                         onChange={handleInputChange}
-                        // onBlur={() => validateField("email", formData.customerId)}
+                        onBlur={() => validateField("amount", formData.amount)}
                         className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                           errors.amount
                             ? "border border-red-600"
@@ -409,7 +432,7 @@ const Betting = () => {
                         } `}
                       />
                       {errors.amount && (
-                        <p className="text-red-500 text-[13px] mt-1">
+                        <p className="text-red-500 text-left text-[13px] ">
                           {errors.amount}
                         </p>
                       )}

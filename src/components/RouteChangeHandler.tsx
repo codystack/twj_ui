@@ -9,6 +9,7 @@ import api from "../services/api";
 import { SingleValue } from "react-select";
 import check from "../assets/dashboard_img/profile/Check_round_fill (1).svg";
 import SuccessModal from "../pages/Logged_in/SuccessModal";
+import { useUserStore } from "../store/useUserStore";
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -127,6 +128,8 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
     city: "",
     postalCode: "",
   });
+  const { fetchUser } = useUserStore();
+
   // Show the modal after 5 seconds if KYC is not complete
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -388,6 +391,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
           title=""
           message="Your verification details have been submitted successfully."
           onClose={() => {
+            fetchUser();
             setIsSuccessModal(false);
           }}
         />
