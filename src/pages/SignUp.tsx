@@ -388,12 +388,13 @@ const SignUp = () => {
       </form>
 
       {/* Right: Image with Overlay */}
-      <div className="relative w-[641px] h-[750px] m-[1rem]  ">
+      <div className="relative w-[641px] h-[calc(100vh-2rem)] m-[1rem]  ">
         {/* Background Image */}
         <img
           src={SignUpImg}
           alt="Signup"
-          className="w-full h-full rounded-[3rem] object-cover"
+          className="w-full h-full rounded-[3rem] object-cover object-top mx-auto"
+
         />
 
         {/* Gradient Overlay */}

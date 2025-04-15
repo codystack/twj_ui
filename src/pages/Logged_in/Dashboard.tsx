@@ -182,10 +182,9 @@ const Dashboard = () => {
   }, [location.pathname]);
 
   const isFormInvalid =
-  Object.values(errors).some((error) => error) ||
-  !formData.amount ||
-  !formData.bank;
-  
+    Object.values(errors).some((error) => error) ||
+    !formData.amount ||
+    !formData.bank;
 
   return (
     <>
