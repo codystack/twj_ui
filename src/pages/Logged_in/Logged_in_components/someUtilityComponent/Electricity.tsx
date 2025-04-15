@@ -218,6 +218,7 @@ const Electricity = () => {
     providerName: string;
     shortName: string;
   }
+
   const fetchProviders = async () => {
     setIsLoading(true);
     setProviders([]);
