@@ -6,6 +6,8 @@ import Delete from "../../../assets/dashboard_img/profile/cancel.svg";
 import Copy from "../../../assets/dashboard_img/profile/transactions/Copy_light.svg";
 import HrtBroken from "../../../assets/dashboard_img/profile/transactions/heartbroken.svg";
 import Report from "../../../assets/dashboard_img/profile/transactions/report.svg";
+import Credit from "../../../assets/dashboard_img/BigCredit.svg";
+import Debit from "../../../assets/dashboard_img/BigDebit.svg";
 // import "../../../App.css";
 
 const transactions = [
@@ -73,7 +75,6 @@ type Transaction = {
   reference: string;
   address: string;
 };
-
 
 const CreditDebitTransactions = () => {
   const [selectedTransaction, setSelectedTransaction] =
@@ -190,13 +191,18 @@ const CreditDebitTransactions = () => {
           <div className="flex items-center gap-4 relative">
             {/* Static Logo Container */}
             <div className="relative">
-              <img
-                src={MyStaticLogo}
-                alt="Transaction Logo"
-                className="w-12 h-12"
-              />
-              {/* Unique Direction Arrow (Absolute Positioning) */}
               {transaction.direction === "inward" ? (
+                <img
+                  src={Credit}
+                  alt="Transaction Logo"
+                  className="w-12 h-12"
+                />
+              ) : (
+                <img src={Debit} alt="Outward Transaction" className="" />
+              )}
+
+              {/* Unique Direction Arrow (Absolute Positioning) */}
+              {/* {transaction.direction === "inward" ? (
                 <img
                   src={ArrowDownIcon}
                   alt="Inward Transaction"
@@ -208,12 +214,14 @@ const CreditDebitTransactions = () => {
                   alt="Outward Transaction"
                   className="absolute right-0 bottom-0 w-4 h-4"
                 />
-              )}
+              )} */}
             </div>
 
             {/* Transaction Details */}
             <div>
-              <p className="text-[16px] text-left text-[#27014F]">{transaction.type}</p>
+              <p className="text-[16px] text-left text-[#27014F]">
+                {transaction.type}
+              </p>
               <div className="flex items-center gap-2 text-gray-600">
                 {/* Tracking ID */}
                 <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
