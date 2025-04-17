@@ -106,3 +106,15 @@ input[type="checkbox"]:checked:before {
   /* height: 5px !important;
   width: 2px !important; */
 }
+
+
+
+/* Hide scroll bar */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
