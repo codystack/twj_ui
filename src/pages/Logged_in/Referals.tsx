@@ -118,7 +118,7 @@ const Referals = () => {
       <div className="h-[2rem] bg-[white] w-[78%] fixed  z-20 "></div>
         <div className=" flex py-[2.3%] ml-[3%] mt-[1rem] gap-[2rem]">
           <div className=" flex flex-col gap-[1.5rem]  w-[40%] ">
-            <div className="w-full border  border-[#D0DAE6] relative h-[179px] bg-[#fff] rounded-[10px] flex items-center justify-center">
+            <div className="w-full  bg-[#F2F4FC] border border-[#326CF6] relative h-[179px]  rounded-[10px] flex items-center justify-center">
               <div className="flex flex-col items-center justify-center text-[#fff]">
                 <p className="text-[15px] text-[#27014F] leading-[rem]">
                   Referral bonus

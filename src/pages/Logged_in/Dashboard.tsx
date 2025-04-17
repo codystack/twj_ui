@@ -5,6 +5,7 @@ import virtualCard from "../../assets/dashboard_img/virtualcardxx 1.svg";
 import ArrowUp from "../../assets/dashboard_img/Arrow_up.svg";
 import ArrowDown from "../../assets/dashboard_img/Arrow_down.svg";
 import { useEffect, useState } from "react";
+import Add_icon from "../../assets/dashboard_img/Add_icon.svg"
 import Betting from "./Logged_in_components/someUtilityComponent/Betting";
 import CableTv from "./Logged_in_components/someUtilityComponent/CableTv";
 import Electricity from "./Logged_in_components/someUtilityComponent/Electricity";
@@ -171,6 +172,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    fetchBanks();
     fetchUser();
     // console.log(textToCopy);
     const timeout = setTimeout(() => {
@@ -217,9 +219,10 @@ const Dashboard = () => {
                       setShowWithdrawalModal(false);
                       navigate("/profile", { state: { activeTab: "bank" } });
                     }}
-                    className="px-4 py-2 bg-[#cfcfe8] text-[#0A2E65] rounded-[5px] cursor-pointer transition"
+                    className="px-4 py-2 flex justify-center items-center bg-[#f2f4fc] text-[#0A2E65] rounded-[5px] cursor-pointer transition"
                   >
-                    Add a Bank Account
+                    <img className="w-[1.2rem]" src={Add_icon} alt="" />
+                    <span className="ml-1 text-[16px] text-black">Add a bank account</span>
                   </button>
                 </div>
               ) : (
