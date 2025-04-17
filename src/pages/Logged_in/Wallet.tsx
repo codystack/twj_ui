@@ -365,112 +365,111 @@ const Wallet = () => {
         <div className="flex-1 overflow-y-auto pb-[1.5rem] px-[1rem]">
           <div className="h-[2rem] bg-[white] w-[78%] fixed z-20 "></div>
           <div className=" ml-[2%] py-[2.3%] bg-[#fff]  ">
-          
-          <div className="flex gap-[1.5rem] mt-[1rem]">
-            <div className="flex ">
-              <div className="w-[505px] relative h-[253px] bg-[#27014F] rounded-[10px] flex items-center justify-center">
-                <img
-                  src={Lines}
-                  className="absolute h-[110%] w-full top-0 left-0"
-                  alt=""
-                />
-                <div className="flex flex-col items-center text-[#fff]">
-                  <p className="text-[20px] leading-[rem]">Wallet Balance</p>
-                  <div className=" relative flex items-center gap-2">
-                    <span className=" mb-[8px] mr-[-5px] text-[16px]">
-                      {isHidden ? "" : "₦"}
-                    </span>
-                    <p className="text-[32px] font-semibold">
-                      {isHidden
-                        ? "*******"
-                        : user?.accountBalance?.toLocaleString()}
-                    </p>
-                    <span className="text-[16px] mt-[12px] ml-[-7px] ">
-                      {isHidden ? "" : ".00"}
-                    </span>
+            <div className="flex gap-[1.5rem] mt-[1rem]">
+              <div className="flex ">
+                <div className="w-[505px] relative h-[253px] bg-[#27014F] rounded-[10px] flex items-center justify-center">
+                  <img
+                    src={Lines}
+                    className="absolute h-[110%] w-full top-0 left-0"
+                    alt=""
+                  />
+                  <div className="flex flex-col items-center text-[#fff]">
+                    <p className="text-[20px] leading-[rem]">Wallet Balance</p>
+                    <div className=" relative flex items-center gap-2">
+                      <span className=" mb-[8px] mr-[-5px] text-[16px]">
+                        {isHidden ? "" : "₦"}
+                      </span>
+                      <p className="text-[32px] font-semibold">
+                        {isHidden
+                          ? "*******"
+                          : user?.accountBalance?.toLocaleString()}
+                      </p>
+                      <span className="text-[16px] mt-[12px] ml-[-7px] ">
+                        {isHidden ? "" : ".00"}
+                      </span>
+                      <button
+                        onClick={toggleVisibility}
+                        className=" ml-[2px] cursor-pointer "
+                      >
+                        {isHidden ? (
+                          <img
+                            src={eye_lines}
+                            className=" top-[1.5px]  left-[2px]"
+                            alt=""
+                          />
+                        ) : (
+                          <img src={eye} className="w-full h-full" alt="" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-center items-center">
+                  <div className=" flex flex-col  w-[8rem] gap-[1rem] rounded-[10px]">
                     <button
-                      onClick={toggleVisibility}
-                      className=" ml-[2px] cursor-pointer "
+                      onClick={openWithdrawalModal}
+                      className="bg-[#FF3366] relative cursor-pointer text-left text-[#fff] text-[12px] py-[1rem] pr-[2.5rem] w-fit  pl-[5px] rounded-r-[40px] m"
                     >
-                      {isHidden ? (
-                        <img
-                          src={eye_lines}
-                          className=" top-[1.5px]  left-[2px]"
-                          alt=""
-                        />
-                      ) : (
-                        <img src={eye} className="w-full h-full" alt="" />
-                      )}
+                      <p> WITHDRAW </p>
+                      <img
+                        className="absolute right-[1rem] bottom-[10px]"
+                        src={ArrowUp}
+                        alt=""
+                      />
+                    </button>
+                    <button
+                      onClick={openModal}
+                      className="bg-[#32A071] relative text-left cursor-pointer text-[#fff] text-[12px] p-[1rem] pl-[5px] rounded-r-[40px]"
+                    >
+                      <p> TOP UP WALLET</p>
+                      <img
+                        className="absolute right-[7px] bottom-[12px]"
+                        src={ArrowDown}
+                        alt=""
+                      />
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div className="flex justify-center items-center">
-                <div className=" flex flex-col  w-[8rem] gap-[1rem] rounded-[10px]">
-                  <button
-                    onClick={openWithdrawalModal}
-                    className="bg-[#FF3366] relative cursor-pointer text-left text-[#fff] text-[12px] py-[1rem] pr-[2.5rem] w-fit  pl-[5px] rounded-r-[40px] m"
-                  >
-                    <p> WITHDRAW </p>
-                    <img
-                      className="absolute right-[1rem] bottom-[10px]"
-                      src={ArrowUp}
-                      alt=""
-                    />
-                  </button>
-                  <button
-                    onClick={openModal}
-                    className="bg-[#32A071] relative text-left cursor-pointer text-[#fff] text-[12px] p-[1rem] pl-[5px] rounded-r-[40px]"
-                  >
-                    <p> TOP UP WALLET</p>
-                    <img
-                      className="absolute right-[7px] bottom-[12px]"
-                      src={ArrowDown}
-                      alt=""
-                    />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className=" w-[423px] h-[253px] bg-[#F9FBFF] border-[#E2E8F0] rounded-[10px] ">
-              <div className="flex flex-col items-center justify-center gap-12">
-                <div className=" leading-[1.7rem] mt-10">
-                  <p className="text-[#27014F]">Daily Withdrawal Limit</p>
-                  <p className="text-[#27014F] font-bold text-[24px]">
-                    ₦500,000
-                  </p>
-                </div>
-
-                <div className=" flex gap-10">
-                  <div className=" leading-[1.7rem] ">
-                    <p className="text-[#27014F]">Total Credit</p>
-                    <div className="flex gap-1 justify-center items-center">
-                      <img src={Credit} alt="" />
-                      <p className="text-[#27014F] font-bold text-[24px]">
-                        ₦350,000
-                      </p>
-                    </div>
+              <div className=" w-[423px] h-[253px] bg-[#F9FBFF] border-[#E2E8F0] rounded-[10px] ">
+                <div className="flex flex-col items-center justify-center gap-12">
+                  <div className=" leading-[1.7rem] mt-10">
+                    <p className="text-[#27014F]">Daily Withdrawal Limit</p>
+                    <p className="text-[#27014F] font-bold text-[24px]">
+                      ₦500,000
+                    </p>
                   </div>
-                  <div className=" leading-[1.7rem]">
-                    <p className="text-[#27014F]">Total Debit</p>
-                    <div className="flex gap-1 justify-center items-center">
-                      <img src={Debit} alt="" />
-                      <p className="text-[#27014F] font-bold text-[24px]">
-                        ₦150,000
-                      </p>
+
+                  <div className=" flex gap-10">
+                    <div className=" leading-[1.7rem] ">
+                      <p className="text-[#27014F]">Total Credit</p>
+                      <div className="flex gap-1 justify-center items-center">
+                        <img src={Credit} alt="" />
+                        <p className="text-[#27014F] font-bold text-[24px]">
+                          ₦350,000
+                        </p>
+                      </div>
+                    </div>
+                    <div className=" leading-[1.7rem]">
+                      <p className="text-[#27014F]">Total Debit</p>
+                      <div className="flex gap-1 justify-center items-center">
+                        <img src={Debit} alt="" />
+                        <p className="text-[#27014F] font-bold text-[24px]">
+                          ₦150,000
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
-            <CreditDebitTransactions />
+            <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
+              <CreditDebitTransactions />
+            </div>
           </div>
-        </div>
         </div>
       </div>
     </>
