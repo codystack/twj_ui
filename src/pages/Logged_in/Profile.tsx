@@ -17,6 +17,7 @@ import "../../App.css";
 import { useBankStore } from "../../store/useBankStore";
 import { useAuthorizationStore } from "../../store/authorizationStore";
 import { useUserStore } from "../../store/useUserStore";
+import { useLocation, Location } from "react-router-dom";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<"account" | "security" | "bank">(
@@ -151,6 +152,20 @@ const Profile = () => {
       setUserName(user.userName);
     }
   }, [user]);
+
+  type LocationState = {
+    activeTab?: string;
+  };
+
+  const location = useLocation() as Location & { state: LocationState };
+
+  useEffect(() => {
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab);
+
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">

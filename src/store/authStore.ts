@@ -2,7 +2,7 @@ import { create } from "zustand";
 import axios from "axios";
 // import { useAuthorizationStore } from "./authorizationStore";
 import { decryptData, encryptData } from "../services/utils/crypto-utils";
-import { useUserStore } from "./useUserStore";
+// import { useUserStore } from "./useUserStore";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -205,7 +205,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   login: async (formData, navigate) => {
-    const { fetchUser } = useUserStore.getState();
+    // const { fetchUser } = useUserStore.getState();
 
     set({ isLoadingLogin: true, loginError: null });
 
@@ -256,7 +256,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         loginSuccess: true,
         loginError: null,
       });
-      await fetchUser();
+      // await fetchUser();
       // Navigate to the last page the user was on
       navigate(lastVisitedRoute);
 
