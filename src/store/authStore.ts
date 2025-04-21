@@ -31,8 +31,12 @@ interface AuthState {
   checkAuth: () => void;
   signUp: (
     formData: Record<string, any>,
-    navigate: (path: string) => void
+    navigate: (path: string) => void,
+    refCode?: string | null
   ) => Promise<void>;
+
+  // signUp: (formData: FormDataType, navigate: NavigateFunction,) => Promise<void>;
+
   emailVerification: (token: string) => Promise<void>;
   forgotpasswordVerification: (
     token: string,
@@ -76,13 +80,16 @@ export const useAuthStore = create<AuthState>((set) => ({
   setIsAuthenticated: (status: boolean) => set({ isAuthenticated: status }),
 
   // Signup Function
-  signUp: async (formData, navigate) => {
+  signUp: async (formData, navigate, refCode = null) => {
     set({ isLoading: true, signUpError: null });
 
     try {
-      const response = await axios.post(`${API_URL}/registerUser`, {
-        ...formData,
-      });
+      const response = await axios.post(
+        `${API_URL}/registerUser${refCode ? `?refCode=${refCode}` : ""}`,
+        {
+          ...formData,
+        }
+      );
 
       const { data } = response;
 
@@ -300,7 +307,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: (navigate: (path: string) => void) => {
     // Clear local storage
-    localStorage.clear()
+    localStorage.clear();
 
     // Update authentication state
     set({

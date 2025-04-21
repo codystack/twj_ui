@@ -84,11 +84,11 @@ const SetPinModal = ({ onClose }: { onClose: () => void }) => {
       }
 
       // ✅ Get Zustand functions
-      const { setPasscodeSet, setSetPinModal } = useModalStore.getState();
+      const { setPasscodeSet, setSetPinModal, setSuccessModalStore } = useModalStore.getState();
 
       // ✅ Set passcode in Zustand and localStorage
       setPasscodeSet(true);
-
+      setSuccessModalStore(true)
       setPin("");
       setConfirmPin("");
       setStep("enter");
@@ -230,6 +230,11 @@ const SetPinModal = ({ onClose }: { onClose: () => void }) => {
           </div>
         </div>
       </div>
+
+
+     
+
+
     </>
   );
 };

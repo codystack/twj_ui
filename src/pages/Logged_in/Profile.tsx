@@ -18,6 +18,14 @@ import { useBankStore } from "../../store/useBankStore";
 import { useAuthorizationStore } from "../../store/authorizationStore";
 import { useUserStore } from "../../store/useUserStore";
 import { useLocation, Location } from "react-router-dom";
+import api from "../../services/api";
+import PinModal from "./Logged_in_components/someUtilityComponent/PinModal";
+import SuccessModal from "./SuccessModal";
+import cancel from "../../assets/dashboard_img/profile/cancel.svg";
+import SetPinModal from "./Logged_in_components/someUtilityComponent/SetPinModal";
+import { useModalStore } from "../../store/modalStore";
+
+// const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<"account" | "security" | "bank">(
@@ -42,6 +50,15 @@ const Profile = () => {
   const [userName, setUserName] = useState("");
   const [name, setName] = useState("");
   const [uniqueID, setUniqueID] = useState("");
+  const [phoneToVerify, setPhoneToVerify] = useState<string | undefined>(
+    undefined
+  );
+  const [showPinModal, setShowPinModal] = useState(false);
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
+  const [proceedToSetPin, setProceedToSetPin] = useState(false);
+  // const [showKycPrompt, setShowKycPrompt] = useState(false);
+  const [shouldCheckPasscode, setShouldCheckPasscode] = useState(false);
+  const { isSuccessModalStore, setDataSuccessModal } = useModalStore();
   const {
     bankList,
     // isFetchingBanks,
@@ -122,9 +139,9 @@ const Profile = () => {
     !formData.reason ||
     !formData.password;
 
-  const handlePhoneNumberChange = (newPhoneNumber: string) => {
-    setFormData((prev) => ({ ...prev, phoneNumber: newPhoneNumber }));
-  };
+  // const handlePhoneNumberChange = (newPhoneNumber: string) => {
+  //   setFormData((prev) => ({ ...prev, phoneNumber: newPhoneNumber }));
+  // };
 
   useEffect(() => {
     // Get email and name from localStorage
@@ -166,6 +183,64 @@ const Profile = () => {
       window.history.replaceState({}, document.title);
     }
   }, [location.state]);
+  const isPasscodeSet = () => localStorage.getItem("passcodeSet") === "true";
+  const closeModal = () => {
+    setShowPinModal(false);
+    setPhoneToVerify(undefined);
+  };
+
+  const onVerify = () =>
+    new Promise<void>((resolve, reject) => {
+      (async () => {
+        try {
+          const payload = [
+            {
+              operationType: "Replace",
+              path: "/phoneNumber",
+              op: "replace",
+              from: "",
+              value: phoneToVerify,
+            },
+          ];
+
+          const response = await api.patch(
+            "/Users/updateUserProfiles",
+            payload
+          );
+          // console.log("Phone number updated:", response.data);
+
+          await fetchUser();
+          setIsSuccessModal(true);
+          resolve();
+          return response;
+        } catch (e) {
+          // console.error("Failed to update phone number:", e);
+          reject(e);
+        }
+      })();
+    });
+
+  // const onVerify = async (): Promise<void> => {
+  //   try {
+  //     const payload = [
+  //       {
+  //         operationType: "Replace",
+  //         path: "/phoneNumber",
+  //         op: "replace",
+  //         from: "",
+  //         value: phoneToVerify,
+  //       },
+  //     ];
+
+  //     const response = await api.patch("/Users/updateUserProfiles", payload);
+  //     console.log("Phone number updated:", response.data);
+  //     await fetchUser();
+  //     setIsSuccessModal(true);
+  //   } catch (e) {
+  //     console.error("Failed to update phone number:", e);
+  //     throw e; // rethrow so caller can catch it
+  //   }
+  // };
 
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
@@ -267,12 +342,16 @@ const Profile = () => {
                       </button>
                     </span>
 
-                    <PhoneEditModal
-                      isOpen={isPhoneInputModalOpen}
-                      onClose={() => setIsPhoneInputModalOpen(false)}
-                      phoneNumber={formData.PhoneNumber}
-                      onSave={handlePhoneNumberChange}
-                    />
+                    {isPhoneInputModalOpen && (
+                      <PhoneEditModal
+                        onClose={() => setIsPhoneInputModalOpen(false)}
+                        onSave={(phoneNumber) => {
+                          setPhoneToVerify(phoneNumber);
+                          setShowPinModal(true);
+                          setShouldCheckPasscode(true);
+                        }}
+                      />
+                    )}
                   </div>
                   <div className="flex items-center justify-between mb-[7%] ">
                     <p className="text-[#7688B4] text-[14px]  ">
@@ -459,6 +538,90 @@ const Profile = () => {
                   )}
                 </div>
               </div>
+            )}
+
+            {showPinModal && isPasscodeSet() && (
+              <PinModal
+                onClose={() => {
+                  setShowPinModal(false);
+                  closeModal();
+                }}
+                onVerify={onVerify}
+              />
+            )}
+
+            {/* Inline Info Modal (before SetPinModal) */}
+            {showPinModal &&
+              shouldCheckPasscode &&
+              !isPasscodeSet() &&
+              !proceedToSetPin && (
+                <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
+                  <div className="bg-white p-6 rounded-2xl  w-[500px] text-center">
+                    <div className="flex justify-end">
+                      <button
+                        onClick={() => setShowPinModal(false)}
+                        className="px-4 py-2 mr-[5px] cursor-pointer "
+                      >
+                        <img src={cancel} alt="" />
+                      </button>
+                    </div>
+                    <div className="flex flex-col items-center mt-4">
+                      <div className="w-[70%] flex flex-col justify-center items-center">
+                        <div className="my-5">
+                          <span className="bg-[#FF3366]/15 rounded-full w-[5rem] h-[5rem] flex justify-center items-center p-[2px]">
+                            <img
+                              src={alarmIcon}
+                              className="w-[3.5rem]"
+                              alt="Alarm Icon"
+                            />
+                          </span>
+                        </div>
+                        <p className="text-[#0A2E65]/60 tracking-[1px] leading-[1.5rem] text-[20px] mb-6">
+                          Setup transation PIN to complete transaction.
+                        </p>
+                        <div className="flex w-full justify-center gap-4">
+                          <button
+                            onClick={() => {
+                              closeModal();
+                              setProceedToSetPin(true);
+                            }}
+                            className="bg-[#8003A9] text-white px-4 w-full text-[18px] py-2 mb-[2rem]  ease-in-out duration-300 cursor-pointer rounded-[5px]  hover:bg-[#8003A9]/90 transition"
+                          >
+                            Setup PIN
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            {/* After Proceed: Show SetPinModal */}
+            {proceedToSetPin && (
+              <SetPinModal onClose={() => setProceedToSetPin(false)} />
+            )}
+
+            {/* Success Modal */}
+            {isSuccessModal && (
+              <SuccessModal
+                title="Phone Number Updated"
+                message="Your phone number has been updated successfully!"
+                onClose={() => {
+                  setIsSuccessModal(false);
+                  // fetchUser();
+                }}
+              />
+            )}
+
+            {isSuccessModalStore && (
+              <SuccessModal
+                title="PIN Set Successfully"
+                message="Your transaction PIN has been created!"
+                onClose={() => {
+                  setDataSuccessModal(false);
+                  // fetchUser();
+                }}
+              />
             )}
 
             {/* Dynamic Content Security*/}

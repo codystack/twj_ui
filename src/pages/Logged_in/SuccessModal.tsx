@@ -37,7 +37,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
             {title}
           </h5>
           <div className="w-full flex justify-center ">
-            <p className="text-[#0A2E65]/60 w-[70%] text-[20px] text-center mt- mb-[1rem]">
+            <p className="text-[#0A2E65]/60 w-[70%] text-[20px] text-center leading-5.5 mt-2 mb-[1.5rem]">
               {message}
             </p>
           </div>

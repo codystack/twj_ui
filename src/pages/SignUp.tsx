@@ -11,9 +11,13 @@ import eye from "../assets/auth_imgs/Eye_light.svg";
 import "../App.css";
 import { useAuthStore } from "../store/authStore";
 import eye_lines from "../assets/dashboard_img/Eye_hide_dark.svg";
+import { useLocation } from "react-router-dom";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const refCode = searchParams.get("refCode");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -137,7 +141,9 @@ const SignUp = () => {
       // setIsLoading(true); // Start loading
       try {
         // console.log({ formData });
-        signUp(formData, navigate);
+        // console.log(refCode);
+        // return;
+        signUp(formData, navigate, refCode);
         setFormData({
           userName: "",
           email: "",
