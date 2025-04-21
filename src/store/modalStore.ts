@@ -6,7 +6,7 @@ interface ModalState {
   passcodeSet: boolean;
 
   // Airetime Modal
-  isSuccessModal: boolean;
+  isSuccessModalStore: boolean;
   showPinModal: boolean;
   setPinModal: boolean;
 
@@ -22,7 +22,7 @@ interface ModalState {
   setPasscodeSet: (value: boolean) => void;
 
   // Airtime Modal
-  setSuccessModal: (value: boolean) => void;
+  setSuccessModalStore: (value: boolean) => void;
   setShowPinModal: (value: boolean) => void;
   setSetPinModal: (value: boolean) => void;
 
@@ -43,7 +43,7 @@ export const useModalStore = create<ModalState>((set) => ({
   passcodeSet: localStorage.getItem("passcodeSet") === "true",
 
   // airtime Modal state
-  isSuccessModal: false,
+  isSuccessModalStore: false,
   showPinModal: false,
   setPinModal: false,
 
@@ -63,12 +63,12 @@ export const useModalStore = create<ModalState>((set) => ({
   },
 
   // Airtime Modal state
-  setSuccessModal: (value: boolean) => set({ isSuccessModal: value }),
+  setSuccessModalStore: (value: boolean) => set({ isSuccessModalStore: value }),
   setShowPinModal: (value: boolean) => set({ showPinModal: value }),
   setSetPinModal: (value: boolean) => set({ setPinModal: value }),
 
   // Data Pin Modal state
-  setDataSuccessModal: (value: boolean) => set({ isSuccessModal: value }),
+  setDataSuccessModal: (value: boolean) => set({ isSuccessModalStore: value }),
   setshowDataPinModal: (value: boolean) => set({ showPinModal: value }),
   setSetDataPinModal: (value: boolean) => set({ setPinModal: value }),
 

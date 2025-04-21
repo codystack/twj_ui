@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import Backspace from "../../../../assets/dashboard_img/profile/icon-park-solid_delete-two.svg";
 import lock from "../../../../assets/dashboard_img/profile/Lock.svg";
 import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
-import { useModalStore } from "../../../../store/modalStore.ts";
+// import { useModalStore } from "../../../../store/modalStore.ts";
 import api from "../../../../services/api";
 import { AxiosError } from "axios";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+// const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const PinModal = ({
   onClose,
@@ -35,7 +35,7 @@ const PinModal = ({
     setLoading(true);
     try {
        const pinResponse = await api.post(
-        `${BASE_URL}/Authentication/validatePasscode`,
+        `/Authentication/validatePin`,
         { passCode: pin }
       );
 
@@ -50,7 +50,7 @@ const PinModal = ({
 
       setLoading(false);
       onClose();
-      useModalStore.getState().setSuccessModal(true);
+      // useModalStore.getState().setSuccessModal(true);
 
       setError("");
       setPin("");
