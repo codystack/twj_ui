@@ -235,15 +235,19 @@ const Electricity = () => {
       setProviders(
         options.map((provider) => ({
           value: provider.shortName,
-          title: provider.providerName,
+          title: `${
+            provider.providerName
+          } - (${provider.shortName.toUpperCase()})`,
+      
         }))
       );
       // console.log(providers)
       setIsLoading(false);
       return true;
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       setIsLoading(false);
+      return e;
     }
   };
 
@@ -471,7 +475,7 @@ const Electricity = () => {
                       {[1000, 2000, 5000, 10000, 25000, 50000].map((amount) => (
                         <div
                           key={amount}
-                          className="text-[#8A95BF] border border-[#8A95BF] py-[10px] cursor-pointer rounded-[5px] flex justify-center items-center transition-all duration-300  hover:scale-105"
+                          className="text-[#A4A4A4] border border-[#A4A4A4] py-[10px] cursor-pointer rounded-[5px] flex justify-center items-center transition-all duration-300  hover:scale-105"
                           onClick={() => handleAmountClick(amount)}
                         >
                           <span>₦{amount}</span>

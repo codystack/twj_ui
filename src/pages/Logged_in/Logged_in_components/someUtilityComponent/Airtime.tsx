@@ -281,7 +281,7 @@ const Airtime = () => {
                       {[100, 200, 500, 1000, 3000, 5000].map((amount) => (
                         <div
                           key={amount}
-                          className="text-[#8A95BF] border border-[#8A95BF] py-[10px] cursor-pointer rounded-[5px] flex justify-center items-center transition-all duration-300  hover:scale-105"
+                          className="text-[#A4A4A4] border border-[#A4A4A4] py-[10px] cursor-pointer rounded-[5px] flex justify-center items-center transition-all duration-300  hover:scale-105"
                           onClick={() => handleAmountClick(amount)}
                         >
                           <span>₦{amount}</span>
