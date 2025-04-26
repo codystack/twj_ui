@@ -62,7 +62,8 @@ const Transaction = () => {
       setNoTransaction(noTransactionMessage);
       scrollContainer.current?.scrollTo({ top: 0,});
     } catch (err) {
-      console.error("Error fetching transactions:", err);
+      return err;
+      // console.error("Error fetching transactions:", err);
     } finally {
       setLoading(false);
     }
@@ -83,9 +84,9 @@ const Transaction = () => {
       className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff]  flex flex-col"
     >
       <div ref={scrollContainer} className="flex-1 overflow-y-auto pb-4 px-4">
-        <div className=" flex flex-col  ml-[3%] ">
+        <div className=" flex flex-col  ml-[2%] ">
           {/* Tab Buttons */}
-          <div className="py-[2.3%] fixed w-[75%]  z-20 bg-[#fff]  ">
+          <div className="py-[2.3%] fixed w-[78%]  z-20 bg-[#fff]  ">
             <div className="bg-[#F5F7FA]/99  backdrop-blur-lg  w-[calc(100%-63%)] bg-blur-md flex items-center rounded-[50px] justify-between p-[7px]">
               <button
                 className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${

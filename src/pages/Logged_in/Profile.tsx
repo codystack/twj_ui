@@ -220,33 +220,12 @@ const Profile = () => {
       })();
     });
 
-  // const onVerify = async (): Promise<void> => {
-  //   try {
-  //     const payload = [
-  //       {
-  //         operationType: "Replace",
-  //         path: "/phoneNumber",
-  //         op: "replace",
-  //         from: "",
-  //         value: phoneToVerify,
-  //       },
-  //     ];
-
-  //     const response = await api.patch("/Users/updateUserProfiles", payload);
-  //     console.log("Phone number updated:", response.data);
-  //     await fetchUser();
-  //     setIsSuccessModal(true);
-  //   } catch (e) {
-  //     console.error("Failed to update phone number:", e);
-  //     throw e; // rethrow so caller can catch it
-  //   }
-  // };
-
+ 
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
       <div className="flex-1 overflow-y-auto pb-4 px-4">
         {/* Nav */}
-        <div className=" flex flex-col ml-[3%] ">
+        <div className=" flex flex-col ml-[2%] ">
           {/* Tab Buttons */}
           <div className="py-[2.3%] fixed w-[74.5%] z-20 bg-[#fff]  ">
             <div className="bg-[#F5F7FA] w-[35%] h-[3rem] flex items-center rounded-[50px] justify-between px-[7px]">
