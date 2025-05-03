@@ -10,56 +10,56 @@ import Credit from "../../../assets/dashboard_img/BigCredit.svg";
 import Debit from "../../../assets/dashboard_img/BigDebit.svg";
 // import "../../../App.css";
 
-const transactions = [
-  {
-    id: "QYWTU578HG",
-    type: "Wallet withdrawal",
-    amount: "₦1,880,500",
-    date: "Mar 4, 2025",
-    direction: "outward",
-    status: "success",
-    network: "USDT TRC20",
-    time: "19:45",
-    reference: "324578765342232334",
-    address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
-  },
-  {
-    id: "XYZ123456",
-    type: "Wallet top up",
-    amount: "₦200,500",
-    date: "Mar 3, 2025",
-    direction: "inward",
-    status: "pending",
-    time: "10:42",
-    network: "USDT TRC20",
-    reference: "32457876534123454",
-    address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
-  },
-  {
-    id: "ABCD7890JK",
-    type: "Wallet withdrawal",
-    amount: "₦1,167,500",
-    date: "Mar 2, 2025",
-    direction: "outward",
-    status: "failed",
-    network: "USDT TRC20",
-    reference: "324577564342232334",
-    time: "1:26",
-    address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
-  },
-  {
-    id: "LMNOP45678",
-    type: "Wallet withdrawal",
-    amount: "₦1,200,750",
-    date: "Mar 1, 2025",
-    direction: "outward",
-    status: "success",
-    network: "USDT TRC20",
-    time: "19:45",
-    reference: "324578765342232334",
-    address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
-  },
-];
+// const transactions = [
+//   {
+//     id: "QYWTU578HG",
+//     type: "Wallet withdrawal",
+//     amount: "₦1,880,500",
+//     date: "Mar 4, 2025",
+//     direction: "outward",
+//     status: "success",
+//     network: "USDT TRC20",
+//     time: "19:45",
+//     reference: "324578765342232334",
+//     address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
+//   },
+//   {
+//     id: "XYZ123456",
+//     type: "Wallet top up",
+//     amount: "₦200,500",
+//     date: "Mar 3, 2025",
+//     direction: "inward",
+//     status: "pending",
+//     time: "10:42",
+//     network: "USDT TRC20",
+//     reference: "32457876534123454",
+//     address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
+//   },
+//   {
+//     id: "ABCD7890JK",
+//     type: "Wallet withdrawal",
+//     amount: "₦1,167,500",
+//     date: "Mar 2, 2025",
+//     direction: "outward",
+//     status: "failed",
+//     network: "USDT TRC20",
+//     reference: "324577564342232334",
+//     time: "1:26",
+//     address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
+//   },
+//   {
+//     id: "LMNOP45678",
+//     type: "Wallet withdrawal",
+//     amount: "₦1,200,750",
+//     date: "Mar 1, 2025",
+//     direction: "outward",
+//     status: "success",
+//     network: "USDT TRC20",
+//     time: "19:45",
+//     reference: "324578765342232334",
+//     address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
+//   },
+// ];
 
 type Transaction = {
   id: string;
@@ -76,7 +76,30 @@ type Transaction = {
   address: string;
 };
 
-const CreditDebitTransactions = () => {
+interface TransactionType {
+  name: string;
+  id: string;
+  time: string;
+  amount: number;
+  description: string;
+  status: string;
+  transactionStatus: string;
+  billPaymentCategory: string;
+  transactionDate: string;
+  transactionReference: string;
+
+  date: string;
+  type: string;
+  direction: string;
+  network: string;
+  quantity: string;
+  reference: string;
+}
+
+const CreditDebitTransactions: React.FC<{
+  transactions: TransactionType[];
+  noTransaction: string | null;
+}> = ({ transactions, noTransaction }) => {
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
   const [showReportForm, setShowReportForm] = useState(false);
@@ -181,28 +204,29 @@ const CreditDebitTransactions = () => {
 
   return (
     <div className="space-y-4 p-4">
-      {transactions.map((transaction) => (
-        <button
-          onClick={() => handleOpenModal(transaction)}
-          key={transaction.id}
-          className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  p-4"
-        >
-          {/* Left Side: Static Logo + Transaction Details */}
-          <div className="flex items-center gap-4 relative">
-            {/* Static Logo Container */}
-            <div className="relative">
-              {transaction.direction === "inward" ? (
-                <img
-                  src={Credit}
-                  alt="Transaction Logo"
-                  className="w-12 h-12"
-                />
-              ) : (
-                <img src={Debit} alt="Outward Transaction" className="" />
-              )}
+      {transactions.length > 0 && noTransaction ? (
+        transactions.map((transaction) => (
+          <button
+            onClick={() => handleOpenModal(transaction)}
+            key={transaction.id}
+            className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  p-4"
+          >
+            {/* Left Side: Static Logo + Transaction Details */}
+            <div className="flex items-center gap-4 relative">
+              {/* Static Logo Container */}
+              <div className="relative">
+                {transaction.direction === "inward" ? (
+                  <img
+                    src={Credit}
+                    alt="Transaction Logo"
+                    className="w-12 h-12"
+                  />
+                ) : (
+                  <img src={Debit} alt="Outward Transaction" className="" />
+                )}
 
-              {/* Unique Direction Arrow (Absolute Positioning) */}
-              {/* {transaction.direction === "inward" ? (
+                {/* Unique Direction Arrow (Absolute Positioning) */}
+                {/* {transaction.direction === "inward" ? (
                 <img
                   src={ArrowDownIcon}
                   alt="Inward Transaction"
@@ -215,49 +239,54 @@ const CreditDebitTransactions = () => {
                   className="absolute right-0 bottom-0 w-4 h-4"
                 />
               )} */}
-            </div>
+              </div>
 
-            {/* Transaction Details */}
-            <div>
-              <p className="text-[16px] text-left text-[#27014F]">
-                {transaction.type}
-              </p>
-              <div className="flex items-center gap-2 text-gray-600">
-                {/* Tracking ID */}
-                <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
-                  {transaction.id}
-                </span>
-                {/* Unique Status Icon */}
-                {transaction.status === "success" && (
-                  <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                    SUCCESSFULL
-                  </div>
-                )}
-                {transaction.status === "pending" && (
-                  <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
-                    PENDING
-                  </div>
-                )}
-                {transaction.status === "failed" && (
-                  <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
-                    FAILED
-                  </div>
-                )}
+              {/* Transaction Details */}
+              <div>
+                <p className="text-[16px] text-left text-[#27014F]">
+                  {transaction.type}
+                </p>
+                <div className="flex items-center gap-2 text-gray-600">
+                  {/* Tracking ID */}
+                  <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
+                    {transaction.id}
+                  </span>
+                  {/* Unique Status Icon */}
+                  {transaction.status === "success" && (
+                    <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                      SUCCESSFULL
+                    </div>
+                  )}
+                  {transaction.status === "pending" && (
+                    <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
+                      PENDING
+                    </div>
+                  )}
+                  {transaction.status === "failed" && (
+                    <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
+                      FAILED
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Right Side: Date & Amount */}
-          <div className="text-right">
-            <p className="font-semibold text-[#27014F]  ">
-              {transaction.amount}
-            </p>
-            <p className="text-sm text-[#27014F] text-[11px]">
-              {transaction.date}
-            </p>
-          </div>
-        </button>
-      ))}
+            {/* Right Side: Date & Amount */}
+            <div className="text-right">
+              <p className="font-semibold text-[#27014F]  ">
+                {transaction.amount}
+              </p>
+              <p className="text-sm text-[#27014F] text-[11px]">
+                {transaction.date}
+              </p>
+            </div>
+          </button>
+        ))
+      ) : (
+        <div className="flex items-center justify-center h-[calc(100vh-18rem)]">
+          <p className="text-gray-500 text-lg">{noTransaction}</p>
+        </div>
+      )}
 
       {selectedTransaction && (
         <div className="fixed inset-0 flex items-center justify-center z-50">

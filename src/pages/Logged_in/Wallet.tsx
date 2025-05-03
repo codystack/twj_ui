@@ -28,6 +28,8 @@ import { useBankStore } from "../../store/useBankStore";
 import RouteChangeHandler from "../../components/RouteChangeHandler";
 import CreditDebitTransactions from "./Logged_in_components/CreditDebitTransactions";
 import { useNavigate } from "react-router-dom";
+import api from "../../services/api";
+import ReactPaginate from "react-paginate";
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -64,6 +66,13 @@ const customStyles = {
 const Wallet = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [noTransaction, setNoTransaction] = useState<string | null>(null);
+  const [transaction, setTransaction] = useState<TransactionType[]>([]);
+  const [page, setPage] = useState(0); // react-paginate starts from 0
+  const [totalPages, setTotalPages] = useState(1);
+
   const [isHidden, setIsHidden] = useState(false);
   const [showKycModal, setShowKycModal] = useState(false);
   const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
@@ -181,6 +190,62 @@ const Wallet = () => {
     }
   };
 
+  // Function to fetch wallet transactions based on the activeTab and page
+
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  interface TransactionType {
+    id: string;
+    amount: number;
+    description: string;
+    date: string;
+    type: string;
+    status: string;
+    transactionStatus: string;
+    time: string;
+    name: string;
+    direction: string;
+    billPaymentCategory: string;
+    transactionDate: string;
+    transactionReference: string;
+    network: string;
+    quantity: string;
+    reference: string;
+  }
+
+  const pageSize = 20;
+
+  const fetchTransactions = async (page: number) => {
+    setLoading(true);
+    try {
+      const response = await api.get(
+        `${BASE_URL}/Transaction/allTransactions?TransactionType=${"wallet"}&page=${page}&pageSize=${pageSize}`
+      );
+
+      const transactions: TransactionType[] = response.data.data.data;
+      const noTransactionMessage = response.data.message;
+      const totalRecords = response.data.data.totalRecords;
+
+      setTransaction(transactions);
+      console.log(transactions);
+      setTotalPages(Math.ceil(totalRecords / pageSize));
+      setNoTransaction(noTransactionMessage);
+      // scrollContainer.current?.scrollTo({ top: 0,});
+    } catch (err) {
+      return err;
+      // console.error("Error fetching transactions:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions(page + 1);
+  }, [page]);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPage(selectedItem.selected);
+    // window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const isFormInvalid =
     Object.values(errors).some((error) => error) ||
     !formData.amount ||
@@ -485,8 +550,49 @@ const Wallet = () => {
             </div>
 
             <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
-              <CreditDebitTransactions />
+              {/* {transaction.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-[100%] p-4">
+                  <p className="text-[#0A2E65] mb-4">{noTransaction}</p>
+                </div>
+              ) : (
+                <CreditDebitTransactions />
+              )} */}
+              <CreditDebitTransactions
+                transactions={transaction || []}
+                noTransaction={noTransaction}
+              />
             </div>
+
+            {totalPages >= 2 && (
+              <ReactPaginate
+                previousLabel={"<"}
+                nextLabel={">"}
+                breakLabel={"..."}
+                pageCount={totalPages}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={2}
+                onPageChange={handlePageChange}
+                forcePage={page}
+                containerClassName="flex items-center justify-center mt-4 space-x-2"
+                // Styles for <li> wrapper
+                pageClassName="border border-[#8003A9] rounded-[5px]"
+                previousClassName="border border-[#8003A9] rounded-[5px]"
+                nextClassName="border  border-[#8003A9] rounded-[5px]"
+                breakClassName=""
+                // Styles for <a> inside
+                pageLinkClassName="px-3 py-1 w text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
+                previousLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
+                nextLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
+                breakLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-default"
+                activeLinkClassName="bg-[#8003A9] text-white"
+              />
+            )}
+
+            {loading && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
+                <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
+              </div>
+            )}
           </div>
         </div>
       </div>

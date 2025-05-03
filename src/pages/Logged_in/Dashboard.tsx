@@ -5,7 +5,7 @@ import virtualCard from "../../assets/dashboard_img/virtualcardxx 1.svg";
 import ArrowUp from "../../assets/dashboard_img/Arrow_up.svg";
 import ArrowDown from "../../assets/dashboard_img/Arrow_down.svg";
 import { useEffect, useState } from "react";
-import Add_icon from "../../assets/dashboard_img/Add_icon.svg"
+import Add_icon from "../../assets/dashboard_img/Add_icon.svg";
 import Betting from "./Logged_in_components/someUtilityComponent/Betting";
 import CableTv from "./Logged_in_components/someUtilityComponent/CableTv";
 import Electricity from "./Logged_in_components/someUtilityComponent/Electricity";
@@ -93,7 +93,7 @@ const Dashboard = () => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000); // Hide after 2s
     } catch (err) {
-      return err
+      return err;
       // console.error("Failed to copy text: ", err);
     }
   };
@@ -223,7 +223,9 @@ const Dashboard = () => {
                     className="px-4 py-2 flex justify-center items-center bg-[#f2f4fc] text-[#0A2E65] rounded-[5px] cursor-pointer transition"
                   >
                     <img className="w-[1.2rem]" src={Add_icon} alt="" />
-                    <span className="ml-1 text-[16px] text-black">Add a bank account</span>
+                    <span className="ml-1 text-[16px] text-black">
+                      Add a bank account
+                    </span>
                   </button>
                 </div>
               ) : (
@@ -312,7 +314,10 @@ const Dashboard = () => {
             <div className="bg-white p-6 rounded-2xl  w-[600px] text-center">
               <div className="flex justify-end">
                 <button
-                  onClick={() => setShowTopupModal(false)}
+                  onClick={() => {
+                    fetchUser();
+                    setShowTopupModal(false);
+                  }}
                   className="px-4 py-2 mr-[5px] cursor-pointer "
                 >
                   <img src={cancel} alt="" />
