@@ -79,6 +79,7 @@ const Electricity = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [proceedToSetPin, setProceedToSetPin] = useState(false); // State to track if the user should proceed to set a PIN
   const [shouldCheckPasscode, setShouldCheckPasscode] = useState(false);
   const [showPinModal, setShowPinModal] = useState(false);
@@ -165,6 +166,7 @@ const Electricity = () => {
 
   const closeModal = () => {
     // Clear form logic can be added here
+    setSelectedAmount(null); 
     setIsModalOpen(false);
     setFormData({
       powerProvider: "",
@@ -183,6 +185,7 @@ const Electricity = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedAmount(null); 
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Validate the field on change
@@ -191,6 +194,7 @@ const Electricity = () => {
 
   const handleAmountClick = (amount: number) => {
     setFormData((prev) => ({ ...prev, amount: amount.toString() }));
+    setSelectedAmount(amount);
   };
 
   const handleSelectChange = (selectedOption: SingleValue<optionType>) => {
@@ -473,14 +477,19 @@ const Electricity = () => {
 
                     <div className="grid grid-cols-3 gap-4">
                       {[1000, 2000, 5000, 10000, 25000, 50000].map((amount) => (
-                        <div
-                          key={amount}
-                          className="text-[#A4A4A4] border border-[#A4A4A4] py-[10px] cursor-pointer rounded-[5px] flex justify-center items-center transition-all duration-300  hover:scale-105"
-                          onClick={() => handleAmountClick(amount)}
-                        >
-                          <span>₦{amount}</span>
-                        </div>
-                      ))}
+                         <div
+                         key={amount}
+                         className={`py-[10px] cursor-pointer rounded-[5px] flex justify-center items-center transition-all duration-300 hover:scale-105
+       ${
+         selectedAmount === amount
+           ? "bg-[#F2F4FC] border border-[#326CF6] text-[#27014F] "
+           : "text-[#A4A4A4] border border-[#A4A4A4]"
+       }`}
+                         onClick={() => handleAmountClick(amount)}
+                       >
+                         <span>₦{amount}</span>
+                       </div>
+                     ))}
                     </div>
 
                     <div className=" mt-[10px] flex justify-between items-center">
