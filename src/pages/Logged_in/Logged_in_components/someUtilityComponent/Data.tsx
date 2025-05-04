@@ -311,7 +311,7 @@ const Data = () => {
                       ))}
                     </div>
 
-                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left  ">
+                    <p className="text-[#0A2E65]/60 mt-[10px] pb-[3px] pl-[5px] text-[15px] text-left  ">
                       Data Plan
                     </p>
                     <div>

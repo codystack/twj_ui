@@ -222,13 +222,13 @@ const Wallet = () => {
       );
 
       const transactions: TransactionType[] = response.data.data.data;
-      const noTransactionMessage = response.data.message;
+      // const noTransactionMessage = response.data.message;
       const totalRecords = response.data.data.totalRecords;
 
       setTransaction(transactions);
       console.log(transactions);
       setTotalPages(Math.ceil(totalRecords / pageSize));
-      setNoTransaction(noTransactionMessage);
+      setNoTransaction("No transactions yet!");
       // scrollContainer.current?.scrollTo({ top: 0,});
     } catch (err) {
       return err;
