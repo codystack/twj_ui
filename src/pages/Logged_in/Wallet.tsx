@@ -550,13 +550,6 @@ const Wallet = () => {
             </div>
 
             <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
-              {/* {transaction.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-[100%] p-4">
-                  <p className="text-[#0A2E65] mb-4">{noTransaction}</p>
-                </div>
-              ) : (
-                <CreditDebitTransactions />
-              )} */}
               <CreditDebitTransactions
                 transactions={transaction || []}
                 noTransaction={noTransaction}
