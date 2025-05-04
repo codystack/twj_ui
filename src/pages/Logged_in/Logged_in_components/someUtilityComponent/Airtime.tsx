@@ -33,7 +33,7 @@ const Airtime = () => {
   });
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [proceedToSetPin, setProceedToSetPin] = useState(false); // State to track if the user should proceed to set a PIN
-
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [showPinModal, setShowPinModal] = useState(false);
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [showKycPrompt, setShowKycPrompt] = useState(false);
@@ -85,6 +85,7 @@ const Airtime = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedAmount(null); 
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
@@ -98,6 +99,7 @@ const Airtime = () => {
 
   const handleAmountClick = (amount: number) => {
     setFormData((prev) => ({ ...prev, amount: amount.toString() }));
+    setSelectedAmount(amount);
   };
 
   // const openModal = () => {
@@ -120,6 +122,7 @@ const Airtime = () => {
     setErrors({ amount: "", recipient: "" });
     setActiveImage(null);
     setIsModalOpen(false);
+    setSelectedAmount(null);
   };
 
   useEffect(() => {
@@ -281,7 +284,12 @@ const Airtime = () => {
                       {[100, 200, 500, 1000, 3000, 5000].map((amount) => (
                         <div
                           key={amount}
-                          className="text-[#A4A4A4] border border-[#A4A4A4] py-[10px] cursor-pointer rounded-[5px] flex justify-center items-center transition-all duration-300  hover:scale-105"
+                          className={`py-[10px] cursor-pointer rounded-[5px] flex justify-center items-center transition-all duration-300 hover:scale-105
+        ${
+          selectedAmount === amount
+            ? "bg-[#F2F4FC] border border-[#326CF6] text-[#27014F] "
+            : "text-[#A4A4A4] border border-[#A4A4A4]"
+        }`}
                           onClick={() => handleAmountClick(amount)}
                         >
                           <span>₦{amount}</span>
