@@ -8,6 +8,7 @@ import HrtBroken from "../../../assets/dashboard_img/profile/transactions/heartb
 import Report from "../../../assets/dashboard_img/profile/transactions/report.svg";
 import Credit from "../../../assets/dashboard_img/BigCredit.svg";
 import Debit from "../../../assets/dashboard_img/BigDebit.svg";
+import warning from "../../../assets/dashboard_img/disabled-warning .png";
 // import "../../../App.css";
 
 // const transactions = [
@@ -283,7 +284,8 @@ const CreditDebitTransactions: React.FC<{
           </button>
         ))
       ) : (
-        <div className="flex items-center justify-center h-[calc(100vh-18rem)]">
+        <div className="flex flex-col items-center justify-center h-[calc(100vh-18rem)]">
+          <img src={warning} className="w-[3rem]" alt="" />
           <p className="text-gray-500 text-lg">{noTransaction}</p>
         </div>
       )}
