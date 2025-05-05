@@ -210,6 +210,7 @@ const Wallet = () => {
     network: string;
     quantity: string;
     reference: string;
+    walletCategory: string;
   }
 
   const pageSize = 20;

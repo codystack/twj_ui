@@ -11,57 +11,6 @@ import Debit from "../../../assets/dashboard_img/BigDebit.svg";
 import warning from "../../../assets/dashboard_img/disabled-warning .png";
 // import "../../../App.css";
 
-// const transactions = [
-//   {
-//     id: "QYWTU578HG",
-//     type: "Wallet withdrawal",
-//     amount: "₦1,880,500",
-//     date: "Mar 4, 2025",
-//     direction: "outward",
-//     status: "success",
-//     network: "USDT TRC20",
-//     time: "19:45",
-//     reference: "324578765342232334",
-//     address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
-//   },
-//   {
-//     id: "XYZ123456",
-//     type: "Wallet top up",
-//     amount: "₦200,500",
-//     date: "Mar 3, 2025",
-//     direction: "inward",
-//     status: "pending",
-//     time: "10:42",
-//     network: "USDT TRC20",
-//     reference: "32457876534123454",
-//     address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
-//   },
-//   {
-//     id: "ABCD7890JK",
-//     type: "Wallet withdrawal",
-//     amount: "₦1,167,500",
-//     date: "Mar 2, 2025",
-//     direction: "outward",
-//     status: "failed",
-//     network: "USDT TRC20",
-//     reference: "324577564342232334",
-//     time: "1:26",
-//     address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
-//   },
-//   {
-//     id: "LMNOP45678",
-//     type: "Wallet withdrawal",
-//     amount: "₦1,200,750",
-//     date: "Mar 1, 2025",
-//     direction: "outward",
-//     status: "success",
-//     network: "USDT TRC20",
-//     time: "19:45",
-//     reference: "324578765342232334",
-//     address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
-//   },
-// ];
-
 type Transaction = {
   id: string;
   name: string;
@@ -75,6 +24,7 @@ type Transaction = {
   time: string;
   reference: string;
   address: string;
+  walletCategory: string;
 };
 
 interface TransactionType {
@@ -90,6 +40,7 @@ interface TransactionType {
   transactionReference: string;
 
   date: string;
+  walletCategory: string;
   type: string;
   direction: string;
   network: string;
@@ -216,7 +167,7 @@ const CreditDebitTransactions: React.FC<{
             <div className="flex items-center gap-4 relative">
               {/* Static Logo Container */}
               <div className="relative">
-                {transaction.direction === "inward" ? (
+                {transaction.walletCategory === "TopUp" ? (
                   <img
                     src={Credit}
                     alt="Transaction Logo"
@@ -245,7 +196,10 @@ const CreditDebitTransactions: React.FC<{
               {/* Transaction Details */}
               <div>
                 <p className="text-[16px] text-left text-[#27014F]">
-                  {transaction.type}
+                  Wallet{" "}
+                  {transaction.walletCategory
+                    .replace(/([a-z])([A-Z])/g, "$1 $2") // Add space before capital letters
+                    .toLowerCase()}
                 </p>
                 <div className="flex items-center gap-2 text-gray-600">
                   {/* Tracking ID */}
@@ -253,17 +207,17 @@ const CreditDebitTransactions: React.FC<{
                     {transaction.id}
                   </span>
                   {/* Unique Status Icon */}
-                  {transaction.status === "success" && (
+                  {transaction.transactionStatus === "success" && (
                     <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
                       SUCCESSFULL
                     </div>
                   )}
-                  {transaction.status === "pending" && (
+                  {transaction.transactionStatus === "pending" && (
                     <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
                       PENDING
                     </div>
                   )}
-                  {transaction.status === "failed" && (
+                  {transaction.transactionStatus === "failed" && (
                     <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
                       FAILED
                     </div>
@@ -278,7 +232,10 @@ const CreditDebitTransactions: React.FC<{
                 {transaction.amount}
               </p>
               <p className="text-sm text-[#27014F] text-[11px]">
-                {transaction.date}
+                {new Date(transaction.transactionDate).toLocaleString("en-US", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                })}
               </p>
             </div>
           </button>
