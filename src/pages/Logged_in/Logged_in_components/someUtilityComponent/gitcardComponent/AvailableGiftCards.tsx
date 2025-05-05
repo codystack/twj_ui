@@ -1,0 +1,38 @@
+
+type ModalProps = {
+    onNext: () => void;
+    onBack: () => void;
+    onClose: () => void;
+  };
+
+
+const AvailableGiftCards = ({ onNext, onBack, onClose }: ModalProps) => {
+  return (
+    <div className="text-center space-y-4">
+    <h2 className="text-2xl font-bold text-gray-800">All Available Gift Cards.</h2>
+    <div className="flex justify-center gap-2">
+      <button
+        onClick={onNext}
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+      >
+        Next
+      </button>
+      <button
+        onClick={onBack}
+        disabled
+        className="bg-gray-300 text-gray-500 px-4 py-2 rounded cursor-not-allowed"
+      >
+        Back
+      </button>
+      <button
+        onClick={onClose}
+        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+  )
+}
+
+export default AvailableGiftCards

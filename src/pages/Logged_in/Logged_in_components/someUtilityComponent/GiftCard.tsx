@@ -5,15 +5,26 @@ import { useState } from "react";
 import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
 import BuyGiftCard from "./gitcardComponent/BuyGiftCard";
 import SellGiftCard from "./gitcardComponent/SellGiftCard";
+import AvailableGiftCards from "./gitcardComponent/AvailableGiftCards";
+import UniqueGiftCard from "./gitcardComponent/UniqueGiftCard";
+import BuyUniqueGiftCard from "./gitcardComponent/BuyUniqueGiftCard";
 
 const GiftCard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => {
-    setIsModalOpen(true);
+  const [modalStack, setModalStack] = useState<string[]>([]);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const openNestedModal = (view: string) => {
+    setModalStack((prev) => [...prev, view]);
+    setIsModalOpen(false); // Close the outer modal
   };
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+
+  const goBack = () => setModalStack((prev) => prev.slice(0, -1));
+  const closeNestedModal = () => setModalStack([]);
+
+  const currentView = modalStack[modalStack.length - 1];
 
   return (
     <>
@@ -29,6 +40,8 @@ const GiftCard = () => {
         </p>
         <img src={giftcardsbg} className="absolute right-0" alt="" />
       </button>
+      {/* Main Modal */}
+
       {isModalOpen && (
         <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
           <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
@@ -43,16 +56,61 @@ const GiftCard = () => {
               </div>
 
               <div className="flex justify-center mt-[1.5rem] py-[2.5rem] gap-[20px] items-center">
-               <BuyGiftCard/>
-               <SellGiftCard/>
-    
+                <BuyGiftCard onOpenNestedModal={openNestedModal} />
+                <SellGiftCard />
               </div>
             </div>
           </div>
         </div>
+      )}
+
+      {/* Nested Modals */}
+      {modalStack.length > 0 && (
+        <Modal onClose={closeNestedModal}>
+          {currentView === "giftcard" && (
+            <AvailableGiftCards
+              onNext={() => openNestedModal("register")}
+              onClose={closeNestedModal}
+              onBack={goBack}
+            />
+          )}
+          {currentView === "register" && (
+            <UniqueGiftCard
+              onNext={() => openNestedModal("forgotPassword")}
+              onClose={closeNestedModal}
+              onBack={goBack}
+            />
+          )}
+          {currentView === "forgotPassword" && (
+            <BuyUniqueGiftCard onClose={closeNestedModal} onBack={goBack} />
+          )}
+        </Modal>
       )}
     </>
   );
 };
 
 export default GiftCard;
+
+// Rendered compnents
+
+type ModalWrapperProps = {
+  onClose: () => void;
+  children: React.ReactNode;
+};
+
+const Modal = ({ children, onClose }: ModalWrapperProps) => (
+  <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-50">
+    <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
+      <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-xl"
+        >
+          &times;
+        </button>
+        {children}
+      </div>
+    </div>
+  </div>
+);
