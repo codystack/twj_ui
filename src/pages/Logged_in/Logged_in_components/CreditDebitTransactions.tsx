@@ -207,17 +207,17 @@ const CreditDebitTransactions: React.FC<{
                     {transaction.id}
                   </span>
                   {/* Unique Status Icon */}
-                  {transaction.status === "success" && (
+                  {transaction.transactionStatus === "success" && (
                     <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
                       SUCCESSFULL
                     </div>
                   )}
-                  {transaction.status === "pending" && (
+                  {transaction.transactionStatus === "pending" && (
                     <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
                       PENDING
                     </div>
                   )}
-                  {transaction.status === "failed" && (
+                  {transaction.transactionStatus === "failed" && (
                     <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
                       FAILED
                     </div>
