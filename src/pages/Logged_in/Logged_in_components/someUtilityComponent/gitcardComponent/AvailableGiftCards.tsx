@@ -28,9 +28,6 @@ export const giftCardsData = [
   { id: "12", name: "Nordstrom", image: Nord, price: "$90" },
 ];
 
-
-
-
 type ModalProps = {
   onNext: () => void;
   onBack: () => void;
