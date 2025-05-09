@@ -57,6 +57,9 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
     clearFormData,
     updateFormData,
   } = useGiftCardStore();
+  const count = useGiftCardStore((state) => state.count);
+  const setCount = useGiftCardStore((state) => state.setCount);
+
 
   const [errors, setErrors] = useState({
     phoneNumber: "",
@@ -64,7 +67,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
     email: "",
     name: "",
   });
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
   const amount = parseFloat(formData.amount || "0");
 
   //  when count or amount changes
@@ -77,11 +80,15 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
     setTotalAmount(total);
   }, [count, amount]);
 
-  const handleIncrement = () => setCount((prev) => prev + 1);
+
+
+  const handleIncrement = () => setCount(count + 1);
 
   const handleDecrement = () => {
-    if (count > 0) setCount((prev) => prev - 1);
+    if (count > 0) setCount(count - 1);
   };
+
+
 
   const validateField = (name: string, value: string | undefined) => {
     let error = "";
@@ -218,11 +225,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                     } as React.CSSProperties
                   }
                 />
-                {/* {errors.phoneNumber && (
-                  <p className="text-red-600 text-xs mt-1">
-                    {errors.phoneNumber}
-                  </p>
-                )} */}
+               
               </div>
 
               <div className="w-full">
