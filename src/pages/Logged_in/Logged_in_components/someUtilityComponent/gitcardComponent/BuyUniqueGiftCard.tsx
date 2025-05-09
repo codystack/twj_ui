@@ -1,7 +1,7 @@
 import cancel from "../../../../../assets/dashboard_img/profile/cancel.svg";
 import { useGiftCardStore } from "../../../../../store/useGiftCardStore";
 import back from "../../../../../assets/dashboard_img/Expand_left_light.svg";
-import { giftCardsData } from "../gitcardComponent/AvailableGiftCards";
+// import { giftCardsData } from "../gitcardComponent/AvailableGiftCards";
 
 type ModalProps = {
   onNext: () => void;
@@ -13,6 +13,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
   const {
     selectedGiftCardId,
     // totalAmount,
+    allCards,
     count,
     formData,
     setCount,
@@ -21,8 +22,8 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
     clearFormData,
   } = useGiftCardStore();
 
-  const selectedCard = giftCardsData.find(
-    (card) => card.id === selectedGiftCardId
+  const selectedCard = allCards.find(
+    (card) => card.productId.toString() === selectedGiftCardId
   );
 
   if (!selectedCard)
@@ -30,7 +31,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
 
   return (
     <div className="text-center space-y-4">
-      <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
+      <div className="flex items-center pt-6 border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
         <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
           Gift Cards
         </h3>
@@ -57,15 +58,15 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
       <div className="grid grid-cols-5 mt-[2rem] px-[1rem] gap-4 ">
         <div className="col-span-2 ">
           <img
-            src={selectedCard.image}
-            alt={selectedCard.name}
-            className="w-full max-w-full object-contain"
+            src={selectedCard.logoUrls[0]}
+            alt={selectedCard.productName}
+            className="w-full rounded-[10px] max-w-full object-contain"
           />
         </div>
 
         <div className="col-span-3 ">
           <h2 className="text-[30px] text-left mt-[-10px] font-bold text-black">
-            {selectedCard.name}
+            {selectedCard.productName}
           </h2>
 
           <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">

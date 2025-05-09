@@ -1,5 +1,5 @@
 import { useGiftCardStore } from "../../../../../store/useGiftCardStore";
-import { giftCardsData } from "../gitcardComponent/AvailableGiftCards";
+// import { giftCardsData } from "../gitcardComponent/AvailableGiftCards";
 import cancel from "../../../../../assets/dashboard_img/profile/cancel.svg";
 import back from "../../../../../assets/dashboard_img/Expand_left_light.svg";
 import { useEffect, useState } from "react";
@@ -51,6 +51,7 @@ type ModalProps = {
 
 const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
   const {
+    allCards,
     selectedGiftCardId,
     formData,
     setTotalAmount,
@@ -149,8 +150,8 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
     }
   };
 
-  const selectedCard = giftCardsData.find(
-    (card) => card.id === selectedGiftCardId
+  const selectedCard = allCards.find(
+    (card) => card.productId.toString() === selectedGiftCardId
   );
 
   if (!selectedCard)
@@ -158,7 +159,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
 
   return (
     <div className="text-center space-y-4">
-      <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
+      <div className="flex items-center pt-6 border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
         <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
           Gift Cards
         </h3>
@@ -186,9 +187,9 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
       <div className="grid grid-cols-5 px-[1rem] gap-4 ">
         <div className="col-span-2 ">
           <img
-            src={selectedCard.image}
-            alt={selectedCard.name}
-            className="w-full max-w-full object-contain"
+            src={selectedCard.logoUrls[0]}
+            alt={selectedCard.productName}
+            className="w-full rounded-[10px] max-w-full object-contain"
           />
 
           <div className="w-full flex mt-[1rem] ml-[7px] ">
@@ -199,7 +200,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
         </div>
         <div className="col-span-3 ">
           <h2 className="text-[30px] text-left mt-[-10px] font-bold text-black">
-            {selectedCard.name}
+            {selectedCard.productName}
           </h2>
 
           <div className="flex items-center justify-items-start w-full ">
@@ -315,7 +316,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
               <p>Estimated price</p>
 
               <p className=" text-left text-gray-600">
-                Price: {selectedCard.price}
+                Price: {selectedCard.fixedRecipientDenominations}
               </p>
             </div>
           </div>
