@@ -1,17 +1,4 @@
-// // stores/useGiftCardStore.ts
-// import { create } from "zustand";
 
-// type GiftCardStore = {
-//   selectedGiftCardId: string | null;
-//   setSelectedGiftCardId: (id: string) => void;
-//   clearSelectedGiftCardId: () => void;
-// };
-
-// export const useGiftCardStore = create<GiftCardStore>((set) => ({
-//   selectedGiftCardId: null,
-//   setSelectedGiftCardId: (id) => set({ selectedGiftCardId: id }),
-//   clearSelectedGiftCardId: () => set({ selectedGiftCardId: null }),
-// }));
 
 import { create } from "zustand";
 
@@ -31,6 +18,9 @@ type GiftCardStore = {
   clearFormData: () => void;
   totalAmount: number;
   setTotalAmount: (value: number) => void;
+  
+  count: number;
+  setCount: (value: number) => void;
 };
 
 export const useGiftCardStore = create<GiftCardStore>((set) => ({
@@ -62,4 +52,7 @@ export const useGiftCardStore = create<GiftCardStore>((set) => ({
 
   totalAmount: 0,
   setTotalAmount: (value) => set({ totalAmount: value }),
+
+  count: 1,
+  setCount: (value) => set({ count: value }),
 }));

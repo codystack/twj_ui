@@ -13,7 +13,9 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
   const {
     selectedGiftCardId,
     // totalAmount,
+    count,
     formData,
+    setCount,
     // setTotalAmount,
     // updateFormData,
     clearFormData,
@@ -35,6 +37,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
         <button
           className="cursor-pointer"
           onClick={() => {
+            setCount(1);
             clearFormData();
             onClose();
           }}
@@ -92,7 +95,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
           </div>
           <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
             <p className="text-[#7688B4] text-left tracking-[1px]">Quatity:</p>
-            <p className="text-[#27014F]">1</p>
+            <p className="text-[#27014F]">{count}</p>
           </div>
           <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
             <p className="text-[#7688B4] text-left tracking-[1px]">Subtotal:</p>
