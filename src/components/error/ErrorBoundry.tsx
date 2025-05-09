@@ -1,30 +1,4 @@
-// import React, { Component, ErrorInfo } from 'react';
 
-// class ErrorBoundary extends Component<any, { hasError: boolean }> {
-//   constructor(props: any) {
-//     super(props);
-//     this.state = { hasError: false };
-//   }
-
-//   static getDerivedStateFromError(error: Error) {
-//     return { hasError: true };
-//   }
-
-//   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-//     console.log("Error caught in ErrorBoundary:", error);
-//     console.log(errorInfo);
-//   }
-
-//   render() {
-//     if (this.state.hasError) {
-//       return <h2>Something went wrong with the modal.</h2>; // Customize your fallback UI
-//     }
-
-//     return this.props.children;
-//   }
-// }
-
-// export default ErrorBoundary;
 
 import { Component, ErrorInfo } from "react";
 

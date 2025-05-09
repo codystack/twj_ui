@@ -9,6 +9,59 @@ type GiftCardFormData = {
   name: string;
 };
 
+
+// types for all gift cards
+interface Countrys {
+  isoName: string;
+  name: string;
+  flagUrl: string;
+}
+
+interface Category {
+  id: number;
+  name: string;
+}
+
+interface Brand {
+  brandId: number;
+  brandName: string;
+}
+
+interface RedeemInstruction {
+  concise: string;
+  verbose: string;
+}
+
+interface GiftCard {
+  productId: number;
+  productName: string;
+  global: boolean;
+  status: string;
+  supportsPreOrder: boolean;
+  senderFee: number;
+  senderFeePercentage: number;
+  discountPercentage: number;
+  denominationType: string;
+  recipientCurrencyCode: string;
+  senderCurrencyCode: string;
+  minRecipientDenomination: number | null;
+  maxRecipientDenomination: number | null;
+  minSenderDenomination: number | null;
+  maxSenderDenomination: number | null;
+  fixedRecipientDenominations: number[];
+  fixedSenderDenominations: number[];
+  fixedRecipientToSenderDenominationsMap: Record<string, number>;
+  metadata: Record<string, any>;
+  logoUrls: string[];
+  brand: Brand;
+  category: Category;
+  country: Countrys;
+  redeemInstruction: RedeemInstruction;
+  additionalRequirements: {
+    userIdRequired: boolean;
+  };
+}
+
 type GiftCardStore = {
   selectedGiftCardId: string | null;
   formData: GiftCardFormData;
@@ -21,6 +74,10 @@ type GiftCardStore = {
   
   count: number;
   setCount: (value: number) => void;
+
+  
+  allCards: GiftCard[];
+  setAllCards: (cards: GiftCard[]) => void;
 };
 
 export const useGiftCardStore = create<GiftCardStore>((set) => ({
@@ -55,4 +112,8 @@ export const useGiftCardStore = create<GiftCardStore>((set) => ({
 
   count: 1,
   setCount: (value) => set({ count: value }),
+
+  
+  allCards: [],
+  setAllCards: (cards) => set({ allCards: cards }),
 }));
