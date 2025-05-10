@@ -107,13 +107,7 @@ type ModalWrapperProps = {
 const Modal = ({ children,  }: ModalWrapperProps) => (
   <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-50">
     <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
-      <div className="bg-white overflow-y-auto w-[800px] h-[calc(100vh-4rem)]  z-[50]   p-6 pt-0 rounded-[15px] shadow-lg flex flex-col">
-        {/* <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-xl"
-        >
-          &times;
-        </button> */}
+      <div className="bg-white overflow-y-aut w-[800px] h-[calc(100vh-2rem)]  z-[50]   p-6 pt-0 rounded-[15px] shadow-lg flex flex-col">
         {children}
       </div>
     </div>

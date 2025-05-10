@@ -76,8 +76,12 @@ type GiftCardStore = {
   setCount: (value: number) => void;
 
   
+  // allCards: GiftCard[];
+  // setAllCards: (cards: GiftCard[]) => void;
   allCards: GiftCard[];
-  setAllCards: (cards: GiftCard[]) => void;
+  setAllCards: (cards: GiftCard[] | ((prev: GiftCard[]) => GiftCard[])) => void;
+ 
+
 };
 
 export const useGiftCardStore = create<GiftCardStore>((set) => ({
@@ -115,5 +119,10 @@ export const useGiftCardStore = create<GiftCardStore>((set) => ({
 
   
   allCards: [],
-  setAllCards: (cards) => set({ allCards: cards }),
+  // setAllCards: (cards) => set({ allCards: cards }),
+  setAllCards: (cards) =>
+  set((state) => ({
+    allCards: typeof cards === "function" ? cards(state.allCards) : cards,
+  })),
+
 }));
