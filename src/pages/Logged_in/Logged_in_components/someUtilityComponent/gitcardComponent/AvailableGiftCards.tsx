@@ -169,6 +169,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
   // const [page, setPage] = useState(1);
   // const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [loadingGiftCards, setLoadingGiftCards] = useState(false);
   const [categories, setCategories] = useState<
     { value: string; label: string }[]
   >([]);
@@ -265,7 +266,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
     // console.log("Fetching gift cards for page:", page);
     const pageSize = 0;
     try {
-      setLoading(true);
+      setLoadingGiftCards(true);
       // console.log("Fetching gift cards...");
       const res = await axios.get(
         `${BASE_URL}/GiftCards/products?size=${pageSize}&page=${page}`
@@ -292,10 +293,10 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
       //   // console.log("has set to false");
       // }
 
-      setLoading(false);
+      setLoadingGiftCards(false);
     } catch (err) {
       // console.error("Error fetching gift cards:", err);
-      setLoading(false);
+      setLoadingGiftCards(false);
       return err;
     }
   };
@@ -464,7 +465,11 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
             scrollableTarget="scrollableDiv"
           > */}
           <div className="grid my-[1.5rem] mt-[0.5rem] z-10 h-[calc(100vh-rem)] mx-[1.5rem] grid-cols-3 gap-6">
-            {filteredCards.length > 0 ? (
+            {loadingGiftCards ? (
+              <div className="col-span-full text-center text-xl text-gray-500">
+                Fetching your gift cards...
+              </div>
+            ) : filteredCards.length > 0 ? (
               filteredCards.map((card) => (
                 <button
                   onClick={() => handleCardClick(card.productId.toString())}

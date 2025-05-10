@@ -245,8 +245,8 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
               <div className="flex items-center  justify-center w-full gap-3">
                 <div className="text-[12px] w-[50%]">
                   <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] text-[12px] text-left mt-[10px] ">
-                    Recipient Phone Number{" "}
-                    {selectedCard.fixedSenderDenominations}
+                    Recipient Phone Number
+                    {/* {selectedCard.fixedSenderDenominations} */}
                   </p>
                   <PhoneInput
                     placeholder="Enter phone number"
@@ -325,6 +325,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                       ? String(selectedOption.value)
                       : "";
                     updateFormData({ amount: value });
+
                   }}
                   onBlur={() => validateField("amount", formData.amount)} // optional blur validation
                   styles={{
@@ -353,13 +354,13 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                   }}
                 />
               </div>
-              <div className="flex flex-col  ml-[1rem] mt-[2rem] text-[10px]">
+              {/* <div className="flex flex-col  ml-[1rem] mt-[2rem] text-[10px]">
                 <p className="text-left">Estimated price</p>
 
                 <p className=" text-left text-gray-600">
                   Price: {selectedCard.fixedRecipientDenominations}
                 </p>
-              </div>
+              </div> */}
             </div>
 
             <div className="flex items-center mt-[1rem] gap-3">
