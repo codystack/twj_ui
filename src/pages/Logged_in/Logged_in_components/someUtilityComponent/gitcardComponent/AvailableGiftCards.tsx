@@ -12,14 +12,13 @@ import uberrats from "../../../../../assets/giftcards_img/uberats.png";
 import playstation from "../../../../../assets/giftcards_img/playstation.png";
 import asos from "../../../../../assets/giftcards_img/asos.png";
 import { useGiftCardStore } from "../../../../../store/useGiftCardStore";
-// import ReactFlagsSelect from "react-flags-select";
-// import Select from "react-select";
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import axios from "axios";
 import search from "../../../../../assets/dashboard_img/Search_light.svg";
-import InfiniteScroll from "react-infinite-scroll-component";
-import ErrorBoundary from "../../../../../components/error/ErrorBoundry";
+// import InfiniteScroll from "react-infinite-scroll-component";
+import { SingleValue } from "react-select";
+// import ErrorBoundary from "../../../../../components/error/ErrorBoundry";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -31,6 +30,7 @@ const customStyles = {
     boxShadow: "none",
     outline: "none",
     textAlign: "left",
+    width: "100%",
     border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
     "&:hover": {
       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
@@ -48,22 +48,17 @@ const customStyles = {
       : "#fff",
     color: state.isSelected ? "#fff" : "#27014F", // Text color change on selection
   }),
-};
 
-// const customStyles = {
-//   control: (provided: any) => ({
-//     ...provided,
-//     display: "flex",
-//     alignItems: "center",
-//     paddingLeft: "0.5rem", // adjust to reduce left space
-//   }),
-//   singleValue: (provided: any) => ({
-//     ...provided,
-//     display: "flex",
-//     alignItems: "center",
-//     gap: "0.5rem",
-//   }),
-// };
+  menu: (provided: any) => ({
+    ...provided,
+    width: "250px", // Set width wider than the input
+    zIndex: 9999,
+  }),
+  menuPortal: (base: any) => ({
+    ...base,
+    zIndex: 9999,
+  }),
+};
 
 export const giftCardsData = [
   { id: "1", name: "Amazon", image: amazon, price: "$100", country: "USA" },
@@ -164,50 +159,73 @@ interface GiftCard {
   };
 }
 
+type OptionType = {
+  label: string;
+  value: string;
+};
+
 const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
   const { allCards, setAllCards, setSelectedGiftCardId } = useGiftCardStore();
-
-  // const [allCards, setAllCards] = useState<GiftCard[]>([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  // const [selected, setSelected] = useState("US");
+  // const [page, setPage] = useState(1);
+  // const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<
-    { value: number; label: string }[]
+    { value: string; label: string }[]
   >([]);
   const [countries, setCountries] = useState<CountryOption[]>([]);
-  const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(
+  const [selectedCountry, setSelectedCountry] = useState<
+    CountryOption | OptionType | null
+  >(countries.find((country) => country.value === "United States") || null);
+
+  // const [selectedCountrys, setSelectedCountrys] = useState<
+  //   OptionType | OptionType
+  // >();
+  const [selectedCategory, setSelectedCategory] = useState<OptionType | null>(
     null
   );
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+ 
+
+  const handleCountryChange = (newValue: SingleValue<OptionType>) => {
+    setSelectedCountry(newValue);
+  };
+
+  const handleCategoryChange = (option: OptionType | null) => {
+    setSelectedCategory(option);
+  };
+
   useEffect(() => {
-    // console.log("Fetching countries...");
     fetchCountries();
     fetchCategories();
   }, []);
 
   const fetchCountries = async () => {
     // console.log("Fetching countries...");
-
     try {
       setLoading(true);
       const res = await axios.get(`${BASE_URL}/GiftCards/countries`);
 
       const data: Country[] = res.data.data;
-      console.log("Raw country data:", data);
+      // console.log("Raw country data:", data);
 
       const options = data.map((country: Country) => ({
-        value: country.isoName,
+        value: country.name,
         label: country.name,
         flag: country.flagUrl,
       }));
 
       setCountries(options);
-      console.log("Parsed country options:", options);
+      // console.log("Parsed country options:", options);
 
       // const us = options.find((c) => c.value === "US");
       const us = options.find(
-        (c: { value: string; label: string; flag: string }) => c.value === "US"
+        (c: { value: string; label: string; flag: string }) => c.value === "United States"
       );
       setLoading(false);
 
@@ -225,93 +243,77 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
 
       // Assuming the structure is: { data: [ { id: 1, name: "Payment Cards" }, ... ] }
       const data: { id: number; name: string }[] = res.data.data;
-      console.log("Raw category data:", data);
+      // console.log("Raw category data:", data);
 
       const options = data.map((category) => ({
-        value: category.id,
+        value: String(category.id),
         label: category.name,
       }));
 
       setCategories(options);
-      console.log("Parsed category options:", options);
+      // console.log("Parsed category options:", options);
 
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      console.error("Error fetching categories:", err);
+      // console.error("Error fetching categories:", err);
       return err;
     }
   };
-
-  // const fetchGiftCards = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const res = await axios.get(`${BASE_URL}/GiftCards/products`);
-
-  //     const data: GiftCard[] = res.data.data || [];
-  //     console.log("Fetched gift cards:", data);
-
-  //     setAllCards(data);
-  //     setLoading(false);
-  //   } catch (err) {
-  //     console.error("Error fetching gift cards:", err);
-  //     setLoading(false);
-  //   }
-  // };
-
-  // Fetch gift cards function
-
+  
+  const page = 1; 
   const fetchGiftCards = async (page: number) => {
-    const pageSize = 20;
+    // console.log("Fetching gift cards for page:", page);
+    const pageSize = 0;
     try {
       setLoading(true);
+      // console.log("Fetching gift cards...");
       const res = await axios.get(
         `${BASE_URL}/GiftCards/products?size=${pageSize}&page=${page}`
       );
 
       const data: GiftCard[] = res.data.data.content || [];
-      console.log("Fetched gift cards:", data);
+      // console.log("Raw gift card data:", data.length);
 
-      // Append new cards to the existing list
-      setAllCards(data);
-      // setAllCards((prevCards) => [...prevCards, ...data]);
+      const uniqueData = Array.from(
+        new Map(data.map((card) => [card.productId, card])).values()
+      );
+      setAllCards((prev) => {
+        const existingIds = new Set(prev.map((card) => card.productId));
+        const newUnique = uniqueData.filter(
+          (card) => !existingIds.has(card.productId)
+        );
+        return [...prev, ...newUnique];
+      });
 
       // Set `hasMore` to false if no more data
-      if (data.length === 0 || data.length < 20) {
-        setHasMore(false);
-      }
+      // if (data.length < pageSize - 2) {
+      //   console.log(data.length);
+      //   setHasMore(false);
+      //   // console.log("has set to false");
+      // }
 
       setLoading(false);
     } catch (err) {
-      console.error("Error fetching gift cards:", err);
+      // console.error("Error fetching gift cards:", err);
       setLoading(false);
+      return err;
     }
   };
 
-  // Handle scroll and load more
-  const loadMore = () => {
-    if (!loading) {
-      setPage((prevPage) => {
-        const newPage = prevPage + 1;
-        fetchGiftCards(newPage);
-        return newPage;
-      });
-    }
-  };
+  // const loadMore = () => {
+  //   // console.log("Loading more cards...");
+  //   setPage((prevPage) => {
+  //     const newPage = prevPage + 1;
+  //     fetchGiftCards(newPage);
+  //     return newPage;
+  //   });
+  // };
 
   useEffect(() => {
-    fetchGiftCards(page);
+      fetchGiftCards(page);
+  
   }, [page]);
-
-  // const customSingleValue = ({ data }: any) => (
-  //   <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-  //     <img
-  //       src={data.flag}
-  //       alt=""
-  //       style={{ width: "1.5rem", height: "1.5rem", borderRadius: "50%" }}
-  //     />
-  //   </div>
-  // );
 
   const customSingleValue = ({ data }: any) => (
     <div style={{ display: "flex", alignItems: "center" }}>
@@ -361,53 +363,76 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
     onNext();
   };
 
-  // useEffect(() => {
-  //   console.log("Selected country:", selectedCountry);
-  // }, [selectedCountry]);
+  // const customFilterOption = (option: any, inputValue: any) => {
+  //   const { data } = option;
+  //   const label = data.label.toLowerCase();
+  //   const searchValue = inputValue.toLowerCase();
+  //   return label.includes(searchValue);
+  // };
+
+  const filteredCards = allCards.filter((card) => {
+    const countryMatch = selectedCountry
+      ? card.country.name === selectedCountry.value
+      : true;
+    const categoryMatch = selectedCategory
+      ? card.category.id.toString() === selectedCategory.value
+      : true;
+    const searchMatch = card.productName
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+    return countryMatch && categoryMatch && searchMatch;
+  });
 
   return (
     <>
-      <div className="text-center w-full space-y-4">
-        {/* <h2 className="text-2xl font-bold text-gray-800">All Available Gift Cards.</h2> */}
+      <div
+        id="scrollableDiv"
+        className="text-center overflow-y-aut w-full  hide-scrollbar  space-y-4"
+        style={{ height: "90vh", overflow: "auto" }}
+      >
         <div className="">
-          <div className="sticky p-6  top-0 z-0 flex items-center border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between bg-white">
+          <div className="sticky p-6  top-0 z-20 w-full  flex items-center border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between bg-white">
             <h3 className="text-[17px] tracking-[1px] text-[#27014F]">
               Gift Cards
             </h3>
-            <button className="cursor-pointer" onClick={onClose}>
+            <button
+              className="cursor-pointer"
+              onClick={() => {
+                setAllCards([]);
+                onClose();
+              }}
+            >
               <img src={cancel} alt="" />
             </button>
           </div>
-          <div className="pt-[2rem] pb-4 w-[700px] z-20 mx-[1.5rem] fixed bg-white  flex items-center gap-4 ">
+          {/* inittially was sticky not fixed  and top-60px */}
+          <div className="pt-[1rem]  w-[720px]  pb-4  z-20 mx-[1.5rem] fixed  left-[19rem] bg-white flex items-center gap-4">
             <div className="  w-[18%]">
               <Select
                 options={countries}
                 value={selectedCountry}
-                onChange={setSelectedCountry}
+                onChange={handleCountryChange}
                 components={{
                   SingleValue: customSingleValue,
                   Option: customOption,
                 }}
                 styles={customStyles}
                 className="custom-select"
-                // placeholder="Select a country"
                 isSearchable={false}
+
+                // menuPortalTarget={document.body}
+                // menuPlacement="auto"
+                // isSearchable={true} // Enable search functionality
+                // filterOption={customFilterOption}
               />
             </div>
 
             <div>
               <Select
                 options={categories}
-                // isLoading={isFetchingPlan}
-                // getOptionLabel={getOptionLabel}
-                // getOptionValue={(e) => e.value}
-                // styles={customStyles}
-                // value={options.find(
-                //   (options: any) => options.value === formData.plans
-                // )}
-                // value={plan.find((plan: any) => plan.value === formData.plans) ?? null}
-
-                // onChange={handleSelectChange}
+                value={selectedCategory}
+                onChange={handleCategoryChange}
                 styles={customStyles}
                 placeholder="Select Category"
               />
@@ -417,12 +442,9 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
               <input
                 type="text"
                 placeholder="Search Gift Card"
-                name="recipient"
-                // value={formData.recipient}
-                // onChange={handleChange}
-                // onBlur={() =>
-                //   validateField("recipient", formData.recipient)
-                // }
+                name="searchTerm"
+                value={searchTerm}
+                onChange={handleSearchChange}
                 className={`  p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-[5px] focus:border-purple-800 `}
               />
               <img
@@ -432,33 +454,43 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
               />
             </div>
           </div>
-          <ErrorBoundary>
-            <InfiniteScroll
-              dataLength={allCards.length}
-              next={loadMore}
-              hasMore={hasMore}
-              loader={<div>Loading...</div>}
-            >
-              <div className="grid my-[1.5rem] mt-[6rem] z-10  h-[calc(100vh-rem)] mx-[1.5rem] grid-cols-4 gap-6">
-                {allCards.map((card) => (
-                  <button
-                    onClick={() => handleCardClick(card.productId.toString())}
-                    key={card.productId}
-                    className="flex flex-col bg-white    transition-all duration-300 ease-in-out  hover:scale-105 cursor-pointer"
-                  >
-                    <img
-                      src={card.logoUrls[0]}
-                      alt={card.productName}
-                      className=" object-cover rounded-[10px] mb-1.5"
-                    />
-                    <h4 className="text-[#000] ml-[3px] text-left font-semibold text-[15px]">
-                      {card.productName}
-                    </h4>
-                  </button>
-                ))}
-              </div>
-            </InfiniteScroll>
-          </ErrorBoundary>
+
+          {/* <InfiniteScroll
+            dataLength={allCards.length}
+            next={() => {
+              // console.log("Triggered next!");
+              loadMore();
+            }}
+            hasMore={hasMore}
+            loader={<div>Loading...</div>}
+            scrollableTarget="scrollableDiv"
+          > */}
+        <div className="grid my-[1.5rem] mt-[6rem] z-10 h-[calc(100vh-rem)] mx-[1.5rem] grid-cols-4 gap-6">
+  {filteredCards.length > 0 ? (
+    filteredCards.map((card) => (
+      <button
+        onClick={() => handleCardClick(card.productId.toString())}
+        key={card.productId}
+        className="flex flex-col bg-white transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
+      >
+        <img
+          src={card.logoUrls[0]}
+          alt={card.productName}
+          className="object-cover rounded-[10px] mb-1.5"
+        />
+        <h4 className="text-[#000] ml-[3px] text-left font-semibold text-[15px]">
+          {card.productName}
+        </h4>
+      </button>
+    ))
+  ) : (
+    <div className="col-span-4 text-center text-xl text-gray-500">
+      No gift cards available!
+    </div>
+  )}
+</div>
+
+          {/* </InfiniteScroll> */}
         </div>
       </div>
 

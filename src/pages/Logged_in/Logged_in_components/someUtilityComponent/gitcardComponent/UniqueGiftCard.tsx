@@ -89,6 +89,9 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
     if (count > 0) setCount(count - 1);
   };
 
+  useEffect(() => {
+    setCount(1); 
+  }, []);
 
 
   const validateField = (name: string, value: string | undefined) => {
@@ -313,7 +316,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
               />
             </div>
             <div className="flex flex-col  ml-[1rem] mt-[2rem] text-[10px]">
-              <p>Estimated price</p>
+              <p className="text-left">Estimated price</p>
 
               <p className=" text-left text-gray-600">
                 Price: {selectedCard.fixedRecipientDenominations}
