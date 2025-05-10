@@ -1,6 +1,7 @@
 import cancel from "../../../../../assets/dashboard_img/profile/cancel.svg";
 import { useGiftCardStore } from "../../../../../store/useGiftCardStore";
 import back from "../../../../../assets/dashboard_img/Expand_left_light.svg";
+// import { use, useEffect } from "react";
 // import { giftCardsData } from "../gitcardComponent/AvailableGiftCards";
 
 type ModalProps = {
@@ -28,6 +29,19 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
 
   if (!selectedCard)
     return <p className="text-red-500">Gift card not found.</p>;
+
+
+const key = Number(formData.amount).toFixed(1); // "50.0"
+const equivalentValue = selectedCard.fixedRecipientToSenderDenominationsMap[key];
+
+const subToatal = equivalentValue * count
+const totalAmount = subToatal + allCards[0].senderFee
+
+// useEffect(() => {
+//   console.log("Selected card:", formData.amount);
+//   console.log("Equivalent value:", equivalentValue);
+// }, []);
+
 
   return (
     <div className="text-center space-y-4">
@@ -92,7 +106,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
             <p className="text-[#7688B4] text-left tracking-[1px]">
               Unit Price:
             </p>
-            <p className="text-[#27014F]">N 0.0</p>
+            <p className="text-[#27014F]">₦{equivalentValue}</p>
           </div>
           <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
             <p className="text-[#7688B4] text-left tracking-[1px]">Quatity:</p>
@@ -100,11 +114,11 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
           </div>
           <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
             <p className="text-[#7688B4] text-left tracking-[1px]">Subtotal:</p>
-            <p className="text-[#27014F]">1</p>
+            <p className="text-[#27014F]">₦{Number(subToatal).toLocaleString()}</p>
           </div>
           <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
             <p className="text-[#7688B4] text-left tracking-[1px]">Fee:</p>
-            <p className="text-[#27014F]">1</p>
+            <p className="text-[#27014F]"> ₦{Number(allCards[0].senderFee).toLocaleString()} </p>
           </div>
         </div>
       </div>
@@ -114,9 +128,10 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
       <div className="border-b border-b-[#E2E8F0] mx-[1rem] pt-[2rem]"></div>
 
       <div className="flex items-center justify-between w-full px-[2rem] mb-[2rem]">
-        <div className="flex items-center text-[24px]">
+        <div className="flex items-center text-[24px] gap-2">
           <p className="text-[#7688B4] text-left tracking-[1px]">Total:</p>
-          <p className="text-[#27014F]">₦ 323,000</p>
+      <p className="text-[#27014F]">₦{Number(totalAmount).toLocaleString()}</p>
+
         </div>
         <button
           onClick={onClose}

@@ -190,8 +190,6 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
     setSearchTerm(e.target.value);
   };
 
- 
-
   const handleCountryChange = (newValue: SingleValue<OptionType>) => {
     setSelectedCountry(newValue);
   };
@@ -225,7 +223,8 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
 
       // const us = options.find((c) => c.value === "US");
       const us = options.find(
-        (c: { value: string; label: string; flag: string }) => c.value === "United States"
+        (c: { value: string; label: string; flag: string }) =>
+          c.value === "United States"
       );
       setLoading(false);
 
@@ -260,8 +259,8 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
       return err;
     }
   };
-  
-  const page = 1; 
+
+  const page = 1;
   const fetchGiftCards = async (page: number) => {
     // console.log("Fetching gift cards for page:", page);
     const pageSize = 0;
@@ -311,8 +310,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
   // };
 
   useEffect(() => {
-      fetchGiftCards(page);
-  
+    fetchGiftCards(page);
   }, [page]);
 
   const customSingleValue = ({ data }: any) => (
@@ -465,30 +463,30 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
             loader={<div>Loading...</div>}
             scrollableTarget="scrollableDiv"
           > */}
-        <div className="grid my-[1.5rem] mt-[6rem] z-10 h-[calc(100vh-rem)] mx-[1.5rem] grid-cols-4 gap-6">
-  {filteredCards.length > 0 ? (
-    filteredCards.map((card) => (
-      <button
-        onClick={() => handleCardClick(card.productId.toString())}
-        key={card.productId}
-        className="flex flex-col bg-white transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
-      >
-        <img
-          src={card.logoUrls[0]}
-          alt={card.productName}
-          className="object-cover rounded-[10px] mb-1.5"
-        />
-        <h4 className="text-[#000] ml-[3px] text-left font-semibold text-[15px]">
-          {card.productName}
-        </h4>
-      </button>
-    ))
-  ) : (
-    <div className="col-span-4 text-center text-xl text-gray-500">
-      No gift cards available!
-    </div>
-  )}
-</div>
+          <div className="grid my-[1.5rem] mt-[6rem] z-10 h-[calc(100vh-rem)] mx-[1.5rem] grid-cols-4 gap-6">
+            {filteredCards.length > 0 ? (
+              filteredCards.map((card) => (
+                <button
+                  onClick={() => handleCardClick(card.productId.toString())}
+                  key={card.productId}
+                  className="flex flex-col bg-white transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
+                >
+                  <img
+                    src={card.logoUrls[0]}
+                    alt={card.productName}
+                    className="object-cover rounded-[10px] mb-1.5"
+                  />
+                  <h4 className="text-[#000] ml-[3px] text-left font-semibold text-[15px]">
+                    {card.productName}
+                  </h4>
+                </button>
+              ))
+            ) : (
+              <div className="col-span-4 text-center text-xl text-gray-500">
+                No gift cards available!
+              </div>
+            )}
+          </div>
 
           {/* </InfiniteScroll> */}
         </div>
