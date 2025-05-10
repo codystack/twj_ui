@@ -405,7 +405,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
             </button>
           </div>
           {/* inittially was sticky not fixed  and top-60px */}
-          <div className="pt-[1rem]  w-[720px]  pb-4  z-20 mx-[1.5rem] fixed  left-[19rem] bg-white flex items-center gap-4">
+          <div className="pt-[1rem]  w-full  pb-4  z-20 mx-[1.5rem] sticky top-[4.2rem]  left-[19rem] borde bg-white flex items-center gap-4">
             <div className="  w-[18%]">
               <Select
                 options={countries}
@@ -463,7 +463,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
             loader={<div>Loading...</div>}
             scrollableTarget="scrollableDiv"
           > */}
-          <div className="grid my-[1.5rem] mt-[6rem] z-10 h-[calc(100vh-rem)] mx-[1.5rem] grid-cols-3 gap-6">
+          <div className="grid my-[1.5rem] mt-[0.5rem] z-10 h-[calc(100vh-rem)] mx-[1.5rem] grid-cols-3 gap-6">
             {filteredCards.length > 0 ? (
               filteredCards.map((card) => (
                 <button
@@ -482,7 +482,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
                 </button>
               ))
             ) : (
-              <div className="col-span-4 text-center text-xl text-gray-500">
+              <div className="col-span-full text-center text-xl text-gray-500">
                 No gift cards available!
               </div>
             )}
