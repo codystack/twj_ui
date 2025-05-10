@@ -463,7 +463,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
             loader={<div>Loading...</div>}
             scrollableTarget="scrollableDiv"
           > */}
-          <div className="grid my-[1.5rem] mt-[6rem] z-10 h-[calc(100vh-rem)] mx-[1.5rem] grid-cols-4 gap-6">
+          <div className="grid my-[1.5rem] mt-[6rem] z-10 h-[calc(100vh-rem)] mx-[1.5rem] grid-cols-3 gap-6">
             {filteredCards.length > 0 ? (
               filteredCards.map((card) => (
                 <button

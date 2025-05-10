@@ -60,6 +60,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
   } = useGiftCardStore();
   const count = useGiftCardStore((state) => state.count);
   const setCount = useGiftCardStore((state) => state.setCount);
+  const [redeemInstructions, setRedeemInstructions] = useState(false);
 
   const [errors, setErrors] = useState({
     phoneNumber: "",
@@ -159,210 +160,243 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
   // Flatten the fixedRecipientDenominations array into a single array of objects
   const flattenedOptions =
     selectedCard?.fixedRecipientDenominations?.map((denomination) => ({
-      value: denomination, 
-      label: `$${denomination}`, 
+      value: denomination,
+      label: `$${denomination}`,
     })) || [];
 
-
   return (
-    <div className="text-center space-y-4">
-      <div className="flex items-center pt-6 border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
-        <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
-          Gift Cards
-        </h3>
-        <button
-          className="cursor-pointer"
-          onClick={() => {
-            clearFormData();
-            onClose();
-          }}
-        >
-          <img src={cancel} alt="" />
-        </button>
-      </div>
+    <>
+      {redeemInstructions && (
+        <div className="fixed inset-0 bg-black/30 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
+            <div className="bg-white overflow-y-aut w-[600px]   z-[50]   p-6 pt-0 rounded-[15px] shadow-lg flex flex-col">
+              <div className="flex items-center pt-6 border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
+                <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
+                  Redeem Instructions
+                </h3>
+                <button
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setRedeemInstructions(false);
+                  }}
+                >
+                  <img src={cancel} alt="" />
+                </button>
+              </div>
+              <div className="flex flex-col items-center justify-center px-2  py-[2rem] ">
+             <p>{selectedCard.redeemInstruction.verbose}</p>
 
-      <button
-        className="flex pl-[1rem] cursor-pointer items-center mb-[1.5rem] justify-center bg-white "
-        onClick={() => {
-          clearFormData();
-          onBack();
-        }}
-      >
-        <img src={back} alt="" />
-        <p> Back</p>
-      </button>
-      <div className="grid grid-cols-5 px-[1rem] gap-4 ">
-        <div className="col-span-2 ">
-          <img
-            src={selectedCard.logoUrls[0]}
-            alt={selectedCard.productName}
-            className="w-full rounded-[10px] max-w-full object-contain"
-          />
-
-          <div className="w-full flex mt-[1rem] ml-[7px] ">
-            <button className=" text-[12px] cursor-pointer text-left  text-[#8003A9] ">
-              See Redeem Instructions
-            </button>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="col-span-3 ">
-          <h2 className="text-[30px] text-left mt-[-10px] font-bold text-black">
-            {selectedCard.productName}
-          </h2>
+      )}
+      <div className="text-center space-y-4">
+        <div className="flex items-center pt-6 border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
+          <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
+            Gift Cards
+          </h3>
+          <button
+            className="cursor-pointer"
+            onClick={() => {
+              clearFormData();
+              onClose();
+            }}
+          >
+            <img src={cancel} alt="" />
+          </button>
+        </div>
 
-          <div className="flex items-center justify-items-start w-full ">
-            <div className="flex items-center  justify-center w-full gap-3">
-              <div className="text-[12px] w-[50%]">
-                <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] text-[12px] text-left mt-[10px] ">
-                  Recipient Phone Number {selectedCard.fixedSenderDenominations}
-                </p>
-                <PhoneInput
-                  placeholder="Enter phone number"
-                  defaultCountry="NG"
-                  value={formData.phoneNumber}
-                  onChange={(value) =>
-                    updateFormData({ phoneNumber: value || "" })
-                  }
-                  style={
-                    {
-                      "--PhoneInputCountrySelect-marginRight": "0em",
-                      borderRadius: "0.375rem",
-                      border: errors.phoneNumber
-                        ? "1px solid red"
-                        : "1px solid #ccc", // Red border if there's an error, else default
-                    } as React.CSSProperties
-                  }
-                />
-              </div>
+        <button
+          className="flex pl-[1rem] cursor-pointer items-center mb-[1.5rem] justify-center bg-white "
+          onClick={() => {
+            clearFormData();
+            onBack();
+          }}
+        >
+          <img src={back} alt="" />
+          <p> Back</p>
+        </button>
+        <div className="grid grid-cols-5 px-[1rem] gap-4 ">
+          <div className="col-span-2 ">
+            <img
+              src={selectedCard.logoUrls[0]}
+              alt={selectedCard.productName}
+              className="w-full rounded-[10px] max-w-full object-contain"
+            />
 
-              <div className="w-full">
-                <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] text-[12px] text-left mt-[10px] ">
-                  Recipient Email
-                </p>
+            <div className="w-full flex mt-[1rem] ml-[7px] ">
+              <button
+                onClick={() => {
+                  setRedeemInstructions(true);
+                }}
+                className=" text-[12px] cursor-pointer text-left  text-[#8003A9] "
+              >
+                See Redeem Instructions
+              </button>
+            </div>
+          </div>
+          <div className="col-span-3 ">
+            <h2 className="text-[30px] text-left mt-[-10px] font-bold text-black">
+              {selectedCard.productName}
+            </h2>
+
+            <div className="flex items-center justify-items-start w-full ">
+              <div className="flex items-center  justify-center w-full gap-3">
+                <div className="text-[12px] w-[50%]">
+                  <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] text-[12px] text-left mt-[10px] ">
+                    Recipient Phone Number{" "}
+                    {selectedCard.fixedSenderDenominations}
+                  </p>
+                  <PhoneInput
+                    placeholder="Enter phone number"
+                    defaultCountry="NG"
+                    value={formData.phoneNumber}
+                    onChange={(value) =>
+                      updateFormData({ phoneNumber: value || "" })
+                    }
+                    style={
+                      {
+                        "--PhoneInputCountrySelect-marginRight": "0em",
+                        borderRadius: "0.375rem",
+                        border: errors.phoneNumber
+                          ? "1px solid red"
+                          : "1px solid #ccc", // Red border if there's an error, else default
+                      } as React.CSSProperties
+                    }
+                  />
+                </div>
+
                 <div className="w-full">
-                  <input
-                    type="email"
-                    placeholder="abc@gmail.com"
-                    name="email"
-                    value={formData.email}
-                    onChange={(e) => updateFormData({ email: e.target.value })}
-                    onBlur={() => validateField("email", formData.email)} // optional blur validation
-                    className={`p-2.5 pl-3 pr-3 text-[12px] w-full outline-none rounded-md
+                  <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] text-[12px] text-left mt-[10px] ">
+                    Recipient Email
+                  </p>
+                  <div className="w-full">
+                    <input
+                      type="email"
+                      placeholder="abc@gmail.com"
+                      name="email"
+                      value={formData.email}
+                      onChange={(e) =>
+                        updateFormData({ email: e.target.value })
+                      }
+                      onBlur={() => validateField("email", formData.email)} // optional blur validation
+                      className={`p-2.5 pl-3 pr-3 text-[12px] w-full outline-none rounded-md
                       border ${
                         errors.email
                           ? "border-red-600"
                           : "border-[#A4A4A4] focus:border-purple-800"
                       }`}
-                  />
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="w-[50%]">
-            <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] text-[12px] text-left mt-[10px] ">
-              Sender's Name
-            </p>
-            <div className="w-full">
-              <input
-                type="text"
-                placeholder="John Doe"
-                name="name"
-                value={formData.name}
-                onChange={(e) => updateFormData({ name: e.target.value })}
-                onBlur={() => validateField("name", formData.name)} // optional blur validation
-                className={`p-2.5 pl-3 pr-3 border text-[12px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
-                  errors.name
-                    ? "border border-red-600"
-                    : "focus:border-purple-800"
-                }`}
-              />
-            </div>
-          </div>
-          <div className="flex items-center  w-full ">
-            <div className="w-[50%] ">
-              <p className="text-[#0A2E65]/60 mt-[10px] pb-[3px] pl-[3px] text-[12px] text-left  ">
-                Select Amount
+            <div className="w-[50%]">
+              <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] text-[12px] text-left mt-[10px] ">
+                Sender's Name
               </p>
-              <Select
-                options={flattenedOptions}
-                onChange={(selectedOption) => {
-                  const value = selectedOption
-                    ? String(selectedOption.value)
-                    : "";
-                  updateFormData({ amount: value });
-                  console.log("Selected amount:", value);
-                }}
-                onBlur={() => validateField("amount", formData.amount)} // optional blur validation
-                styles={{
-                  ...customStyles,
-                  control: (provided: any, state: any) => ({
-                    ...provided,
-                    borderRadius: "8px",
-                    padding: "1px",
-                    boxShadow: "none",
-                    outline: "none",
-                    fontSize: "12px",
-                    textAlign: "left",
-                    border: errors.amount
-                      ? "1px solid red"
-                      : state.isFocused
-                      ? "2px solid #8003A9"
-                      : "1px solid #a4a4a4",
-                    "&:hover": {
+              <div className="w-full">
+                <input
+                  type="text"
+                  placeholder="John Doe"
+                  name="name"
+                  value={formData.name}
+                  onChange={(e) => updateFormData({ name: e.target.value })}
+                  onBlur={() => validateField("name", formData.name)} // optional blur validation
+                  className={`p-2.5 pl-3 pr-3 border text-[12px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                    errors.name
+                      ? "border border-red-600"
+                      : "focus:border-purple-800"
+                  }`}
+                />
+              </div>
+            </div>
+            <div className="flex items-center  w-full ">
+              <div className="w-[50%] ">
+                <p className="text-[#0A2E65]/60 mt-[10px] pb-[3px] pl-[3px] text-[12px] text-left  ">
+                  Select Amount
+                </p>
+                <Select
+                  options={flattenedOptions}
+                  onChange={(selectedOption) => {
+                    const value = selectedOption
+                      ? String(selectedOption.value)
+                      : "";
+                    updateFormData({ amount: value });
+                  }}
+                  onBlur={() => validateField("amount", formData.amount)} // optional blur validation
+                  styles={{
+                    ...customStyles,
+                    control: (provided: any, state: any) => ({
+                      ...provided,
+                      borderRadius: "8px",
+                      padding: "1px",
+                      boxShadow: "none",
+                      outline: "none",
+                      fontSize: "12px",
+                      textAlign: "left",
                       border: errors.amount
                         ? "1px solid red"
                         : state.isFocused
                         ? "2px solid #8003A9"
                         : "1px solid #a4a4a4",
-                    },
-                  }),
-                }}
-              />
+                      "&:hover": {
+                        border: errors.amount
+                          ? "1px solid red"
+                          : state.isFocused
+                          ? "2px solid #8003A9"
+                          : "1px solid #a4a4a4",
+                      },
+                    }),
+                  }}
+                />
+              </div>
+              <div className="flex flex-col  ml-[1rem] mt-[2rem] text-[10px]">
+                <p className="text-left">Estimated price</p>
+
+                <p className=" text-left text-gray-600">
+                  Price: {selectedCard.fixedRecipientDenominations}
+                </p>
+              </div>
             </div>
-            <div className="flex flex-col  ml-[1rem] mt-[2rem] text-[10px]">
-              <p className="text-left">Estimated price</p>
 
-              <p className=" text-left text-gray-600">
-                Price: {selectedCard.fixedRecipientDenominations}
-              </p>
+            <div className="flex items-center mt-[1rem] gap-3">
+              <button
+                onClick={handleDecrement}
+                className={`h-[2.5rem] flex justify-center items-center w-[2.5rem] rounded bg-[#F1C8FF] ${
+                  count === 0
+                    ? "cursor-not-allowed opacity-70"
+                    : "bg-[#F1C8FF] cursor-pointer"
+                }`}
+                disabled={count === 0}
+              >
+                <img src={minus} alt="" />
+              </button>
+
+              <span className="w-6 text-center">{count}</span>
+
+              <button
+                onClick={handleIncrement}
+                className="h-[2.5rem] cursor-pointer flex justify-center items-center w-[2.5rem] rounded bg-[#8003A9] "
+              >
+                <img src={plus} alt="" />
+              </button>
             </div>
-          </div>
 
-          <div className="flex items-center mt-[1rem] gap-3">
-            <button
-              onClick={handleDecrement}
-              className={`h-[2.5rem] flex justify-center items-center w-[2.5rem] rounded bg-[#F1C8FF] ${
-                count === 0
-                  ? "cursor-not-allowed opacity-70"
-                  : "bg-[#F1C8FF] cursor-pointer"
-              }`}
-              disabled={count === 0}
-            >
-              <img src={minus} alt="" />
-            </button>
-
-            <span className="w-6 text-center">{count}</span>
-
-            <button
-              onClick={handleIncrement}
-              className="h-[2.5rem] cursor-pointer flex justify-center items-center w-[2.5rem] rounded bg-[#8003A9] "
-            >
-              <img src={plus} alt="" />
-            </button>
-          </div>
-
-          <div className="mt-5 gap-2 w-full mb-[2rem] flex justify-start">
-            <button
-              onClick={handleNext}
-              className="bg-[#8003A9] cursor-pointer w-[70%] text-white px-4 py-2 rounded-[5px]"
-            >
-              Buy Now
-            </button>
+            <div className="mt-5 gap-2 w-full mb-[2rem] flex justify-start">
+              <button
+                onClick={handleNext}
+                className="bg-[#8003A9] cursor-pointer w-[70%] text-white px-4 py-2 rounded-[5px]"
+              >
+                Buy Now
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
