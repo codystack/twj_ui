@@ -36,12 +36,12 @@ const customStyles = {
   }),
 };
 
-const priceOptions = [
-  { label: "$10", value: 10 },
-  { label: "$25", value: 25 },
-  { label: "$50", value: 50 },
-  { label: "$100", value: 100 },
-];
+// const priceOptions = [
+//   { label: "$10", value: 10 },
+//   { label: "$25", value: 25 },
+//   { label: "$50", value: 50 },
+//   { label: "$100", value: 100 },
+// ];
 
 type ModalProps = {
   onNext: () => void;
@@ -60,7 +60,6 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
   } = useGiftCardStore();
   const count = useGiftCardStore((state) => state.count);
   const setCount = useGiftCardStore((state) => state.setCount);
-
 
   const [errors, setErrors] = useState({
     phoneNumber: "",
@@ -81,8 +80,6 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
     setTotalAmount(total);
   }, [count, amount]);
 
-
-
   const handleIncrement = () => setCount(count + 1);
 
   const handleDecrement = () => {
@@ -90,9 +87,8 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
   };
 
   useEffect(() => {
-    setCount(1); 
+    setCount(1);
   }, []);
-
 
   const validateField = (name: string, value: string | undefined) => {
     let error = "";
@@ -160,6 +156,14 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
   if (!selectedCard)
     return <p className="text-red-500">Gift card not found.</p>;
 
+  // Flatten the fixedRecipientDenominations array into a single array of objects
+  const flattenedOptions =
+    selectedCard?.fixedRecipientDenominations?.map((denomination) => ({
+      value: denomination, 
+      label: `$${denomination}`, 
+    })) || [];
+
+
   return (
     <div className="text-center space-y-4">
       <div className="flex items-center pt-6 border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
@@ -210,7 +214,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
             <div className="flex items-center  justify-center w-full gap-3">
               <div className="text-[12px] w-[50%]">
                 <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] text-[12px] text-left mt-[10px] ">
-                  Recipient Phone Number
+                  Recipient Phone Number {selectedCard.fixedSenderDenominations}
                 </p>
                 <PhoneInput
                   placeholder="Enter phone number"
@@ -229,7 +233,6 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                     } as React.CSSProperties
                   }
                 />
-               
               </div>
 
               <div className="w-full">
@@ -282,11 +285,13 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                 Select Amount
               </p>
               <Select
-                options={priceOptions}
-                onChange={(option) => {
-                  const value =
-                    option?.value !== undefined ? String(option.value) : "";
+                options={flattenedOptions}
+                onChange={(selectedOption) => {
+                  const value = selectedOption
+                    ? String(selectedOption.value)
+                    : "";
                   updateFormData({ amount: value });
+                  console.log("Selected amount:", value);
                 }}
                 onBlur={() => validateField("amount", formData.amount)} // optional blur validation
                 styles={{

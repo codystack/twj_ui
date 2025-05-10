@@ -116,7 +116,7 @@ export const useGiftCardStore = create<GiftCardStore>((set) => ({
 
   count: 1,
   setCount: (value) => set({ count: value }),
-
+ 
   
   allCards: [],
   // setAllCards: (cards) => set({ allCards: cards }),
