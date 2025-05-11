@@ -72,7 +72,7 @@ const OtpModal = ({
   const handleNextStep = async () => {
     setIsLoading(true);
     const enteredPin = otp.join("");
-    
+
     if (step === 1) {
       setOldPin(enteredPin); // Save the old PIN
       setOtp(Array(4).fill("")); // Clear input for new PIN
@@ -80,7 +80,6 @@ const OtpModal = ({
       setIsLoading(false);
       return;
     } else {
-
       const newPin = enteredPin;
 
       try {

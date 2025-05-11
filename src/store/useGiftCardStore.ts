@@ -1,5 +1,3 @@
-
-
 import { create } from "zustand";
 
 type GiftCardFormData = {
@@ -8,7 +6,6 @@ type GiftCardFormData = {
   email: string;
   name: string;
 };
-
 
 // types for all gift cards
 interface Countrys {
@@ -71,17 +68,16 @@ type GiftCardStore = {
   clearFormData: () => void;
   totalAmount: number;
   setTotalAmount: (value: number) => void;
-  
+
   count: number;
   setCount: (value: number) => void;
 
-  
   // allCards: GiftCard[];
   // setAllCards: (cards: GiftCard[]) => void;
   allCards: GiftCard[];
   setAllCards: (cards: GiftCard[] | ((prev: GiftCard[]) => GiftCard[])) => void;
- 
-
+  showSuccessModal: boolean;
+  setShowSuccessModal: (value: boolean) => void;
 };
 
 export const useGiftCardStore = create<GiftCardStore>((set) => ({
@@ -116,13 +112,14 @@ export const useGiftCardStore = create<GiftCardStore>((set) => ({
 
   count: 1,
   setCount: (value) => set({ count: value }),
- 
-  
+
   allCards: [],
   // setAllCards: (cards) => set({ allCards: cards }),
   setAllCards: (cards) =>
-  set((state) => ({
-    allCards: typeof cards === "function" ? cards(state.allCards) : cards,
-  })),
+    set((state) => ({
+      allCards: typeof cards === "function" ? cards(state.allCards) : cards,
+    })),
 
+  showSuccessModal: false,
+  setShowSuccessModal: (value) => set({ showSuccessModal: value }),
 }));
