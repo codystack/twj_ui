@@ -70,7 +70,6 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
   });
   // const [count, setCount] = useState(0);
   const amount = parseFloat(formData.amount || "0");
-
   //  when count or amount changes
   useEffect(() => {
     formData.amount = String("");
@@ -154,6 +153,12 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
     (card) => card.productId.toString() === selectedGiftCardId
   );
 
+  const redeemText = selectedCard?.redeemInstruction.verbose;
+
+  const redeemSteps = redeemText
+    ? redeemText.split(/\. +/).filter(Boolean)
+    : [];
+
   if (!selectedCard)
     return <p className="text-red-500">Gift card not found.</p>;
 
@@ -184,8 +189,22 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                 </button>
               </div>
               <div className="flex flex-col items-center justify-center px-2  py-[2rem] ">
-             <p>{selectedCard.redeemInstruction.verbose}</p>
-
+                <p>
+                  {redeemSteps.length > 0 ? (
+                    <ul className="list-disc pl-5 space-y-2">
+                      {redeemSteps.map((step, index) => (
+                        <li
+                          className="text-left  text-[13px] leading-[1rem]"
+                          key={index}
+                        >
+                          {step.trim()}.
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No redemption instructions available.</p>
+                  )}
+                </p>
               </div>
             </div>
           </div>
@@ -325,7 +344,6 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                       ? String(selectedOption.value)
                       : "";
                     updateFormData({ amount: value });
-
                   }}
                   onBlur={() => validateField("amount", formData.amount)} // optional blur validation
                   styles={{

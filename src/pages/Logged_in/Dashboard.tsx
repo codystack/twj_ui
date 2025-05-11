@@ -25,6 +25,8 @@ import Select from "react-select";
 import Button from "../../components/Button";
 import { useBankStore } from "../../store/useBankStore";
 import { useNavigate } from "react-router-dom";
+import SuccessModal from "./SuccessModal";
+import { useGiftCardStore } from "../../store/useGiftCardStore";
 
 // const options = [
 //   { value: "postpaid", label: "postpaid" },
@@ -66,6 +68,8 @@ const customStyles = {
 const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { showSuccessModal, setShowSuccessModal } = useGiftCardStore();
+
   const [isHidden, setIsHidden] = useState(false);
   const [showKycModal, setShowKycModal] = useState(false);
   const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
@@ -496,6 +500,25 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {showSuccessModal && (
+        <SuccessModal
+          title="Gift Card Purchase Succesful"
+          message="Your STEAM gift card is on its way!"
+          onClose={() => {
+              fetchUser();
+            setShowSuccessModal(false);
+          }}
+          button={
+            <button
+              onClick={() => setShowSuccessModal(false)}
+              className="bg-[#8003A9] w-[75%] text-white px-8 py-3 rounded-[5px] mb-2"
+            >
+              View Gift Card Detail
+            </button>
+          }
+        />
+      )}
     </>
   );
 };

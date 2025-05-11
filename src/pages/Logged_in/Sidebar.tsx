@@ -445,19 +445,16 @@ const Sidebar = () => {
                 <div className="fixed inset-0 flex items-center justify-center   bg-black/40 bg-opacity-50 !z-50">
                   <div className="   rounded-[10px]  bg-[#fff]/20 p-[0.7rem]  bg-opacity-50">
                     <div className=" p-6 w-[600px]  rounded-[10px]  bg-white  shadow-lg  text-center">
-                      
-                    <div className="flex r-[-3rem]  flex-row-reverse ">
-                          <button
-                            onClick={handleClose}
-                            className="px-4 py-2 cursor-pointer"
-                          >
-                            <img src={Cancel} alt="" />
-                          </button>
-                        </div>
-                      
+                      <div className="flex r-[-3rem]  flex-row-reverse ">
+                        <button
+                          onClick={handleClose}
+                          className="px-4 py-2 cursor-pointer"
+                        >
+                          <img src={Cancel} alt="" />
+                        </button>
+                      </div>
+
                       <div className=" flex items-center justify-center">
-                    
-                     
                         <div className=" w-[25rem]">
                           <div className="flex flex-col mt-3 items-center justify-center">
                             <div className="flex justify-center my-[5%] mb-[1rem]">
@@ -474,13 +471,12 @@ const Sidebar = () => {
                             </h3>
                           </div>
                           <div className="flex justify-between mt-4">
-                          <button
+                            <button
                               onClick={() => logout(navigate)}
                               className="px-4 py-3 transition duration-500 ease-in-out bg-red-600 mb-[2rem] cursor-pointer text-white rounded-lg w-full hover:bg-red-700"
                             >
                               Yes, Logout
                             </button>
-
                           </div>
                         </div>
                       </div>
