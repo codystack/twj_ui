@@ -34,6 +34,7 @@ interface GiftCard {
   productName: string;
   global: boolean;
   status: string;
+  // status: string;
   supportsPreOrder: boolean;
   senderFee: number;
   senderFeePercentage: number;
@@ -72,8 +73,9 @@ type GiftCardStore = {
   count: number;
   setCount: (value: number) => void;
 
-  // allCards: GiftCard[];
-  // setAllCards: (cards: GiftCard[]) => void;
+  productIso: string | null;
+  setProductIso: (value: string | null) => void;
+
   allCards: GiftCard[];
   setAllCards: (cards: GiftCard[] | ((prev: GiftCard[]) => GiftCard[])) => void;
   showSuccessModal: boolean;
@@ -112,6 +114,9 @@ export const useGiftCardStore = create<GiftCardStore>((set) => ({
 
   count: 1,
   setCount: (value) => set({ count: value }),
+
+  productIso: null,
+  setProductIso: (value) => set({ productIso: value }),
 
   allCards: [],
   // setAllCards: (cards) => set({ allCards: cards }),

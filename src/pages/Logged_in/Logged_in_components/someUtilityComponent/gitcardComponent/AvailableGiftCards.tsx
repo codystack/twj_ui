@@ -165,7 +165,8 @@ type OptionType = {
 };
 
 const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
-  const { allCards, setAllCards, setSelectedGiftCardId } = useGiftCardStore();
+  const { allCards, setAllCards, setProductIso, setSelectedGiftCardId } =
+    useGiftCardStore();
   // const [page, setPage] = useState(1);
   // const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -472,7 +473,10 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
             ) : filteredCards.length > 0 ? (
               filteredCards.map((card) => (
                 <button
-                  onClick={() => handleCardClick(card.productId.toString())}
+                  onClick={() => {
+                    handleCardClick(card.productId.toString());
+                    setProductIso(card.country.isoName);
+                  }}
                   key={card.productId}
                   className="flex flex-col bg-white transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
                 >
