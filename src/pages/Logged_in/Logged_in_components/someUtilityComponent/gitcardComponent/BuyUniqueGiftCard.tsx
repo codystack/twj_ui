@@ -24,6 +24,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
     selectedGiftCardId,
     // totalAmount,
     allCards,
+    productIso,
     count,
     formData,
     setCount,
@@ -39,11 +40,11 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
   if (!selectedCard)
     return <p className="text-red-500">Gift card not found.</p>;
 
-  const key = Number(formData.amount).toFixed(1); // "50.0"
-  const equivalentValue =
+  const key = Number(formData.amount).toFixed(1);
+  const equivalentNairaValue =
     selectedCard.fixedRecipientToSenderDenominationsMap[key];
 
-  const subToatal = equivalentValue * count;
+  const subToatal = equivalentNairaValue * count;
   const totalAmount = subToatal + allCards[0].senderFee;
 
   // useEffect(() => {
@@ -62,11 +63,14 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
       quantity: count,
       recipientEmail: formData.email,
       phoneDetails: {
-        countryCode: "+234",
+        countryCode: productIso,
         phoneNumber: formData.phoneNumber,
       },
+      totalCharge: totalAmount,
+      fee: allCards[0].senderFee,
       senderName: formData.name,
-      unitPrice: 1000,
+      nairaUnitPrice: equivalentNairaValue,
+      unitPrice: Number(formData.amount),
       productAdditionalRequirements: {
         additionalProp1: "",
         additionalProp2: "",
@@ -74,7 +78,8 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
       },
     };
 
-    console.log("Payload:", payload);
+    // console.log("Payload:", payload);
+    // return;
 
     try {
       setLoading(true);
@@ -163,7 +168,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
               <p className="text-[#7688B4] text-left tracking-[1px]">
                 Unit Price:
               </p>
-              <p className="text-[#27014F]">₦{equivalentValue}</p>
+              <p className="text-[#27014F]">₦{equivalentNairaValue}</p>
             </div>
             <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
               <p className="text-[#7688B4] text-left tracking-[1px]">
@@ -190,7 +195,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
 
         {/* <div>{totalAmount > 0 ? totalAmount : formData.amount}</div> */}
         {error && (
-          <div className="text-red-500 text-left ml-[6rem] mt-1">{error}</div>
+          <div className="text-red-500 text-[14px] text-left ml-[19.4rem] mt-[-0.9rem]">{error}</div>
         )}
         <div className="border-b border-b-[#E2E8F0] mx-[1rem] pt-[2rem]"></div>
 

@@ -5,64 +5,9 @@
   font-family: "Matter SQ Regular", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
     sans-serif;
-  /* --text-pink-primary: #27014F;
---text-pink-secondary: #9605C5;
---text-pink-white: #ffF;
---text-bgimg-primary: #D671F7;
---text-grey-primary: #7688B4;
---text-black-primary: #000000;
---text-red-primary: #F80004;
---button-bg-primary: #9605C5;
---button-bg-secondary: #F1C8FF;
---email-color-primary: #8003A9;
---border-primary: #8003A9;
---border-red: #FF3366;
---border-green: #009933; */
+
 }
 
-/* * Create Tailwind-like utility classes dynamically */
-/* @layer utilities {
-  .text-pink-primary {
-    color: var(--text-pink-primary) !important;
-  }
-  .text-pink-secondary {
-    color: var(--text-pink-secondary) !important;
-  }
-  .text-pink-white {
-    color: var(--text-pink-white) !important;
-  }
-  .bg-text-bgimg-primary {
-    background-color: var(--text-bgimg-primary) !important;
-  }
-  .text-grey-primary {
-    color: var(--text-grey-primary) !important;
-  }
-  .text-black-primary {
-    color: var(--text-black-primary) !important;
-  }
-  .text-red-primary {
-    color: var(--text-red-primary) !important;
-  }
-  .bg-button-bg-primary {
-    background-color: var(--button-bg-primary);
-  }
-  .bg-button-bg-secondary {
-    background-color: var(--button-bg-secondary) !important;
-  }
-  .text-email-color-primary {
-    color: var(--email-color-primary) !important;
-  }
-  .border-primary {
-    border-color: var(--border-primary) !important;
-  }
-  .border-red {
-    border-color: var(--border-red) !important;
-  }
-  .border-green {
-    border-color: var(--border-green) !important;
-  }
-}
- */
 
 body {
   margin: 0;

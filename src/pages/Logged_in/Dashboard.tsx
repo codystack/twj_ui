@@ -506,7 +506,7 @@ const Dashboard = () => {
           title="Gift Card Purchase Succesful"
           message="Your STEAM gift card is on its way!"
           onClose={() => {
-              fetchUser();
+            fetchUser();
             setShowSuccessModal(false);
           }}
           button={
