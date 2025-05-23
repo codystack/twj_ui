@@ -400,7 +400,8 @@ const Sidebar = () => {
               <div
                 onClick={() => {
                   // /console.log("Button clicked"); // Debugging
-                  setIsModalOpen(true);
+                  // setIsModalOpen(true);
+                  logout(navigate);
                 }}
                 className=" flex cursor-pointer  pl-[1.7rem] pb-[10px] justify-center gap-2 text-[#27014F] "
               >
