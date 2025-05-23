@@ -17,18 +17,23 @@ import LogoutModal from "../../modals/LogoutModal";
 
 import { useAuthStore } from "../../store/authStore";
 import { useUserStore } from "../../store/useUserStore";
+import MobileNav from "../../modals/MobileNav";
 
 const DashboardLayoutt = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen((prev) => !prev);
+  };
 
   const { user } = useUserStore();
   // Get logout function from store
   const navigate = useNavigate();
-  const logout = useAuthStore((state) => state.logout); 
+  const logout = useAuthStore((state) => state.logout);
 
- 
   const location = useLocation(); // Get current path
 
   const locations = useLocation();
@@ -43,7 +48,7 @@ const DashboardLayoutt = () => {
     case "/dashboard":
       CurrentPage = <Dashboard />;
       break;
-      case "/wallet":
+    case "/wallet":
       CurrentPage = <Wallet />;
       break;
     case "/transactions":
@@ -62,14 +67,13 @@ const DashboardLayoutt = () => {
       CurrentPage = <Referals />;
       break;
     default:
-      CurrentPage = <Dashboard />; 
+      CurrentPage = <Dashboard />;
   }
-
 
   useEffect(() => {
     if (user) {
       setEmail(user.email);
-      setName(`${user.firstName ?? name } ${user.lastName ?? ""}`);
+      setName(`${user.firstName ?? name} ${user.lastName ?? ""}`);
     }
   }, [user]);
 
@@ -82,24 +86,51 @@ const DashboardLayoutt = () => {
     setName(storedName ?? "");
   }, []);
 
-
-
-
   return (
     <>
-      <nav className="bg-[#F5F5F5] h-full ">
+      <nav className=" h-full ">
         <div className="flex   w-full bg-[#F5F5F5] z-5 fixed items-center justify-between">
-          <NavLink to="/dashboard" className="p-[12px] cursor-pointer ">
+          <NavLink
+            to="/dashboard"
+            className=" [@media(min-width:1350px)]:block hidden p-[12px] cursor-pointer "
+          >
             <img src={Logo} alt="logo image" />
           </NavLink>
+
+          {/* Hand burger menu here */}
+          <button
+            type="button"
+            className="relative ml-[1.5rem] cursor-pointer [@media(min-width:1350px)]:hidden flex flex-col justify-center items-center gap-[6px] p-2 z-[999]"
+            aria-haspopup="true"
+            aria-expanded={isOpen}
+            aria-controls="site-nav"
+            aria-label="Toggle navigation menu"
+            onClick={toggleMenu}
+          >
+            <div
+              className={`bg-[#27014F] w-[25px] h-[2px] rounded transition-all duration-300 ease-[cubic-bezier(0.455,0.03,0.515,0.955)]
+          ${isOpen ? "rotate-45 translate-y-[8px]" : "rotate-0 translate-y-0"}`}
+            ></div>
+            <div
+              className={`bg-[#27014F] w-[25px] h-[2px] rounded transition-all duration-300 ease-[cubic-bezier(0.455,0.03,0.515,0.955)]
+          ${isOpen ? "opacity-0" : "opacity-100"}`}
+            ></div>
+            <div
+              className={`bg-[#27014F] w-[25px] h-[2px] rounded transition-all duration-300 ease-[cubic-bezier(0.455,0.03,0.515,0.955)]
+          ${
+            isOpen ? "-rotate-45 -translate-y-[8px]" : "rotate-0 translate-y-0"
+          }`}
+            ></div>
+          </button>
+
           <h3 className="text-[#0A2E65] text-[16px] tracking-[2.5px] font-semibold">
             {pageName}
           </h3>
           <div className="flex items-center ">
-            <div className="bg-[#fff] rounded-[100%] h-[40px] w-[40px] flex items-center justify-center border mr-[1rem] border-[#8003A9]">
+            <div className="bg-[#fff] rounded-[100%] h-[40px] w-[40px] flex items-center justify-center border mr-[1rem]  border-[#8003A9]">
               <img src={Alert} alt="" />
             </div>
-            <div className=" flex gap-[15px] items-center border border-[#8003A9] mr-[1rem] rounded-r-[50px] rounded-l-[50px] px-[7px] py-[7px]">
+            <div className=" flex gap-[15px] items-center border border-[#8003A9]  mr-[1rem] rounded-r-[50px] [@media(min-width:1350px)]:my-0 my-2  rounded-l-[50px] px-[7px] py-[7px]">
               <div>
                 <img
                   src={userIcon}
@@ -117,13 +148,13 @@ const DashboardLayoutt = () => {
           </div>
         </div>
 
-        <div className="bg-[#F5F5F5] h-screen flex w-full ">
+        <div className="[@media(min-width:1350px)]:bg-[#F5F5F5] h-screen flex w-full ">
           {/* The left Screen */}
-          <div className=" pt-[8%]  bg-[#F5F5F5]  fixed h-full   w-[20%]">
+          <div className="[@media(min-width:1350px)]:block hidden  pt-[8%]  bg-[#F5F5F5]   fixed h-full   w-[20%]">
             {/* Top Section - First 5 Items */}
 
             {/* <Sidebar /> */}
-            <div className="flex flex-col h-full  justify-between">
+            <div className=" flex-col h-full [@media(min-width:1350px)]:flex hidden justify-between">
               <ul className="flex flex-col gap-[0.3rem] ">
                 <li className="flex items-center gap-2">
                   <NavLink
@@ -434,69 +465,25 @@ const DashboardLayoutt = () => {
                         Log Out
                       </>
                     </div>
-
-                    {/* {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center   bg-black/40 bg-opacity-50 !z-50">
-                  <div className="   rounded-[10px]  bg-[#fff]/20 p-[0.7rem]  bg-opacity-50">
-                    <div className=" p-6 w-[600px]  rounded-[10px]  bg-white  shadow-lg  text-center">
-                      
-                    <div className="flex r-[-3rem]  flex-row-reverse ">
-                          <button
-                            onClick={handleClose}
-                            className="px-4 py-2 cursor-pointer"
-                          >
-                            <img src={Cancel} alt="" />
-                          </button>
-                        </div>
-                      
-                      <div className=" flex items-center justify-center">
-                    
-                     
-                        <div className=" w-[25rem]">
-                          <div className="flex flex-col mt-3 items-center justify-center">
-                            <div className="flex justify-center my-[5%] mb-[1rem]">
-                              <span className="bg-[#FF3366]/15 rounded-[100%] w-[5rem] h-[5rem] flex justify-center items-center p-[2px] mr-[2px] ">
-                                <img
-                                  src={alarmIcon}
-                                  className="w-[3.5rem] "
-                                  alt=""
-                                />
-                              </span>
-                            </div>
-                            <h3 className="text-lg w-full text-[#27014F] ">
-                              Are you sure you want to logout?
-                            </h3>
-                          </div>
-                          <div className="flex justify-between mt-4">
-                          <button
-                              onClick={() => logout(navigate)}
-                              className="px-4 py-3 transition duration-500 ease-in-out bg-red-600 mb-[2rem] cursor-pointer text-white rounded-lg w-full hover:bg-red-700"
-                            >
-                              Yes, Logout
-                            </button>
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )} */}
                   </div>
                 </li>
               </ul>
             </div>
           </div>
-          <div className=" w-[79.5%]  ml-[20%]">{CurrentPage}</div>
+          <div className=" [@media(min-width:1350px)]:w-[79.5%] w-full  [@media(min-width:1350px)]:ml-[20%]">
+            {CurrentPage}
+          </div>
         </div>
       </nav>
+
+      {/* Hamburger Mobile  Menu */}
+      <MobileNav isOpen={isOpen} onClose={toggleMenu} />
 
       {/* Logout Modal */}
       <LogoutModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={() => logout(navigate)}
-    
       />
     </>
   );

@@ -388,7 +388,7 @@ const Dashboard = () => {
 
       <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
         <div className="flex-1 overflow-y-auto pb-[1.5rem] px-4">
-          <div className="h-[2rem] bg-[white] w-[78%] fixed z-20 "></div>
+          <div className="h-[2rem] bg-[white]  [@media(min-width:1350px)]:w-[78%] w-full fixed z-20 "></div>
           <div className=" ml-[2%] py-[2.3%] bg-[#fff]  ">
             <div className="flex gap-[1.5rem] mt-[1rem]">
               <div className="flex ">
@@ -482,8 +482,8 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className=" flex w-full mt-[3rem]  justify-start">
-              <div className="grid grid-cols-4 grid-rows-2 gap-[1rem] ">
+            <div className="w-full mt-[3rem]  ">
+              <div className="grid grid-cols-4 grid-rows-2 w-full h-full gap-[2rem] pr-[2rem]">
                 <Crypto />
                 <ErrorBoundary>
                   <GiftCard />
@@ -491,7 +491,6 @@ const Dashboard = () => {
                 <Airtime />
                 <Data />
                 <Electricity />
-
                 <CableTv />
                 <Betting />
                 <Support />
