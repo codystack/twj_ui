@@ -483,7 +483,7 @@ const Dashboard = () => {
             </div>
 
             <div className="w-full mt-[3rem]  ">
-              <div className="grid grid-cols-4 grid-rows-2 w-full h-full gap-[2rem] pr-[2rem]">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6 w-full h-full  auto-rows-fr">
                 <Crypto />
                 <ErrorBoundary>
                   <GiftCard />
