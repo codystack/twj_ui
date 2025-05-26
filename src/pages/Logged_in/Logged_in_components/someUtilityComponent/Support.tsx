@@ -170,7 +170,7 @@ const Support = () => {
     <>
       <button
         // onClick={openModal}
-        className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] w-[252px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]"
+        className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px]  min-w-[252px]  border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]"
       >
         <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
           <img src={Supportimg} alt="" />
