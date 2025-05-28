@@ -60,7 +60,7 @@ const Transaction = () => {
       setTransaction(transactions);
       setTotalPages(Math.ceil(totalRecords / pageSize));
       setNoTransaction(noTransactionMessage);
-      scrollContainer.current?.scrollTo({ top: 0,});
+      scrollContainer.current?.scrollTo({ top: 0 });
     } catch (err) {
       return err;
       // console.error("Error fetching transactions:", err);
@@ -86,8 +86,8 @@ const Transaction = () => {
       <div ref={scrollContainer} className="flex-1 overflow-y-auto pb-4 px-4">
         <div className=" flex flex-col  ml-[2%] ">
           {/* Tab Buttons */}
-          <div className="py-[2.3%] fixed w-[78%]  z-20 bg-[#fff]  ">
-            <div className="bg-[#F5F7FA]/99  backdrop-blur-lg  w-[calc(100%-63%)] bg-blur-md flex items-center rounded-[50px] justify-between p-[7px]">
+          <div className="py-[2.3%] fixed [@media(min-width:1350px)]:w-[78%] w-[95%]   z-20 bg-[#fff]  ">
+            <div className="bg-[#F5F7FA]/99  backdrop-blur-lg w-full   [@media(min-width:900px)]:w-[38%] bg-blur-md flex items-center rounded-[50px] justify-between p-[7px]">
               <button
                 className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${
                   activeTab === "Crypto"
@@ -100,7 +100,7 @@ const Transaction = () => {
               </button>
 
               <button
-                className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${
+                className={`flex-1 px-[20px] cursor-pointer py-[5px] whitespace-nowrap  rounded-[40px] ${
                   activeTab === "GiftCard"
                     ? "bg-[#fff] text-[#8003A9] "
                     : "bg-transparent  text-[#7688B4]"
@@ -111,7 +111,7 @@ const Transaction = () => {
               </button>
 
               <button
-                className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px]  ${
+                className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] whitespace-nowrap   ${
                   activeTab === "BillsPayment"
                     ? "bg-[#fff] text-[#8003A9] "
                     : "bg-transparent  text-[#7688B4]"
@@ -129,7 +129,7 @@ const Transaction = () => {
           {/* Dynamic Content profile*/}
           <div className=" h-[100%]  mt-[10%] ">
             {activeTab === "Crypto" && (
-              <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
+              <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
                 <CrytoTransaction
                 // transactions={transactions || []}
                 />
@@ -138,7 +138,7 @@ const Transaction = () => {
 
             {/* Dynamic Content Security*/}
             {activeTab === "GiftCard" && (
-              <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
+              <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
                 <GiftCardTransaction
                 // transactions={transactions || []}
                 />
@@ -146,7 +146,7 @@ const Transaction = () => {
             )}
             {/* Dynamic Content Bank*/}
             {activeTab === "BillsPayment" && (
-              <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
+              <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
                 <UtilityTransaction
                   transactions={transaction || []}
                   noTransaction={noTransaction}
