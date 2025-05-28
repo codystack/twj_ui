@@ -163,7 +163,7 @@ const ProfileSecurity = () => {
 
   return (
     <>
-      <div className="mt-[1%] w-[40%]">
+      <div className=" mt-[5%]  md:mt-[1%] lg:[-1%]     w-full md:w-[60%]   lg:w-[40%]">
         <div className="flex items-center justify-between leading-[1.2rem]">
           <div className=" flex flex-col">
             <p className="font-[500]">Update Password</p>
