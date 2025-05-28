@@ -114,7 +114,7 @@ const Login = () => {
 
 
   return (
-    <div className="flex h-[calc(100vh-1rem)] border border-amber-500 w-full">
+    <div className="flex h-[calc(100vh-1rem)] w-full">
       {/* Left: Login Form */}
       <form onSubmit={handleSubmit} className="[@media(min-width:1100px)]:w-1/2 w-full my-[1rem]   mx-[2rem]">
         <div className="mt-8">
