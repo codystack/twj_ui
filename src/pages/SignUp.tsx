@@ -176,7 +176,7 @@ const SignUp = () => {
   return (
     <div className="flex h-screen w-full ">
       {/* Left: Signup Form */}
-      <div className="w-1/2 h-full hide-scrollbar overflow-y-auto">
+      <div className="[@media(min-width:950px)]:w-1/2 w-full h-full hide-scrollbar overflow-y-auto">
         <form onSubmit={handleSubmit} className="  my-[1rem] mx-[2rem] ">
           <div className="mt-8">
             <div className="Nav flex justify-between ">
@@ -396,7 +396,7 @@ const SignUp = () => {
         </form>
       </div>
       {/* Right: Image with Overlay */}
-      <div className="fixed right-0 top-0 w-[50%] h-screen p-[1rem]">
+      <div className="fixed    hidden [@media(min-width:950px)]:block [@media(min-width:950px)]:relative   right-0 top-0 w-[50%] h-screen p-[1rem]">
         <div className="relative w-full h-full flex items-center justify-center">
           <img
             src={SignUpImg}
