@@ -112,16 +112,11 @@ const Login = () => {
     // console.log(formData);
   };
 
-  //useEffect(() => {
-  // if (isAuthenticated) {
-  // console.log("User is authenticated");
-  //  }
-  //}, [isAuthenticated]);
 
   return (
-    <div className="flex h-[calc(100vh-1rem)] w-full">
+    <div className="flex h-[calc(100vh-1rem)] border border-amber-500 w-full">
       {/* Left: Login Form */}
-      <form onSubmit={handleSubmit} className="w-1/2 my-[1rem]   mx-[2rem]">
+      <form onSubmit={handleSubmit} className="[@media(min-width:1100px)]:w-1/2 w-full my-[1rem]   mx-[2rem]">
         <div className="mt-8">
           <div className="Nav flex justify-between">
             <a href="https://twjhub.com/" className="cursor-pointer">
@@ -266,7 +261,7 @@ const Login = () => {
      
 
       {/* Right: Image with Overlay */}
-      <div className="relative w-[641px] h-[calc(100vh-2rem)] m-[1rem]">
+      <div className="  hidden [@media(min-width:1100px)]:block [@media(min-width:1100px)]:relative  w-[641px] h-[calc(100vh-2rem)] m-[1rem]">
         <img
           src={LoginImg}
           alt="Signup"
