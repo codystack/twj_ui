@@ -227,8 +227,8 @@ const Profile = () => {
         {/* Nav */}
         <div className=" flex flex-col ml-[2%] ">
           {/* Tab Buttons */}
-          <div className="py-[2.3%] fixed w-[74.5%] z-20 bg-[#fff]  ">
-            <div className="bg-[#F5F7FA] w-[35%] h-[3rem] flex items-center rounded-[50px] justify-between px-[7px]">
+          <div className="py-[2.3%]   fixed [@media(min-width:1350px)]:w-[75.5%] w-[95%] z-20 bg-[#fff]  ">
+            <div className="bg-[#F5F7FA] w-full   [@media(min-width:900px)]:w-[35%] pr[2rem] h-[3rem] flex items-center rounded-[50px] justify-between px-[7px]">
               <button
                 className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${
                   activeTab === "account"
@@ -269,9 +269,9 @@ const Profile = () => {
           </div>
 
           {/* Dynamic Content profile*/}
-          <div className=" h-[100%]  mt-[12%] ">
+          <div className=" h-[100%]  mt-[18%] [@media(min-width:700px)]:mt-[12%]  ">
             {activeTab === "account" && (
-              <div className="w-[38%]">
+              <div className="w-full md:w-[50%]   lg:w-[38%] ">
                 <div className=" px-[1rem] flex items-center gap-4">
                   <div className="imgdiv  relative rounded-[100%] w-[7rem] ">
                     <img
