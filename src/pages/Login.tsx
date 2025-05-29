@@ -112,17 +112,23 @@ const Login = () => {
     // console.log(formData);
   };
 
-
   return (
     <div className="flex h-[calc(100vh-1rem)] w-full">
       {/* Left: Login Form */}
-      <form onSubmit={handleSubmit} className="[@media(min-width:1100px)]:w-1/2 w-full my-[1rem]   mx-[2rem]">
-        <div className="mt-8">
+      <form
+        onSubmit={handleSubmit}
+        className="[@media(min-width:1100px)]:w-1/2 w-full my-[1rem]   md:mx-[2rem] mx-[1rem]"
+      >
+        <div className="sm:mt-8 mt-2">
           <div className="Nav flex justify-between">
             <a href="https://twjhub.com/" className="cursor-pointer">
-              <img src={Logo} alt="Logo" />
+              <img
+                src={Logo}
+                className="md:w-[188px] w-[150px] h-auto"
+                alt="Logo"
+              />
             </a>
-            <div className="flex items-center text-[15px]">
+            <div className=" sm:flex hidden items-center text-[15px]">
               <p className="font-[500] text-[#27014F]">
                 Don't have an account?
               </p>
@@ -135,15 +141,15 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div className="flex w-full h-[80%] max-w-[480px] mx-auto justify-center items-center">
-          <div className="flex flex-col justify-center w-full p-8 bg-white">
-            <h2 className="text-2xl font-bold mb-[0.4rem] text-[40px] text-[#27014F] w-full leading-[2.5rem]">
+        <div className="flex w-full h-[80%] md:max-w-[480px]  mx-auto justify-center items-center">
+          <div className="flex flex-col justify-center w-full sm:p-8 p-0 bg-white">
+            <h2 className="text-2xl font-bold md:mb-[0.4rem] mb-0 md:text-[40px] text-[30px] text-[#27014F] w-full leading-[2.5rem]">
               Welcome back
             </h2>
             <p className="text-[14px] text-[#27014F]">
               We're happy to see you here again.
             </p>
-            <div className="flex flex-col mt-[2rem]">
+            <div className="flex flex-col md:mt-[2rem] mt-[1rem]">
               <div className="w-full mb-4">
                 <input
                   type="email"
@@ -253,12 +259,22 @@ const Login = () => {
                   "Log In"
                 )}
               </button>
+
+              <div className=" sm:hidden flex mt-2 items-center text-[15px]">
+                <p className="font-[500] text-[#27014F]">
+                  Don't have an account?
+                </p>
+                <NavLink
+                  to="/signup"
+                  className="cursor-pointer  ml-[5px] text-[#9605C5]"
+                >
+                  Create account
+                </NavLink>
+              </div>
             </div>
           </div>
         </div>
-        
       </form>
-     
 
       {/* Right: Image with Overlay */}
       <div className="  hidden [@media(min-width:1100px)]:block [@media(min-width:1100px)]:relative  w-[641px] h-[calc(100vh-2rem)] m-[1rem]">
