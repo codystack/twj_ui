@@ -177,13 +177,20 @@ const SignUp = () => {
     <div className="flex h-screen w-full ">
       {/* Left: Signup Form */}
       <div className="[@media(min-width:950px)]:w-1/2 w-full h-full hide-scrollbar overflow-y-auto">
-        <form onSubmit={handleSubmit} className="  my-[1rem] mx-[2rem] ">
-          <div className="mt-8">
+        <form
+          onSubmit={handleSubmit}
+          className="  my-[1rem]  md:mx-[2rem] mx-[1rem] "
+        >
+          <div className="sm:mt-8 mt-2">
             <div className="Nav flex justify-between ">
               <a href="https://twjhub.com/" className="cursor-pointer">
-                <img src={Logo} alt="Logo" />
+                <img
+                  src={Logo}
+                  className="md:w-[188px] w-[150px] h-auto"
+                  alt="Logo"
+                />
               </a>
-              <div className="flex items-center text-[15px]">
+              <div className="sm:flex hidden items-center text-[15px]">
                 <p className="font-[500] text-[#27014F]">
                   Already have an account?
                 </p>
@@ -196,9 +203,9 @@ const SignUp = () => {
               </div>
             </div>
           </div>
-          <div className="mt-[4rem] max-w-[480px] mx-auto ">
-            <div className="flex flex-col justify-center p-8 bg-white">
-              <h2 className="text-2xl font-bold mb-[0.4rem] text-[40px] text-[#27014F] w-full leading-[2.5rem]">
+          <div className="md:mt-[4rem] mt-[3rem] max-w-[480px] mx-auto ">
+            <div className="flex flex-col justify-center sm:p-8 p-0 bg-white">
+              <h2 className="text-2xl font-bold sm:mb-[0.4rem]  sm:text-[40px] text-[30px] text-[#27014F] w-full leading-[2.5rem]">
                 Create an account
               </h2>
               <p className="text-[14px]">
@@ -390,6 +397,18 @@ const SignUp = () => {
                     "Create Account"
                   )}
                 </button>
+
+                <div className="sm:hidden mb-[4rem] mt-2 flex  items-center text-[15px]">
+                  <p className="font-[500] text-[#27014F]">
+                    Already have an account?
+                  </p>
+                  <NavLink
+                    to="/"
+                    className=" cursor-pointer font-[500] ml-[5px] text-[#9605C5]"
+                  >
+                    Log in
+                  </NavLink>
+                </div>
               </div>
             </div>
           </div>
