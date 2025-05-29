@@ -2,7 +2,8 @@ import { NavLink, useLocation, useNavigate } from "react-router";
 import Logo from "../../assets/dashboard_img/Logo.svg";
 import Alert from "../../assets/dashboard_img/Bell_pin_light.svg";
 import userIcon from "../../assets/dashboard_img/profile/userIcon.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+
 import Dashboard from "./Dashboard";
 // import Bills from "./Bills";
 // import Crypto from "./Crypto";
@@ -24,6 +25,33 @@ const DashboardLayoutt = () => {
   const [email, setEmail] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  // Close on outside click
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      const target = event.target as Node;
+
+      // If clicked outside both modal and button, close it
+      if (
+        showProfile &&
+        modalRef.current &&
+        !modalRef.current.contains(target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(target)
+      ) {
+        setShowProfile(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showProfile]);
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
@@ -100,7 +128,7 @@ const DashboardLayoutt = () => {
           {/* Hand burger menu here */}
           <button
             type="button"
-            className="relative ml-[1.5rem] cursor-pointer [@media(min-width:1350px)]:hidden flex flex-col justify-center items-center gap-[6px] p-2 z-[999]"
+            className="relative md:ml-[1.5rem]  cursor-pointer [@media(min-width:1350px)]:hidden flex flex-col justify-center items-center gap-[6px] p-2 z-[999]"
             aria-haspopup="true"
             aria-expanded={isOpen}
             aria-controls="site-nav"
@@ -123,27 +151,80 @@ const DashboardLayoutt = () => {
             ></div>
           </button>
 
-          <h3 className="text-[#0A2E65] text-[16px] tracking-[2.5px] font-semibold">
+          <h3 className="text-[#0A2E65] md:text-[16px] text-[14px] md:tracking-[2.5px] tracking-[2px] font-semibold">
             {pageName}
           </h3>
           <div className="flex items-center ">
-            <div className="bg-[#fff] rounded-[100%] h-[40px] w-[40px] flex items-center justify-center border mr-[1rem]  border-[#8003A9]">
+            <div className="bg-[#fff] rounded-[100%] md:h-[40px] md:w-[40px] h-[35px] w-[35px] flex items-center justify-center border md:mr-[1rem] mr-[0.5rem]  border-[#8003A9]">
               <img src={Alert} alt="" />
             </div>
-            <div className=" flex gap-[15px] items-center border border-[#8003A9]  mr-[1rem] rounded-r-[50px] [@media(min-width:1350px)]:my-0 my-2  rounded-l-[50px] px-[7px] py-[7px]">
+            <div className=" md:flex hidden  md:gap-[15px] items-center border border-[#8003A9]  md:mr-[1rem] mr-2 rounded-r-[50px] [@media(min-width:1350px)]:my-0 my-2  rounded-l-[50px] md:p-[7px] p-[4px] ">
               <div>
                 <img
                   src={userIcon}
                   alt="Profile"
-                  className="w-[40px] h-[40px] object-cover object-top rounded-full"
+                  className="md:w-[40px] md:h-[40px] h-[30px] w-[30px] object-cover object-top rounded-full"
                 />
               </div>
-              <div className="mr-[10px]">
-                <p className="mb-[-3px] text-[15px] text-[#27014F] font-bold ">
+              <div className="md:mr-[10px]">
+                <p className="mb-[-3px] hidden md:block text-[15px] text-[#27014F] font-bold ">
                   {name}
                 </p>
-                <p className="text-[12px] text-[#534D5A]">{email}</p>
+                <p className="text-[12px] hidden md:block text-[#534D5A]">
+                  {email}
+                </p>
               </div>
+            </div>
+
+            {/* Mobile button for profile */}
+            <div className="relative">
+              <button
+                ref={buttonRef}
+                onClick={() => setShowProfile((prev) => !prev)}
+                className=" cursor-pointer md:hidden flex md:gap-[15px] items-center border border-[#8003A9]  md:mr-[1rem] mr-2 rounded-r-[50px] [@media(min-width:1350px)]:my-0 my-2  rounded-l-[50px] md:p-[7px] p-[4px] "
+              >
+                <div>
+                  <img
+                    src={userIcon}
+                    alt="Profile"
+                    className="md:w-[40px] md:h-[40px] h-[30px] w-[30px] object-cover object-top rounded-full"
+                  />
+                </div>
+              </button>
+
+              {showProfile && (
+                <div
+                  ref={modalRef}
+                  className="absolute top-12 right-3 w-[260px] rounded-xl bg-white border border-[#8003A9] shadow-xl p-5 z-[999]"
+                >
+                  {/* Header */}
+                  <div className="mb-4">
+                    <h2 className="text-xl font-semibold text-[#27014F]">
+                      {name}
+                    </h2>
+                    <p className="text-sm text-[#534D5A]">{email}</p>
+                  </div>
+
+                  {/* Divider */}
+                  <hr className="border-t border-[#E0CCE9] my-3" />
+
+                  {/* Actions */}
+                  <div className="flex flex-col gap-3">
+                    <a
+                      href="#"
+                      className="text-[15px] text-[#27014F] hover:text-[#8003A9] transition-colors duration-200"
+                    >
+                      Help
+                    </a>
+                    <button
+                      onClick={() => logout(navigate)}
+                      className="text-[15px] text-left text-[#27014F] hover:text-[#8003A9] transition-colors duration-200"
+                    >
+                      Log Out
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -374,7 +455,7 @@ const DashboardLayoutt = () => {
                             }`}
                           />
                         </svg>
-                        Profiles
+                        Profile
                       </>
                     )}
                   </NavLink>
@@ -470,7 +551,7 @@ const DashboardLayoutt = () => {
               </ul>
             </div>
           </div>
-          <div className=" [@media(min-width:1350px)]:w-[79.5%] w-full  [@media(min-width:1350px)]:ml-[20%]">
+          <div className=" [@media(min-width:1350px)]:w-[79.5%] w-full z-1  [@media(min-width:1350px)]:ml-[20%]">
             {CurrentPage}
           </div>
         </div>

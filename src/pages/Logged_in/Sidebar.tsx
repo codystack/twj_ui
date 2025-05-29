@@ -1,33 +1,41 @@
 import { NavLink, useNavigate } from "react-router";
 import { useAuthStore } from "../../store/authStore";
-import { useState } from "react";
-import alarmIcon from "../../assets/dashboard_img/profile/Alarm_duotone.svg";
+// import { useState } from "react";
 import Cancel from "../../assets/dashboard_img/profile/cancel.svg";
+import Logo from "../../assets/dashboard_img/Logo.svg";
+// import Cancel from "../assets/dashboard_img/profile/cancel.svg";
 
-const Sidebar = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+interface MobileNavProps {
+  // onClose: boolean;
+  close: () => void;
+}
 
-  // const [showForm, setShowForm] = useState(false);
-  // Get logout function from store
+const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
+  
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout); // Get logout function from store
 
-  // const handleLogout = () => {
-  //   logout(navigate);
-  //   setIsModalOpen(false);
-  // };
-  const handleClose = () => {
-    setIsModalOpen(false);
-  };
+ 
   return (
     <>
       <div className="flex flex-col h-full  justify-between">
-        <ul className="flex flex-col gap-[0.3rem] ">
+        <ul className="flex  flex-col gap-[0.3rem] ">
+          <li className="flex mb-5 items-center justify-between ">
+            <div>
+              <img src={Logo} className="w-[9rem] mt-5 ml-3" alt="logo image" />
+            </div>
+            <button
+              className="mr-3 p-4 cursor-pointer block md:hidden "
+              onClick={close}
+            >
+              <img src={Cancel} alt="" />
+            </button>
+          </li>
           <li className="flex items-center gap-2">
             <NavLink
               to="/dashboard"
               className={({ isActive }) =>
-                `flex items-center w-[68%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px]  pl-[1.7rem] ${
+                `flex items-center w-[56%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px]  pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -170,7 +178,7 @@ const Sidebar = () => {
             <NavLink
               to="/wallet"
               className={({ isActive }) =>
-                `flex items-center w-[68%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px] pl-[1.7rem] ${
+                `flex items-center w-[56%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px] pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -212,7 +220,7 @@ const Sidebar = () => {
             <NavLink
               to="/transactions"
               className={({ isActive }) =>
-                `flex items-center  gap-2 transition-colors rounded-r-[50px] w-[73%] duration-100 py-[12px] pl-[1.7rem] ${
+                `flex items-center  gap-2 transition-colors rounded-r-[50px] w-[56%] duration-100 py-[12px] pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -253,7 +261,7 @@ const Sidebar = () => {
             <NavLink
               to="/referrals"
               className={({ isActive }) =>
-                `flex items-center  gap-2 transition-colors rounded-r-[50px] w-[68%] duration-100 py-[12px] pl-[1.7rem] ${
+                `flex items-center  gap-2 transition-colors rounded-r-[50px] w-[56%] duration-100 py-[12px] pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -324,7 +332,7 @@ const Sidebar = () => {
             <NavLink
               to="/profile"
               className={({ isActive }) =>
-                `flex items-center w-[68%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px]  pl-[1.7rem] ${
+                `flex items-center w-[56%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px]  pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -349,14 +357,14 @@ const Sidebar = () => {
                       }`}
                     />
                   </svg>
-                  Profiles
+                  Profile
                 </>
               )}
             </NavLink>
           </li>
         </ul>
 
-        <ul className="mb-[15%] flex flex-col gap-2">
+        <ul className="mb-[5%] flex flex-col gap-2">
           <li className="flex items-center  ">
             <button className="flex cursor-pointer pl-[1.7rem] py-[10px] justify-center gap-2 text-[#27014F] ">
               <>
@@ -441,50 +449,7 @@ const Sidebar = () => {
                   Log Out
                 </>
               </div>
-              {/* Logout Modal */}
-              {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center   bg-black/40 bg-opacity-50 !z-50">
-                  <div className="   rounded-[10px]  bg-[#fff]/20 p-[0.7rem]  bg-opacity-50">
-                    <div className=" p-6 w-[600px]  rounded-[10px]  bg-white  shadow-lg  text-center">
-                      <div className="flex r-[-3rem]  flex-row-reverse ">
-                        <button
-                          onClick={handleClose}
-                          className="px-4 py-2 cursor-pointer"
-                        >
-                          <img src={Cancel} alt="" />
-                        </button>
-                      </div>
-
-                      <div className=" flex items-center justify-center">
-                        <div className=" w-[25rem]">
-                          <div className="flex flex-col mt-3 items-center justify-center">
-                            <div className="flex justify-center my-[5%] mb-[1rem]">
-                              <span className="bg-[#FF3366]/15 rounded-[100%] w-[5rem] h-[5rem] flex justify-center items-center p-[2px] mr-[2px] ">
-                                <img
-                                  src={alarmIcon}
-                                  className="w-[3.5rem] "
-                                  alt=""
-                                />
-                              </span>
-                            </div>
-                            <h3 className="text-lg w-full text-[#27014F] ">
-                              Are you sure you want to logout?
-                            </h3>
-                          </div>
-                          <div className="flex justify-between mt-4">
-                            <button
-                              onClick={() => logout(navigate)}
-                              className="px-4 py-3 transition duration-500 ease-in-out bg-red-600 mb-[2rem] cursor-pointer text-white rounded-lg w-full hover:bg-red-700"
-                            >
-                              Yes, Logout
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+         
             </div>
           </li>
         </ul>
