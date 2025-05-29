@@ -260,7 +260,7 @@ const Login = () => {
                 )}
               </button>
 
-              <div className=" sm:hidden flex mt-2 items-center text-[15px]">
+              <div className=" sm:hidden flex mt-2 items-center justify-center text-[15px]">
                 <p className="font-[500] text-[#27014F]">
                   Don't have an account?
                 </p>

@@ -203,7 +203,7 @@ const SignUp = () => {
               </div>
             </div>
           </div>
-          <div className="md:mt-[4rem] mt-[3rem] max-w-[480px] mx-auto ">
+          <div className="mt-[4rem]  max-w-[480px] mx-auto ">
             <div className="flex flex-col justify-center sm:p-8 p-0 bg-white">
               <h2 className="text-2xl font-bold sm:mb-[0.4rem]  sm:text-[40px] text-[30px] text-[#27014F] w-full leading-[2.5rem]">
                 Create an account
@@ -398,7 +398,7 @@ const SignUp = () => {
                   )}
                 </button>
 
-                <div className="sm:hidden mb-[4rem] mt-2 flex  items-center text-[15px]">
+                <div className="sm:hidden mb-[2rem] mt-2 flex  items-center justify-center text-[15px]">
                   <p className="font-[500] text-[#27014F]">
                     Already have an account?
                   </p>
