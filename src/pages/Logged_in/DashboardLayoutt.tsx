@@ -195,7 +195,7 @@ const DashboardLayoutt = () => {
               {showProfile && (
                 <div
                   ref={modalRef}
-                  className="absolute top-12 right-3 w-[260px] rounded-xl bg-white border border-[#8003A9] shadow-xl p-5 z-[999]"
+                  className="absolute top-16 right-3 w-[260px] rounded-xl bg-white border border-[#8003A9] shadow-xl p-5 z-[999]"
                 >
                   {/* Header */}
                   <div className="mb-4">
