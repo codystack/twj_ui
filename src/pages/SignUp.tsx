@@ -203,24 +203,30 @@ const SignUp = () => {
               </div>
             </div>
           </div>
-          <div className="mt-[4rem]  max-w-[480px] mx-auto ">
+          <div className="mt-[4rem]  md:max-w-[480px] mx-auto ">
             <div className="flex flex-col justify-center sm:p-8 p-0 bg-white">
               <h2 className="text-2xl font-bold sm:mb-[0.4rem]  sm:text-[40px] text-[30px] text-[#27014F] w-full leading-[2.5rem]">
                 Create an account
               </h2>
-              <p className="text-[14px]">
+              <p className="md:text-[14px] text-[16px]">
                 Create your account, it takes less than a minute.
               </p>
               <div className="flex flex-col mt-[2rem] ">
                 <div className="w-full mb-4">
+                  <label
+                    htmlFor="Username"
+                    className="md:hidden block my-2 text-[16px] text-[#8b8989] "
+                  >
+                    Username
+                  </label>
                   <input
                     type="text"
-                    placeholder="Username"
+                    placeholder="Enter your username"
                     name="userName"
                     value={formData.userName}
                     onChange={handleChange}
                     onBlur={() => validateField("fullName", formData.userName)}
-                    className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                    className={`md:p-2.5 p-4 px-3 border md:text-[13px] text-[16px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                       errors.userName
                         ? "border border-red-600"
                         : "focus:border-purple-800"
@@ -234,6 +240,13 @@ const SignUp = () => {
                   )}
                 </div>
                 <div className="w-full mb-4">
+                  <label
+                    htmlFor="email"
+                    className="md:hidden block my-2 text-[16px] text-[#8b8989]"
+                  >
+                    Email Address
+                  </label>
+
                   <input
                     type="email"
                     placeholder="Enter your email"
@@ -241,7 +254,7 @@ const SignUp = () => {
                     value={formData.email}
                     onChange={handleChange}
                     onBlur={() => validateField("email", formData.email)}
-                    className={` text-[13px] focus:border-2 outline-none p-2.5 pl-3 pr-3 border border-[#A4A4A4] rounded-md w-full ${
+                    className={` md:text-[13px] text-[16px] focus:border-2 outline-none md:p-2.5 p-4  px-3 border border-[#A4A4A4] rounded-md w-full ${
                       errors.email
                         ? "border border-red-600"
                         : "focus:border-purple-800"
@@ -261,8 +274,16 @@ const SignUp = () => {
                       : "focus:border-purple-800"
                   }`}
                 >
+
+
+                  <label
+                    htmlFor="phoneNumber"
+                    className="md:hidden block my-2 text-[16px] text-[#8b8989]"
+                  >
+                    Phone Number
+                  </label>
                   <PhoneInput
-                    placeholder="Enter phone number"
+                    placeholder="Enter your phone number"
                     defaultCountry="NG"
                     value={formData.phoneNumber}
                     onChange={handlePhoneNumberChange}
@@ -285,21 +306,27 @@ const SignUp = () => {
                 </div>
 
                 <div className="relative w-full">
+                  <label
+                    htmlFor="password"
+                    className="md:hidden block my-2 text-[16px] text-[#8b8989]"
+                  >
+                    Password
+                  </label>
                   <input
                     type={isPasswordVisible ? "text" : "password"}
-                    placeholder="Password"
+                    placeholder="Enter your password"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                     onBlur={() => validateField("password", formData.password)}
-                    className={`  w-full focus:border-2 outline-none p-2.5 pl-3 pr-3 text-[13px] border border-[#A4A4A4] rounded-md  ${
-                      errors.email
+                    className={`  w-full focus:border-2 outline-none md:p-2.5 p-4 px-3 md:text-[13px] text-[16px] border border-[#A4A4A4] rounded-md  ${
+                      errors.password
                         ? "border border-red-600"
                         : "focus:border-purple-800"
                     }`}
                   />
                   <div
-                    className={`absolute  cursor-pointer right-[0.8rem] bottom-[0.45rem] 
+                    className={`absolute  cursor-pointer right-[0.8rem] md:bottom-[0.45rem] bottom-[0.95rem]
                   }`}
                     onClick={togglePasswordVisibility}
                   >
@@ -324,7 +351,7 @@ const SignUp = () => {
                   <p className="text-red-500 text-xs mt-1">{errors.password}</p>
                 )}
 
-                <p className="text-[13px] bold-semibold mt-[5px] ">
+                <p className="md:text-[13px] text-[16px] bold-semibold mt-[5px] ">
                   Password must be at least 8 charaters
                 </p>
                 {signUpError && (
@@ -341,7 +368,7 @@ const SignUp = () => {
                     checked={formData.isChecked}
                     onChange={handleChange}
                   />
-                  <div className="flex">
+                  <div className="flex text-[16px] md:text-[14px]">
                     <p>I agree to the </p>
                     <a
                       href="https://twjhub.com/terms"
@@ -364,7 +391,7 @@ const SignUp = () => {
 
                 <button
                   type="submit"
-                  className={`bg-[#9605C5] font-semibold text-white p-3 rounded-[10px] flex items-center justify-center
+                  className={`bg-[#9605C5] font-semibold text-white md:p-3 p-4 md:text-[14px] text-[17px] rounded-[10px] flex items-center justify-center
   ${
     isFormInvalid || isLoading
       ? "opacity-60 cursor-not-allowed"
@@ -398,7 +425,7 @@ const SignUp = () => {
                   )}
                 </button>
 
-                <div className="sm:hidden mb-[2rem] mt-2 flex  items-center justify-center text-[15px]">
+                <div className="sm:hidden mb-[2rem] mt-4 flex  items-center justify-center text-[16px]">
                   <p className="font-[500] text-[#27014F]">
                     Already have an account?
                   </p>
