@@ -146,11 +146,17 @@ const Login = () => {
             <h2 className="text-2xl font-bold md:mb-[0.4rem] mb-0 md:text-[40px] text-[30px] text-[#27014F] w-full leading-[2.5rem]">
               Welcome back
             </h2>
-            <p className="text-[14px] text-[#27014F]">
+            <p className="md:text-[14px] text-[16px] md:mb-0 mb-3 text-[#27014F]">
               We're happy to see you here again.
             </p>
             <div className="flex flex-col md:mt-[2rem] mt-[1rem]">
               <div className="w-full mb-4">
+                <label
+                  htmlFor="email"
+                  className="md:hidden block my-2 text-[16px] text-[#8b8989] "
+                >
+                  Email Address
+                </label>
                 <input
                   type="email"
                   placeholder="Enter your email"
@@ -158,7 +164,7 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   onBlur={() => validateField("email", formData.email)}
-                  className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                  className={`py-4 md:p-2.5 px-3  border md:text-[13px] text-[16px]  border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                     errors.email
                       ? "border border-red-600"
                       : "focus:border-purple-800"
@@ -172,6 +178,12 @@ const Login = () => {
               </div>
 
               <div className="relative w-full">
+                <label
+                  htmlFor="password "
+                  className="md:hidden block my-2 text-[16px] text-[#8b8989] "
+                >
+                  Password
+                </label>
                 <input
                   type={isPasswordVisible ? "text" : "password"}
                   placeholder="Password"
@@ -179,7 +191,7 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleInputChange}
                   onBlur={() => validateField("password", formData.password)}
-                  className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                  className={`py-4 md:py-2.5 px-3   md:text-[13px] text-[16px] border  border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
                     errors.password
                       ? "border border-red-600"
                       : "focus:border-purple-800"
@@ -187,7 +199,7 @@ const Login = () => {
                 />
 
                 <div
-                  className={`absolute  cursor-pointer right-[0.8rem] bottom-[0.45rem] 
+                  className={`absolute  cursor-pointer right-[0.8rem] md:bottom-[0.45rem] bottom-[0.95rem]
                   }`}
                   onClick={togglePasswordVisibility}
                 >
@@ -201,13 +213,6 @@ const Login = () => {
                     />
                   )}
                 </div>
-
-                {/* <img
-                  className="absolute cursor-pointer right-[0.8rem] bottom-[0.45rem]"
-                  src={eye}
-                  alt="password visibility toggle"
-                  onClick={togglePasswordVisibility}
-                /> */}
               </div>
               {errors.password && (
                 <p className="text-red-500 text-xs mt-1">{errors.password}</p>
@@ -219,13 +224,13 @@ const Login = () => {
 
               <NavLink
                 to="/email_for_reset_password"
-                className="text-[13px] text-end cursor-pointer text-[#27014F] underline bold-semibold mt-[5px]"
+                className="md:text-[13px] text-[16px] text-end cursor-pointer text-[#27014F] underline bold-semibold md:mt-[5px] mt-[1rem] mb-[11px]"
               >
                 Forgot password?
               </NavLink>
 
               <button
-                className={`bg-[#9605C5] mt-[2rem] font-semibold text-white p-3 rounded-[10px]  ${
+                className={`bg-[#9605C5] md:mt-[2rem] md:text-[16px] text-[18px] mt-[1rem] font-semibold text-white md:p-3 p-4  rounded-[10px]  ${
                   isFormInvalid
                     ? "opacity-60 cursor-not-allowed"
                     : "  cursor-pointer"
@@ -260,7 +265,7 @@ const Login = () => {
                 )}
               </button>
 
-              <div className=" sm:hidden flex mt-2 items-center justify-center text-[15px]">
+              <div className=" sm:hidden flex mt-5 items-center justify-center text-[16px]">
                 <p className="font-[500] text-[#27014F]">
                   Don't have an account?
                 </p>

@@ -128,7 +128,7 @@ const DashboardLayoutt = () => {
           {/* Hand burger menu here */}
           <button
             type="button"
-            className="relative md:ml-[1.5rem]  cursor-pointer [@media(min-width:1350px)]:hidden flex flex-col justify-center items-center gap-[6px] p-2 z-[999]"
+            className="relative md:ml-[1.5rem] ml-2  cursor-pointer [@media(min-width:1350px)]:hidden flex flex-col justify-center items-center gap-[6px] p-2 z-[999]"
             aria-haspopup="true"
             aria-expanded={isOpen}
             aria-controls="site-nav"
@@ -181,7 +181,7 @@ const DashboardLayoutt = () => {
               <button
                 ref={buttonRef}
                 onClick={() => setShowProfile((prev) => !prev)}
-                className=" cursor-pointer md:hidden flex md:gap-[15px] items-center border border-[#8003A9]  md:mr-[1rem] mr-2 rounded-r-[50px] [@media(min-width:1350px)]:my-0 my-2  rounded-l-[50px] md:p-[7px] p-[4px] "
+                className=" cursor-pointer md:hidden flex md:gap-[15px] items-center border border-[#8003A9]  md:mr-[1rem] mr-4 rounded-r-[50px] [@media(min-width:1350px)]:my-0 my-2  rounded-l-[50px] md:p-[7px] p-[4px] "
               >
                 <div>
                   <img

@@ -28,14 +28,14 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
               className="mr-3 p-4 cursor-pointer block md:hidden "
               onClick={close}
             >
-              <img src={Cancel} alt="" />
+              <img src={Cancel} className="w-6" alt="" />
             </button>
           </li>
           <li className="flex items-center gap-2">
             <NavLink
               to="/dashboard"
               className={({ isActive }) =>
-                `flex items-center w-[56%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px]  pl-[1.7rem] ${
+                `flex items-center w-[56%] text-[1.5rem] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px]  pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -178,7 +178,7 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
             <NavLink
               to="/wallet"
               className={({ isActive }) =>
-                `flex items-center w-[56%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px] pl-[1.7rem] ${
+                `flex items-center w-[56%] text-[1.5rem] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px] pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -220,7 +220,7 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
             <NavLink
               to="/transactions"
               className={({ isActive }) =>
-                `flex items-center  gap-2 transition-colors rounded-r-[50px] w-[56%] duration-100 py-[12px] pl-[1.7rem] ${
+                `flex items-center text-[1.5rem]  gap-2 transition-colors rounded-r-[50px] w-[56%] duration-100 py-[12px] pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -261,7 +261,7 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
             <NavLink
               to="/referrals"
               className={({ isActive }) =>
-                `flex items-center  gap-2 transition-colors rounded-r-[50px] w-[56%] duration-100 py-[12px] pl-[1.7rem] ${
+                `flex items-center text-[1.5rem]  gap-2 transition-colors rounded-r-[50px] w-[56%] duration-100 py-[12px] pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -301,7 +301,7 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
             </NavLink>
           </li>
 
-          <li className="flex items-center gap-2">
+          <li className="flex items-center text-[1.5rem] gap-2">
             <a
               href="http://rates.twjhub.com"
               target="_blank"
@@ -332,7 +332,7 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
             <NavLink
               to="/profile"
               className={({ isActive }) =>
-                `flex items-center w-[56%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px]  pl-[1.7rem] ${
+                `flex items-center text-[1.5rem] w-[56%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px]  pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -366,7 +366,7 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
 
         <ul className="mb-[5%] flex flex-col gap-2">
           <li className="flex items-center  ">
-            <button className="flex cursor-pointer pl-[1.7rem] py-[10px] justify-center gap-2 text-[#27014F] ">
+            <button className="flex text-[1.5rem] cursor-pointer pl-[1.7rem] py-[10px] justify-center gap-2 text-[#27014F] ">
               <>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -411,10 +411,9 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
                   // setIsModalOpen(true);
                   logout(navigate);
                 }}
-                className=" flex cursor-pointer  pl-[1.7rem] pb-[10px] justify-center gap-2 text-[#27014F] "
+                className=" flex cursor-pointer text-[1.5rem]  pl-[1.7rem] pb-[10px] justify-center gap-2 text-[#27014F] "
               >
-                <>
-                  <svg
+                <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -446,6 +445,8 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
                       fill="#27014F"
                     />
                   </svg>
+                <>
+                  
                   Log Out
                 </>
               </div>

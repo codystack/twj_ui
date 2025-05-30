@@ -134,3 +134,13 @@ input[type="checkbox"]:checked:before {
 .hide-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+
+@media (max-width: 768px) {
+  .PhoneInputInput {
+    padding: 16px 10px;
+    font-size: 16px;
+    /* border-top-right-radius: 4px; */
+    /* border-bottom-right-radius: 4px; */
+  }
+}
