@@ -301,7 +301,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
             handleAddBank();
             refetch();
           }}
-          className="h-[182px] min-w-[320px] border flex flex-col  items-center justify-center cursor-pointer border-[#D0DAE6] hover:border-[#8003A9] transition duration-300 rounded-[10px]"
+          className="md:h-[182px] md:mt-0 mt-5 h-[220px] min-w-[320px] border flex flex-col  items-center justify-center cursor-pointer border-[#D0DAE6] hover:border-[#8003A9] transition duration-300 rounded-[10px]"
         >
           <img src={AddRing} alt="" />
           <p className="text-[#8003A9]">Add bank account</p>
@@ -310,7 +310,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
         {bankList.map((banks, index) => (
           <div
             key={banks.id}
-            className="relative min-w-[320px] h-[182px] cursor-pointer"
+            className="relative sm:my-0 my-2 min-w-[320px] md:h-[182px] h-[220px] cursor-pointer"
             onClick={() => handleFlip(index)}
           >
             <div

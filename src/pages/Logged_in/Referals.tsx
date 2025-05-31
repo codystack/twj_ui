@@ -111,7 +111,7 @@ const Referals = () => {
   return (
     <>
       <div className="w-full z-10 overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
-        <div className="flex-1 overflow-y-auto  px-4">
+        <div className="flex-1 overflow-y-auto  md:px-4 px-2.5">
           <div className="h-[2rem] bg-[white] w-[98%] fixed  z-20 "></div>
           <div className=" flex flex-col  md:flex-col lg:flex-row  py-[2.3%] ml-[2%] mt-[1.5rem] lg:mt-[1rem]  gap-[2rem]">
             <div className=" flex flex-col gap-[1.5rem] w-full  lg:w-[40%]  ">

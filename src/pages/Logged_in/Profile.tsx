@@ -225,12 +225,12 @@ const Profile = () => {
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
       <div className="flex-1 overflow-y-auto pb-4 px-4">
         {/* Nav */}
-        <div className=" flex flex-col ml-[2%] ">
+        <div className=" flex flex-col md:ml-[2%] ">
           {/* Tab Buttons */}
-          <div className="py-[2.3%]   fixed [@media(min-width:1350px)]:w-[75.5%] w-[95%] z-20 bg-[#fff]  ">
+          <div className="py-[2.3%] md:ml-0 ml-[-7px]  fixed [@media(min-width:1350px)]:w-[75.5%] w-[95%] z-20 bg-[#fff]  ">
             <div className="bg-[#F5F7FA] w-full   [@media(min-width:900px)]:w-[35%] pr[2rem] h-[3rem] flex items-center rounded-[50px] justify-between px-[7px]">
               <button
-                className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${
+                className={`flex-1 px-[20px] text-[17px] cursor-pointer py-[5px] rounded-[40px] ${
                   activeTab === "account"
                     ? "bg-[#fff] text-[#8003A9] "
                     : "bg-transparent text-[#7688B4]"
@@ -241,7 +241,7 @@ const Profile = () => {
               </button>
 
               <button
-                className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${
+                className={`flex-1 px-[20px] text-[17px] cursor-pointer py-[5px] rounded-[40px] ${
                   activeTab === "security"
                     ? "bg-[#fff] text-[#8003A9] "
                     : "bg-transparent  text-[#7688B4]"
@@ -252,7 +252,7 @@ const Profile = () => {
               </button>
 
               <button
-                className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px]  ${
+                className={`flex-1 px-[20px] text-[17px] cursor-pointer py-[5px] rounded-[40px]  ${
                   activeTab === "bank"
                     ? "bg-[#fff] text-[#8003A9] "
                     : "bg-transparent  text-[#7688B4]"
@@ -291,30 +291,30 @@ const Profile = () => {
                     </p>
                     <NavLink
                       to="/profile/account_upgrade"
-                      className="flex hover:bg-[#F1C8FF]/80 transition-colors duration-200 bg-[#F1C8FF] p-[6px] py-[4px] text-[#27014F] cursor-pointer rounded-[5px] text-[13px] items-center gap-1 w-fit"
+                      className="flex hover:bg-[#F1C8FF]/80 transition-colors duration-200 bg-[#F1C8FF] p-[6px] py-[4px] text-[#27014F] cursor-pointer rounded-[5px] md:text-[13px] text-[17px] items-center gap-1 w-fit"
                     >
                       <p>Tier One</p>
                       <img src={arrowRight} alt="pointing arror to the right" />
                     </NavLink>
                   </div>
                 </div>
-                <div className="mt-[8%] px-[0.6rem]">
+                <div className="mt-[8%] md:px-[0.6rem]">
                   <div className="flex items-center justify-between mb-[6%] ">
-                    <p className="text-[#7688B4] text-[14px] ">Username</p>
-                    <p className="text-[#27014F] text-[14px]  "> {userName}</p>
+                    <p className="text-[#7688B4] text-[17px] md:text-[14px] ">Username</p>
+                    <p className="text-[#27014F] text-[17px] md:text-[14px]  "> {userName}</p>
                   </div>
                   <div className="flex items-center justify-between mb-[6%] ">
-                    <p className="text-[#7688B4] text-[14px] ">Unique ID</p>
-                    <p className="text-[#27014F] text-[14px]  ">{uniqueID}</p>
+                    <p className="text-[#7688B4] text-[17px] md:text-[14px] ">Unique ID</p>
+                    <p className="text-[#27014F] text-[17px] md:text-[14px]  ">{uniqueID}</p>
                   </div>
                   <div className="flex items-center justify-between mb-[6%] ">
-                    <p className="text-[#7688B4] text-[14px] ">Email address</p>
-                    <p className="text-[#27014F] text-[14px]  ">{email}</p>
+                    <p className="text-[#7688B4] text-[17px] md:text-[14px] ">Email address</p>
+                    <p className="text-[#27014F] text-[17px] md:text-[14px]  ">{email}</p>
                   </div>
                   <div className="flex items-center justify-between mb-[6%] ">
-                    <p className="text-[#7688B4] text-[14px]  ">Phone</p>
+                    <p className="text-[#7688B4] text-[17px] md:text-[14px] ">Phone</p>
                     <span className="flex gap-[2px]">
-                      <p className="text-[#27014F] text-[14px]  ">{phone}</p>
+                      <p className="text-[#27014F] text-[17px] md:text-[14px]  ">{phone}</p>
 
                       <button onClick={() => setIsPhoneInputModalOpen(true)}>
                         <img src={Edit} alt="" className=" cursor-pointer" />
@@ -333,10 +333,10 @@ const Profile = () => {
                     )}
                   </div>
                   <div className="flex items-center justify-between mb-[7%] ">
-                    <p className="text-[#7688B4] text-[14px]  ">
+                    <p className="text-[#7688B4] text-[17px] md:text-[14px]  ">
                       Date of birth
                     </p>
-                    <p className="text-[#27014F] text-[14px]">
+                    <p className="text-[#27014F] text-[17px] md:text-[14px]">
                       {user?.dateOfBirth &&
                       !isNaN(new Date(user.dateOfBirth).getTime())
                         ? new Date(user.dateOfBirth).toLocaleDateString(
@@ -359,10 +359,10 @@ const Profile = () => {
                         <img src={alarmIcon} alt="" />
                       </span>
                       <span className="leading-[0.8rem]">
-                        <p className="text-[#27014F] text-start font-[500] text-[13px] ">
+                        <p className="text-[#27014F] text-start font-[500] text-[15px] md:text-[13px] ">
                           Upgrade Account
                         </p>
-                        <p className="text-[10px] text-start text-[#343E65]">
+                        <p className="md:text-[10px] text-[12px] text-start text-[#343E65]">
                           upgrade your account to access all features and keep
                           it safe
                         </p>
@@ -379,7 +379,7 @@ const Profile = () => {
                       <span className="bg-[#F80004]/10 flex justify-between items-center p-[12px] mr-2 rounded-[100%] ">
                         <img src={Delete} alt="" />
                       </span>
-                      <p>Delete Account</p>
+                      <p className="text-[18px]">Delete Account</p>
                     </button>
                   ) : (
                     // Fullscreen Dark Overlay with Centered   w-[600px]
