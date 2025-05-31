@@ -387,24 +387,32 @@ const Dashboard = () => {
       )}
 
       <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
-        <div className="flex-1 overflow-y-auto pb-[1.5rem] px-4">
-          <div className="h-[2rem] bg-[white]  [@media(min-width:1350px)]:w-[78%] w-full fixed z-20 "></div>
-          <div className=" ml-[2%] py-[2.3%] bg-[#fff]  ">
-            <div className="flex gap-[1.5rem] mt-[1rem]">
-              <div className="flex ">
-                <div className="w-[505px] relative h-[253px] bg-[#27014F] rounded-[10px] flex items-center justify-center">
+        <div className="flex-1 overflow-y-auto pb-[1.5rem] md:px-4 p-3">
+          <div className="md:h-[2rem] h-[1.5rem] bg-[white] mt-[-12px] md:rounded-tl-[20px] md:ml-0 ml-[-5px] [@media(min-width:1350px)]:w-[78%] w-full fixed z-20 "></div>
+          <div className=" md:ml-[2%] py-[2.3%] bg-[#fff]  ">
+            <div className="flex  gap-4 w-full  mt-[1rem] ">
+    
+    
+    
+    
+    
+              <div className="flex relative [@media(min-width:900px)]:w-auto w-full">
+                <div className="[@media(min-width:900px)]:w-[505px] w-full relative h-[253px] bg-[#27014F] rounded-[10px] flex items-center justify-center">
                   <img
                     src={Lines}
                     className="absolute h-[110%] w-full top-0 left-0"
                     alt=""
                   />
+
                   <div className="flex flex-col items-center text-[#fff]">
-                    <p className="text-[20px] leading-[rem]">Wallet Balance</p>
-                    <div className=" relative flex items-center gap-2">
+                    <p className="sm:text-[20px] text-[18px] leading-[rem]">
+                      Wallet Balance
+                    </p>
+                    <div className=" relative mb-4 flex items-center gap-2">
                       <span className=" mb-[8px] mr-[-5px] text-[16px]">
                         {isHidden ? "" : " ₦"}
                       </span>
-                      <p className="text-[32px] font-semibold">
+                      <p className="sm:text-[32px] text-[30px] font-semibold">
                         {isHidden
                           ? "*******"
                           : user?.accountBalance?.toLocaleString()}
@@ -427,10 +435,28 @@ const Dashboard = () => {
                         )}
                       </button>
                     </div>
+
+                    {/* topup and withdrawal on smaller screens */}
+                    <div>
+                      <div className=" lg:hidden mb-[-1rem] flex w-full  z-30    gap-[1rem] rounded-[10px]">
+                        <button
+                          onClick={openWithdrawalModal}
+                          className=" relative cursor-pointer border border-white text-left text-[#fff] sm:text-[14px] text-[13px] py-[0.5rem] w-fit  px-[1rem] rounded-[40px] m"
+                        >
+                          <p> WITHDRAW </p>
+                        </button>
+                        <button
+                          onClick={openModal}
+                          className="bg-[#fff] relative text-left cursor-pointer text-[#27014F] sm:text-[14px] text-[13px] py-[0.5rem] w-fit  px-[1rem] rounded-[40px]"
+                        >
+                          <p className="whitespace-nowrap"> TOP UP WALLET</p>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex justify-center items-center">
+                <div className="lg:flex hidden justify-center items-center">
                   <div className=" flex flex-col  w-[8rem] gap-[1rem] rounded-[10px]">
                     <button
                       onClick={openWithdrawalModal}
@@ -457,7 +483,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="relative w-[423px] h-[253] bg-[#FBEEFF] rounded-[10px] ">
+              <div className="[@media(min-width:900px)]:block hidden relative w-full max-w-[423px] h-[253] bg-[#FBEEFF] rounded-[10px] ">
                 <div className=" pt-[1.5rem] pl-[1.5rem]">
                   <div className="flex  items-center">
                     <h5 className="font-bold text-[24px] mr-[5px]">
@@ -483,7 +509,7 @@ const Dashboard = () => {
             </div>
 
             <div className="w-full mt-[3rem]  ">
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6 w-full h-full  auto-rows-fr">
+              <div className="grid grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6 w-full h-full auto-rows-fr">
                 <Crypto />
                 <ErrorBoundary>
                   <GiftCard />
@@ -496,6 +522,32 @@ const Dashboard = () => {
                 <Support />
               </div>
             </div>
+
+            {/* <div className="w-full mt-[3rem] border  ">
+              <div className="md:hidden block relative w-full  h-[253] bg-[#FBEEFF] rounded-[10px] ">
+                <div className=" pt-[1.5rem] pl-[1.5rem]">
+                  <div className="flex  items-center">
+                    <h5 className="font-bold text-[24px] mr-[5px]">
+                      Virtual Card
+                    </h5>
+                    <div className="bg-[#FF3366]/20 px-[5px] py-[1px] h-fit rounded-[2px] text-[8px] text-[#FF3366]">
+                      COMING SOON
+                    </div>
+                  </div>
+
+                  <p className="text-left text-[#27014F] leading-[13px] tracking-normal text-[11px]">
+                    Avoid card transaction failures. Use the <br /> TWJ Virtual
+                    USD Card for smooth, relaible <br /> payments on your
+                    favourite platforms.
+                  </p>
+                </div>
+                <img
+                  src={virtualCard}
+                  className=" absolute bottom-0 rounded-bl-[10px]  rounded-br-[10px]"
+                  alt=""
+                />
+              </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -242,7 +242,7 @@ const CreditDebitTransactions: React.FC<{
         ))
       ) : (
         <div className="flex flex-col items-center justify-center h-[calc(100vh-18rem)]">
-          <img src={warning} className="w-[9rem]" alt="" />
+          <img src={warning} className="md:w-[9rem] w-[5rem]" alt="" />
           <p className="text-gray-500 text-lg">{noTransaction}</p>
         </div>
       )}
