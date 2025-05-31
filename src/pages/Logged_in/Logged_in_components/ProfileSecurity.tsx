@@ -9,7 +9,7 @@ import api from "../../../services/api";
 import { AxiosError } from "axios";
 import SuccessModal from "../SuccessModal";
 
-const ProfileSecurity = () => {
+const     ProfileSecurity = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [changePinModal, SetChangePinModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -165,9 +165,9 @@ const ProfileSecurity = () => {
     <>
       <div className=" mt-[5%]  md:mt-[1%] lg:[-1%]     w-full md:w-[60%]   lg:w-[40%]">
         <div className="flex items-center justify-between leading-[1.2rem]">
-          <div className=" flex flex-col">
-            <p className="font-[500]">Update Password</p>
-            <p className="text-[12px] text-[#7688B4]">
+          <div className=" flex mt-[2rem] md:mt-0 flex-col">
+            <p className="font-[500] text-[17px] md:text-[15px]">Update Password</p>
+            <p className="md:text-[12px] text-[14px] text-[#7688B4]">
               Change your old password to a new one
             </p>
           </div>
@@ -332,10 +332,10 @@ const ProfileSecurity = () => {
             />
           )}
         </div>
-        <div className="flex items-center mt-[10%] justify-between leading-[1.2rem]">
+        <div className="flex items-center md:mt-[10%] mt-[16%] justify-between leading-[1.2rem]">
           <div className=" flex flex-col">
-            <p className="font-[500]">Update PIN</p>
-            <p className="text-[12px] text-[#7688B4]">
+            <p className="font-[500] text-[17px] md:text-[15px]">Update PIN</p>
+            <p className="md:text-[12px] text-[14px] text-[#7688B4]">
               Change or reset your TWJ PIN
             </p>
           </div>
@@ -368,10 +368,10 @@ const ProfileSecurity = () => {
             closeChangePinModal={closeChangePinModal}
           />
         </div>
-        <div className="flex items-center mt-[10%] justify-between leading-[1.2rem]">
+        <div className="flex items-center md:mt-[10%] mt-[16%] justify-between leading-[1.2rem]">
           <div className=" flex flex-col">
-            <p className="font-[500]">Two-Factor Authentication</p>
-            <p className="text-[12px]  text-[#7688B4]">
+            <p className="font-[500] md:text-[15px] text-[17px]">Two-Factor Authentication</p>
+            <p className="md:text-[12px] text-[14px]  text-[#7688B4]">
               Protect your TWJ account from unauthorised <br /> transaction
               using a software token
             </p>

@@ -183,7 +183,7 @@ const CrytoTransaction = () => {
         <button
           onClick={() => handleOpenModal(transaction)}
           key={transaction.id}
-          className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  p-4"
+          className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  md:p-4 py-3"
         >
           {/* Left Side: Static Logo + Transaction Details */}
           <div className="flex items-center gap-4 relative">

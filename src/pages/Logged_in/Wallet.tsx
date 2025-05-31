@@ -448,7 +448,7 @@ const Wallet = () => {
       <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
         <div className="flex-1 overflow-y-auto pb-[1.5rem] px-[1rem]">
           <div className="md:h-[2rem]  h-[1rem] bg-[white] [@media(min-width:1350px)]:w-[78%]  w-[97%] fixed z-20 "></div>
-          <div className=" ml-[2%] py-[2.3%] bg-[#fff]  ">
+          <div className=" md:ml-[2%] py-[2.3%] bg-[#fff]  ">
 
 
 

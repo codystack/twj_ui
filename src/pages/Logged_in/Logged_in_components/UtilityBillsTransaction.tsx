@@ -160,7 +160,7 @@ const UtilityTransaction: React.FC<{
           <button
             onClick={() => handleOpenModal(transaction)}
             key={transaction.id}
-            className="flex justify-between cursor-pointer items-center bg-white border-b  w-full border-[#E2E8F0] last:border-b-0 p-4"
+            className="flex justify-between cursor-pointer items-center bg-white border-b  w-full border-[#E2E8F0] last:border-b-0 md:p-4 py-3"
           >
             <div className="flex items-center gap-4 relative">
               <div className="relative">
@@ -208,7 +208,7 @@ const UtilityTransaction: React.FC<{
                 </p>
                 <div className="flex items-center gap-2 text-gray-600">
                   {/* Tracking ID */}
-                  <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
+                  <span className="text-[11px] text-left text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
                     {transaction.id}
                   </span>
 
