@@ -447,23 +447,30 @@ const Wallet = () => {
 
       <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
         <div className="flex-1 overflow-y-auto pb-[1.5rem] px-[1rem]">
-          <div className="h-[2rem] bg-[white] w-[78%] fixed z-20 "></div>
+          <div className="md:h-[2rem]  h-[1rem] bg-[white] [@media(min-width:1350px)]:w-[78%]  w-[97%] fixed z-20 "></div>
           <div className=" ml-[2%] py-[2.3%] bg-[#fff]  ">
-            <div className="flex gap-[1.5rem] mt-[1rem]">
-              <div className="flex ">
-                <div className="w-[505px] relative h-[253px] bg-[#27014F] rounded-[10px] flex items-center justify-center">
+
+
+
+
+            <div className="  block gap-[1.5rem] mt-[1rem] [@media(min-width:900px)]:flex">
+              <div className="flex relative [@media(min-width:900px)]:w-auto w-full">
+                <div className="[@media(min-width:900px)]:w-[505px] w-full relative h-[253px] bg-[#27014F] rounded-[10px] flex items-center justify-center">
                   <img
                     src={Lines}
                     className="absolute h-[110%] w-full top-0 left-0"
                     alt=""
                   />
+
                   <div className="flex flex-col items-center text-[#fff]">
-                    <p className="text-[20px] leading-[rem]">Wallet Balance</p>
-                    <div className=" relative flex items-center gap-2">
+                    <p className="sm:text-[20px] text-[18px] leading-[rem]">
+                      Wallet Balance
+                    </p>
+                    <div className=" relative mb-4 flex items-center gap-2">
                       <span className=" mb-[8px] mr-[-5px] text-[16px]">
-                        {isHidden ? "" : "₦"}
+                        {isHidden ? "" : " ₦"}
                       </span>
-                      <p className="text-[32px] font-semibold">
+                      <p className="sm:text-[32px] text-[30px] font-semibold">
                         {isHidden
                           ? "*******"
                           : user?.accountBalance?.toLocaleString()}
@@ -486,10 +493,28 @@ const Wallet = () => {
                         )}
                       </button>
                     </div>
+
+                    {/* topup and withdrawal on smaller screens */}
+                    <div>
+                      <div className=" lg:hidden mb-[-1rem] flex w-full  z-30    gap-[1rem] rounded-[10px]">
+                        <button
+                          onClick={openWithdrawalModal}
+                          className=" relative cursor-pointer border border-white text-left text-[#fff] sm:text-[14px] text-[13px] py-[0.5rem] w-fit  px-[1rem] rounded-[40px] m"
+                        >
+                          <p> WITHDRAW </p>
+                        </button>
+                        <button
+                          onClick={openModal}
+                          className="bg-[#fff] relative text-left cursor-pointer text-[#27014F] sm:text-[14px] text-[13px] py-[0.5rem] w-fit  px-[1rem] rounded-[40px]"
+                        >
+                          <p className="whitespace-nowrap"> TOP UP WALLET</p>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex justify-center items-center">
+                <div className="lg:flex hidden justify-center items-center">
                   <div className=" flex flex-col  w-[8rem] gap-[1rem] rounded-[10px]">
                     <button
                       onClick={openWithdrawalModal}
@@ -517,7 +542,7 @@ const Wallet = () => {
                 </div>
               </div>
 
-              <div className=" w-[423px] h-[253px] bg-[#F2F4FC] border border-[#326CF6] rounded-[10px] ">
+              <div className=" [@media(min-width:900px)]:w-[423px] w-full h-[253px] [@media(min-width:900px)]:my-[0px] my-[1.5rem] bg-[#F2F4FC] border border-[#326CF6] rounded-[10px] ">
                 <div className="flex flex-col items-center justify-center gap-12">
                   <div className=" leading-[1.7rem] mt-10">
                     <p className="text-[#27014F]">Daily Withdrawal Limit</p>
@@ -526,7 +551,7 @@ const Wallet = () => {
                     </p>
                   </div>
 
-                  <div className=" flex gap-10">
+                  <div className=" flex [@media(min-width:900px)]:gap-10 sm:gap-40 gap-10">
                     <div className=" leading-[1.7rem] ">
                       <p className="text-[#27014F]">Total Credit</p>
                       <div className="flex gap-1 justify-center items-center">

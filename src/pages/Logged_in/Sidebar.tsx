@@ -11,11 +11,9 @@ interface MobileNavProps {
 }
 
 const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
-  
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout); // Get logout function from store
 
- 
   return (
     <>
       <div className="flex flex-col h-full  justify-between">
@@ -28,14 +26,14 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
               className="mr-3 p-4 cursor-pointer block md:hidden "
               onClick={close}
             >
-              <img src={Cancel} className="w-6" alt="" />
+              <img src={Cancel} className="w-5" alt="" />
             </button>
           </li>
           <li className="flex items-center gap-2">
             <NavLink
               to="/dashboard"
               className={({ isActive }) =>
-                `flex items-center w-[56%] text-[1.5rem] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px]  pl-[1.7rem] ${
+                `flex items-center w-[56%] text-[16px] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px]  pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -178,7 +176,7 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
             <NavLink
               to="/wallet"
               className={({ isActive }) =>
-                `flex items-center w-[56%] text-[1.5rem] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px] pl-[1.7rem] ${
+                `flex items-center w-[56%] text-[16px] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px] pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -220,7 +218,7 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
             <NavLink
               to="/transactions"
               className={({ isActive }) =>
-                `flex items-center text-[1.5rem]  gap-2 transition-colors rounded-r-[50px] w-[56%] duration-100 py-[12px] pl-[1.7rem] ${
+                `flex items-center text-[16px]  gap-2 transition-colors rounded-r-[50px] w-[56%] duration-100 py-[12px] pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -261,7 +259,7 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
             <NavLink
               to="/referrals"
               className={({ isActive }) =>
-                `flex items-center text-[1.5rem]  gap-2 transition-colors rounded-r-[50px] w-[56%] duration-100 py-[12px] pl-[1.7rem] ${
+                `flex items-center text-[16px]  gap-2 transition-colors rounded-r-[50px] w-[56%] duration-100 py-[12px] pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -301,7 +299,7 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
             </NavLink>
           </li>
 
-          <li className="flex items-center text-[1.5rem] gap-2">
+          <li className="flex items-center text-[16px] gap-2">
             <a
               href="http://rates.twjhub.com"
               target="_blank"
@@ -332,7 +330,7 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
             <NavLink
               to="/profile"
               className={({ isActive }) =>
-                `flex items-center text-[1.5rem] w-[56%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px]  pl-[1.7rem] ${
+                `flex items-center text-[16px] w-[56%] gap-2 transition-colors rounded-r-[50px] duration-100 py-[12px]  pl-[1.7rem] ${
                   isActive
                     ? "white bg-[#8003A9] rounded-r-[50px] pr-[30px] text-[#fff]"
                     : "text-[#27014F]"
@@ -364,9 +362,9 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
           </li>
         </ul>
 
-        <ul className="mb-[5%] flex flex-col gap-2">
+        <ul className="mb-[12%] flex flex-col gap-2">
           <li className="flex items-center  ">
-            <button className="flex text-[1.5rem] cursor-pointer pl-[1.7rem] py-[10px] justify-center gap-2 text-[#27014F] ">
+            <button className="flex text-[16px]  items-center cursor-pointer pl-[1.7rem] py-[10px] justify-center gap-2 text-[#27014F] ">
               <>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -411,46 +409,42 @@ const Sidebar: React.FC<MobileNavProps> = ({ close }) => {
                   // setIsModalOpen(true);
                   logout(navigate);
                 }}
-                className=" flex cursor-pointer text-[1.5rem]  pl-[1.7rem] pb-[10px] justify-center gap-2 text-[#27014F] "
+                className=" flex cursor-pointer text-[16px] pl-[1.7rem] pb-[10px] items-center justify-center gap-2 text-[#27014F] "
               >
                 <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <ellipse
-                      cx="6"
-                      cy="6"
-                      rx="6"
-                      ry="6"
-                      transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 21 18)"
-                      fill="#7E869E"
-                      fillOpacity="0.25"
-                    />
-                    <path
-                      d="M8.7 12C8.7 8.52061 11.5206 5.7 15 5.7C18.4794 5.7 21.3 8.52061 21.3 12C21.3 15.4794 18.4794 18.3 15 18.3C11.5206 18.3 8.7 15.4794 8.7 12Z"
-                      stroke="#7E869E"
-                      strokeOpacity="0.25"
-                      strokeWidth="0.6"
-                    />
-                    <path
-                      d="M9 18.9282C10.2162 19.6303 11.5957 20 13 20C14.4043 20 15.7838 19.6303 17 18.9282C18.2162 18.2261 19.2261 17.2162 19.9282 16C20.6303 14.7838 21 13.4043 21 12C21 10.5957 20.6303 9.21615 19.9282 8C19.2261 6.78385 18.2162 5.77394 17 5.0718C15.7838 4.36965 14.4043 4 13 4C11.5957 4 10.2162 4.36965 9 5.0718"
-                      stroke="#27014F"
-                      strokeWidth="1.5"
-                    />
-                    <path
-                      d="M3 12L2.41435 11.5315L2.03953 12L2.41435 12.4685L3 12ZM12 12.75C12.4142 12.75 12.75 12.4142 12.75 12C12.75 11.5858 12.4142 11.25 12 11.25V12.75ZM6.41435 6.53148L2.41435 11.5315L3.58565 12.4685L7.58565 7.46852L6.41435 6.53148ZM2.41435 12.4685L6.41435 17.4685L7.58565 16.5315L3.58565 11.5315L2.41435 12.4685ZM3 12.75H12V11.25H3V12.75Z"
-                      fill="#27014F"
-                    />
-                  </svg>
-                <>
-                  
-                  Log Out
-                </>
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <ellipse
+                    cx="6"
+                    cy="6"
+                    rx="6"
+                    ry="6"
+                    transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 21 18)"
+                    fill="#7E869E"
+                    fillOpacity="0.25"
+                  />
+                  <path
+                    d="M8.7 12C8.7 8.52061 11.5206 5.7 15 5.7C18.4794 5.7 21.3 8.52061 21.3 12C21.3 15.4794 18.4794 18.3 15 18.3C11.5206 18.3 8.7 15.4794 8.7 12Z"
+                    stroke="#7E869E"
+                    strokeOpacity="0.25"
+                    strokeWidth="0.6"
+                  />
+                  <path
+                    d="M9 18.9282C10.2162 19.6303 11.5957 20 13 20C14.4043 20 15.7838 19.6303 17 18.9282C18.2162 18.2261 19.2261 17.2162 19.9282 16C20.6303 14.7838 21 13.4043 21 12C21 10.5957 20.6303 9.21615 19.9282 8C19.2261 6.78385 18.2162 5.77394 17 5.0718C15.7838 4.36965 14.4043 4 13 4C11.5957 4 10.2162 4.36965 9 5.0718"
+                    stroke="#27014F"
+                    strokeWidth="1.5"
+                  />
+                  <path
+                    d="M3 12L2.41435 11.5315L2.03953 12L2.41435 12.4685L3 12ZM12 12.75C12.4142 12.75 12.75 12.4142 12.75 12C12.75 11.5858 12.4142 11.25 12 11.25V12.75ZM6.41435 6.53148L2.41435 11.5315L3.58565 12.4685L7.58565 7.46852L6.41435 6.53148ZM2.41435 12.4685L6.41435 17.4685L7.58565 16.5315L3.58565 11.5315L2.41435 12.4685ZM3 12.75H12V11.25H3V12.75Z"
+                    fill="#27014F"
+                  />
+                </svg>
+                <div>Log Out</div>
               </div>
-         
             </div>
           </li>
         </ul>
