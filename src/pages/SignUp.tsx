@@ -226,7 +226,7 @@ const SignUp = () => {
                     value={formData.userName}
                     onChange={handleChange}
                     onBlur={() => validateField("fullName", formData.userName)}
-                    className={`md:p-2.5 p-4 px-3 border md:text-[13px] text-[16px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                    className={`md:p-2.5 p-4 px-3 border  text-[16px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                       errors.userName
                         ? "border border-red-600"
                         : "focus:border-purple-800"
@@ -254,7 +254,7 @@ const SignUp = () => {
                     value={formData.email}
                     onChange={handleChange}
                     onBlur={() => validateField("email", formData.email)}
-                    className={` md:text-[13px] text-[16px] focus:border-2 outline-none md:p-2.5 p-4  px-3 border border-[#A4A4A4] rounded-md w-full ${
+                    className={`  text-[16px] focus:border-2 outline-none md:p-2.5 p-4  px-3 border border-[#A4A4A4] rounded-md w-full ${
                       errors.email
                         ? "border border-red-600"
                         : "focus:border-purple-800"
@@ -319,14 +319,14 @@ const SignUp = () => {
                     value={formData.password}
                     onChange={handleChange}
                     onBlur={() => validateField("password", formData.password)}
-                    className={`  w-full focus:border-2 outline-none md:p-2.5 p-4 px-3 md:text-[13px] text-[16px] border border-[#A4A4A4] rounded-md  ${
+                    className={`  w-full focus:border-2 outline-none md:p-2.5 p-4 px-3 text-[16px] border border-[#A4A4A4] rounded-md  ${
                       errors.password
                         ? "border border-red-600"
                         : "focus:border-purple-800"
                     }`}
                   />
                   <div
-                    className={`absolute  cursor-pointer right-[0.8rem] md:bottom-[0.45rem] bottom-[0.95rem]
+                    className={`absolute  cursor-pointer right-[0.8rem]  bottom-[0.7rem]
                   }`}
                     onClick={togglePasswordVisibility}
                   >

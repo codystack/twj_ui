@@ -164,7 +164,7 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   onBlur={() => validateField("email", formData.email)}
-                  className={`py-4 md:p-2.5 px-3  border md:text-[13px] text-[16px]  border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                  className={`py-4 md:p-2.5 px-3  border  text-[16px]  border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                     errors.email
                       ? "border border-red-600"
                       : "focus:border-purple-800"
@@ -191,7 +191,7 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleInputChange}
                   onBlur={() => validateField("password", formData.password)}
-                  className={`py-4 md:py-2.5 px-3   md:text-[13px] text-[16px] border  border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                  className={`py-4 md:py-2.5 px-3   text-[16px] border  border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
                     errors.password
                       ? "border border-red-600"
                       : "focus:border-purple-800"
@@ -199,7 +199,7 @@ const Login = () => {
                 />
 
                 <div
-                  className={`absolute  cursor-pointer right-[0.8rem] md:bottom-[0.45rem] bottom-[0.95rem]
+                  className={`absolute  cursor-pointer right-[0.8rem] md:bot bottom-[0.7rem]
                   }`}
                   onClick={togglePasswordVisibility}
                 >

@@ -117,7 +117,7 @@ const DashboardLayoutt = () => {
   return (
     <>
       <nav className=" h-full ">
-        <div className="flex   w-full bg-[#F5F5F5] z-5 fixed items-center justify-between">
+        <div className="flex   w-full bg-[#F5F5F5] z-5  fixed items-center justify-between">
           <NavLink
             to="/dashboard"
             className=" [@media(min-width:1350px)]:block hidden p-[12px] cursor-pointer "
@@ -235,7 +235,7 @@ const DashboardLayoutt = () => {
             {/* Top Section - First 5 Items */}
 
             {/* <Sidebar /> */}
-            <div className=" flex-col h-full [@media(min-width:1350px)]:flex hidden justify-between">
+            <div className=" flex-col h-full [@media(min-width:1350px)]:flex z-0 hidden justify-between">
               <ul className="flex flex-col gap-[0.3rem] ">
                 <li className="flex items-center gap-2">
                   <NavLink
@@ -551,7 +551,7 @@ const DashboardLayoutt = () => {
               </ul>
             </div>
           </div>
-          <div className=" [@media(min-width:1350px)]:w-[79.5%] w-full z-1  [@media(min-width:1350px)]:ml-[20%]">
+          <div className=" [@media(min-width:1350px)]:w-[79.5%] w-full z-10  [@media(min-width:1350px)]:ml-[20%]">
             {CurrentPage}
           </div>
         </div>
