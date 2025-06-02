@@ -117,7 +117,7 @@ const DashboardLayoutt = () => {
   return (
     <>
       <nav className=" h-full ">
-        <div className="flex   w-full bg-[#F5F5F5] z-5  fixed items-center justify-between">
+        <div className="flex   w-full bg-[#F5F5F5]  z-5  fixed items-center justify-between">
           <NavLink
             to="/dashboard"
             className=" [@media(min-width:1350px)]:block hidden p-[12px] cursor-pointer "
@@ -128,7 +128,7 @@ const DashboardLayoutt = () => {
           {/* Hand burger menu here */}
           <button
             type="button"
-            className="relative md:ml-[1.5rem] ml-2  cursor-pointer [@media(min-width:1350px)]:hidden flex flex-col justify-center items-center gap-[6px] p-2 z-[999]"
+            className="relative  md:ml-[1.5rem] ml-2  cursor-pointer [@media(min-width:1350px)]:hidden flex flex-col justify-center items-center gap-[6px] p-2 z-[999]"
             aria-haspopup="true"
             aria-expanded={isOpen}
             aria-controls="site-nav"
@@ -195,7 +195,7 @@ const DashboardLayoutt = () => {
               {showProfile && (
                 <div
                   ref={modalRef}
-                  className="absolute top-16 right-3 w-[260px] rounded-xl bg-white border border-[#8003A9] shadow-xl p-5 z-[999]"
+                  className="absolute top-16 right-3 w-[260px]  rounded-xl bg-white border border-[#8003A9] shadow-xl p-5 z-50"
                 >
                   {/* Header */}
                   <div className="mb-4">
@@ -551,7 +551,7 @@ const DashboardLayoutt = () => {
               </ul>
             </div>
           </div>
-          <div className=" [@media(min-width:1350px)]:w-[79.5%] w-full z-10  [@media(min-width:1350px)]:ml-[20%]">
+          <div className=" [@media(min-width:1350px)]:w-[79.5%] w-full  [@media(min-width:1350px)]:ml-[20%]">
             {CurrentPage}
           </div>
         </div>
