@@ -294,7 +294,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
 
   return (
     <>
-      <div className="grid grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] gap-4 justify-center">
+      <div className="grid grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] md:gap-4 gap-6  justify-center">
         {/* Add Bank Button Styled Like a Card */}
         <button
           onClick={() => {
@@ -310,7 +310,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
         {bankList.map((banks, index) => (
           <div
             key={banks.id}
-            className="relative sm:my-0 my-2 min-w-[320px] md:h-[182px] h-[220px] cursor-pointer"
+            className="relative  min-w-[320px] md:h-[182px] h-[230px] cursor-pointer"
             onClick={() => handleFlip(index)}
           >
             <div

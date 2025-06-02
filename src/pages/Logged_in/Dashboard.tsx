@@ -388,14 +388,9 @@ const Dashboard = () => {
 
       <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
         <div className="flex-1 overflow-y-auto pb-[1.5rem] md:px-4 p-3">
-          <div className="md:h-[2rem] h-[1.5rem] bg-[white] mt-[-12px] md:rounded-tl-[20px] md:ml-0 ml-[-5px] [@media(min-width:1350px)]:w-[78%] w-full fixed z-20 "></div>
+          <div className="md:h-[2rem] md:block hidden  h-[1.5rem] bg-[white] mt-[-12px] md:rounded-tl-[20px] md:ml-0 ml-[-5px] [@media(min-width:1350px)]:w-[78%] w-full fixed z-20 "></div>
           <div className=" md:ml-[2%] py-[2.3%] bg-[#fff]  ">
             <div className="flex  gap-4 w-full  mt-[1rem] ">
-    
-    
-    
-    
-    
               <div className="flex relative [@media(min-width:900px)]:w-auto w-full">
                 <div className="[@media(min-width:900px)]:w-[505px] w-full relative h-[253px] bg-[#27014F] rounded-[10px] flex items-center justify-center">
                   <img

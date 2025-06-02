@@ -299,22 +299,22 @@ const Profile = () => {
                   </div>
                 </div>
                 <div className="mt-[8%] md:px-[0.6rem]">
-                  <div className="flex items-center justify-between mb-[6%] ">
-                    <p className="text-[#7688B4] text-[17px] md:text-[14px] ">Username</p>
-                    <p className="text-[#27014F] text-[17px] md:text-[14px]  "> {userName}</p>
+                  <div className="flex items-center justify-between md:mb-[6%]  mb-[8%] ">
+                    <p className="text-[#7688B4] text-[15px] ">Username</p>
+                    <p className="text-[#27014F] text-[15px]  "> {userName}</p>
                   </div>
-                  <div className="flex items-center justify-between mb-[6%] ">
-                    <p className="text-[#7688B4] text-[17px] md:text-[14px] ">Unique ID</p>
-                    <p className="text-[#27014F] text-[17px] md:text-[14px]  ">{uniqueID}</p>
+                  <div className="flex items-center justify-between md:mb-[6%]  mb-[8%] ">
+                    <p className="text-[#7688B4] text-[15px] ">Unique ID</p>
+                    <p className="text-[#27014F] text-[15px]  ">{uniqueID}</p>
                   </div>
-                  <div className="flex items-center justify-between mb-[6%] ">
-                    <p className="text-[#7688B4] text-[17px] md:text-[14px] ">Email address</p>
-                    <p className="text-[#27014F] text-[17px] md:text-[14px]  ">{email}</p>
+                  <div className="flex items-center justify-between md:mb-[6%]  mb-[8%] ">
+                    <p className="text-[#7688B4] text-[15px] ">Email address</p>
+                    <p className="text-[#27014F] text-[15px]  ">{email}</p>
                   </div>
-                  <div className="flex items-center justify-between mb-[6%] ">
-                    <p className="text-[#7688B4] text-[17px] md:text-[14px] ">Phone</p>
+                  <div className="flex items-center justify-between md:mb-[6%]  mb-[8%] ">
+                    <p className="text-[#7688B4] text-[15px] ">Phone</p>
                     <span className="flex gap-[2px]">
-                      <p className="text-[#27014F] text-[17px] md:text-[14px]  ">{phone}</p>
+                      <p className="text-[#27014F] text-[15px]  ">{phone}</p>
 
                       <button onClick={() => setIsPhoneInputModalOpen(true)}>
                         <img src={Edit} alt="" className=" cursor-pointer" />
@@ -332,11 +332,11 @@ const Profile = () => {
                       />
                     )}
                   </div>
-                  <div className="flex items-center justify-between mb-[7%] ">
-                    <p className="text-[#7688B4] text-[17px] md:text-[14px]  ">
+                  <div className="flex items-center justify-between md:mb-[7%] mb-[12%] ">
+                    <p className="text-[#7688B4] text-[15px]  ">
                       Date of birth
                     </p>
-                    <p className="text-[#27014F] text-[17px] md:text-[14px]">
+                    <p className="text-[#27014F] text-[15px]">
                       {user?.dateOfBirth &&
                       !isNaN(new Date(user.dateOfBirth).getTime())
                         ? new Date(user.dateOfBirth).toLocaleDateString(
@@ -359,10 +359,10 @@ const Profile = () => {
                         <img src={alarmIcon} alt="" />
                       </span>
                       <span className="leading-[0.8rem]">
-                        <p className="text-[#27014F] text-start font-[500] text-[15px] md:text-[13px] ">
+                        <p className="text-[#27014F] text-start sm:pb-0 pb-1.5 font-[500] text-[15px] md:text-[13px] ">
                           Upgrade Account
                         </p>
-                        <p className="md:text-[10px] text-[12px] text-start text-[#343E65]">
+                        <p className="md:text-[10px] text-[11px] text-start text-[#343E65]">
                           upgrade your account to access all features and keep
                           it safe
                         </p>
