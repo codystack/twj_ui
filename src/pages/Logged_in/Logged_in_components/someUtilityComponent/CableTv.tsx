@@ -26,7 +26,7 @@ const customStyles = {
   control: (provided: any, state: any) => ({
     ...provided,
     borderRadius: "8px",
-    padding: "4px",
+    padding: "9px",
     boxShadow: "none",
     outline: "none",
     textAlign: "left",
@@ -326,21 +326,21 @@ const CableTv = () => {
         <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
           {/* Dialog Box */}
           <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
+            <div className="bg-white  sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto    z-[50]   p-6 sm:rounded-[15px] shadow-lg flex flex-col">
               <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
-                <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
+                <h3 className="sm:text-[17px] text-[20px] tracking-[1px]  text-[#27014F] ">
                   Cable TV Subscription
                 </h3>
                 <button className="cursor-pointer" onClick={closeModal}>
-                  <img src={Cancel} alt="" />
+                  <img className="sm:w-4 w-5" src={Cancel} alt="" />
                 </button>
               </div>
 
               <div className="flex justify-center items-center">
-                <div className="w-[70%]">
+                <div className="sm:w-[70%] w-full">
                   {/* Input Fields */}
                   <form onSubmit={handleSubmit}>
-                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left mt-[2rem] ">
+                    <p className="text-[#0A2E65]/60 pb-[3px]  pl-[5px] text-[16px] text-left sm:mt-[2rem] mt-[3rem] ">
                       Service Provider
                     </p>
                     <div>
@@ -357,15 +357,12 @@ const CableTv = () => {
                         placeholder=" Choose a Provider"
                       />
                     </div>
-                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left  mt-[10px] ">
+                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[16px] text-left  sm:mt-[10px] mt-[17px] ">
                       Package/Bouquet
                     </p>
                     <div>
                       <Select
-                        // options={options}
-                        // getOptionLabel={(e) => e.label}
-                        // getOptionValue={(e) => e.value}
-
+                    
                         options={bouquetOptions}
                         onChange={handleBouquetChange}
                         // isLoading={isLoading}
@@ -377,7 +374,7 @@ const CableTv = () => {
                         placeholder="Provider"
                       />
                     </div>
-                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left  mt-[10px] ">
+                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[16px] text-left  sm:mt-[10px] mt-[17px] ">
                       Smart Card Number
                     </p>
                     <div className="w-full ">
@@ -388,7 +385,7 @@ const CableTv = () => {
                         value={formData.smartCardNumber}
                         onChange={handleInputChange}
                         onBlur={handleBlur}
-                        className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                        className={`p-4 px-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                           errors.provider
                             ? "border border-red-600"
                             : "focus:border-purple-800"
@@ -422,11 +419,11 @@ const CableTv = () => {
                       )}
                     </div>
 
-                    <div className=" mt-[10px] flex justify-between items-center">
-                      <p className="text-[#0A2E65]/60 pl-[5px] text-[15px] pb-[3px] text-left   ">
+                    <div className=" sm:mt-[10px] mt-[17px] flex justify-between items-center">
+                      <p className="text-[#0A2E65]/60 pl-[5px] text-[16px] pb-[3px] text-left   ">
                         Amount
                       </p>
-                      <div className="flex items-center px-[5px] text-[15px]  ">
+                      <div className="flex items-center px-[5px] text-[16px]  ">
                         <span className="text-[#0A2E65] mr-[2px]">
                           Balance:
                         </span>
@@ -446,7 +443,7 @@ const CableTv = () => {
                         value={amount}
                         onChange={handleInputChange}
                         onBlur={() => validateField("email", formData.amount)}
-                        className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                        className={`p-4 px-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                           errors.amount
                             ? "border border-red-600"
                             : "focus:border-purple-800"
@@ -459,7 +456,7 @@ const CableTv = () => {
                 )} */}
                     </div>
 
-                    <div className="w-full mt-[1.5rem] mb-[2rem]">
+                    <div className="w-full sm:mt-[1.5rem] mt-[2.5rem] mb-[2rem]">
                       <Button type="submit" isDisabled={isFormInvalid}>
                         Pay for Subscription
                       </Button>

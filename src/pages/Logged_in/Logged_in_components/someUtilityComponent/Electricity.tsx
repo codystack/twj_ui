@@ -29,7 +29,7 @@ const customStyles = {
   control: (provided: any, state: any) => ({
     ...provided,
     borderRadius: "8px",
-    padding: "4px",
+    padding: "9px",
     boxShadow: "none",
     outline: "none",
     textAlign: "left",
@@ -166,7 +166,7 @@ const Electricity = () => {
 
   const closeModal = () => {
     // Clear form logic can be added here
-    setSelectedAmount(null); 
+    setSelectedAmount(null);
     setIsModalOpen(false);
     setFormData({
       powerProvider: "",
@@ -185,7 +185,7 @@ const Electricity = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedAmount(null); 
+    setSelectedAmount(null);
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Validate the field on change
@@ -242,7 +242,6 @@ const Electricity = () => {
           title: `${
             provider.providerName
           } - (${provider.shortName.toUpperCase()})`,
-      
         }))
       );
       // console.log(providers)
@@ -381,21 +380,21 @@ const Electricity = () => {
         <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
           {/* Dialog Box */}
           <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] h-[px] overflow-auto shadow-lg flex flex-col">
+            <div className="bg-white sm:w-[600px] w-[100vw] sm:h-auto   z-[50]   p-6 sm:rounded-[15px] h-[100vh] overflow-y-auto  flex flex-col">
               <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
-                <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
+                <h3 className="sm:text-[17px] text-[20px] tracking-[1px]  text-[#27014F] ">
                   Electricity Purchase
                 </h3>
                 <button className="cursor-pointer" onClick={closeModal}>
-                  <img src={Cancel} alt="" />
+                  <img className="sm:w-4 w-5" src={Cancel} alt="" />
                 </button>
               </div>
 
               <div className="flex justify-center items-center">
-                <div className="w-[70%]">
+                <div className="sm:w-[70%] w-full">
                   {/* Input Fields */}
                   <form onSubmit={handleSubmit}>
-                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left mt-[2rem] ">
+                    <p className="text-[#0A2E65]/60 pb-[3px] mb-[5px]  pl-[5px] text-[16px] text-left mt-[2rem] ">
                       Service Provider
                     </p>
                     <div>
@@ -412,7 +411,7 @@ const Electricity = () => {
                         placeholder=" Choose a Provider"
                       />
                     </div>
-                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left  mt-[10px] ">
+                    <p className="text-[#0A2E65]/60 pb-[3px] mb-[5px] pl-[5px] text-[15px] text-left  sm:mt-[10px] mt-[17px] ">
                       Type
                     </p>
                     <div>
@@ -429,7 +428,7 @@ const Electricity = () => {
                         placeholder="Provider type"
                       />
                     </div>
-                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left  mt-[10px] ">
+                    <p className="text-[#0A2E65]/60 pb-[3px] mb-[5px] pl-[5px] text-[15px] text-left  sm:mt-[10px] mt-[17px] ">
                       Meter Number
                     </p>
                     <div className="w-full ">
@@ -441,7 +440,7 @@ const Electricity = () => {
                         onChange={handleInputChange}
                         // onBlur={() => validateField("email", formData.customerId)}
                         onBlur={handleBlur}
-                        className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                        className={`p-4 px-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                           errors.meterNumber
                             ? "border border-red-600"
                             : "focus:border-purple-800"
@@ -475,28 +474,32 @@ const Electricity = () => {
                       )}
                     </div>
 
+                    <p className="sm:hidden block text-[#0A2E65]/60 sm:mt-[10px] mt-[17px] pb-[3px] mb-[5px] pl-[5px] text-[16px] text-left ">
+                      Choose an Amount
+                    </p>
+
                     <div className="grid grid-cols-3 gap-4">
                       {[1000, 2000, 5000, 10000, 25000, 50000].map((amount) => (
-                         <div
-                         key={amount}
-                         className={`py-[10px] cursor-pointer rounded-[5px] flex justify-center items-center transition-all duration-300 hover:scale-105
+                        <div
+                          key={amount}
+                          className={`py-[10px] cursor-pointer rounded-[5px] flex justify-center items-center transition-all duration-300 hover:scale-105
        ${
          selectedAmount === amount
            ? "bg-[#F2F4FC] border border-[#326CF6] text-[#27014F] "
            : "text-[#A4A4A4] border border-[#A4A4A4]"
        }`}
-                         onClick={() => handleAmountClick(amount)}
-                       >
-                         <span>₦{amount}</span>
-                       </div>
-                     ))}
+                          onClick={() => handleAmountClick(amount)}
+                        >
+                          <span>₦{amount}</span>
+                        </div>
+                      ))}
                     </div>
 
-                    <div className=" mt-[10px] flex justify-between items-center">
-                      <p className="text-[#0A2E65]/60 pl-[5px] text-[15px] pb-[3px] text-left   ">
+                    <div className=" sm:mt-[10px] mt-[17px] flex justify-between items-center">
+                      <p className="text-[#0A2E65]/60 pl-[5px] text-[15px] pb-[3px]  text-left   ">
                         Amount
                       </p>
-                      <div className="flex items-center px-[5px] text-[15px]  ">
+                      <div className="flex items-center px-[5px] text-[16px]  ">
                         <span className="text-[#0A2E65] mr-[2px]">
                           Balance:
                         </span>
@@ -514,7 +517,7 @@ const Electricity = () => {
                         value={formData.amount}
                         onChange={handleInputChange}
                         // onBlur={() => validateField("email", formData.customerId)}
-                        className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                        className={`p-4 px-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                           errors.amount
                             ? "border border-red-600"
                             : "focus:border-purple-800"
@@ -527,7 +530,7 @@ const Electricity = () => {
                       )}
                     </div>
 
-                    <div className="w-full mt-[1.5rem] mb-[2rem]">
+                    <div className="w-full sm:mt-[1.5rem] mt-[2.5rem] mb-[2rem]">
                       <Button
                         type="submit"
                         isDisabled={isFormInvalid}
