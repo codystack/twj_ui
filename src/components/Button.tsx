@@ -21,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       disabled={isDisabled || isLoading} // Prevent clicks when disabled/loading
       type={type} // Dynamically handle button type
-      className={`bg-[#9605C5] mt-[rem] w-full text-white p-3 rounded-[5px] ${
+      className={`bg-[#9605C5] mt-[rem] w-full text-white p-4 text-[17px] rounded-[5px] ${
         isDisabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
       }`}
     >

@@ -37,7 +37,7 @@ const customStyles = {
   control: (provided: any, state: any) => ({
     ...provided,
     borderRadius: "8px",
-    padding: "4px",
+    padding: "10px",
     boxShadow: "none",
     outline: "none",
     textAlign: "left",
@@ -200,7 +200,7 @@ const Dashboard = () => {
       {showWithdrawalModal && (
         <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
           <div className="p-[0.8rem] rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white p-6 rounded-2xl w-[600px] text-center">
+            <div className="bg-white  p-6 sm:rounded-2xl sm:w-[600px] sm:h-auto h-[100vh] w-[100vw] text-center">
               <div className="flex justify-end">
                 <button
                   onClick={() => {
@@ -208,104 +208,108 @@ const Dashboard = () => {
                     setFormData({ amount: "", bank: "" });
                     setShowWithdrawalModal(false);
                   }}
-                  className="px-4 py-2 mr-[5px] cursor-pointer "
+                  className="px-4 py-2 sm:mr-[5px] mr-[-10px] cursor-pointer "
                 >
-                  <img src={cancel} alt="" />
+                  <img className="w-5 sm:w-4" src={cancel} alt="" />
                 </button>
               </div>
 
-              {options.length === 0 ? (
-                <div className="flex flex-col items-center justify-center p-6">
-                  <p className="text-[#0A2E65] mb-4">
-                    You don't have any bank account set up yet.
-                  </p>
-                  <button
-                    onClick={() => {
-                      setShowWithdrawalModal(false);
-                      navigate("/profile", { state: { activeTab: "bank" } });
-                    }}
-                    className="px-4 py-2 flex justify-center items-center bg-[#f2f4fc] text-[#0A2E65] rounded-[5px] cursor-pointer transition"
-                  >
-                    <img className="w-[1.2rem]" src={Add_icon} alt="" />
-                    <span className="ml-1 text-[16px] text-black">
-                      Add a bank account
-                    </span>
-                  </button>
-                </div>
-              ) : (
-                <form className="flex flex-col items-center ">
-                  <div className="w-[70%] flex flex-col justify-center">
-                    <h5 className="text-[#0A2E65]/60">Available Balance</h5>
-                    <div className="flex items-center justify-center">
-                      <div className="relative flex items-center gap-2">
-                        <span className="mb-[8px] mr-[-5px] text-[16px]">
-                          ₦
-                        </span>
-                        <p className="text-[32px] text-center font-semibold">
-                          {user?.accountBalance?.toLocaleString() ?? ""}
-                        </p>
-                        <span className="text-[16px] mt-[12px] ml-[-7px]">
-                          .00
-                        </span>
+              <div className="flex flex-col h-[90%] justify-center ">
+                {options.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center p-6">
+                    <p className="text-[#0A2E65] mb-4">
+                      You don't have any bank account set up yet.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setShowWithdrawalModal(false);
+                        navigate("/profile", { state: { activeTab: "bank" } });
+                      }}
+                      className="px-4 py-2 flex justify-center items-center bg-[#f2f4fc] text-[#0A2E65] rounded-[5px] cursor-pointer transition"
+                    >
+                      <img className="w-[1.2rem]" src={Add_icon} alt="" />
+                      <span className="ml-1 text-[16px] text-black">
+                        Add a bank account
+                      </span>
+                    </button>
+                  </div>
+                ) : (
+                  <form className="flex flex-col items-center ">
+                    <div className="sm:w-[70%] w-full flex flex-col justify-center">
+                      <h5 className="text-[#0A2E65]/60 sm:text-[15px] text-[17px] ">Available Balance</h5>
+                      <div className="flex items-center justify-center">
+                        <div className="relative flex items-center gap-2">
+                          <span className="mb-[8px] mr-[-5px] text-[16px]">
+                            ₦
+                          </span>
+                          <p className="text-[32px] text-center font-semibold">
+                            {user?.accountBalance?.toLocaleString() ?? ""}
+                          </p>
+                          <span className="text-[16px] mt-[12px] ml-[-7px]">
+                            .00
+                          </span>
+                        </div>
+                      </div>
+
+                      <p className="text-[#0A2E65]/60 mt-[1rem] pl-[5px] text-[15px] pb-[3px] text-left">
+                        Amount
+                      </p>
+                      <div className="w-full mb-4">
+                        <input
+                          type="amount"
+                          placeholder="₦0.00"
+                          name="amount"
+                          value={formData.amount}
+                          onChange={handleInputChange}
+                          onBlur={() =>
+                            validateField("amount", formData.amount)
+                          }
+                          className={`p-4 px-3  border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                            errors.amount
+                              ? "border border-red-600"
+                              : "focus:border-purple-800"
+                          } `}
+                        />
+                        {errors.amount && (
+                          <p className="text-red-500 text-left text-[13px] mt-1">
+                            {errors.amount}
+                          </p>
+                        )}
+                      </div>
+
+                      <p className="text-[#0A2E65]/60 pl-[5px] text-[15px] pb-[3px] text-left">
+                        Bank Account
+                      </p>
+                      <div className="w-full">
+                        <Select
+                          options={options}
+                          getOptionLabel={(e) => e.label}
+                          getOptionValue={(e) => e.value}
+                          onChange={(selected) => {
+                            if (selected) {
+                              setFormData((prev) => ({
+                                ...prev,
+                                bank: selected.value,
+                              }));
+                            }
+                          }}
+                          styles={customStyles}
+                          value={options.find(
+                            (option) => option.value === formData.bank
+                          )}
+                          placeholder="Select Bank Account"
+                        />
+                      </div>
+
+                      <div className="w-full mt-[1.5rem] mb-[2rem]">
+                        <Button type="submit" isDisabled={isFormInvalid}>
+                          Make Withdrawal
+                        </Button>
                       </div>
                     </div>
-
-                    <p className="text-[#0A2E65]/60 mt-[1rem] pl-[5px] text-[15px] pb-[3px] text-left">
-                      Amount
-                    </p>
-                    <div className="w-full mb-4">
-                      <input
-                        type="amount"
-                        placeholder="₦0.00"
-                        name="amount"
-                        value={formData.amount}
-                        onChange={handleInputChange}
-                        onBlur={() => validateField("amount", formData.amount)}
-                        className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
-                          errors.amount
-                            ? "border border-red-600"
-                            : "focus:border-purple-800"
-                        } `}
-                      />
-                      {errors.amount && (
-                        <p className="text-red-500 text-left text-[13px] mt-1">
-                          {errors.amount}
-                        </p>
-                      )}
-                    </div>
-
-                    <p className="text-[#0A2E65]/60 pl-[5px] text-[15px] pb-[3px] text-left">
-                      Bank Account
-                    </p>
-                    <div className="w-full">
-                      <Select
-                        options={options}
-                        getOptionLabel={(e) => e.label}
-                        getOptionValue={(e) => e.value}
-                        onChange={(selected) => {
-                          if (selected) {
-                            setFormData((prev) => ({
-                              ...prev,
-                              bank: selected.value,
-                            }));
-                          }
-                        }}
-                        styles={customStyles}
-                        value={options.find(
-                          (option) => option.value === formData.bank
-                        )}
-                        placeholder="Select Bank Account"
-                      />
-                    </div>
-
-                    <div className="w-full mt-[1.5rem] mb-[2rem]">
-                      <Button type="submit" isDisabled={isFormInvalid}>
-                        Make Withdrawal
-                      </Button>
-                    </div>
-                  </div>
-                </form>
-              )}
+                  </form>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -315,27 +319,27 @@ const Dashboard = () => {
       {showTopupModal && (
         <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
           <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white p-6 rounded-2xl  w-[600px] text-center">
+            <div className="bg-white p-6 sm:rounded-2xl  sm:w-[600px] sm:h-auto h-[100vh] w-[100vw] text-center">
               <div className="flex justify-end">
                 <button
                   onClick={() => {
                     fetchUser();
                     setShowTopupModal(false);
                   }}
-                  className="px-4 py-2 mr-[5px] cursor-pointer "
+                  className="px-4 py-2 md:mr-[5px] mr-[-10px] cursor-pointer "
                 >
-                  <img src={cancel} alt="" />
+                  <img className="w-5 sm:w-4" src={cancel} alt="" />
                 </button>
               </div>
-              <div className="flex flex-col items-center ">
-                <div className="w-[70%] flex flex-col justify-center items-center">
-                  <div className="mt-5 mb-2 ">
+              <div className="flex flex-col items-center  h-[80%] justify-center ">
+                <div className="sm:w-[70%] flex flex-col justify-center items-center">
+                  <div className="sm:mt-5 sm:mb-2 mb-5">
                     <span className="  rounded-full flex justify-center flex-col items-center p-[2px]">
                       <img src={bankImg} className="w-[]" alt="Alarm Icon" />
                       <h4 className="text-[#27014F] font-semibold mt-[1rem] text-[24px] ">
                         Account Top-up
                       </h4>
-                      <p className="text-[#0A2E65]/60 tracking-[1px]  leading-[1.5rem]  mb-6">
+                      <p className="text-[#0A2E65]/60 tracking-[1px] text-[16px]  leading-[1.5rem]  mb-6">
                         Transfer money to your virtual account wallet
                         <br /> using the account number below.
                       </p>
@@ -343,14 +347,14 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                <div className="w-[77%]">
+                <div className="sm:w-[77%] w-full">
                   <div className="text-[#022B69] w-full flex justify-between   ">
                     <p>Account Name</p>
                     <p> {user?.accountName ?? ""}</p>
                   </div>
-                  <div className="text-[#022B69] mt-[16px] w-full flex justify-between   ">
+                  <div className="text-[#022B69] sm:mt-[16px] mt-[20px] w-full flex justify-between   ">
                     <p>Account Number</p>
-                    <div className="flex reltive items-center justify-center text-[#8003A9]">
+                    <div className="flex relative items-center justify-center text-[#8003A9]">
                       <p>{textToCopy}</p>
                       <button
                         onClick={handleCopy}
@@ -366,7 +370,7 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="text-[#022B69] mt-[16px] mb-[2rem] w-full flex justify-between   ">
+                  <div className="text-[#022B69] sm:mt-[16px] mt-[20px] mb-[2rem] w-full flex justify-between   ">
                     <p>Bank Name</p>
                     <p> {user?.bankName ?? ""}</p>
                   </div>
