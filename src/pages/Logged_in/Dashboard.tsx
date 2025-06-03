@@ -300,7 +300,6 @@ const Dashboard = () => {
                           placeholder="Select Bank Account"
                         />
                       </div>
-
                       <div className="w-full mt-[1.5rem] mb-[2rem]">
                         <Button type="submit" isDisabled={isFormInvalid}>
                           Make Withdrawal
