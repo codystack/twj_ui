@@ -219,7 +219,7 @@ const Airtime = () => {
           <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
             <div className="bg-white overflow-y-auto sm:w-[600px] w-[100vw] sm:h-auto h-[100vh]   z-[50]   p-6 sm:rounded-[15px] shadow-lg flex flex-col">
               <div className="flex items-center   border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
-                <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
+                <h3 className="sm:text-[17px] text-[20px] tracking-[1px]  text-[#27014F] ">
                   Airtime Purchase
                 </h3>
                 <button className="cursor-pointer " onClick={closeModal}>
