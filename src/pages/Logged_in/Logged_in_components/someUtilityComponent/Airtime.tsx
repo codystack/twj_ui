@@ -85,7 +85,7 @@ const Airtime = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedAmount(null); 
+    setSelectedAmount(null);
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
@@ -217,21 +217,21 @@ const Airtime = () => {
         <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
           {/* Dialog Box */}
           <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
-              <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
+            <div className="bg-white overflow-y-auto sm:w-[600px] w-[100vw] sm:h-auto h-[100vh]   z-[50]   p-6 sm:rounded-[15px] shadow-lg flex flex-col">
+              <div className="flex items-center   border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
                 <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
                   Airtime Purchase
                 </h3>
-                <button className="cursor-pointer" onClick={closeModal}>
-                  <img src={Cancel} alt="" />
+                <button className="cursor-pointer " onClick={closeModal}>
+                  <img className="sm:w-4 w-5" src={Cancel} alt="" />
                 </button>
               </div>
 
               <div className="flex justify-center mt-[1.5rem] items-center">
-                <div className="w-[65%]">
+                <div className="sm:w-[65%] w-full">
                   {/* Input Fields */}
                   <form onSubmit={handleSubmit}>
-                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left mt-[10px] ">
+                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left sm:mt-[10px] mt-[16px] ">
                       Choose Network
                     </p>
                     <div className="flex items-center justify-around p-2 rounded-[5px] border border-[#D0DAE6]">
@@ -250,7 +250,7 @@ const Airtime = () => {
                       ))}
                     </div>
 
-                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left mt-[10px] ">
+                    <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[16px] text-left sm:mt-[10px] mt-[20px] ">
                       Phone Number
                     </p>
 
@@ -264,19 +264,19 @@ const Airtime = () => {
                         onBlur={() =>
                           validateField("recipient", formData.recipient)
                         }
-                        className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
-                          errors.recipient
+                        className={`p-4 px-3  border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                          errors?.recipient
                             ? "border border-red-600"
                             : "focus:border-purple-800"
                         }`}
                       />
-                      {errors.recipient && (
+                      {errors?.recipient && (
                         <p className="text-red-500 text-[13px] text-left">
                           {errors.recipient}
                         </p>
                       )}
                     </div>
-                    <p className="text-[#0A2E65]/60 mt-[10px] pb-[3px] pl-[5px] text-[15px] text-left ">
+                    <p className="text-[#0A2E65]/60 sm:mt-[10px] mt-[20px] pb-[3px] pl-[5px] text-[16px] text-left ">
                       Choose an amount
                     </p>
 
@@ -297,11 +297,11 @@ const Airtime = () => {
                       ))}
                     </div>
 
-                    <div className="mt-[10px] flex justify-between items-center">
-                      <p className="text-[#0A2E65]/60 pl-[5px] text-[15px] pb-[3px] text-left">
+                    <div className="sm:mt-[10px] mt-[20px] flex justify-between items-center">
+                      <p className="text-[#0A2E65]/60 pl-[5px] text-[16px] pb-[3px] text-left">
                         Amount
                       </p>
-                      <div className="flex items-center px-[5px] text-[15px]">
+                      <div className="flex items-center px-[5px] text-[16px]">
                         <span className="text-[#0A2E65] mr-[2px]">
                           Balance:
                         </span>
@@ -320,7 +320,7 @@ const Airtime = () => {
                         value={formData.amount}
                         onChange={handleChange}
                         onBlur={() => validateField("amount", formData.amount)}
-                        className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                        className={`p-4 px-3  border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
                           errors.amount
                             ? "border border-red-600"
                             : "focus:border-purple-800"
@@ -333,7 +333,7 @@ const Airtime = () => {
                       )}
                     </div>
 
-                    <div className="w-full mt-[1.5rem] mb-[2rem]">
+                    <div className="w-full sm:mt-[1.5rem] mt-[2.5rem]  mb-[2rem]">
                       <Button type="submit" isDisabled={isFormInvalid}>
                         Buy Airtime
                       </Button>
