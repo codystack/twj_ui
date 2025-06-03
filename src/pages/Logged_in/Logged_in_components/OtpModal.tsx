@@ -113,7 +113,7 @@ const OtpModal = ({
       {changePinModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-20 bg-opacity-50">
           <div className="p-[1rem] rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white text-[#27014F] w-[600px] p-6 rounded-[20px] ">
+            <div className="bg-white text-[#27014F] sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto  p-6 sm:rounded-[20px] ">
               <div className="flex justify-between border-b-[#E2E8F0]  border-b pb-[1rem] items-center">
                 <h2 className="text-xl  text-center">
                   {step === 1 ? "Change PIN" : "Set New PIN"}
@@ -160,7 +160,7 @@ const OtpModal = ({
               {step === 1 && (
                 <div className="flex items-center justify-center mt-[2rem]">
                   <p>Forgot Pin?</p>
-                  <button className="text-[#8003A9] ml-[3px] cursor-pointer">
+                  <button className="text-[#8003A9]  ml-[3px] cursor-pointer">
                     Reset Your Pin
                   </button>
                 </div>
@@ -174,7 +174,7 @@ const OtpModal = ({
               {/* Buttons */}
               <div className="flex justify-center mt-[2rem] items-center">
                 <button
-                  className={`bg-[#9605C5] w-[70%] mb-[2rem] text-white p-3 rounded-[6px] ${
+                  className={`bg-[#9605C5] sm:w-[70%] w-full mb-[2rem] text-white py-4 text-[17px] px-3 rounded-[6px] ${
                     otp.some((digit) => digit === "")
                       ? "opacity-60 cursor-not-allowed"
                       : "cursor-pointer"

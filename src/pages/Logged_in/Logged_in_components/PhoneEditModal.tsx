@@ -54,9 +54,9 @@ const PhoneEditModal = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-20">
       <div className="p-[1rem] rounded-[20px] bg-[#fff]/20">
-        <div className="bg-white text-[#27014F] p-6 rounded-[15px] w-[600px]">
+        <div className="bg-white text-[#27014F] p-6 sm:rounded-[15px]  sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto">
           <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-[1rem]">
-            <h2 className="text-[20px]">Update your phone number</h2>
+            <h2 className="sm:text-[17px] text-[20px]">Update your phone number</h2>
             <button
               className="p-[10px] cursor-pointer mt-[10px] rounded-md"
               onClick={onClose}
@@ -65,12 +65,12 @@ const PhoneEditModal = ({
             </button>
           </div>
 
-          <p className="text-left ml-[6rem] pt-[1.5rem] text-[#0A2E65]/60">
+          <p className="text-left sm:ml-[6rem] text-[16px] sm:pb-0 sm:mt-0 mt-[1rem] pb-[5px] pt-[1.5rem] text-[#0A2E65]/60">
             Enter your phone number
           </p>
 
           <div className="flex flex-col items-center justify-center">
-            <div className="w-[70%]">
+            <div className="sm:w-[70%] w-full">
               <PhoneInput
                 placeholder="Enter phone number"
                 defaultCountry="NG"
@@ -82,7 +82,7 @@ const PhoneEditModal = ({
                     "--PhoneInputCountrySelect-marginRight": "0rem",
                   } as React.CSSProperties
                 }
-                className="w-full p-2 rounded-md focus:outline-none focus:border-purple-800"
+                className="w-full sm:p-2 rounded-md focus:outline-none focus:border-purple-800"
               />
               {error && (
                 <p className="text-red-500 text-[13px] ml-2 mt-[-10px]">
@@ -90,10 +90,10 @@ const PhoneEditModal = ({
                 </p>
               )}
 
-              <div className="flex mb-[2rem] w-full justify-end gap-4 mt-4">
+              <div className="flex mb-[2rem] w-full justify-end gap-4 mt-[2.5rem] sm:mt-4">
                 <button
                   disabled={isFormInvalid}
-                  className={`w-full px-4 py-2 rounded-md text-white transition ${
+                  className={`w-full px-3 py-4 rounded-md text-white transition ${
                     isFormInvalid
                       ? "bg-[#9605C5]/60 cursor-not-allowed"
                       : "bg-[#9605C5] cursor-pointer"

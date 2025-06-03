@@ -142,13 +142,13 @@ const SetPinModal = ({ onClose }: { onClose: () => void }) => {
     <>
       <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-20">
         <div className="p-[0.8rem] rounded-[20px] bg-[#fff]/20">
-          <div className="bg-white w-[600px] rounded-[10px]">
+          <div className="bg-white sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto sm:rounded-[10px]">
             <div className="flex flex-row-reverse">
               <button
                 className="px-4 py-2 mr-[5px] cursor-pointer mt-[1rem]"
                 onClick={handleClose}
               >
-                <img src={cancel} alt="" />
+                <img className="sm:w-4 w-5" src={cancel} alt="" />
               </button>
             </div>
             <div className="flex items-center justify-center">
