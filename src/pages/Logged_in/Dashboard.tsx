@@ -214,7 +214,7 @@ const Dashboard = () => {
                 </button>
               </div>
 
-              <div className="flex flex-col h-[90%] justify-center ">
+              <div className="flex flex-col h-[60%] justify-center ">
                 {options.length === 0 ? (
                   <div className="flex flex-col items-center justify-center p-6">
                     <p className="text-[#0A2E65] mb-4">
@@ -331,7 +331,7 @@ const Dashboard = () => {
                   <img className="w-5 sm:w-4" src={cancel} alt="" />
                 </button>
               </div>
-              <div className="flex flex-col items-center  h-[80%] justify-center ">
+              <div className="flex flex-col items-center  h-[60%] justify-center ">
                 <div className="sm:w-[70%] flex flex-col justify-center items-center">
                   <div className="sm:mt-5 sm:mb-2 mb-5">
                     <span className="  rounded-full flex justify-center flex-col items-center p-[2px]">
@@ -341,7 +341,7 @@ const Dashboard = () => {
                       </h4>
                       <p className="text-[#0A2E65]/60 tracking-[1px] text-[16px]  leading-[1.5rem]  mb-6">
                         Transfer money to your virtual account wallet
-                        <br /> using the account number below.
+                        <br className="sm:block hidden" /> using the account number below.
                       </p>
                     </span>
                   </div>

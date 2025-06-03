@@ -2,11 +2,11 @@
 import React from "react";
 
 interface ButtonProps {
-  onClick?: () => void;                 // Optional click handler (for buttons)
-  isLoading?: boolean;                   // Show loading spinner
-  isDisabled?: boolean;                  // Disable button
-  type?: "button" | "submit" | "reset";  // Support button, submit, reset types
-  children: React.ReactNode;             // Button content (text or icons)
+  onClick?: () => void;
+  isLoading?: boolean;
+  isDisabled?: boolean;
+  type?: "button" | "submit" | "reset";
+  children: React.ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -21,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       disabled={isDisabled || isLoading} // Prevent clicks when disabled/loading
       type={type} // Dynamically handle button type
-      className={`bg-[#9605C5] mt-[rem] w-full text-white p-4 text-[17px] rounded-[5px] ${
+      className={`bg-[#9605C5]  w-full text-white px-3 p-4 text-[16px] rounded-[5px] ${
         isDisabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
       }`}
     >

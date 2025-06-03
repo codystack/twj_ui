@@ -173,7 +173,7 @@ const     ProfileSecurity = () => {
           </div>
           <button
             onClick={() => setIsOpen(true)}
-            className="text-[#8003A9] cursor-pointer"
+            className="text-[#8003A9] whitespace-nowrap cursor-pointer"
           >
             Change Password
           </button>
@@ -182,21 +182,21 @@ const     ProfileSecurity = () => {
           {isOpen && (
             <div className="fixed inset-0 flex z-20 items-center justify-center bg-black/40 bg-opacity-50">
               <div className="p-[1rem] rounded-[20px] bg-[#fff]/20">
-                <div className="bg-white p-6 text-[#27014F] w-[600px] rounded-[15px] ">
+                <div className="bg-white p-6 text-[#27014F] sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto  sm:rounded-[15px] ">
                   <div className="flex justify-between items-center pb-[1rem] mb-[2rem] border-b-[#E2E8F0]  border-b ">
-                    <h2 className="text-xl pl-[10px] ">Change Password</h2>
+                    <h2 className="text-[20px] sm:text-[17px] pl-[10px] ">Change Password</h2>
                     <button
                       className="cursor-pointer mr-[10px] p-[10px]"
                       onClick={closeModal}
                     >
-                      <img src={Cancel} alt="" />
+                      <img className="sm:w-4 w-5" src={Cancel} alt="" />
                     </button>
                   </div>
                   {/* Input Fields */}
 
                   <form onSubmit={handleSubmit}>
                     <div className=" flex  justify-center items-center]">
-                      <div className="w-[70%] flex flex-col ">
+                      <div className="sm:w-[70%] w-full flex flex-col ">
                         <div className="relative w-full">
                           <input
                             type={isPasswordVisible ? "text" : "password"}
@@ -214,14 +214,14 @@ const     ProfileSecurity = () => {
                                 formData
                               )
                             }
-                            className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                            className={`p-4 px-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
                               errors.oldPassword
                                 ? "border border-red-600"
                                 : "focus:border-purple-800"
                             } `}
                           />
                           <img
-                            className="absolute cursor-pointer right-[0.8rem] bottom-[0.45rem]"
+                            className="absolute cursor-pointer right-[0.8rem] bottom-[0.8rem]"
                             src={eye}
                             alt="password visibility toggle"
                             onClick={togglePasswordVisibility}
@@ -250,14 +250,14 @@ const     ProfileSecurity = () => {
                                 formData
                               )
                             }
-                            className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                            className={`p-4 px-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
                               errors.newPassword
                                 ? "border border-red-600"
                                 : "focus:border-purple-800"
                             } `}
                           />
                           <img
-                            className="absolute cursor-pointer right-[0.8rem] bottom-[0.45rem]"
+                            className="absolute cursor-pointer right-[0.8rem] bottom-[0.8rem]"
                             src={eye}
                             alt="password visibility toggle"
                             onClick={togglePasswordVisibility}
@@ -279,7 +279,7 @@ const     ProfileSecurity = () => {
                     <div className="flex justify-center items-center pt-[5%]  ">
                       <button
                         type="submit"
-                        className={`bg-[#9605C5]  w-[70%] mb-[2rem] text-white p-3 rounded-[6px]  ${
+                        className={`bg-[#9605C5]  sm:w-[70%] w-full sm:mt-0 mt-[2rem] mb-[2rem] text-white px-3 py-4 rounded-[6px]  ${
                           isFormInvalid
                             ? "opacity-60 cursor-not-allowed"
                             : "  cursor-pointer"

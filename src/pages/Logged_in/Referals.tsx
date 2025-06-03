@@ -234,12 +234,12 @@ const Referals = () => {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
           <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white p-6 rounded-lg  w-[600px] ">
+            <div className="bg-white p-6 rounded-lg  sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto  ">
               <button
                 className="text-black p-[5px] cursor-pointer float-right"
                 onClick={closeModal}
               >
-                <img src={cancel} alt="" />
+                <img className="sm:w-4 w-5" src={cancel} alt="" />
               </button>
               <div className="flex justify-center items-center">
                 <div className="w-[80%] flex flex-col items-center ">
@@ -260,7 +260,7 @@ const Referals = () => {
                   </p>
 
                   {/* Form with submit handler */}
-                  <form onSubmit={handleSubmit} className="p-4">
+                  <form onSubmit={handleSubmit} className="  p-4">
                     <div className="w-full  ">
                       <input
                         type="text"
@@ -269,7 +269,7 @@ const Referals = () => {
                         value={amount}
                         onChange={handleInputChange}
                         onBlur={() => validateField("amount", amount)}
-                        className={`p-2.5 pl-3 pr-3 border text-[15px]  border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                        className={`p-4 px-3 border text-[15px]  border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                           errors
                             ? "border border-red-600"
                             : "focus:border-purple-800"
@@ -283,7 +283,7 @@ const Referals = () => {
                     </div>
 
                     {/* Submit Button */}
-                    <div className="w-[360px] mt-[1.5rem] mb-[2rem]">
+                    <div className="w-[360px] sm:mt-[1.5rem] mt-[2rem] mb-[2rem]">
                       <Button
                         type="submit"
                         isDisabled={isFormInvalid}

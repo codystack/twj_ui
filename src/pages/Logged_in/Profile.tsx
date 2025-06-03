@@ -386,19 +386,19 @@ const Profile = () => {
                     <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
                       {/* Dialog Box */}
                       <div className="p-[0.8rem] rounded-[20px] bg-[#fff]/20">
-                        <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
+                        <div className="bg-white sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto  z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
                           <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
-                            <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
+                            <h3 className="sm:text-[17px] text-[20px] tracking-[1px]  text-[#27014F] ">
                               Delete my TWJ Account
                             </h3>
                             <button
                               className="cursor-pointer"
                               onClick={() => setShowForm(false)}
                             >
-                              <img src={Cancel} alt="" />
+                              <img className="sm:w-4 w-5" src={Cancel} alt="" />
                             </button>
                           </div>
-                          <div className="flex justify-center my-[5%] mb-[1rem]">
+                          <div className="flex justify-center  my-[20%] sm:mb-[1rem]  mb-[2rem]">
                             <span className="bg-[#FF3366]/15 rounded-[100%] w-[5rem] h-[5rem] flex justify-center items-center p-[2px] mr-[2px] ">
                               <img
                                 src={alarmIcon}
@@ -409,8 +409,8 @@ const Profile = () => {
                           </div>
 
                           <div className="flex justify-center items-center">
-                            <div className="w-[70%]">
-                              <p className="text-[14px] text-[#0A2E65]/60 text-center">
+                            <div className="sm:w-[70%] w-full">
+                              <p className="sm:text-[14px] text-[16px] text-[#0A2E65]/60 text-center">
                                 You are about to delete this account, the action
                                 is not reversable. Please
                                 <span className="text-[#8003A9] mx-[5px] cursor-pointer">
@@ -428,7 +428,7 @@ const Profile = () => {
                                 name="reason"
                                 value={formData.reason}
                                 onChange={handleInputChange} // className=""
-                                className={`h-[7rem] w-full border border-[#A4A4A4] p-2 text-[13px] resize-none  mt-3 focus:border-2 outline-none rounded-md ${
+                                className={`sm:h-[7rem] h-[10rem] w-full border border-[#A4A4A4] p-2 text-[15px] resize-none  mt-3 focus:border-2 outline-none rounded-md ${
                                   errors.reason
                                     ? "border border-red-600"
                                     : "focus:border-purple-800"
@@ -451,14 +451,14 @@ const Profile = () => {
                                   onBlur={() =>
                                     validateField("password", formData.password)
                                   }
-                                  className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                                  className={`p-4 px-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
                                     errors.password
                                       ? "border border-red-600"
                                       : "focus:border-purple-800"
                                   } `}
                                 />
                                 <img
-                                  className="absolute cursor-pointer right-[0.8rem] bottom-[0.45rem]"
+                                  className="absolute cursor-pointer right-[0.8rem] bottom-[0.8rem]"
                                   src={eye}
                                   alt="password visibility toggle"
                                   onClick={togglePasswordVisibility}
@@ -473,7 +473,7 @@ const Profile = () => {
                               {/* Buttons */}
                               <div className="flex justify-between w-[100%] mt-[5%] mb-[2rem]  ">
                                 <button
-                                  className={`bg-[#9605C5] w-full  text-white p-3 rounded-[6px]  ${
+                                  className={`bg-[#9605C5] w-full  text-white px-3 p-4 rounded-[6px]  ${
                                     isFormInvalid
                                       ? "opacity-60 cursor-not-allowed"
                                       : "  cursor-pointer"
@@ -535,13 +535,13 @@ const Profile = () => {
               !isPasscodeSet() &&
               !proceedToSetPin && (
                 <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
-                  <div className="bg-white p-6 rounded-2xl  w-[500px] text-center">
+                  <div className="bg-white p-6 rounded-2xl  sm:w-[500px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto  text-center">
                     <div className="flex justify-end">
                       <button
                         onClick={() => setShowPinModal(false)}
                         className="px-4 py-2 mr-[5px] cursor-pointer "
                       >
-                        <img src={cancel} alt="" />
+                        <img className="sm:w-4 w-5" src={cancel} alt="" />
                       </button>
                     </div>
                     <div className="flex flex-col items-center mt-4">
@@ -564,7 +564,7 @@ const Profile = () => {
                               closeModal();
                               setProceedToSetPin(true);
                             }}
-                            className="bg-[#8003A9] text-white px-4 w-full text-[18px] py-2 mb-[2rem]  ease-in-out duration-300 cursor-pointer rounded-[5px]  hover:bg-[#8003A9]/90 transition"
+                            className="bg-[#8003A9] text-white px-3 w-full text-[18px] py-4 mb-[2rem]  ease-in-out duration-300 cursor-pointer rounded-[5px]  hover:bg-[#8003A9]/90 transition"
                           >
                             Setup PIN
                           </button>
