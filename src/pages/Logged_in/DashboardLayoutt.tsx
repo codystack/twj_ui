@@ -15,10 +15,12 @@ import Profile from "./Profile";
 import AccountUpgrade from "./AccountUpgrade";
 import Referals from "./Referals";
 import LogoutModal from "../../modals/LogoutModal";
-
 import { useAuthStore } from "../../store/authStore";
 import { useUserStore } from "../../store/useUserStore";
 import MobileNav from "../../modals/MobileNav";
+
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const DashboardLayoutt = () => {
   const [name, setName] = useState<string>("");
@@ -168,10 +170,15 @@ const DashboardLayoutt = () => {
               </div>
               <div className="md:mr-[10px]">
                 <p className="mb-[-3px] hidden md:block text-[15px] text-[#27014F] font-bold ">
-                  {name}
+                  {typeof name === "string" && name.trim().length > 0 ? (
+                    name
+                  ) : (
+                    <Skeleton width={150} height={15} />
+                  )}
                 </p>
+
                 <p className="text-[12px] hidden md:block text-[#534D5A]">
-                  {email}
+                  {email || <Skeleton width={150} height={10} />}
                 </p>
               </div>
             </div>

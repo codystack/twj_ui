@@ -30,6 +30,8 @@ import CreditDebitTransactions from "./Logged_in_components/CreditDebitTransacti
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import ReactPaginate from "react-paginate";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -466,33 +468,43 @@ const Wallet = () => {
                     <p className="sm:text-[20px] text-[18px] leading-[rem]">
                       Wallet Balance
                     </p>
-                    <div className=" relative mb-4 flex items-center gap-2">
-                      <span className=" mb-[8px] mr-[-5px] text-[16px]">
-                        {isHidden ? "" : " ₦"}
-                      </span>
-                      <p className="sm:text-[32px] text-[30px] font-semibold">
-                        {isHidden
-                          ? "*******"
-                          : user?.accountBalance?.toLocaleString()}
-                      </p>
-                      <span className="text-[16px] mt-[12px] ml-[-7px] ">
-                        {isHidden ? "" : ".00"}
-                      </span>
-                      <button
-                        onClick={toggleVisibility}
-                        className=" ml-[2px] cursor-pointer "
+                     {user?.accountBalance === undefined ? (
+                      <SkeletonTheme
+                        baseColor="#3e1a65"
+                        highlightColor="#5a2d8a"
                       >
-                        {isHidden ? (
-                          <img
-                            src={eye_lines}
-                            className=" top-[1.5px]  left-[2px]"
-                            alt=""
-                          />
-                        ) : (
-                          <img src={eye} className="w-full h-full" alt="" />
-                        )}
-                      </button>
-                    </div>
+                        <Skeleton height={30} width={150} />
+                      </SkeletonTheme>
+                    ) : (
+                      <div className=" relative mb-4 flex items-center gap-2">
+                        <span className=" mb-[8px] mr-[-5px] text-[16px]">
+                          {isHidden ? "" : " ₦"}
+                        </span>
+                        <p className="sm:text-[32px] text-[30px] font-semibold">
+                          {isHidden
+                            ? "*******"
+                            : user?.accountBalance?.toLocaleString()}
+                        </p>
+
+                        <span className="text-[16px] mt-[12px] ml-[-7px] ">
+                          {isHidden ? "" : ".00"}
+                        </span>
+                        <button
+                          onClick={toggleVisibility}
+                          className=" ml-[2px] cursor-pointer "
+                        >
+                          {isHidden ? (
+                            <img
+                              src={eye_lines}
+                              className=" top-[1.5px]  left-[2px]"
+                              alt=""
+                            />
+                          ) : (
+                            <img src={eye} className="w-full h-full" alt="" />
+                          )}
+                        </button>
+                      </div>
+                    )}
 
                     {/* topup and withdrawal on smaller screens */}
                     <div>
