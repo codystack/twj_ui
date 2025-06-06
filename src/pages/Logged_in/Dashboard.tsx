@@ -27,6 +27,8 @@ import { useBankStore } from "../../store/useBankStore";
 import { useNavigate } from "react-router-dom";
 import SuccessModal from "./SuccessModal";
 import { useGiftCardStore } from "../../store/useGiftCardStore";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 // const options = [
 //   { value: "postpaid", label: "postpaid" },
@@ -236,7 +238,9 @@ const Dashboard = () => {
                 ) : (
                   <form className="flex flex-col items-center ">
                     <div className="sm:w-[70%] w-full flex flex-col justify-center">
-                      <h5 className="text-[#0A2E65]/60 sm:text-[15px] text-[17px] ">Available Balance</h5>
+                      <h5 className="text-[#0A2E65]/60 sm:text-[15px] text-[17px] ">
+                        Available Balance
+                      </h5>
                       <div className="flex items-center justify-center">
                         <div className="relative flex items-center gap-2">
                           <span className="mb-[8px] mr-[-5px] text-[16px]">
@@ -340,7 +344,8 @@ const Dashboard = () => {
                       </h4>
                       <p className="text-[#0A2E65]/60 tracking-[1px] text-[16px]  leading-[1.5rem]  mb-6">
                         Transfer money to your virtual account wallet
-                        <br className="sm:block hidden" /> using the account number below.
+                        <br className="sm:block hidden" /> using the account
+                        number below.
                       </p>
                     </span>
                   </div>
@@ -406,33 +411,44 @@ const Dashboard = () => {
                     <p className="sm:text-[20px] text-[18px] leading-[rem]">
                       Wallet Balance
                     </p>
-                    <div className=" relative mb-4 flex items-center gap-2">
-                      <span className=" mb-[8px] mr-[-5px] text-[16px]">
-                        {isHidden ? "" : " ₦"}
-                      </span>
-                      <p className="sm:text-[32px] text-[30px] font-semibold">
-                        {isHidden
-                          ? "*******"
-                          : user?.accountBalance?.toLocaleString()}
-                      </p>
-                      <span className="text-[16px] mt-[12px] ml-[-7px] ">
-                        {isHidden ? "" : ".00"}
-                      </span>
-                      <button
-                        onClick={toggleVisibility}
-                        className=" ml-[2px] cursor-pointer "
+
+                    {user?.accountBalance === undefined ? (
+                      <SkeletonTheme
+                        baseColor="#3e1a65"
+                        highlightColor="#5a2d8a"
                       >
-                        {isHidden ? (
-                          <img
-                            src={eye_lines}
-                            className=" top-[1.5px]  left-[2px]"
-                            alt=""
-                          />
-                        ) : (
-                          <img src={eye} className="w-full h-full" alt="" />
-                        )}
-                      </button>
-                    </div>
+                        <Skeleton height={30} width={150} />
+                      </SkeletonTheme>
+                    ) : (
+                      <div className=" relative mb-4 flex items-center gap-2">
+                        <span className=" mb-[8px] mr-[-5px] text-[16px]">
+                          {isHidden ? "" : " ₦"}
+                        </span>
+                        <p className="sm:text-[32px] text-[30px] font-semibold">
+                          {isHidden
+                            ? "*******"
+                            : user?.accountBalance?.toLocaleString()}
+                        </p>
+
+                        <span className="text-[16px] mt-[12px] ml-[-7px] ">
+                          {isHidden ? "" : ".00"}
+                        </span>
+                        <button
+                          onClick={toggleVisibility}
+                          className=" ml-[2px] cursor-pointer "
+                        >
+                          {isHidden ? (
+                            <img
+                              src={eye_lines}
+                              className=" top-[1.5px]  left-[2px]"
+                              alt=""
+                            />
+                          ) : (
+                            <img src={eye} className="w-full h-full" alt="" />
+                          )}
+                        </button>
+                      </div>
+                    )}
 
                     {/* topup and withdrawal on smaller screens */}
                     <div>

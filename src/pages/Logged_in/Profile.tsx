@@ -15,7 +15,7 @@ import ProfileBank from "./Logged_in_components/ProfileBank";
 import PhoneEditModal from "./Logged_in_components/PhoneEditModal";
 import "../../App.css";
 import { useBankStore } from "../../store/useBankStore";
-import { useAuthorizationStore } from "../../store/authorizationStore";
+// import { useAuthorizationStore } from "../../store/authorizationStore";
 import { useUserStore } from "../../store/useUserStore";
 import { useLocation, Location } from "react-router-dom";
 import api from "../../services/api";
@@ -24,7 +24,8 @@ import SuccessModal from "./SuccessModal";
 import cancel from "../../assets/dashboard_img/profile/cancel.svg";
 import SetPinModal from "./Logged_in_components/someUtilityComponent/SetPinModal";
 import { useModalStore } from "../../store/modalStore";
-
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 // const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Profile = () => {
@@ -65,17 +66,15 @@ const Profile = () => {
     // fetchError,
     fetchBanks,
   } = useBankStore();
-
+  // const { user, fetchUser } = useUserStore();
   const { user, fetchUser } = useUserStore();
-  const { accessToken } = useAuthorizationStore(); // Get accessToken from Zustand
+  // const { accessToken } = useAuthorizationStore(); // Get accessToken from Zustand
 
   useEffect(() => {
-    if (accessToken) {
-      fetchBanks();
-      fetchUser();
-      // console.log("Fetching banks... in useEffect:", bankList);
-    }
-  }, [accessToken]);
+    fetchBanks();
+    fetchUser();
+    // console.log("Fetching banks... in useEffect:", bankList);
+  }, []);
 
   // Update form field value
   const handleInputChange = (e: any) => {
@@ -220,7 +219,6 @@ const Profile = () => {
       })();
     });
 
- 
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
       <div className="flex-1 overflow-y-auto pb-4 px-4">
@@ -286,8 +284,8 @@ const Profile = () => {
                     />
                   </div>
                   <div>
-                    <p className="text-[#27014F] text-[24px] font-bold ">
-                      {name}
+                    <p className="text-[#27014F] text-[24px] font-bold">
+                      {name ? name : <Skeleton width={150} height={28} />}
                     </p>
                     <NavLink
                       to="/profile/account_upgrade"
@@ -301,20 +299,37 @@ const Profile = () => {
                 <div className="mt-[8%] md:px-[0.6rem]">
                   <div className="flex items-center justify-between md:mb-[6%]  mb-[8%] ">
                     <p className="text-[#7688B4] text-[15px] ">Username</p>
-                    <p className="text-[#27014F] text-[15px]  "> {userName}</p>
+                    <p className="text-[#27014F] text-[15px]  ">
+                      {" "}
+                      {userName ? (
+                        userName
+                      ) : (
+                        <Skeleton width={100} height={20} />
+                      )}
+                    </p>
                   </div>
                   <div className="flex items-center justify-between md:mb-[6%]  mb-[8%] ">
                     <p className="text-[#7688B4] text-[15px] ">Unique ID</p>
-                    <p className="text-[#27014F] text-[15px]  ">{uniqueID}</p>
+                    <p className="text-[#27014F] text-[15px]  ">
+                      {uniqueID ? (
+                        uniqueID
+                      ) : (
+                        <Skeleton width={100} height={20} />
+                      )}
+                    </p>
                   </div>
                   <div className="flex items-center justify-between md:mb-[6%]  mb-[8%] ">
                     <p className="text-[#7688B4] text-[15px] ">Email address</p>
-                    <p className="text-[#27014F] text-[15px]  ">{email}</p>
+                    <p className="text-[#27014F] text-[15px]  ">
+                      {email ? email : <Skeleton width={100} height={20} />}
+                    </p>
                   </div>
                   <div className="flex items-center justify-between md:mb-[6%]  mb-[8%] ">
                     <p className="text-[#7688B4] text-[15px] ">Phone</p>
                     <span className="flex gap-[2px]">
-                      <p className="text-[#27014F] text-[15px]  ">{phone}</p>
+                      <p className="text-[#27014F] text-[15px]  ">
+                        {phone ? phone : <Skeleton width={100} height={20} />}
+                      </p>
 
                       <button onClick={() => setIsPhoneInputModalOpen(true)}>
                         <img src={Edit} alt="" className=" cursor-pointer" />
@@ -338,16 +353,15 @@ const Profile = () => {
                     </p>
                     <p className="text-[#27014F] text-[15px]">
                       {user?.dateOfBirth &&
-                      !isNaN(new Date(user.dateOfBirth).getTime())
-                        ? new Date(user.dateOfBirth).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            }
-                          )
-                        : ""}
+                      !isNaN(new Date(user.dateOfBirth).getTime()) ? (
+                        new Date(user.dateOfBirth).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })
+                      ) : (
+                        <Skeleton width={140} height={18} />
+                      )}
                     </p>
                   </div>
                   <NavLink
