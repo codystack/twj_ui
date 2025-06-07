@@ -32,6 +32,7 @@ import api from "../../services/api";
 import ReactPaginate from "react-paginate";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import TransactionSkeleton from "../../components/TransactionSkeleton";
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -392,13 +393,18 @@ const Wallet = () => {
                 <div className="sm:w-[70%] w-full flex flex-col justify-center items-center">
                   <div className="mt-5 mb-2 ">
                     <span className="  rounded-full  mt-5 sm:mt-0 flex justify-center flex-col items-center p-[2px]">
-                      <img src={bankImg} className="sm:mb-0 mb-[2rem]" alt="Alarm Icon" />
+                      <img
+                        src={bankImg}
+                        className="sm:mb-0 mb-[2rem]"
+                        alt="Alarm Icon"
+                      />
                       <h4 className="text-[#27014F] font-semibold mb-[1rem]  text-[24px] ">
                         Account Top-up
                       </h4>
                       <p className="text-[#0A2E65]/60 tracking-[1px]  leading-[1.5rem]  mb-6">
                         Transfer money to your virtual account wallet
-                        <br className="sm:block hidden" /> using the account number below.
+                        <br className="sm:block hidden" /> using the account
+                        number below.
                       </p>
                     </span>
                   </div>
@@ -451,10 +457,6 @@ const Wallet = () => {
         <div className="flex-1 overflow-y-auto pb-[1.5rem] px-[1rem]">
           <div className="md:h-[2rem]  h-[1rem] bg-[white] [@media(min-width:1350px)]:w-[78%]  w-[97%] fixed z-20 "></div>
           <div className=" md:ml-[2%] py-[2.3%] bg-[#fff]  ">
-
-
-
-
             <div className="  block gap-[1.5rem] mt-[1rem] [@media(min-width:900px)]:flex">
               <div className="flex relative [@media(min-width:900px)]:w-auto w-full">
                 <div className="[@media(min-width:900px)]:w-[505px] w-full relative h-[253px] bg-[#27014F] rounded-[10px] flex items-center justify-center">
@@ -468,12 +470,16 @@ const Wallet = () => {
                     <p className="sm:text-[20px] text-[18px] leading-[rem]">
                       Wallet Balance
                     </p>
-                     {user?.accountBalance === undefined ? (
+                    {user?.accountBalance === undefined ? (
                       <SkeletonTheme
                         baseColor="#3e1a65"
                         highlightColor="#5a2d8a"
                       >
-                        <Skeleton height={30} width={150} />
+                        <Skeleton
+                          height={30}
+                          width={150}
+                          className="lg:mb-0 mb-3"
+                        />
                       </SkeletonTheme>
                     ) : (
                       <div className=" relative mb-4 flex items-center gap-2">
@@ -587,43 +593,43 @@ const Wallet = () => {
               </div>
             </div>
 
-            <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
-              <CreditDebitTransactions
-                transactions={transaction || []}
-                noTransaction={noTransaction}
-              />
-            </div>
-
-            {totalPages >= 2 && (
-              <ReactPaginate
-                previousLabel={"<"}
-                nextLabel={">"}
-                breakLabel={"..."}
-                pageCount={totalPages}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={2}
-                onPageChange={handlePageChange}
-                forcePage={page}
-                containerClassName="flex items-center justify-center mt-4 space-x-2"
-                // Styles for <li> wrapper
-                pageClassName="border border-[#8003A9] rounded-[5px]"
-                previousClassName="border border-[#8003A9] rounded-[5px]"
-                nextClassName="border  border-[#8003A9] rounded-[5px]"
-                breakClassName=""
-                // Styles for <a> inside
-                pageLinkClassName="px-3 py-1 w text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
-                previousLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
-                nextLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
-                breakLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-default"
-                activeLinkClassName="bg-[#8003A9] text-white"
-              />
-            )}
-
-            {loading && (
-              <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
-                <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
+            {loading ? (
+              <div className="w-full px-5 border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
+                <TransactionSkeleton />
+              </div>
+            ) : (
+              <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[3%] ">
+                <CreditDebitTransactions
+                  transactions={transaction || []}
+                  noTransaction={noTransaction}
+                />
               </div>
             )}
+            {loading ||
+              (totalPages >= 2 && (
+                <ReactPaginate
+                  previousLabel={"<"}
+                  nextLabel={">"}
+                  breakLabel={"..."}
+                  pageCount={totalPages}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={2}
+                  onPageChange={handlePageChange}
+                  forcePage={page}
+                  containerClassName="flex items-center justify-center mt-4 space-x-2"
+                  // Styles for <li> wrapper
+                  pageClassName="border border-[#8003A9] rounded-[5px]"
+                  previousClassName="border border-[#8003A9] rounded-[5px]"
+                  nextClassName="border  border-[#8003A9] rounded-[5px]"
+                  breakClassName=""
+                  // Styles for <a> inside
+                  pageLinkClassName="px-3 py-1 w text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
+                  previousLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
+                  nextLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
+                  breakLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-default"
+                  activeLinkClassName="bg-[#8003A9] text-white"
+                />
+              ))}
           </div>
         </div>
       </div>

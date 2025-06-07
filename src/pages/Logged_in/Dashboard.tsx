@@ -417,7 +417,7 @@ const Dashboard = () => {
                         baseColor="#3e1a65"
                         highlightColor="#5a2d8a"
                       >
-                        <Skeleton height={30} width={150} />
+                        <Skeleton height={30} width={150} className="lg:mb-0 mb-3" />
                       </SkeletonTheme>
                     ) : (
                       <div className=" relative mb-4 flex items-center gap-2">
