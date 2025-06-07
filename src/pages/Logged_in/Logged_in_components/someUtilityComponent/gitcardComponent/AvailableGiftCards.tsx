@@ -18,6 +18,8 @@ import axios from "axios";
 import search from "../../../../../assets/dashboard_img/Search_light.svg";
 // import InfiniteScroll from "react-infinite-scroll-component";
 import { SingleValue } from "react-select";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 // import ErrorBoundary from "../../../../../components/error/ErrorBoundry";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -384,6 +386,8 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
     return countryMatch && categoryMatch && searchMatch;
   });
 
+  const skeletonArray = Array.from({ length: 10 });
+
   return (
     <>
       <div
@@ -397,7 +401,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
               Gift Cards
             </h3>
             <button
-              className="cursor-pointer"
+              className="cursor-pointer p-4"
               onClick={() => {
                 setAllCards([]);
                 onClose();
@@ -407,7 +411,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
             </button>
           </div>
           {/* inittially was sticky not fixed  and top-60px */}
-          <div className="pt-[1rem]  w-full  pb-4  z-20 mx-[1.5rem] sticky top-[4.2rem]  left-[19rem] borde bg-white flex items-center gap-4">
+          <div className="pt-[1rem]  w-full pl-4  pb-4  z-20 sticky top-[4.2rem]  left-[19rem] borde bg-white flex items-center gap-4">
             <div className="  w-[18%]">
               <Select
                 options={countries}
@@ -454,21 +458,22 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
               />
             </div>
           </div>
-
-          {/* <InfiniteScroll
-            dataLength={allCards.length}
-            next={() => {
-              // console.log("Triggered next!");
-              loadMore();
-            }}
-            hasMore={hasMore}
-            loader={<div>Loading...</div>}
-            scrollableTarget="scrollableDiv"
-          > */}
           <div className="grid my-[1.5rem] mt-[0.5rem] z-10 h-[calc(100vh-rem)] mx-[1.5rem] grid-cols-3 gap-6">
             {loadingGiftCards ? (
-              <div className="col-span-full text-center text-xl text-gray-500">
-                Fetching your gift cards...
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 col-span-full">
+                <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
+                  {skeletonArray.map((_, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col bg-white p-2 rounded-[10px]"
+                    >
+                      <Skeleton height={120} className="rounded-[10px] mb-2" />
+                      <div className="w-full text-left">
+                        <Skeleton width="60%" height={15} />
+                      </div>
+                    </div>
+                  ))}
+                </SkeletonTheme>
               </div>
             ) : filteredCards.length > 0 ? (
               filteredCards.map((card) => (
