@@ -386,7 +386,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
     return countryMatch && categoryMatch && searchMatch;
   });
 
-  const skeletonArray = Array.from({ length: 10 });
+  const skeletonArray = Array.from({ length: 7 });
 
   return (
     <>
@@ -460,7 +460,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
           </div>
           <div className="grid my-[1.5rem] mt-[0.5rem] z-10 h-[calc(100vh-rem)] mx-[1.5rem] grid-cols-3 gap-6">
             {loadingGiftCards ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 col-span-full">
+              <div className="grid grid-cols-1 md:grid-cols-3  gap-4 col-span-full">
                 <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
                   {skeletonArray.map((_, index) => (
                     <div
