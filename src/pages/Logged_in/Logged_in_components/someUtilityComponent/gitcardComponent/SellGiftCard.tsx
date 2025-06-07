@@ -5,7 +5,7 @@ const SellGiftCard = () => {
     return (
         <button className=" sm:h-[156px] h-[200px] min-w-[291px] border    border-[#F2F4FC]  transition duration-300 rounded-[10px]  cursor-pointer   hover:border relative   bg-[#F2F4FC] hover:border-[#326CF6]  flex flex-col items-start ">
         <div className="p-5">
-          <img className="w-[3.5rem] sm:w-[2rem" src={outward} alt="" />
+          <img className="w-[3.5rem] sm:w-[2rem]" src={outward} alt="" />
 
           <h5 className="text-[#27014F] sm:mt-0 mt-5 pt-3.5 text-left font-bold sm:text-[15px] text-[17px]">
             Sell Gift Cards

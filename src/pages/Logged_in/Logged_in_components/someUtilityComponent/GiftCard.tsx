@@ -55,14 +55,14 @@ const GiftCard = () => {
                 </button>
               </div>
 
-              <div className=" block sm:flex    mx-auto justify-center mt-[1.5rem] py-[2.5rem] gap-[20px] items-center">
-             <div className="sm:mb-0 mb-8">
-                 <BuyGiftCard
-                  // onClose={closeNestedModal}
-                  // onBack={goBack}
-                  onOpenNestedModal={openNestedModal}
-                />
-             </div>
+              <div className=" block sm:flex   px-10 justify-center mt-[1.5rem] py-[2.5rem] gap-[20px] items-center">
+                <div className="sm:mb-0 mb-8  ">
+                  <BuyGiftCard
+                    // onClose={closeNestedModal}
+                    // onBack={goBack}
+                    onOpenNestedModal={openNestedModal}
+                  />
+                </div>
                 <SellGiftCard />
               </div>
             </div>
@@ -105,11 +105,10 @@ type ModalWrapperProps = {
   children: React.ReactNode;
 };
 
-
-const Modal = ({ children,  }: ModalWrapperProps) => (
+const Modal = ({ children }: ModalWrapperProps) => (
   <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-50">
     <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
-      <div className="bg-white overflow-y-aut w-[800px] h-[calc(100vh-2rem)]  z-[50]   p-6 pt-0 rounded-[15px] shadow-lg flex flex-col">
+      <div className="bg-white overflow-y-aut     md:w-[750px] w-[100vw] md:h-auto h-[100vh]      z-[50]   p-6 pt-0 md:rounded-[15px] shadow-lg flex flex-col">
         {children}
       </div>
     </div>
