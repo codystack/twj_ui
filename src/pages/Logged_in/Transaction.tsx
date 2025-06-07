@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import CrytoTransaction from "./Logged_in_components/CryptoTransaction";
 import GiftCardTransaction from "./Logged_in_components/GiftcardTransaction";
 import UtilityTransaction from "./Logged_in_components/UtilityBillsTransaction";
-
+import TransactionSkeleton from "../../components/TransactionSkeleton";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 interface TransactionType {
   id: string;
@@ -128,63 +128,79 @@ const Transaction = () => {
 
           {/* Dynamic Content profile*/}
           <div className=" h-[100%]  mt-[10%] ">
-            {activeTab === "Crypto" && (
-              <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
-                <CrytoTransaction
-                // transactions={transactions || []}
-                />
-              </div>
-            )}
+            {activeTab === "Crypto" &&
+              (loading ? (
+                <div className="w-full px-5 border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
+                  <TransactionSkeleton />
+                </div>
+              ) : (
+                <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
+                  <CrytoTransaction
+                  // transactions={transactions || []}
+                  />
+                </div>
+              ))}
 
             {/* Dynamic Content Security*/}
-            {activeTab === "GiftCard" && (
-              <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
-                <GiftCardTransaction
-                // transactions={transactions || []}
-                />
-              </div>
-            )}
+            {activeTab === "GiftCard" &&
+              (loading ? (
+                <div className="w-full px-5 border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
+                  <TransactionSkeleton />
+                </div>
+              ) : (
+                <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
+                  <GiftCardTransaction
+                  // transactions={transactions || []}
+                  />
+                </div>
+              ))}
             {/* Dynamic Content Bank*/}
-            {activeTab === "BillsPayment" && (
-              <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
-                <UtilityTransaction
-                  transactions={transaction || []}
-                  noTransaction={noTransaction}
-                />
-              </div>
-            )}
+            {activeTab === "BillsPayment" &&
+              (loading ? (
+                <div className="w-full px-5 border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
+                  <TransactionSkeleton />
+                </div>
+              ) : (
+                <div className="w-full  border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%] [@media(min-width:900px)]:mt-[3%] ">
+                  <UtilityTransaction
+                    transactions={transaction || []}
+                    noTransaction={noTransaction}
+                  />
+                </div>
+              ))}
           </div>
 
-          {totalPages >= 2 && (
-            <ReactPaginate
-              previousLabel={"<"}
-              nextLabel={">"}
-              breakLabel={"..."}
-              pageCount={totalPages}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={2}
-              onPageChange={handlePageChange}
-              forcePage={page}
-              containerClassName="flex items-center justify-center mt-4 space-x-2"
-              // Styles for <li> wrapper
-              pageClassName="border border-[#8003A9] rounded-[5px]"
-              previousClassName="border border-[#8003A9] rounded-[5px]"
-              nextClassName="border  border-[#8003A9] rounded-[5px]"
-              breakClassName=""
-              // Styles for <a> inside
-              pageLinkClassName="px-3 py-1 w text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
-              previousLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
-              nextLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
-              breakLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-default"
-              activeLinkClassName="bg-[#8003A9] text-white"
-            />
-          )}
+          {loading ||
+            (totalPages >= 2 && (
+              <ReactPaginate
+                previousLabel={"<"}
+                nextLabel={">"}
+                breakLabel={"..."}
+                pageCount={totalPages}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={2}
+                onPageChange={handlePageChange}
+                forcePage={page}
+                containerClassName="flex items-center justify-center mt-4 space-x-2"
+                // Styles for <li> wrapper
+                pageClassName="border border-[#8003A9] rounded-[5px]"
+                previousClassName="border border-[#8003A9] rounded-[5px]"
+                nextClassName="border  border-[#8003A9] rounded-[5px]"
+                breakClassName=""
+                // Styles for <a> inside
+                pageLinkClassName="px-3 py-1 w text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
+                previousLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
+                nextLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-pointer hover:bg-[#8003A9]/15 hover:text-[#27014F]"
+                breakLinkClassName="px-3 py-1 text-[#27014F] rounded-[5px] cursor-default"
+                activeLinkClassName="bg-[#8003A9] text-white"
+              />
+            ))}
 
-          {loading && (
+          {/* {loading && (
             <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
               <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

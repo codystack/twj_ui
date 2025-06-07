@@ -289,12 +289,6 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
         return [...prev, ...newUnique];
       });
 
-      // Set `hasMore` to false if no more data
-      // if (data.length < pageSize - 2) {
-      //   console.log(data.length);
-      //   setHasMore(false);
-      //   // console.log("has set to false");
-      // }
 
       setLoadingGiftCards(false);
     } catch (err) {
@@ -303,15 +297,6 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
       return err;
     }
   };
-
-  // const loadMore = () => {
-  //   // console.log("Loading more cards...");
-  //   setPage((prevPage) => {
-  //     const newPage = prevPage + 1;
-  //     fetchGiftCards(newPage);
-  //     return newPage;
-  //   });
-  // };
 
   useEffect(() => {
     fetchGiftCards(page);
@@ -364,13 +349,6 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
     setSelectedGiftCardId(id);
     onNext();
   };
-
-  // const customFilterOption = (option: any, inputValue: any) => {
-  //   const { data } = option;
-  //   const label = data.label.toLowerCase();
-  //   const searchValue = inputValue.toLowerCase();
-  //   return label.includes(searchValue);
-  // };
 
   const filteredCards = allCards.filter((card) => {
     const countryMatch = selectedCountry
