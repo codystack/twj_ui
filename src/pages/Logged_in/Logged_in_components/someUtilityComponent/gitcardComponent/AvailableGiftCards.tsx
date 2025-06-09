@@ -289,7 +289,6 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
         return [...prev, ...newUnique];
       });
 
-
       setLoadingGiftCards(false);
     } catch (err) {
       // console.error("Error fetching gift cards:", err);
@@ -370,11 +369,11 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
     <>
       <div
         id="scrollableDiv"
-        className="text-center overflow-y-aut w-full  hide-scrollbar  space-y-4"
+        className="text-center md:rounded-[15px] overflow-y-aut w-full  hide-scrollbar  space-y-4"
         style={{ height: "90vh", overflow: "auto" }}
       >
-        <div className="">
-          <div className="sticky p-6  top-0 z-20 w-full  flex items-center border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between bg-white">
+        <div className=" px-5">
+          <div className="sticky p-6  top-0 z-20 w-full  flex items-center border-b border-b-[#E2E8F0] py-[1rem] pr-[10px] justify-between bg-white">
             <h3 className="text-[17px] tracking-[1px] text-[#27014F]">
               Gift Cards
             </h3>
@@ -388,9 +387,11 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
               <img src={cancel} alt="" />
             </button>
           </div>
+          
           {/* inittially was sticky not fixed  and top-60px */}
-          <div className="pt-[1rem]  w-full pl-4  pb-4  z-20 sticky top-[4.2rem]  left-[19rem] borde bg-white flex items-center gap-4">
-            <div className="  w-[18%]">
+          <div className="pt-4 w-full px-4 pb-4 z-20 sticky top-[4.2rem] bg-white flex flex-col gap-4 sm:flex-row md:items-center md:gap-4">
+            {/* Country Select */}
+            <div className="w-full md:w-[18%]">
               <Select
                 options={countries}
                 value={selectedCountry}
@@ -402,15 +403,11 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
                 styles={customStyles}
                 className="custom-select"
                 isSearchable={false}
-
-                // menuPortalTarget={document.body}
-                // menuPlacement="auto"
-                // isSearchable={true} // Enable search functionality
-                // filterOption={customFilterOption}
               />
             </div>
 
-            <div>
+            {/* Category Select */}
+            <div className="w-full md:w-auto">
               <Select
                 options={categories}
                 value={selectedCategory}
@@ -420,23 +417,25 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
               />
             </div>
 
-            <div className="relative ">
+            {/* Search Input */}
+            <div className="relative w-full md:w-auto">
               <input
                 type="text"
                 placeholder="Search Gift Card"
                 name="searchTerm"
                 value={searchTerm}
                 onChange={handleSearchChange}
-                className={`  p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-[5px] focus:border-purple-800 `}
+                className="p-2.5 pl-3 pr-10 border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-[5px] focus:border-purple-800"
               />
               <img
                 src={search}
-                className="absolute bottom-[0.7rem] right-3"
+                className="absolute bottom-[0.55rem] right-3 w-7"
                 alt=""
               />
             </div>
           </div>
-          <div className="grid my-[1.5rem] mt-[0.5rem] z-10 h-[calc(100vh-rem)] mx-[1.5rem] grid-cols-3 gap-6">
+
+          <div className="grid my-[1.5rem] mt-[0.5rem] z-10 h-[calc(100vh-rem)]  grid-cols-3 gap-6">
             {loadingGiftCards ? (
               <div className="grid grid-cols-1 md:grid-cols-3  gap-4 col-span-full">
                 <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
@@ -454,25 +453,28 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
                 </SkeletonTheme>
               </div>
             ) : filteredCards.length > 0 ? (
-              filteredCards.map((card) => (
-                <button
-                  onClick={() => {
-                    handleCardClick(card.productId.toString());
-                    setProductIso(card.country.isoName);
-                  }}
-                  key={card.productId}
-                  className="flex flex-col bg-white transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
-                >
-                  <img
-                    src={card.logoUrls[0]}
-                    alt={card.productName}
-                    className="object-cover rounded-[10px] mb-1.5"
-                  />
-                  <h4 className="text-[#000] ml-[3px] text-left font-semibold text-[15px]">
-                    {card.productName}
-                  </h4>
-                </button>
-              ))
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 col-span-full">
+                {filteredCards.map((card) => (
+                  <button
+                    onClick={() => {
+                      handleCardClick(card.productId.toString());
+                      setProductIso(card.country.isoName);
+                    }}
+                    key={card.productId}
+                    className="flex flex-col bg-white transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
+                  >
+                    <img
+                      src={card.logoUrls[0]}
+                      alt={card.productName}
+                      className="w-full sm:h-[150px] h-[120px] object-cover rounded-[10px] mb-1.5"
+                    />
+
+                    <h4 className="text-[#000] ml-[3px] text-left font-semibold text-[15px]">
+                      {card.productName}
+                    </h4>
+                  </button>
+                ))}
+              </div>
             ) : (
               <div className="col-span-full text-center text-xl text-gray-500">
                 No gift cards available!
