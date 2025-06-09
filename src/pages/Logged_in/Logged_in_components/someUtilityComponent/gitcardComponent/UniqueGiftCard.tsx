@@ -210,10 +210,10 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
           </div>
         </div>
       )}
-      <div className="text-center space-y-4">
-        <div className="flex items-center pt-6 border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
+      <div className="text-center space-y-4 px-5 ">
+        <div className="flex items-center pt-6 border-b border-b-[#E2E8F0] pb-[1rem] px-5  md:pr-[15px] justify-between">
           <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
-            Gift Cards
+            Gift Card
           </h3>
           <button
             className="cursor-pointer"
@@ -222,7 +222,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
               onClose();
             }}
           >
-            <img src={cancel} alt="" />
+            <img className="w-5 sm:w-4" src={cancel} alt="" />
           </button>
         </div>
 
@@ -236,8 +236,8 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
           <img src={back} alt="" />
           <p> Back</p>
         </button>
-        <div className="grid grid-cols-5 px-[1rem] gap-4 ">
-          <div className="col-span-2 ">
+        <div className="grid  grid-cols-1 md:grid-cols-5   gap-4 ">
+          <div className=" col-span-1 md:col-span-2 ">
             <img
               src={selectedCard.logoUrls[0]}
               alt={selectedCard.productName}
@@ -255,14 +255,14 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
               </button>
             </div>
           </div>
-          <div className="col-span-3 ">
+          <div className="col-span-1 md:col-span-3 ">
             <h2 className="text-[30px] text-left mt-[-10px] font-bold text-black">
               {selectedCard.productName}
             </h2>
 
             <div className="flex items-center justify-items-start w-full ">
-              <div className="flex items-center  justify-center w-full gap-3">
-                <div className="text-[12px] w-[50%]">
+              <div className="md:flex items-center  justify-center w-full gap-3">
+                <div className="text-[12px] w-full md:w-[50%]">
                   <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] text-[12px] text-left mt-[10px] ">
                     Recipient Phone Number
                     {/* {selectedCard.fixedSenderDenominations} */}
@@ -287,7 +287,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                 </div>
 
                 <div className="w-full">
-                  <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] text-[12px] text-left mt-[10px] ">
+                  <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] md:text-[12px] text-[15px] text-left mt-[10px] ">
                     Recipient Email
                   </p>
                   <div className="w-full">
@@ -300,7 +300,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                         updateFormData({ email: e.target.value })
                       }
                       onBlur={() => validateField("email", formData.email)} // optional blur validation
-                      className={`p-2.5 pl-3 pr-3 text-[12px] w-full outline-none rounded-md
+                      className={`p-4 px-3 md:text-[15px] w-full outline-none rounded-md
                       border ${
                         errors.email
                           ? "border-red-600"
@@ -312,8 +312,8 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
               </div>
             </div>
 
-            <div className="w-[50%]">
-              <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] text-[12px] text-left mt-[10px] ">
+            <div className=" w-full md:w-[50%]">
+              <p className="text-[#0A2E65]/60 pb-[3px] pl-[3px] md:text-[12px] text-[15px] text-left mt-[10px] ">
                 Sender's Name
               </p>
               <div className="w-full">
@@ -324,7 +324,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                   value={formData.name}
                   onChange={(e) => updateFormData({ name: e.target.value })}
                   onBlur={() => validateField("name", formData.name)} // optional blur validation
-                  className={`p-2.5 pl-3 pr-3 border text-[12px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                  className={`p-4 px-3 border md:text-[12px] text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
                     errors.name
                       ? "border border-red-600"
                       : "focus:border-purple-800"
@@ -333,8 +333,8 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
               </div>
             </div>
             <div className="flex items-center  w-full ">
-              <div className="w-[50%] ">
-                <p className="text-[#0A2E65]/60 mt-[10px] pb-[3px] pl-[3px] text-[12px] text-left  ">
+              <div className=" w-full md:w-[50%] ">
+                <p className="text-[#0A2E65]/60 mt-[10px] pb-[3px] pl-[3px] md:text-[12px] text-[15px] text-left  ">
                   Select Amount
                 </p>
                 <Select
@@ -351,10 +351,10 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                     control: (provided: any, state: any) => ({
                       ...provided,
                       borderRadius: "8px",
-                      padding: "1px",
+                      padding: "9px",
                       boxShadow: "none",
                       outline: "none",
-                      fontSize: "12px",
+                      fontSize: "15px",
                       textAlign: "left",
                       border: errors.amount
                         ? "1px solid red"
@@ -407,7 +407,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
             <div className="mt-5 gap-2 w-full mb-[2rem] flex justify-start">
               <button
                 onClick={handleNext}
-                className="bg-[#8003A9] cursor-pointer w-[70%] text-white px-4 py-2 rounded-[5px]"
+                className="bg-[#8003A9] cursor-pointer w-full md:w-[70%] text-white px-4 py-2 rounded-[5px]"
               >
                 Buy Now
               </button>

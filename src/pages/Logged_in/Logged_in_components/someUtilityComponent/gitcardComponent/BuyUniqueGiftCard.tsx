@@ -106,10 +106,10 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
 
   return (
     <>
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-4 px-5">
         <div className="flex items-center pt-6 border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
           <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
-            Gift Cards
+            Gift Card
           </h3>
           <button
             className="cursor-pointer"
@@ -131,8 +131,8 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
           <p> Back</p>
         </button>
 
-        <div className="grid grid-cols-5 mt-[2rem] px-[1rem] gap-4 ">
-          <div className="col-span-2 ">
+        <div className="grid  grid-cols-1 md:grid-cols-5 mt-[2rem]  gap-4 ">
+          <div className="col-span-1 md:col-span-2 ">
             <img
               src={selectedCard.logoUrls[0]}
               alt={selectedCard.productName}
@@ -140,7 +140,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
             />
           </div>
 
-          <div className="col-span-3 ">
+          <div className="col-span-1 md:col-span-3 ">
             <h2 className="text-[30px] text-left mt-[-10px] font-bold text-black">
               {selectedCard.productName}
             </h2>
@@ -195,11 +195,13 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
 
         {/* <div>{totalAmount > 0 ? totalAmount : formData.amount}</div> */}
         {error && (
-          <div className="text-red-500 text-[14px] text-left ml-[19.4rem] mt-[-0.9rem]">{error}</div>
+          <div className="text-red-500 md:block hidden text-[14px] text-left ml-[19.4rem] mt-[-0.9rem]">{error}</div>
         )}
         <div className="border-b border-b-[#E2E8F0] mx-[1rem] pt-[2rem]"></div>
-
-        <div className="flex items-center justify-between w-full px-[2rem] mb-[2rem]">
+        {error && (
+          <div className="text-red-500 ml-[16px] text-[14px] text-left  mt-[-0.9rem]">{error}</div>
+        )}
+        <div className="md:flex block items-center justify-between w-full md:px-[2rem] px-3 mb-[2rem]">
           <div className="flex items-center text-[24px] gap-2">
             <p className="text-[#7688B4] text-left tracking-[1px]">Total:</p>
             <p className="text-[#27014F]">
@@ -209,7 +211,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
           <button
             disabled={loading}
             onClick={submitOrder}
-            className={`px-18 py-3.5 rounded-[5px] text-white ${
+            className={`px-18 w-full mt-2 md:w-fit py-3.5 rounded-[5px] text-white ${
               loading
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-[#8003A9] cursor-pointer"
