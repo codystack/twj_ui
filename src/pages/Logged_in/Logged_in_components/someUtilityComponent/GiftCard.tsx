@@ -44,8 +44,8 @@ const GiftCard = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
-          <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white md:w-[750px] w-[100vw] md:h-auto h-[100vh]   z-[50]   p-6 md:rounded-[15px] shadow-lg flex flex-col">
+          <div className="md:p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
+            <div className="bg-white md:w-[750px]  border-4 border-amber-700 w-screen md:h-auto h-[min(100dvh,100vh)] max-h-screen overflow-y-auto z-[50]   p-6 md:rounded-[15px] flex flex-col">
               <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
                 <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
                   Gift Cards

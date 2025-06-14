@@ -14,7 +14,7 @@ import SignUp from "./pages/SignUp";
 import VerifyOtp from "./pages/VerifyOtp";
 import DashboardLayoutt from "./pages/Logged_in/DashboardLayoutt.tsx";
 import GiftCards from "./pages/Logged_in/GiftCards.tsx";
-import Crypto from "./pages/Logged_in/Crypto.tsx";
+// import Crypto from "./pages/Logged_in/Crypto.tsx";
 import Wallet from "./pages/Logged_in/Wallet.tsx";
 import Transaction from "./pages/Logged_in/Transaction.tsx";
 import Profile from "./pages/Logged_in/Profile.tsx";
@@ -26,6 +26,7 @@ import RecoverAccount from "./pages/RecoverAccount.tsx";
 import AccountUpgrade from "./pages/Logged_in/AccountUpgrade.tsx";
 import Referals from "./pages/Logged_in/Referals.tsx";
 import RouteChangeHandler from "./components/RouteChangeHandler.tsx";
+import Help from "./pages/Logged_in/Help.tsx";
 
 const App = () => {
   return (
@@ -94,7 +95,7 @@ const AppWithRoutes = () => {
           <Route path="/bills_payment" element={<Bills />} />
           <Route path="/referrals" element={<Referals />} />
           <Route path="/giftcards" element={<GiftCards />} />
-          <Route path="/crypto" element={<Crypto />} />
+          <Route path="/support" element={<Help />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/transactions" element={<Transaction />} />
           <Route path="/profile" element={<Profile />}>
