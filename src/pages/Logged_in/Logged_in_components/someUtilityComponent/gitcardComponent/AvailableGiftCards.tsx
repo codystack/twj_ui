@@ -387,7 +387,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
               <img src={cancel} alt="" />
             </button>
           </div>
-          
+
           {/* inittially was sticky not fixed  and top-60px */}
           <div className="pt-4 w-full px-4 pb-4 z-20 sticky top-[4.2rem] bg-white flex flex-col gap-4 sm:flex-row md:items-center md:gap-4">
             {/* Country Select */}

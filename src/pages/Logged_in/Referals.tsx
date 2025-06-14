@@ -5,6 +5,7 @@ import eye_lines from "../../assets/dashboard_img/Eye_hide_dark.svg";
 import eye from "../../assets/dashboard_img/Eye_opne_dark.svg";
 import cancel from "../../assets/dashboard_img/profile/cancel.svg";
 import Button from "../../components/Button";
+import api from "../../services/api";
 
 type Ref = {
   id: string;
@@ -40,6 +41,9 @@ const Referals = () => {
   const [errors, setErrors] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [referrals, setReferrals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -74,6 +78,22 @@ const Referals = () => {
 
     setReferral(referralLink ?? "");
     // setName(storedName ?? "");
+  }, []);
+
+  useEffect(() => {
+    const fetchReferrals = async () => {
+      try {
+        const response = await api  .get('/Referrals/getUserReferrals'); 
+        setReferrals(response.data);
+      } catch (err: any) {
+        console.error('Error fetching referrals:', err);
+        setError('Failed to fetch referrals');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReferrals();
   }, []);
 
   const handleCopy = () => {
