@@ -369,11 +369,11 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
     <>
       <div
         id="scrollableDiv"
-        className="text-center md:rounded-[15px] overflow-y-aut w-full  hide-scrollbar  space-y-4"
+        className="text-center md:rounded-[15px] overflow-y-aut w-full  hide-scrollbar  space-y-"
         style={{ height: "90vh", overflow: "auto" }}
       >
-        <div className=" px-5">
-          <div className="sticky p-6  top-0 z-20 w-full  flex items-center border-b border-b-[#E2E8F0] py-[1rem] pr-[10px] justify-between bg-white">
+        <div className="  px-3 bg-white">
+          <div className="sticky  top-0 z-20 w-full  flex items-center border-b border-b-[#E2E8F0] py-[1rem]  justify-between bg-white">
             <h3 className="text-[17px] tracking-[1px] text-[#27014F]">
               Gift Cards
             </h3>
@@ -389,7 +389,7 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
           </div>
 
           {/* inittially was sticky not fixed  and top-60px */}
-          <div className="pt-4 w-full px-4 pb-4 z-20 sticky top-[4.2rem] bg-white flex flex-col gap-4 sm:flex-row md:items-center md:gap-4">
+          <div className="pt-4 w-full  pb-4 z-20 sticky top-[4.2rem] bg-white flex flex-col gap-4 sm:flex-row md:items-center md:gap-4">
             {/* Country Select */}
             <div className="w-full md:w-[18%]">
               <Select

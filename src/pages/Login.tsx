@@ -113,18 +113,18 @@ const Login = () => {
   };
 
   return (
-    <div className="flex h-[calc(100vh-1rem)] w-full">
+    <div className="flex  md:h-[calc(100vh-1rem)] h-full w-full">
       {/* Left: Login Form */}
       <form
         onSubmit={handleSubmit}
-        className="[@media(min-width:1100px)]:w-1/2 w-full my-[1rem]   md:mx-[2rem] mx-[1rem]"
+        className="[@media(min-width:1100px)]:w-1/2 w-full my-[1rem]   md:mx-[2rem] mx-[10px]"
       >
-        <div className="sm:mt-8 mt-2">
-          <div className="Nav flex justify-between">
+        <div className="sm:mt-8  mt-2">
+          <div className="Nav flex  justify-between">
             <a href="https://twjhub.com/" className="cursor-pointer">
               <img
                 src={Logo}
-                className="md:w-[188px] w-[150px] h-auto"
+                className="md:w-[188px]  w-[200px] "
                 alt="Logo"
               />
             </a>
@@ -141,9 +141,9 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div className="flex w-full h-[80%] md:max-w-[480px]  mx-auto justify-center items-center">
+        <div className="flex  w-full md:h-[80%] md:max-w-[480px]  mx-auto justify-center items-center">
           <div className="flex flex-col justify-center w-full sm:p-8 p-0 bg-white">
-            <h2 className="text-2xl font-bold md:mb-[0.4rem] mb-0 md:text-[40px] text-[30px] text-[#27014F] w-full leading-[2.5rem]">
+            <h2 className="text-2xl sm-mt-0 mt-5 font-bold md:mb-[0.4rem] mb-0 md:text-[40px] text-[30px] text-[#27014F] w-full leading-[2.5rem]">
               Welcome back
             </h2>
             <p className="md:text-[14px] text-[16px] md:mb-0 mb-3 text-[#27014F]">
@@ -153,7 +153,7 @@ const Login = () => {
               <div className="w-full mb-4">
                 <label
                   htmlFor="email"
-                  className="md:hidden block my-2 text-[16px] text-[#8b8989] "
+                  className="md:hidden block font-semibold mt-2 text-[16px] text-[#8b8989] "
                 >
                   Email Address
                 </label>
@@ -180,7 +180,7 @@ const Login = () => {
               <div className="relative w-full">
                 <label
                   htmlFor="password "
-                  className="md:hidden block my-2 text-[16px] text-[#8b8989] "
+                  className="md:hidden font-semibold block mt-2 text-[16px] text-[#8b8989] "
                 >
                   Password
                 </label>
@@ -199,7 +199,7 @@ const Login = () => {
                 />
 
                 <div
-                  className={`absolute  cursor-pointer right-[0.8rem] md:bot bottom-[0.7rem]
+                  className={`absolute  cursor-pointer right-[0.8rem]  md:bottom-[0.7rem] bottom-[1rem]
                   }`}
                   onClick={togglePasswordVisibility}
                 >
@@ -265,7 +265,7 @@ const Login = () => {
                 )}
               </button>
 
-              <div className=" sm:hidden flex mt-5 items-center justify-center text-[16px]">
+              <div className=" sm:hidden flex mt-5 mb-15 items-center justify-center text-[16px]">
                 <p className="font-[500] text-[#27014F]">
                   Don't have an account?
                 </p>
