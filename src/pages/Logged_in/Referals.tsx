@@ -41,9 +41,11 @@ const Referals = () => {
   const [errors, setErrors] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // pending
   const [referrals, setReferrals] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -83,11 +85,11 @@ const Referals = () => {
   useEffect(() => {
     const fetchReferrals = async () => {
       try {
-        const response = await api  .get('/Referrals/getUserReferrals'); 
+        const response = await api.get("/Referrals/getUserReferrals");
         setReferrals(response.data);
       } catch (err: any) {
-        console.error('Error fetching referrals:', err);
-        setError('Failed to fetch referrals');
+        console.error("Error fetching referrals:", err);
+        setError("Failed to fetch referrals");
       } finally {
         setLoading(false);
       }
@@ -130,6 +132,10 @@ const Referals = () => {
 
   return (
     <>
+      {/* Just for deployment purpose */}
+      {referrals.length === 0 && loading && (
+        <div className="hidden">{error}</div>
+      )}
       <div className="w-full z-10 overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
         <div className="flex-1 overflow-y-auto  md:px-4 px-2.5">
           <div className="h-[2rem] bg-[white] w-[98%] fixed  z-20 "></div>
