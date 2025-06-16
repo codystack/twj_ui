@@ -106,7 +106,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
 
   return (
     <>
-      <div className="text-center space-y-4 px-5">
+      <div className="text-center space-y-4 px-3">
         <div className="flex items-center pt-6 border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
           <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
             Gift Card
@@ -124,7 +124,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
         </div>
 
         <button
-          className="flex pl-[1rem] cursor-pointer items-center mb-[1.5rem] justify-center bg-white "
+          className="flex sm:pl-[1rem] cursor-pointer items-center mb-[1.5rem] justify-center bg-white "
           onClick={onBack}
         >
           <img src={back} alt="" />
@@ -201,7 +201,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
         {error && (
           <div className="text-red-500 ml-[16px] text-[14px] text-left  mt-[-0.9rem]">{error}</div>
         )}
-        <div className="md:flex block items-center justify-between w-full md:px-[2rem] px-3 mb-[2rem]">
+        <div className="md:flex block  items-center justify-between w-full md:px-[2rem]  mb-[2rem]">
           <div className="flex items-center text-[24px] gap-2">
             <p className="text-[#7688B4] text-left tracking-[1px]">Total:</p>
             <p className="text-[#27014F]">
@@ -217,7 +217,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
                 : "bg-[#8003A9] cursor-pointer"
             }`}
           >
-            {loading ? "Submitting..." : "Pay Now"}
+            {loading ? "Processing..." : "Pay Now"}
           </button>
         </div>
       </div>

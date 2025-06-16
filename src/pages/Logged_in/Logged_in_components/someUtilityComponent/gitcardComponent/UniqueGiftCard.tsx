@@ -210,8 +210,8 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
           </div>
         </div>
       )}
-      <div className="text-center space-y-4 px-5 ">
-        <div className="flex items-center pt-6 border-b border-b-[#E2E8F0] pb-[1rem] px-5  md:pr-[15px] justify-between">
+      <div className="text-center space-y-4 px-3 ">
+        <div className="flex items-center pt-6 border-b border-b-[#E2E8F0] pb-[1rem] px-1 md:pr-[15px] justify-between">
           <h3 className="text-[17px] tracking-[1px]  text-[#27014F] ">
             Gift Card
           </h3>
@@ -227,7 +227,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
         </div>
 
         <button
-          className="flex pl-[1rem] cursor-pointer items-center mb-[1.5rem] justify-center bg-white "
+          className="flex md:pl-[1rem] cursor-pointer items-center mb-[1.5rem] justify-center bg-white "
           onClick={() => {
             clearFormData();
             onBack();
@@ -407,7 +407,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
             <div className="mt-5 gap-2 w-full mb-[2rem] flex justify-start">
               <button
                 onClick={handleNext}
-                className="bg-[#8003A9] cursor-pointer w-full md:w-[70%] text-white px-4 py-2 rounded-[5px]"
+                className="bg-[#8003A9] cursor-pointer w-full md:w-[70%] text-white sm:px-4 sm:py-2 py-3.5 rounded-[5px]"
               >
                 Buy Now
               </button>
