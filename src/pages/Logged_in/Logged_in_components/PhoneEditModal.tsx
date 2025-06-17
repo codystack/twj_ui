@@ -54,14 +54,14 @@ const PhoneEditModal = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-20">
       <div className="p-[1rem] rounded-[20px] bg-[#fff]/20">
-        <div className="bg-white text-[#27014F] p-6 sm:rounded-[15px]  sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto">
+        <div className="bg-white text-[#27014F] py-6 px-3 sm:rounded-[15px]  sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen  overflow-y-auto">
           <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-[1rem]">
-            <h2 className="sm:text-[17px] text-[20px]">Update your phone number</h2>
+            <h2 className="sm:text-[17px] text-[18px]">Update your phone number</h2>
             <button
               className="p-[10px] cursor-pointer mt-[10px] rounded-md"
               onClick={onClose}
             >
-              <img src={Cancel} alt="" />
+              <img className="w-4 h-4" src={Cancel} alt="" />
             </button>
           </div>
 

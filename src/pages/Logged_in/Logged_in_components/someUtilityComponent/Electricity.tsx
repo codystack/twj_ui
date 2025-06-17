@@ -380,7 +380,7 @@ const Electricity = () => {
         <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
           {/* Dialog Box */}
           <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white sm:w-[600px] w-[100vw] sm:h-auto   z-[50]   p-6 sm:rounded-[15px] h-[100vh] overflow-y-auto  flex flex-col">
+            <div className="bg-white sm:w-[600px] w-[100vw] sm:h-auto   z-[50]   py-6 px-4 sm:rounded-[15px] h-[min(100dvh,100vh)] max-h-screen  overflow-y-auto  flex flex-col">
               <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
                 <h3 className="sm:text-[17px] text-[20px] tracking-[1px]  text-[#27014F] ">
                   Electricity Purchase

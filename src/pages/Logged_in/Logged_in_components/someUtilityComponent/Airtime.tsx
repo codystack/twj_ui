@@ -217,7 +217,7 @@ const Airtime = () => {
         <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
           {/* Dialog Box */}
           <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white overflow-y-auto sm:w-[600px] w-[100vw] sm:h-auto h-[100vh]   z-[50]   p-6 sm:rounded-[15px] shadow-lg flex flex-col">
+            <div className="bg-white overflow-y-auto sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen   z-[50]   py-6 px-4 sm:rounded-[15px] shadow-lg flex flex-col">
               <div className="flex items-center   border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
                 <h3 className="sm:text-[17px] text-[20px] tracking-[1px]  text-[#27014F] ">
                   Airtime Purchase
