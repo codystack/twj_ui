@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import BankIcon from "../../../assets/dashboard_img/profile/Bank_icon.svg";
 import AddRing from "../../../assets/dashboard_img/profile/Add_ring_light.svg";
 import BgImage from "../../../assets/dashboard_img/profile/atmcard.jpg";
@@ -53,7 +53,6 @@ const customStyles = {
     },
   }),
 
-
   option: (provided: any, state: any) => ({
     ...provided,
     cursor: "pointer",
@@ -61,14 +60,13 @@ const customStyles = {
     backgroundColor: state.isSelected
       ? "#8003A9"
       : state.isFocused
-      ? "#F8E0FF" 
+      ? "#F8E0FF"
       : "#fff",
     color: state.isSelected ? "#fff" : "#27014F",
   }),
 };
 
 const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -76,7 +74,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
     selectedBank: "",
     bankCode: "",
   });
- const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState({
     accountNumber: "",
     selectedBank: "",
   });
@@ -92,7 +90,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
 
   // Fetch banks on demand
   const {
-    data: banks, 
+    data: banks,
     isLoading,
     refetch,
   } = useQuery({
@@ -176,25 +174,30 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
     }
   };
 
-  // Handling submit of details to the Bankend 
+  // Handling submit of details to the Bankend
 
   const handleSubmit = async () => {
     setLoading(true);
-  
+
     const payload = {
       bankName: formData.selectedBank,
       accountName: accountName,
       accountNumber: formData.accountNumber,
       bankCode: formData.bankCode,
     };
-  
+
     try {
-      const response = await api.post(`${BASE_URL}/BankAccounts/addBank`, payload);
-  
-      setSuccessMessage(response.data.message || "Bank account added successfully");
+      const response = await api.post(
+        `${BASE_URL}/BankAccounts/addBank`,
+        payload
+      );
+
+      setSuccessMessage(
+        response.data.message || "Bank account added successfully"
+      );
       handleClose();
       setIsSuccessModal(true);
-  
+
       if (!response.data.success) {
         throw new Error(response.data.message || "An error occurred");
       }
@@ -204,24 +207,20 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
       fetchBanks();
     }
   };
-  
-
-
-
 
   // here is the delete function
   const deleteBankAccount = async (bankId: string) => {
     setLoadingDelete(true);
-  
+
     try {
       const response = await api.delete(`/BankAccounts/deleteBank`, {
         params: { bankId }, // Pass bankId as a query parameter
       });
-  
+
       if (response.data?.success === false) {
         throw new Error(response.data.message || "Failed to delete account");
       }
-  
+
       // Success message
       setSuccessMessage("Bank account deleted successfully");
       fetchBanks(); // Refresh the bank list
@@ -294,18 +293,18 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
 
   return (
     <>
-      <div className="grid grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] md:gap-4 gap-6  justify-center">
-        {/* Add Bank Button Styled Like a Card */}
-        <button
-          onClick={() => {
-            handleAddBank();
-            refetch();
-          }}
-          className="md:h-[182px] md:mt-0 mt-5 h-[220px] min-w-[320px] border flex flex-col  items-center justify-center cursor-pointer border-[#D0DAE6] hover:border-[#8003A9] transition duration-300 rounded-[10px]"
-        >
-          <img src={AddRing} alt="" />
-          <p className="text-[#8003A9]">Add bank account</p>
-        </button>
+   <div className="grid grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] md:gap-4 gap-6 p  justify-center">
+  <button
+    onClick={() => {
+      handleAddBank();
+      refetch();
+    }}
+    className="w-full md:h-[182px] h-[220px] md:mt-0 mt-6 border flex flex-col items-center justify-center cursor-pointer border-[#D0DAE6] hover:border-[#8003A9] transition duration-300 rounded-[10px]"
+  >
+    <img src={AddRing} alt="" />
+    <p className="text-[#8003A9]">Add bank account</p>
+  </button>
+
         {/* Account Cards */}
         {bankList.map((banks, index) => (
           <div
@@ -368,13 +367,13 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-20 bg-opacity-50">
           <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
-            <form className="bg-white p-6 rounded-[20px] text-[#27014F] shadow-lg w-[600px]">
+            <form className="bg-white sm:w-[600px] w-[100vw] sm:h-auto   z-[50]   py-6 px-4 sm:rounded-[15px] h-[min(100dvh,100vh)] max-h-screen  text-[#27014F] shadow-lg ">
               <div className="flex justify-end">
                 <button
                   onClick={handleClose}
                   className="flex p-[10px] mr-[10px] cursor-pointer items-center"
                 >
-                  <img src={Delete} alt="" />
+                  <img className="w-5 h-5" src={Delete} alt="" />
                 </button>
               </div>
               <div className="flex items-center justify-center flex-col my-[1rem]">
@@ -384,9 +383,9 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
                   Withdrawals are paid into your bank account
                 </p>
               </div>
-              <div className="flex flex-col mt-[10px] items-center justify-center">
-                <div className=" w-[60%] ">
-                  <div className="w-full mb-4">
+              <div className="flex flex-col mt-[10px]  items-center justify-center">
+                <div className=" sm:w-[60%] w-full ">
+                  <div className="w-full  mb-4">
                     <input
                       type="text"
                       name="accountNumber"
@@ -446,7 +445,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
                     // handleClose();
                     // handleSuccessModal();
                   }}
-                  className={`bg-[#9605C5] mt-[2rem] w-[60%] font-semibold text-white p-3 rounded-[10px]  ${
+                  className={`bg-[#9605C5] mt-[2rem] md:w-[60%] w-full font-semibold text-white p-3 rounded-[10px]  ${
                     isFormInvalid
                       ? "opacity-60 cursor-not-allowed"
                       : "  cursor-pointer"
@@ -497,7 +496,7 @@ const ProfileBank: React.FC<BankDetailsProps> = ({ bankList }) => {
       {isSuccessModal && (
         <SuccessModal
           title="You, Yes You, Rock!"
-          message={successMessage} 
+          message={successMessage}
           onClose={() => {
             setIsSuccessModal(false);
           }}

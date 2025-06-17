@@ -138,7 +138,7 @@ const Referals = () => {
       )}
       <div className="w-full z-10 overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
         <div className="flex-1 overflow-y-auto  md:px-4 px-2.5">
-          <div className="h-[2rem] bg-[white] w-[98%] fixed  z-20 "></div>
+          <div className="h-[2rem] sm:block hidden not-only: md:block bg-[white] w-[98%] fixed  z-20 "></div>
           <div className=" flex flex-col  md:flex-col lg:flex-row  py-[2.3%] ml-[2%] mt-[1.5rem] lg:mt-[1rem]  gap-[2rem]">
             <div className=" flex flex-col gap-[1.5rem] w-full  lg:w-[40%]  ">
               <div className="w-full  bg-[#F2F4FC] border border-[#326CF6] relative h-[179px]  rounded-[10px] flex items-center justify-center">
@@ -215,7 +215,7 @@ const Referals = () => {
             </div>
 
             <div className="border w-full lg:w-[60%] rounded-[10px] h-fit border-[#D0DAE6]">
-              <ul className="space-y-3 p-[2rem]">
+              <ul className="space-y-3 py-[2rem] sm:px-[2rem] px-[1rem]">
                 {ref.map((ref) => (
                   <li
                     key={ref.id}
@@ -223,7 +223,7 @@ const Referals = () => {
                   >
                     {/* Left side: Status + Name */}
                     <div className="flex items-center gap-2">
-                      <span className="text-[#27014F] text-[16px] font-[600]">
+                      <span className="text-[#27014F] text-[16px] text-left font-[600]">
                         {ref.name}
                       </span>
                       {/* Unique Status Icon */}
@@ -260,15 +260,19 @@ const Referals = () => {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
           <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white p-6 rounded-lg  sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto  ">
+            <div className="bg-white py-6 px-4 rounded-lg  sm:w-[600px] w-[100vw]  sm:h-auto h-[min(100dvh,100vh)] max-h-screen  overflow-y-auto  ">
               <button
-                className="text-black p-[5px] cursor-pointer float-right"
+                className="text-black p-[5px] cursor-pointer flex flex-row-reverse justify-end"
+                style={{ position: "absolute", top: "1rem", right: "1rem" }}
                 onClick={closeModal}
               >
                 <img className="sm:w-4 w-5" src={cancel} alt="" />
               </button>
+
+
+
               <div className="flex justify-center items-center">
-                <div className="w-[80%] flex flex-col items-center ">
+                <div className="sm:w-[80%] w-full  flex flex-col items-center ">
                   <p className="mt-[3rem] text-[#0A2E65]/60 text-[15px]">
                     Referral bonus balance
                   </p>
@@ -281,13 +285,13 @@ const Referals = () => {
                       {walletAmount}
                     </p>
                   </div>
-                  <p className=" text-[#0A2E65]/60  mb-[0.4rem] text-[15px]">
+                  <p className=" text-[#0A2E65]/60 text-center  mb-[0.4rem] text-[15px]">
                     How much would you like to withdraw?
                   </p>
 
                   {/* Form with submit handler */}
-                  <form onSubmit={handleSubmit} className="  p-4">
-                    <div className="w-full  ">
+                  <form onSubmit={handleSubmit} className=" w-full my-[1rem]  ">
+                    <div className="w-full   ">
                       <input
                         type="text"
                         placeholder="Amount"
@@ -309,7 +313,7 @@ const Referals = () => {
                     </div>
 
                     {/* Submit Button */}
-                    <div className="w-[360px] sm:mt-[1.5rem] mt-[2rem] mb-[2rem]">
+                    <div className="sm:w-[360px] w-full sm:mt-[1.5rem] mt-[2rem] mb-[2rem]">
                       <Button
                         type="submit"
                         isDisabled={isFormInvalid}

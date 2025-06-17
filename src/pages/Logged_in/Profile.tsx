@@ -270,8 +270,8 @@ const Profile = () => {
           <div className=" h-[100%]  mt-[18%] [@media(min-width:700px)]:mt-[12%]  ">
             {activeTab === "account" && (
               <div className="w-full md:w-[50%]   lg:w-[38%] ">
-                <div className=" px-[1rem] flex items-center gap-4">
-                  <div className="imgdiv  relative rounded-[100%] w-[7rem] ">
+                <div className=" px-[1rem]  sm:mt-0 mt-4 flex items-center gap-4">
+                  <div className="imgdiv  relative  rounded-[100%] w-[7rem] ">
                     <img
                       src={userIcon}
                       className="rounded-[100%]"
@@ -400,7 +400,7 @@ const Profile = () => {
                     <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
                       {/* Dialog Box */}
                       <div className="p-[0.8rem] rounded-[20px] bg-[#fff]/20">
-                        <div className="bg-white sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto  z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
+                        <div className="bg-white sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen overflow-y-auto  z-[50]   py-6 px-3 md:rounded-[15px] shadow-lg flex flex-col">
                           <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
                             <h3 className="sm:text-[17px] text-[20px] tracking-[1px]  text-[#27014F] ">
                               Delete my TWJ Account

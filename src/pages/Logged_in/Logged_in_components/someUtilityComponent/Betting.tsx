@@ -324,7 +324,7 @@ const Betting = () => {
         <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
           {/* Dialog Box */}
           <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
-            <div className="bg-white  sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto    z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
+            <div className="bg-white  sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen  overflow-y-auto    z-[50]  px-4 py-6 rounded-[15px] shadow-lg flex flex-col">
               <div className="flex items-center  border-b border-b-[#E2E8F0] pb-[1rem] pr-[10px] justify-between">
                 <h3 className="sm:text-[17px] text-[20px] tracking-[1px]  text-[#27014F] ">
                   Fund Betting Wallet
