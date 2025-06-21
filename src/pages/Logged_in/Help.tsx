@@ -6,7 +6,6 @@ import {
   FaMoneyCheckAlt,
   FaFacebook,
   FaInstagram,
-  FaLinkedin,
 } from "react-icons/fa";
 import { AiTwotoneMail } from "react-icons/ai";
 import { FaXTwitter } from "react-icons/fa6";
@@ -47,7 +46,7 @@ const buttons = [
 const socialMediaButtons = [
   {
     icon: <AiTwotoneMail />,
-    name: "Email ",
+    name: "hello@twjhub.com",
     label: "Email Address",
     url: "mailto:your_email@example.com",
     rightIcon: <IoIosArrowForward />,
