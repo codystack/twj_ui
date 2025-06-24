@@ -92,7 +92,7 @@ const Help = () => {
                   rel="noopener noreferrer"
                   className="py-[1.5rem] cursor-pointer rounded-[5px] border text-[#27014F] flex items-center gap-2 border-[#D0DAE6] hover:border-[#8003A9]"
                 >
-                  <span className="text-xl text-[#000] pl-[1.25rem] pr-[0.5rem]">
+                  <span className="text-xl   pl-[1.25rem] pr-[0.5rem]">
                     {btn.icon}
                   </span>
                   <span>{btn.label}</span>
@@ -107,7 +107,7 @@ const Help = () => {
                   }}
                   className="py-[1.5rem] cursor-pointer rounded-[5px] border text-[#27014F] flex items-center gap-2"
                 >
-                  <span className="text-xl text-[#000] pl-[1.25rem] pr-[0.5rem]">
+                  <span className="text-xl  pl-[1.25rem] pr-[0.5rem]">
                     {btn.icon}
                   </span>
                   <span>{btn.label}</span>
@@ -117,7 +117,7 @@ const Help = () => {
           </div>
 
           {/* Display Area: spans 3 columns */}
-          <div className="col-span-2 border border-[#D0DAE6] px-8 py-10 rounded-[10px] shadow">
+          <div className="col-span-2 border border-[#D0DAE6] px-8 py-10 rounded-[10px]">
             <h2 className="text-[29px] font-semibold mb-2 text-left">
               Contact Us
             </h2>
@@ -134,10 +134,10 @@ const Help = () => {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-[1rem] cursor-pointer rounded-[5px] justify-between  text-[#27014F] flex items-center gap-2 bg-[#A4A4A4]/10  hover:bg-[#A4A4A4]/20"
+                    className="py-[1rem] cursor-pointer rounded-[5px] justify-between  text-[#27014F] flex items-center gap-2  border-b border-b-[#E2E8F0] last:border-b-0  hover:bg-[#A4A4A4]/10"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-xl text-[#000] pl-[2rem] pr-[1.25rem] ">
+                      <span className="text-xl  pl-[2rem] pr-[1.25rem] ">
                         {social.icon}
                       </span>
                       <div className="flex flex-col">
