@@ -9,6 +9,7 @@ import { NavLink, useNavigate } from "react-router";
 import { useAuthStore } from "../store/authStore";
 import "../App.css";
 import eye_lines from "../assets/dashboard_img/Eye_hide_dark.svg";
+import { FaLock } from "react-icons/fa";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -122,11 +123,7 @@ const Login = () => {
         <div className="sm:mt-8  mt-2">
           <div className="Nav flex  justify-between">
             <a href="https://twjhub.com/" className="cursor-pointer">
-              <img
-                src={Logo}
-                className="md:w-[188px]  w-[200px] "
-                alt="Logo"
-              />
+              <img src={Logo} className="md:w-[188px]  w-[200px] " alt="Logo" />
             </a>
             <div className=" sm:flex hidden items-center text-[15px]">
               <p className="font-[500] text-[#27014F]">
@@ -141,8 +138,21 @@ const Login = () => {
             </div>
           </div>
         </div>
+
         <div className="flex  w-full md:h-[80%] md:max-w-[480px]  mx-auto justify-center items-center">
           <div className="flex flex-col justify-center w-full sm:p-8 p-0 bg-white">
+            <div className="flex flex-col mt-[2rem] items-center justify-center ">
+              <h3 className="text-[#27014F] ">
+                Please check that you are visiting the correct URL
+              </h3>
+
+              <div className=" flex items-center justify-center gap-0.5 mt-2 mb-4 border border-[#b8c1cd] rounded-[30px] px-8 py-2.5">
+                <span className="flex items-center gap-1 text-[#15aa64] text-[16px]">
+                  <FaLock /> <p>https://</p>
+                </span>
+                <span className="text-[#27014F]">app.twjhub.com</span>
+              </div>
+            </div>
             <h2 className="text-2xl sm-mt-0 mt-5 font-bold md:mb-[0.4rem] mb-0 md:text-[40px] text-[30px] text-[#27014F] w-full leading-[2.5rem]">
               Welcome back
             </h2>
