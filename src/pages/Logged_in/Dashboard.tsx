@@ -124,14 +124,7 @@ const Dashboard = () => {
     // const completeKyc = localStorage.getItem("kycComplete");
     fetchBanks();
     setShowWithdrawalModal(true);
-    // console.log(bankList);
-    // if (completeKyc === "true") {
-    //   setShowTopupModal(true);
-    //   setShowKycModal(false);
-    // } else {
-    //   setShowTopupModal(false);
-    //   setShowKycModal(true);
-    // }
+ 
   };
 
   const options = bankList.map((bank) => ({
@@ -238,7 +231,7 @@ const Dashboard = () => {
                 ) : (
                   <form className="flex flex-col h-full items-center ">
                     <div className="flex flex-col sm:flex-row items-center justify-between w-full">
-                      <div className="sm:w-[70%] w-full flex flex-col justify-center">
+                      <div className="sm:w-[70%]  mx-auto w-full flex flex-col justify-center">
                         <h5 className="text-[#0A2E65]/60 sm:text-[15px] text-[17px] ">
                           Available Balance
                         </h5>
