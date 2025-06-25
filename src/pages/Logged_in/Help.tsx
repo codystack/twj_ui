@@ -49,21 +49,21 @@ const socialMediaButtons = [
     icon: <AiTwotoneMail />,
     name: "hello@twjhub.com",
     label: "Email Address",
-    url: "mailto:your_email@example.com",
+    url: "mailto:hello@twjhub.com",
     rightIcon: <IoIosArrowForward />,
   },
   {
     icon: <FaFacebook />,
     name: "facebook",
     label: "Social Media",
-    url: "https://facebook.com/your_profile",
+    url: "https://web.facebook.com/twjhub/?_rdc=1&_rdr#",
     rightIcon: <IoIosArrowForward />,
   },
   {
     icon: <FaInstagram />,
     name: "instagram",
     label: "Social Media",
-    url: "https://instagram.com/your_profile",
+    url: "https://www.instagram.com/twjhub",
     rightIcon: <IoIosArrowForward />,
   },
   {
@@ -77,7 +77,6 @@ const socialMediaButtons = [
 
 const Help = () => {
   const [activeButton, setActiveButton] = useState("button1");
-  // const [activeButtonMobile, setActiveButtonMobile] = useState("");
   const [showContactModal, setShowContactModal] = useState(false);
 
   return (
@@ -194,13 +193,13 @@ const Help = () => {
           {/* Mobile Display Area: spans 3 columns */}
           {showContactModal && (
             <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center ">
-              <div className="bg-white w-full  p-6 h-[min(100dvh,100vh)] max-h-screen shadow-lg relative">
-                <div className="w-full  flex ">
+              <div className="bg-white w-full   p-6 h-[min(100dvh,100vh)] max-h-screen shadow-lg relative">
+                <div className="w-full mb-4 flex ">
                   <button
                     className=" text-left   cursor-pointer mt-[0.6rem] text-gray-600 text-lg font-bold"
                     onClick={() => setShowContactModal(false)}
                   >
-                    <GoArrowLeft className="text-[1.5rem]" />
+                    <GoArrowLeft className="text-[1.7rem]" />
                   </button>
                 </div>
 
