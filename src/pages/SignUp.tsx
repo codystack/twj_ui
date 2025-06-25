@@ -12,6 +12,7 @@ import "../App.css";
 import { useAuthStore } from "../store/authStore";
 import eye_lines from "../assets/dashboard_img/Eye_hide_dark.svg";
 import { useLocation } from "react-router-dom";
+import { FaLock } from "react-icons/fa";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -203,8 +204,20 @@ const SignUp = () => {
               </div>
             </div>
           </div>
-          <div className="mt-[4rem]  md:max-w-[480px] mx-auto ">
+          <div className="mt-[2rem]  md:max-w-[480px] mx-auto ">
             <div className="flex flex-col justify-center sm:p-8 p-0 bg-white">
+              <div className="flex flex-col mb-[1rem] items-center justify-center ">
+                <h3 className="text-[#27014F] text-center ">
+                  Please check that you are visiting the correct URL
+                </h3>
+
+                <div className=" flex items-center justify-center gap-0.5 mt-2 mb-4 border border-[#b8c1cd] rounded-[30px] px-8 py-2.5">
+                  <span className="flex items-center gap-1 text-[#15aa64] text-[16px]">
+                    <FaLock /> <p>https://</p>
+                  </span>
+                  <span className="text-[#27014F]">app.twjhub.com/signup</span>
+                </div>
+              </div>
               <h2 className="text-2xl font-bold sm:mb-[0.4rem]  sm:text-[40px] text-[30px] text-[#27014F] w-full leading-[2.5rem]">
                 Create an account
               </h2>
@@ -274,8 +287,6 @@ const SignUp = () => {
                       : "focus:border-purple-800"
                   }`}
                 >
-
-
                   <label
                     htmlFor="phoneNumber"
                     className="md:hidden block my-2 text-[16px] text-[#8b8989]"
