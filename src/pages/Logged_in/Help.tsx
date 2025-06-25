@@ -8,15 +8,10 @@ import {
   FaInstagram,
 } from "react-icons/fa";
 import { AiTwotoneMail } from "react-icons/ai";
-import { FaXTwitter } from "react-icons/fa6";
+// import { FaXTwitter } from "react-icons/fa6";
 import { IoIosArrowForward } from "react-icons/io";
 import { GoArrowLeft } from "react-icons/go";
-// const contentMap: Record<string, string> = {
-//   button1: "This is content for Button 1",
-//   button2: "This is content for Button 2",
-//   button3: "This is content for Button 3",
-//   // button4: "This is content for Button 4",
-// };
+import { BsWhatsapp } from "react-icons/bs";
 
 const buttons = [
   { id: "button1", label: "Contact Us", icon: <FaHeadset /> },
@@ -67,10 +62,10 @@ const socialMediaButtons = [
     rightIcon: <IoIosArrowForward />,
   },
   {
-    icon: <FaXTwitter />,
-    name: "Twitter (X)",
+    icon: <BsWhatsapp />,
+    name: "WhatsApp",
     label: "Social Media",
-    url: "https://twitter.com/your_profile",
+    url: "https://api.whatsapp.com/send/?phone=%2B2348108514863&text=Hello%2C+TWJ+I+would+like+to+reach+out+to+the+support+team.+&type=phone_number&app_absent=0",
     rightIcon: <IoIosArrowForward />,
   },
 ];
