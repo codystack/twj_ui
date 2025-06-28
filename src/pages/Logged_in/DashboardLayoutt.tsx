@@ -22,6 +22,9 @@ import MobileNav from "../../modals/MobileNav";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Help from "./Help";
+import BuyCrypto from "./crpto/BuyCrypto";
+import SellCrypto from "./crpto/SellCrypto";
+import SwapCrypto from "./crpto/SwapCrypto";
 
 const DashboardLayoutt = () => {
   const [name, setName] = useState<string>("");
@@ -81,6 +84,15 @@ const DashboardLayoutt = () => {
       break;
     case "/wallet":
       CurrentPage = <Wallet />;
+      break;
+      case "/wallet/buycrypto":
+      CurrentPage = <BuyCrypto />;
+      break;
+      case "/wallet/sellcrypto":
+      CurrentPage = <SellCrypto />;
+      break;
+      case "/wallet/swapcrypto":
+      CurrentPage = <SwapCrypto />;
       break;
     case "/transactions":
       CurrentPage = <Transaction />;

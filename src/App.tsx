@@ -27,6 +27,10 @@ import AccountUpgrade from "./pages/Logged_in/AccountUpgrade.tsx";
 import Referals from "./pages/Logged_in/Referals.tsx";
 import RouteChangeHandler from "./components/RouteChangeHandler.tsx";
 import Help from "./pages/Logged_in/Help.tsx";
+// import WalletHome from "./pages/Logged_in/crpto/WalletHome.tsx";
+import BuyCrypto from "./pages/Logged_in/crpto/BuyCrypto.tsx";
+import SellCrypto from "./pages/Logged_in/crpto/SellCrypto.tsx";
+import SwapCrypto from "./pages/Logged_in/crpto/SwapCrypto.tsx";
 
 const App = () => {
   return (
@@ -96,7 +100,15 @@ const AppWithRoutes = () => {
           <Route path="/referrals" element={<Referals />} />
           <Route path="/giftcards" element={<GiftCards />} />
           <Route path="/support" element={<Help />} />
-          <Route path="/wallet" element={<Wallet />} />
+          {/* <Route path="/wallet" element={<Wallet />} /> */}
+          {/* Nesting wallet route */}
+          <Route path="/wallet" element={<Wallet />}>
+         
+            <Route path="buycrypto" element={<BuyCrypto />} />
+            <Route path="sellcrypto" element={<SellCrypto />} />
+            <Route path="swapcrypto" element={<SwapCrypto />} />
+          </Route>
+
           <Route path="/transactions" element={<Transaction />} />
           <Route path="/profile" element={<Profile />}>
             <Route path="account_upgrade" element={<AccountUpgrade />} />
