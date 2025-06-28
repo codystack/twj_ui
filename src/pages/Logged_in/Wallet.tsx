@@ -34,16 +34,16 @@ const Wallet = () => {
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
       <div className="flex-1 overflow-y-auto p-4 ">
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-3 gap-5 mt-5 [@media(min-width:1000px)]:ml-5">
           {cardData.map(({ id, icon, title, description, link }) => (
             <Link
               to={link}
               key={id}
-              className="bg-white shadow p-4 rounded-xl text-left hover:shadow-md transition"
+              className="  cursor-pointer border h-[156px] min-width-[291px] bg-[#F2F4FC]/60 border-[#D0DAE6] hover:border-[#326CF6]  duration-300 rounded-[10px]   p-4 text-left transition"
             >
-              <img src={icon} alt={title} className="w-8 h-8 mb-2" />
-              <h3 className="font-semibold text-lg">{title}</h3>
-              <p className="text-sm text-gray-500">{description}</p>
+              <img src={icon} alt={title} className="w-8 h-8 mt-[9px] mb-2" />
+              <h3 className="font-semibold text-[#27014F] text-lg">{title}</h3>
+              <p className="text-[16px] leading-[1rem] mt-[5px] sm:text-[14px]  text-[#0A2E65]">{description}</p>
             </Link>
           ))}
         </div>
