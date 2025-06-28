@@ -7,6 +7,7 @@ const Crypto = () => {
         {/* Simulating long content */}
         <div className="h-[1000px] ">
           Scrollable content goes here...
+          {/* You can add more content or components here */}
         </div>
       </div>
     </div>

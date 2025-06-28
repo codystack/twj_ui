@@ -140,7 +140,7 @@ const Login = () => {
         </div>
 
         <div className="flex  w-full md:h-[80%] md:max-w-[480px]  mx-auto justify-center items-center">
-          <div className="flex flex-col justify-center w-full sm:p-8 p-0 bg-white">
+          <div className="flex flex-col justify-center w-full sm:p-8 p-0 ">
             <div className="flex flex-col mt-[2rem] items-center justify-center ">
               <h3 className="text-[#27014F] ">
                 Please check that you are visiting the correct URL
