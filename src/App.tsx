@@ -3,18 +3,14 @@ import { useAuthStore } from "./store/authStore.ts";
 import { useEffect } from "react";
 import useIdleTimer from "./hooks/useIdleTimer.ts";
 import { useNavigate } from "react-router-dom";
-
 import ResetPassword from "./pages/ResetPassword.tsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProtectedDashboard from "./components/protectedDashboard";
 import Dashboard from "./pages/Logged_in/Dashboard.tsx";
-import Bills from "./pages/Logged_in/Bills.tsx";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import VerifyOtp from "./pages/VerifyOtp";
 import DashboardLayoutt from "./pages/Logged_in/DashboardLayoutt.tsx";
-import GiftCards from "./pages/Logged_in/GiftCards.tsx";
-// import Crypto from "./pages/Logged_in/Crypto.tsx";
 import Wallet from "./pages/Logged_in/Wallet.tsx";
 import Transaction from "./pages/Logged_in/Transaction.tsx";
 import Profile from "./pages/Logged_in/Profile.tsx";
@@ -27,7 +23,6 @@ import AccountUpgrade from "./pages/Logged_in/AccountUpgrade.tsx";
 import Referals from "./pages/Logged_in/Referals.tsx";
 import RouteChangeHandler from "./components/RouteChangeHandler.tsx";
 import Help from "./pages/Logged_in/Help.tsx";
-// import WalletHome from "./pages/Logged_in/crpto/WalletHome.tsx";
 import BuyCrypto from "./pages/Logged_in/crpto/BuyCrypto.tsx";
 import SellCrypto from "./pages/Logged_in/crpto/SellCrypto.tsx";
 import SwapCrypto from "./pages/Logged_in/crpto/SwapCrypto.tsx";
@@ -96,19 +91,13 @@ const AppWithRoutes = () => {
           }
         >
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/bills_payment" element={<Bills />} />
           <Route path="/referrals" element={<Referals />} />
-          <Route path="/giftcards" element={<GiftCards />} />
           <Route path="/support" element={<Help />} />
-          {/* <Route path="/wallet" element={<Wallet />} /> */}
-          {/* Nesting wallet route */}
           <Route path="/wallet" element={<Wallet />}>
-         
             <Route path="buycrypto" element={<BuyCrypto />} />
             <Route path="sellcrypto" element={<SellCrypto />} />
             <Route path="swapcrypto" element={<SwapCrypto />} />
           </Route>
-
           <Route path="/transactions" element={<Transaction />} />
           <Route path="/profile" element={<Profile />}>
             <Route path="account_upgrade" element={<AccountUpgrade />} />
