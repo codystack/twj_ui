@@ -54,14 +54,3 @@ const Wallet = () => {
 
 export default Wallet;
 
-// import { Outlet } from "react-router-dom";
-
-// const Wallet = () => {
-//   return (
-//     <div className="pt-[5rem] px-[1rem]">
-//       <Outlet />
-//     </div>
-//   );
-// };
-
-// export default Wallet;
