@@ -126,7 +126,7 @@ const BuyCrypto = () => {
 
                 <div className="w-full flex mt-9 justify-end">
                   <div className="flex items-center gap-3">
-                    <button className="border-[2px] cursor-pointer border-[#8003A9] text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]">
+                    <button className="border-[2px] cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]">
                       Swap Asset
                     </button>
                     <button className="border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]">
