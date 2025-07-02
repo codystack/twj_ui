@@ -93,6 +93,9 @@ const BuyCrypto = () => {
                     placeholder="Choose a coin"
                     inputWidth="w-full"
                     optionsWidth="w-full"
+                    px="px-6"
+                    py="py-3"
+                    textSize="text-[15px]"
                     onChange={handleSelection}
                   />
                 </div>

@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { FiChevronDown } from "react-icons/fi"; // You can use any icon library
-
+import { FiChevronDown } from "react-icons/fi";
 
 type Option = {
   id: string;
@@ -17,6 +16,9 @@ interface CustomSelectProps {
   inputWidth?: string;
   optionsWidth?: string;
   placeholder?: string;
+  px?: string; 
+  py?: string; 
+  textSize?: string; 
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -26,6 +28,9 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   inputWidth = "w-full",
   optionsWidth,
   placeholder = "Select an option",
+  px = "px-4",
+  py = "py-2",
+  textSize = "text-base",
 }) => {
   const [selected, setSelected] = useState<Option | undefined>(defaultSelected);
   const [isOpen, setIsOpen] = useState(false);
@@ -38,17 +43,15 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
 
   return (
     <div className="relative">
-      {/* Input-like display */}
+      {/* Selected Field */}
       <div
         tabIndex={0}
         onClick={() => setIsOpen((prev) => !prev)}
-        // onBlur={() => setIsOpen(false)}
-        className={`outline-none px-4 py-2 rounded-md flex justify-between items-center cursor-pointer bg-white ${inputWidth}`}
+        className={`outline-none ${px} ${py} ${textSize} rounded-md flex justify-between items-center cursor-pointer bg-white ${inputWidth}`}
         style={{
           border: isOpen ? "2px solid #8A95BF" : "1px solid #8A95BF",
         }}
       >
-        {/* Left side: image + label */}
         {selected ? (
           <>
             <div className="flex items-center gap-2">
@@ -78,7 +81,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         )}
       </div>
 
-      {/* Options Dropdown */}
+      {/* Dropdown Options */}
       {isOpen && (
         <ul
           className={`absolute mt-2 bg-white border rounded-md shadow z-10 max-h-60 overflow-y-auto ${
@@ -93,11 +96,13 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
               className="flex justify-between items-center px-4 py-3 hover:bg-[#f5f7fd] cursor-pointer rounded-md mx-2 my-2"
             >
               <div className="flex items-center gap-2">
-                <img
-                  src={option.image}
-                  alt={option.label}
-                  className="w-5 h-5 rounded-full"
-                />
+                {option.image && (
+                  <img
+                    src={option.image}
+                    alt={option.label}
+                    className="w-5 h-5 rounded-full"
+                  />
+                )}
                 <span>{option.label}</span>
               </div>
               {option.displayValue && (
