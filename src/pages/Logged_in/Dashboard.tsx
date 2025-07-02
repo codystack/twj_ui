@@ -124,7 +124,6 @@ const Dashboard = () => {
     // const completeKyc = localStorage.getItem("kycComplete");
     fetchBanks();
     setShowWithdrawalModal(true);
- 
   };
 
   const options = bankList.map((bank) => ({
@@ -537,32 +536,6 @@ const Dashboard = () => {
                 <Support />
               </div>
             </div>
-
-            {/* <div className="w-full mt-[3rem] border  ">
-              <div className="md:hidden block relative w-full  h-[253] bg-[#FBEEFF] rounded-[10px] ">
-                <div className=" pt-[1.5rem] pl-[1.5rem]">
-                  <div className="flex  items-center">
-                    <h5 className="font-bold text-[24px] mr-[5px]">
-                      Virtual Card
-                    </h5>
-                    <div className="bg-[#FF3366]/20 px-[5px] py-[1px] h-fit rounded-[2px] text-[8px] text-[#FF3366]">
-                      COMING SOON
-                    </div>
-                  </div>
-
-                  <p className="text-left text-[#27014F] leading-[13px] tracking-normal text-[11px]">
-                    Avoid card transaction failures. Use the <br /> TWJ Virtual
-                    USD Card for smooth, relaible <br /> payments on your
-                    favourite platforms.
-                  </p>
-                </div>
-                <img
-                  src={virtualCard}
-                  className=" absolute bottom-0 rounded-bl-[10px]  rounded-br-[10px]"
-                  alt=""
-                />
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
