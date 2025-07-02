@@ -59,7 +59,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                 <img
                   src={selected.image}
                   alt={selected.label}
-                  className="w-5 h-5 rounded-full"
+                  className="w-6 h-6 rounded-full"
                 />
               )}
               <span className="font-medium">{selected.label}</span>

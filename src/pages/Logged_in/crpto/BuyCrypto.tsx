@@ -1,3 +1,4 @@
+import { useState } from "react";
 import CustomSelect from "../../../components/CustomSelect";
 import Bitcoin from "../../../assets/crpto_icons/Btc-coin.757f6cb3 2.svg";
 import Eth from "../../../assets/crpto_icons/ETH-b-coin.eac01ea4 1.svg";
@@ -8,6 +9,9 @@ import BITCOIN from "../../../assets/crpto_icons/BITCOIN.svg";
 import ETHER from "../../../assets/crpto_icons/ETHER.svg";
 import positive from "../../../assets/crpto_icons/positive.svg";
 import negative from "../../../assets/crpto_icons/negative.svg";
+import QR from "../../../assets/crpto_icons/qrcodee.svg";
+import copy from "../../../assets/crpto_icons/Copy_lightC.svg";
+import warRed from "../../../assets/crpto_icons/warn_red.svg";
 
 const options = [
   {
@@ -71,6 +75,16 @@ export type Optiontype = {
 };
 
 const BuyCrypto = () => {
+  const [copied, setCopied] = useState(false);
+
+  // Full wallet address
+  const fullAddress = "bc1qkuv9jc9qgfzzvgqev8zsu3e4gzeux09pq3nvs5";
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(fullAddress);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
   const handleSelection = (selected: Optiontype) => {
     console.log(" Selected from parent:", selected);
     console.log(" Backend value:", selected.value);
@@ -93,7 +107,7 @@ const BuyCrypto = () => {
                     placeholder="Choose a coin"
                     inputWidth="w-full"
                     optionsWidth="w-full"
-                    px="px-6"
+                    px="px-5"
                     py="py-3"
                     textSize="text-[15px]"
                     onChange={handleSelection}
@@ -180,8 +194,51 @@ const BuyCrypto = () => {
               </div>
 
               {/* Right section */}
-              <div className=" ml-5 border ">
-                <p className="text-sm">Right Section</p>
+              <div className=" relative  ml-5 w-full h-full flex justify-center items-center ">
+                <div className="border border-[#8A95BF] rounded-[10px] bg-[#F5F7FA] w-[85%] border-dashed">
+                  <div className="flex justify-center items-center mt-15">
+                    <img src={QR} alt="qr code" />
+                  </div>
+
+                  <div className="mt-10  px-[3rem]">
+                    <p className="mb-[-6px]">Wallet Address</p>
+
+                    <div className="flex my-[0.7rem] items-center w-full max-w-md border border-[#8A95BF] rounded-md overflow-hidden">
+                      {/* Address section */}
+                      <div className="px-4 py-2 text-sm text-gray-700 truncate w-full">
+                        {fullAddress}
+                      </div>
+
+                      {/* Copy button */}
+                      <button
+                        onClick={handleCopy}
+                        className="bg-[#8003A9] cursor-pointer hover:bg-[#6c028b] text-white p-3 flex items-center justify-center"
+                        title="Copy address"
+                      >
+                        <img src={copy} alt="" />
+                      </button>
+                    </div>
+
+                    {/* Copied tag */}
+                    {copied && (
+                      <span className=" absolute buttom--[20px] right-[5rem] text-[13px] text-green-600 font-medium">
+                        Copied!
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="px-[2rem] mb-[2rem]">
+                    <div className="flex justify-center  items-center px-7 py-3 mt-4 rounded-[10px] w-full bg-[#FFEEF2] ">
+                      <div className="flex items-center  gap-3 justify-center ">
+                        <img src={warRed} alt="" />
+                        <p className="leading-[0.9rem] text-[#27014F] text-left text-[13px]">
+                          Sending less than $10 will result in receiving credit
+                          at a significantly lower exchange rate.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
