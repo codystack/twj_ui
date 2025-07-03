@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
+import { components } from "react-select";
 
 type Option = {
   id: string;
@@ -16,9 +17,11 @@ interface CustomSelectProps {
   inputWidth?: string;
   optionsWidth?: string;
   placeholder?: string;
-  px?: string; 
-  py?: string; 
-  textSize?: string; 
+  px?: string;
+  py?: string;
+  textSize?: string;
+  borderColor?: string;
+  backgroundColor?: string;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -31,6 +34,8 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   px = "px-4",
   py = "py-2",
   textSize = "text-base",
+  borderColor = "#8A95BF",
+  backgroundColor = "#ffffff",
 }) => {
   const [selected, setSelected] = useState<Option | undefined>(defaultSelected);
   const [isOpen, setIsOpen] = useState(false);
@@ -47,9 +52,12 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       <div
         tabIndex={0}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`outline-none ${px} ${py} ${textSize} rounded-md flex justify-between items-center cursor-pointer bg-white ${inputWidth}`}
+        className={`outline-none ${px} ${py} ${textSize} rounded-md flex justify-between items-center cursor-pointer ${inputWidth}`}
         style={{
-          border: isOpen ? "2px solid #8A95BF" : "1px solid #8A95BF",
+          border: isOpen
+            ? `2px solid ${borderColor}`
+            : `1px solid ${borderColor}`,
+          backgroundColor: backgroundColor,
         }}
       >
         {selected ? (
@@ -120,25 +128,19 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
 
 export default CustomSelect;
 
-// use case for this
-{
-  // <CustomSelect
-  //   options={options}
-  //   defaultSelected={options[0]}
-  //   inputWidth="w-64"
-  //   optionsWidth="w-80"
-  //   onChange={(selected) => {
-  //     console.log("Send this value to backend:", selected.value);
-  //    }}
-  //  />
-}
 
-// <CustomSelect
-//   options={options}
-//   placeholder="Choose a coin"
-//   inputWidth="w-64"
-//   optionsWidth="w-80"
-//   onChange={(selected) => {
-//     console.log("Backend value:", selected.value);
-//   }}
-// />
+
+// all the props for this component
+// | Prop              | Type                                      | Description                                                                                                                   |
+// | ----------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+// | `options`         | `Option[]`                                | **(Required)** Array of selectable options. Each option can have `label`, `value`, `id`, optional `image` and `displayValue`. |
+// | `defaultSelected` | `Option` *(optional)*                     | The option that should be selected by default.                                                                                |
+// | `onChange`        | `(selected: Option) => void` *(optional)* | Callback triggered when a new option is selected.                                                                             |
+// | `inputWidth`      | `string` *(optional)*                     | Tailwind width class for the input field (e.g., `"w-full"`).                                                                  |
+// | `optionsWidth`    | `string` *(optional)*                     | Tailwind width class for the dropdown list. Defaults to `inputWidth`.                                                         |
+// | `placeholder`     | `string` *(optional)*                     | Placeholder text when no option is selected. Defaults to `"Select an option"`.                                                |
+// | `px`              | `string` *(optional)*                     | Tailwind horizontal padding (e.g., `"px-4"`).                                                                                 |
+// | `py`              | `string` *(optional)*                     | Tailwind vertical padding (e.g., `"py-2"`).                                                                                   |
+// | `textSize`        | `string` *(optional)*                     | Tailwind text size class (e.g., `"text-base"`).                                                                               |
+// | `borderColor`     | `string` *(optional)*                     | CSS color value for the input border (e.g., `"#3a57e8"` or `"red"`).                                                          |
+// | `backgroundColor` | `string` *(optional)*                     | CSS background color of the select field (e.g., `"#f9f9f9"`).                                                                 |
