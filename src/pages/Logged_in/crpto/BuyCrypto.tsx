@@ -229,7 +229,7 @@ const BuyCrypto = () => {
                         <p className="text-[18px] mb-[-8px] text-center">
                           Purchase
                         </p>
-                        <h4 className="flex justify-center items-center text-[24px]">
+                        <h4 className="flex justify-center gap-0.5   items-center text-[24px]">
                           <span>0.0003667</span> <span>BTC</span>
                         </h4>
                         <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
