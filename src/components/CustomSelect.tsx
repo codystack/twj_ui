@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
 type Option = {
@@ -23,6 +23,7 @@ interface CustomSelectProps {
   backgroundColor?: string;
   optionsPx?: string;
   optionsPy?: string;
+  showDropdownIcon?: boolean;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -39,6 +40,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   backgroundColor = "#ffffff",
   optionsPx = "px-4",
   optionsPy = "py-3",
+  showDropdownIcon = true,
 }) => {
   const [selected, setSelected] = useState<Option | undefined>(defaultSelected);
   const [isOpen, setIsOpen] = useState(false);
@@ -81,13 +83,17 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                   {selected.displayValue}
                 </span>
               )}
-              <FiChevronDown className="text-gray-500 text-base" />
+              {showDropdownIcon && (
+                <FiChevronDown className="text-gray-500 text-base" />
+              )}
             </div>
           </>
         ) : (
           <>
             <span className="text-gray-400">{placeholder}</span>
-            <FiChevronDown className="text-gray-500 text-base" />
+            {showDropdownIcon && (
+              <FiChevronDown className="text-gray-500 text-base" />
+            )}
           </>
         )}
       </div>
