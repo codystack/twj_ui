@@ -16,9 +16,14 @@ interface CustomSelectProps {
   inputWidth?: string;
   optionsWidth?: string;
   placeholder?: string;
-  px?: string; 
-  py?: string; 
-  textSize?: string; 
+  px?: string;
+  py?: string;
+  textSize?: string;
+  borderColor?: string;
+  backgroundColor?: string;
+  optionsPx?: string;
+  optionsPy?: string;
+  showDropdownIcon?: boolean;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -27,10 +32,15 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   onChange,
   inputWidth = "w-full",
   optionsWidth,
-  placeholder = "Select an option",
+  placeholder = "",
   px = "px-4",
   py = "py-2",
   textSize = "text-base",
+  borderColor = "#8A95BF",
+  backgroundColor = "#ffffff",
+  optionsPx = "px-4",
+  optionsPy = "py-3",
+  showDropdownIcon = true,
 }) => {
   const [selected, setSelected] = useState<Option | undefined>(defaultSelected);
   const [isOpen, setIsOpen] = useState(false);
@@ -47,9 +57,12 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       <div
         tabIndex={0}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`outline-none ${px} ${py} ${textSize} rounded-md flex justify-between items-center cursor-pointer bg-white ${inputWidth}`}
+        className={`outline-none ${px} ${py} ${textSize} rounded-md flex justify-between items-center cursor-pointer ${inputWidth}`}
         style={{
-          border: isOpen ? "2px solid #8A95BF" : "1px solid #8A95BF",
+          border: isOpen
+            ? `2px solid ${borderColor}`
+            : `1px solid ${borderColor}`,
+          backgroundColor: backgroundColor,
         }}
       >
         {selected ? (
@@ -70,13 +83,17 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                   {selected.displayValue}
                 </span>
               )}
-              <FiChevronDown className="text-gray-500 text-base" />
+              {showDropdownIcon && (
+                <FiChevronDown className="text-gray-500 text-base" />
+              )}
             </div>
           </>
         ) : (
           <>
             <span className="text-gray-400">{placeholder}</span>
-            <FiChevronDown className="text-gray-500 text-base" />
+            {showDropdownIcon && (
+              <FiChevronDown className="text-gray-500 text-base" />
+            )}
           </>
         )}
       </div>
@@ -93,9 +110,9 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             <li
               key={option.id}
               onClick={() => handleSelect(option)}
-              className="flex justify-between items-center px-4 py-3 hover:bg-[#f5f7fd] cursor-pointer rounded-md mx-2 my-2"
+              className={`flex justify-between items-center ${optionsPx} ${optionsPy} hover:bg-[#f5f7fd] cursor-pointer rounded-md mx-2 my-2`}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 {option.image && (
                   <img
                     src={option.image}
@@ -120,25 +137,20 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
 
 export default CustomSelect;
 
-// use case for this
-{
-  // <CustomSelect
-  //   options={options}
-  //   defaultSelected={options[0]}
-  //   inputWidth="w-64"
-  //   optionsWidth="w-80"
-  //   onChange={(selected) => {
-  //     console.log("Send this value to backend:", selected.value);
-  //    }}
-  //  />
-}
+// all the props for this Component
 
-// <CustomSelect
-//   options={options}
-//   placeholder="Choose a coin"
-//   inputWidth="w-64"
-//   optionsWidth="w-80"
-//   onChange={(selected) => {
-//     console.log("Backend value:", selected.value);
-//   }}
-// />
+// | Prop              | Type                                      | Description                                                                                                                                 |
+// | ----------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+// | `options`         | `Option[]`                                | **(Required)** Array of selectable options. Each option should include `id`, `label`, and `value`; `image` and `displayValue` are optional. |
+// | `defaultSelected` | `Option` *(optional)*                     | The option that should be selected by default.                                                                                              |
+// | `onChange`        | `(selected: Option) => void` *(optional)* | Callback triggered when a new option is selected.                                                                                           |
+// | `inputWidth`      | `string` *(optional)*                     | Tailwind width class for the input field (e.g., `"w-full"`, `"w-[50%]"`).                                                                   |
+// | `optionsWidth`    | `string` *(optional)*                     | Tailwind width class for the dropdown list. Defaults to the value of `inputWidth`.                                                          |
+// | `placeholder`     | `string` *(optional)*                     | Placeholder text when no option is selected. Defaults to an empty string (`""`).                                                            |
+// | `px`              | `string` *(optional)*                     | Tailwind horizontal padding for the input field (e.g., `"px-4"`).                                                                           |
+// | `py`              | `string` *(optional)*                     | Tailwind vertical padding for the input field (e.g., `"py-2"`).                                                                             |
+// | `textSize`        | `string` *(optional)*                     | Tailwind text size class for the input field (e.g., `"text-base"`, `"text-[15px]"`).                                                        |
+// | `borderColor`     | `string` *(optional)*                     | CSS border color for the input field (e.g., `"#3a57e8"` or `"white"`).                                                                      |
+// | `backgroundColor` | `string` *(optional)*                     | CSS background color for the input field (e.g., `"#f9f9f9"`, `"rgba(...)"`).                                                                |
+// | `optionsPx`       | `string` *(optional)*                     | Tailwind horizontal padding for each dropdown option (e.g., `"px-4"`).                                                                      |
+// | `optionsPy`       | `string` *(optional)*                     | Tailwind vertical padding for each dropdown option (e.g., `"py-3"`).                                                                        |

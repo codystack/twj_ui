@@ -1,70 +1,11 @@
-import { useState } from "react";
-import CustomSelect from "../../../components/CustomSelect";
-import Bitcoin from "../../../assets/crpto_icons/Btc-coin.757f6cb3 2.svg";
-import Eth from "../../../assets/crpto_icons/ETH-b-coin.eac01ea4 1.svg";
-import warning from "../../../assets/crpto_icons/warning_c.svg";
-import DOGE from "../../../assets/crpto_icons/Doge-coin.de2aebc7 1.svg";
-import USDT from "../../../assets/crpto_icons/USDT-b-coin.9404ef8d 1.svg";
+import { FaArrowLeft } from "react-icons/fa";
+import { NavLink } from "react-router";
+import USDT from "../../../assets/crpto_icons/USDT-b-coin.svg";
 import BITCOIN from "../../../assets/crpto_icons/BITCOIN.svg";
+import NGN from "../../../assets/crpto_icons/MaskNGN.svg";
 import ETHER from "../../../assets/crpto_icons/ETHER.svg";
-import positive from "../../../assets/crpto_icons/positive.svg";
-import negative from "../../../assets/crpto_icons/negative.svg";
-import QR from "../../../assets/crpto_icons/qrcodee.svg";
-import copy from "../../../assets/crpto_icons/Copy_lightC.svg";
-import warRed from "../../../assets/crpto_icons/warn_red.svg";
-
-const options = [
-  {
-    id: "btc",
-    label: "Bitcoin",
-    value: "btc_backend_id_123",
-    displayValue: ".102 BTC",
-    image: Bitcoin,
-  },
-  {
-    id: "eth",
-    label: "Ethereum",
-    value: "eth_backend_id_456",
-    displayValue: ".504 ETH",
-
-    image: Eth,
-  },
-];
-
-const cryptoData = [
-  {
-    id: "btc",
-    shortName: "BTC",
-    fullName: "Bitcoin",
-    priceNGN: "₦75,300,000",
-    percentChange: 2.15,
-    image: BITCOIN,
-  },
-  {
-    id: "eth",
-    shortName: "ETH",
-    fullName: "Ethereum",
-    priceNGN: "₦4,580,000",
-    percentChange: -1.32,
-    image: ETHER,
-  },
-  {
-    id: "usdt",
-    shortName: "USDT",
-    fullName: "Tether",
-    priceNGN: "₦1,320",
-    percentChange: 0.05,
-    image: USDT,
-  },
-  {
-    id: "usdc",
-    shortName: "DOGE",
-    fullName: "Doge",
-    priceNGN: "₦1,310",
-    percentChange: -0.12,
-    image: DOGE,
-  },
-];
+import CustomSelect from "../../../components/CustomSelect";
+import { useState } from "react";
 
 export type Optiontype = {
   id: string;
@@ -74,171 +15,278 @@ export type Optiontype = {
   displayValue?: string;
 };
 
+const coins = [
+  {
+    name: "Bitcoin",
+    short: "BTC",
+    value: "(0.00 BTC)",
+    img: BITCOIN,
+  },
+  {
+    name: "Ethereum",
+    short: "ETH",
+    value: "(1.25 ETH)",
+    img: ETHER,
+  },
+  {
+    name: "Tether",
+    short: "USDT",
+    value: "(20.00 USDT)",
+    img: USDT,
+  },
+  {
+    name: "Binance Coin",
+    short: "BNB",
+    value: "(5.10 BNB)",
+    img: BITCOIN,
+  },
+  {
+    name: "Solana",
+    short: "SOL",
+    value: "(12.00 SOL)",
+    img: ETHER,
+  },
+];
+
+const options = [
+  {
+    id: "btc",
+    label: "Bitcoin",
+    value: "btc_backend_id_123",
+    // displayValue: ".102 BTC",
+    image: BITCOIN,
+  },
+  {
+    id: "eth",
+    label: "Ethereum",
+    value: "eth_backend_id_456",
+    // displayValue: ".504 ETH",
+    image: ETHER,
+  },
+];
+
 const BuyCrypto = () => {
-  const [copied, setCopied] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
-  // Full wallet address
-  const fullAddress = "bc1qkuv9jc9qgfzzvgqev8zsu3e4gzeux09pq3nvs5";
+  const [selectedCoin, setSelectedCoin] = useState<Optiontype>(options[0]);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(fullAddress);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  };
   const handleSelection = (selected: Optiontype) => {
-    console.log(" Selected from parent:", selected);
-    console.log(" Backend value:", selected.value);
+    console.log("Selected from parent:", selected);
+    console.log("Backend value:", selected.value);
+    setSelectedCoin(selected);
   };
+  const secHandleChange = (val: Optiontype) => {
+  console.log(val);
+};
 
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
       <div className="flex-1 overflow-y-auto p-4 ">
         <div className="flex justify-center items-center">
           <div className=" w-full  p-4">
+            <div className="flex justify-start items-center mb-2">
+              <NavLink className="flex items-center gap-1 " to="/wallet">
+                <FaArrowLeft className="text- cursor-pointer" />
+                <p className="text-[15px]">Back</p>
+              </NavLink>
+            </div>
             <div className="w-full grid [grid-template-columns:45%_55%]   ">
               {/* Left section */}
               <div className=" ">
-                <div className="flex flex-col">
-                  <p className="py-3 text-[14px] text-[#000]">
-                    Select Cryptocurrency Asset
-                  </p>
-                  <CustomSelect
-                    options={options}
-                    placeholder="Choose a coin"
-                    inputWidth="w-full"
-                    optionsWidth="w-full"
-                    px="px-5"
-                    py="py-3"
-                    textSize="text-[15px]"
-                    onChange={handleSelection}
-                  />
-                </div>
-
-                <div className="flex justify-center items-center px-7 py-3 mt-4 rounded-[10px] w-full bg-[#FBEEFF] ">
-                  <div className="flex items-center  gap-3 justify-center ">
-                    <img src={warning} alt="" />
-                    <p className="leading-[0.9rem] text-[#8003A9] text-left text-[13px]">
-                      Your wallet will automatically be credited with Naira
-                      after confirmations on your transaction.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="w-full flex mt-9 justify-end">
-                  <div className="flex items-center gap-3">
-                    <button className="border-[2px] cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]">
-                      Swap Asset
-                    </button>
-                    <button className="border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]">
-                      Create Wallet
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mt-7">
-                    <p className=" text-[19px] font-[500]">Market</p>
-                  </div>
-
-                  <div className="w-full border  px-5 py-4 mt-2 border-[#8A95BF] rounded-md overflow-hidden">
-                    {cryptoData.map((coin, index) => (
-                      <div
-                        key={coin.id}
-                        className={`flex justify-between items-center  py-3 ${
-                          index !== cryptoData.length - 1 ? "border-b" : ""
-                        } border-[#8A95BF]`}
-                      >
-                        {/* Left: Coin Image + Name */}
-                        <div className="flex items-center gap-3">
-                          <img
-                            src={coin.image}
-                            alt={coin.fullName}
-                            className="w-8 h-8"
-                          />
-                          <div className="leading-tight">
-                            <p className="text-[15px]">{coin.shortName}</p>
-                            <p className="text-[12px] text-gray-500">
-                              {coin.fullName}
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Right: Price + Change */}
-                        <div className="text-right leading-tight flex flex-col items-end">
-                          <p className="text-[15px]">{coin.priceNGN}</p>
-                          <p
-                            className={`text-sm flex items-center gap-1 ${
-                              coin.percentChange >= 0
-                                ? "text-green-500"
-                                : "text-red-500"
-                            }`}
-                          >
-                            <img
-                              src={
-                                coin.percentChange >= 0 ? positive : negative
-                              }
-                              alt={
-                                coin.percentChange >= 0
-                                  ? "positive"
-                                  : "negative"
-                              }
-                              className="w-3 h-3"
-                            />
-                            {coin.percentChange}%
-                          </p>
-                        </div>
+                <h3 className="text-[18px] my-[1rem]">Crypto Wallets</h3>
+                <div className="flex flex-col gap-4">
+                  {coins.map((coin, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-4 border border-gray-300 rounded-lg"
+                    >
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={coin.img}
+                          alt={coin.name}
+                          className="w-6 h-6"
+                        />
+                        <span className="font-medium">{coin.name}</span>
                       </div>
-                    ))}
-                  </div>
+                      <span className="text-gray-500">{coin.value}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               {/* Right section */}
-              <div className=" relative  ml-5 w-full h-full flex justify-center items-center ">
-                <div className="border border-[#8A95BF] rounded-[10px] bg-[#F5F7FA] w-[85%] border-dashed">
-                  <div className="flex justify-center items-center mt-15">
-                    <img src={QR} alt="qr code" />
-                  </div>
+              <div className=" mt-[1rem] ml-[2rem]">
+                {!showConfirmation ? (
+                  <>
+                    <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                      Select Cryptocurrency
+                    </p>
+                    <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
+                      <p className="w-full text-[16px] font-medium">
+                        {selectedCoin.label}
+                      </p>
 
-                  <div className="mt-10  px-[3rem]">
-                    <p className="mb-[-6px]">Wallet Address</p>
-
-                    <div className="flex my-[0.7rem] items-center w-full max-w-md border border-[#8A95BF] rounded-md overflow-hidden">
-                      {/* Address section */}
-                      <div className="px-4 py-2 text-sm text-gray-700 truncate w-full">
-                        {fullAddress}
+                      <div className="w-full flex">
+                        <div className="ml-auto w-[50%]">
+                          <CustomSelect
+                            options={options}
+                            defaultSelected={options[0]}
+                            inputWidth="w-full"
+                            optionsWidth="w-full"
+                            px="px-1"
+                            py="py-1"
+                            textSize="text-[15px]"
+                            onChange={handleSelection}
+                            borderColor="#fff"
+                            backgroundColor="#EAEFF6"
+                            optionsPx="px-1"
+                            optionsPy="py-1"
+                            //  showDropdownIcon={false}
+                          />
+                        </div>
                       </div>
+                    </div>
+                    <div className="flex justify-between  mt-[0.5rem]   items-center">
+                      <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                        Enter Amount
+                      </p>
 
-                      {/* Copy button */}
-                      <button
-                        onClick={handleCopy}
-                        className="bg-[#8003A9] cursor-pointer hover:bg-[#6c028b] text-white p-3 flex items-center justify-center"
-                        title="Copy address"
-                      >
-                        <img src={copy} alt="" />
-                      </button>
+                      <div className="flex items-center justify-between text-[#6779A7] ">
+                        <p className="mr-1">Wallel Balance:</p>
+                        <span className="flex justify-center items-center">
+                          <span>N</span>
+                          <span>50,000</span>
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Copied tag */}
-                    {copied && (
-                      <span className=" absolute buttom--[20px] right-[5rem] text-[13px] text-green-600 font-medium">
-                        Copied!
-                      </span>
-                    )}
-                  </div>
+                    <div className="flex items-center w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
+                      {/* Left Section with Flag and NGN */}
+                      <div className="flex items-center mx-1 my-1 gap-1 px-3 py-2 bg-[#EAEFF6] rounded-l-md">
+                        <img
+                          src={NGN}
+                          alt="NGN flag"
+                          className="w-4 h-4 rounded-sm"
+                        />
+                        <span className="text-[13px] font-medium">NGN</span>
+                      </div>
 
-                  <div className="px-[2rem] mb-[2rem]">
-                    <div className="flex justify-center  items-center px-7 py-3 mt-4 rounded-[10px] w-full bg-[#FFEEF2] ">
-                      <div className="flex items-center  gap-3 justify-center ">
-                        <img src={warRed} alt="" />
-                        <p className="leading-[0.9rem] text-[#27014F] text-left text-[13px]">
-                          Sending less than $10 will result in receiving credit
-                          at a significantly lower exchange rate.
+                      {/* Input Field */}
+                      <input
+                        type="text"
+                        placeholder="50,000"
+                        className="w-full px-1 py-2 outline-none bg-white rounded-r-md text-sm"
+                      />
+                    </div>
+
+                    <div className="mt-[0.5rem]">
+                      <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                        What you'll receive
+                      </p>
+
+                      <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
+                        <p className="w-full text-[16px] font-medium">
+                          0.00237
+                        </p>
+
+                        <div className="w-full flex">
+                          <div className="ml-auto w-[50%]">
+                            <CustomSelect
+                              options={options}
+                              defaultSelected={options[0]}
+                              inputWidth="w-full"
+                              optionsWidth="w-full"
+                              px="px-1"
+                              py="py-1"
+                              textSize="text-[15px]"
+                              onChange={secHandleChange}
+                              borderColor="#fff"
+                              backgroundColor="#EAEFF6"
+                              optionsPx="px-1"
+                              optionsPy="py-1"
+                              showDropdownIcon={false}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="w-full flex mt-9 justify-end">
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => setShowConfirmation(true)}
+                            className="border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
+                          >
+                            Continue
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-center">
+                      <div className="flex flex-col gap-[2px]">
+                        <p className="text-[18px] mb-[-8px] text-center">
+                          Purchase
+                        </p>
+                        <h4 className="flex justify-center items-center text-[24px]">
+                          <span>0.0003667</span> <span>BTC</span>
+                        </h4>
+                        <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
+                          <span>-</span> <span>50,000</span>
+                          <span>NGN</span>
                         </p>
                       </div>
                     </div>
-                  </div>
-                </div>
+                    <div className="border border-gray-300 mt-[2rem] px-4 py-6 rounded-md bg-white shadow">
+                      <div className="flex justify-between text-[15px] mb-4">
+                        <p className="">Price Per Asset</p>
+                        <span className="  flex items-center gap-1">
+                          <span>3,505.03</span>
+                          <span>NGN</span>
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between text-[15px] mb-4">
+                        <p className="">Cost</p>
+                        <span className=" flex items-center gap-1">
+                          <span>50,000</span>
+                          <span>NGN</span>
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between text-[15px] mb-4">
+                        <p className="">Transaction Fee</p>
+                        <span className="flex items-center gap-1">
+                          <span>0.0012</span>
+                          <span>BTC</span>
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between text-[15px] ">
+                        <p className="">You will receive</p>
+                        <span className="flex items-center gap-1">
+                          <span>0.0012</span>
+                          <span>BTC</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="w-full flex mt-9 justify-end">
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => setShowConfirmation(false)}
+                          className="border-[2px] cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
+                        >
+                          Edit Purchase
+                        </button>
+                        <button className="border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]">
+                          Create Wallet
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
