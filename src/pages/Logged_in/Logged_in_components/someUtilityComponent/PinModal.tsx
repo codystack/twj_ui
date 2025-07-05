@@ -34,12 +34,18 @@ const PinModal = ({
   const validatePin = async () => {
     setLoading(true);
     try {
-       const pinResponse = await api.post(
-        `/Authentication/validatePin`,
-        { passCode: pin }
-      );
+      const pinResponse = await api.post(`/Authentication/validatePin`, {
+        passCode: pin,
+      });
 
-      if (!pinResponse.data.isSuccessful) {
+      // if (!pinResponse.data.isSuccessful) {
+      //   setError("Invalid PIN. Please try again.");
+      //   setPin("");
+      //   setLoading(false);
+      //   return;
+      // }
+
+      if (pinResponse?.data?.statusCode !== "OK") {
         setError("Invalid PIN. Please try again.");
         setPin("");
         setLoading(false);
@@ -65,7 +71,6 @@ const PinModal = ({
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     if (pin.length === 4) {
