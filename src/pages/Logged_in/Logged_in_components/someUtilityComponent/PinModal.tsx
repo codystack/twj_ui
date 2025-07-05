@@ -38,6 +38,13 @@ const PinModal = ({
         passCode: pin,
       });
 
+      // if (!pinResponse.data.isSuccessful) {
+      //   setError("Invalid PIN. Please try again.");
+      //   setPin("");
+      //   setLoading(false);
+      //   return;
+      // }
+
       if (pinResponse?.data?.statusCode !== "OK") {
         setError("Invalid PIN. Please try again.");
         setPin("");
