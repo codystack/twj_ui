@@ -85,7 +85,7 @@ const BuyCrypto = () => {
         <div className="flex justify-center items-center">
           <div className=" w-full  p-4">
             <div className="flex justify-start items-center mb-2">
-              <NavLink className="flex items-center gap-1 " to="/wallet">
+              <NavLink className="flex items-center gap-1 " to="/crypto">
                 <FaArrowLeft className="text- cursor-pointer" />
                 <p className="text-[15px]">Back</p>
               </NavLink>

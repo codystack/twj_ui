@@ -1,8 +1,9 @@
 // WalletHome.tsx
-import { Link } from "react-router-dom"; // use 'react-router-dom', not 'react-router'
+import { Link, NavLink } from "react-router-dom"; // use 'react-router-dom', not 'react-router'
 import BuyCrypto from "../../assets/crpto_icons/c-down.svg";
 import SellCrypto from "../../assets/crpto_icons/c-sell.svg";
 import SwapCrypto from "../../assets/crpto_icons/c-swap.svg";
+import { FaArrowLeft } from "react-icons/fa";
 
 const cardData = [
   {
@@ -11,7 +12,7 @@ const cardData = [
     title: "Buy Crypto",
     description:
       "Buy various cryptocurrencies easily and instantly at the best market rates.",
-    link: "/wallet/buycrypto",
+    link: "/crypto/buycrypto",
   },
   {
     id: 2,
@@ -19,14 +20,14 @@ const cardData = [
     title: "Sell Crypto",
     description:
       "Sell various cryptocurrencies easily and instantly at the best market rates.",
-    link: "/wallet/sellcrypto",
+    link: "/crypto/sellcrypto",
   },
   {
     id: 3,
     icon: SwapCrypto,
     title: "Swap Crypto",
     description: "Swap various cryptocurrencies easily and instantly to NGN.",
-    link: "/wallet/swapcrypto",
+    link: "/crypto/swapcrypto",
   },
 ];
 
@@ -34,6 +35,12 @@ const Crypto = () => {
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
       <div className="flex-1 overflow-y-auto p-4 ">
+        <div className="flex my-[1.5rem] ml-[1.5rem] justify-start items-center m">
+          <NavLink className="flex items-center gap-1 " to="/dashboard">
+            <FaArrowLeft className="text- cursor-pointer" />
+            <p className="text-[15px]">Back</p>
+          </NavLink>
+        </div>
         <div className="grid md:grid-cols-3 gap-5 mt-5 [@media(min-width:1000px)]:ml-5">
           {cardData.map(({ id, icon, title, description, link }) => (
             <Link

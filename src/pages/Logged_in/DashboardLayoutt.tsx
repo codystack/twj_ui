@@ -25,6 +25,7 @@ import Help from "./Help";
 import BuyCrypto from "./crpto/BuyCrypto";
 import SellCrypto from "./crpto/SellCrypto";
 import SwapCrypto from "./crpto/SwapCrypto";
+import Crypto from "./Crypto";
 
 const DashboardLayoutt = () => {
   const [name, setName] = useState<string>("");
@@ -83,18 +84,23 @@ const DashboardLayoutt = () => {
     case "/dashboard":
       CurrentPage = <Dashboard />;
       break;
+    case "/crypto":
+      CurrentPage = <Crypto />;
+      break;
+    case "/crypto/buycrypto":
+      CurrentPage = <BuyCrypto />;
+      break;
+    case "/crypto/sellcrypto":
+      CurrentPage = <SellCrypto />;
+      break;
+    case "/crypto/swapcrypto":
+      CurrentPage = <SwapCrypto />;
+      break;
+
     case "/wallet":
       CurrentPage = <Wallet />;
       break;
-    case "/wallet/buycrypto":
-      CurrentPage = <BuyCrypto />;
-      break;
-    case "/wallet/sellcrypto":
-      CurrentPage = <SellCrypto />;
-      break;
-    case "/wallet/swapcrypto":
-      CurrentPage = <SwapCrypto />;
-      break;
+
     case "/transactions":
       CurrentPage = <Transaction />;
       break;
