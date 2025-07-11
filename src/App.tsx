@@ -26,6 +26,7 @@ import Help from "./pages/Logged_in/Help.tsx";
 import BuyCrypto from "./pages/Logged_in/crpto/BuyCrypto.tsx";
 import SellCrypto from "./pages/Logged_in/crpto/SellCrypto.tsx";
 import SwapCrypto from "./pages/Logged_in/crpto/SwapCrypto.tsx";
+import Crypto from "./pages/Logged_in/Crypto.tsx";
 
 const App = () => {
   return (
@@ -93,7 +94,8 @@ const AppWithRoutes = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/referrals" element={<Referals />} />
           <Route path="/support" element={<Help />} />
-          <Route path="/wallet" element={<Wallet />}>
+          <Route path="/wallet" element={<Wallet />} />
+          <Route path="/crypto" element={<Crypto />}>
             <Route path="buycrypto" element={<BuyCrypto />} />
             <Route path="sellcrypto" element={<SellCrypto />} />
             <Route path="swapcrypto" element={<SwapCrypto />} />

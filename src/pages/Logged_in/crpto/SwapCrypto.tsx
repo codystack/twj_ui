@@ -82,7 +82,7 @@ const SwapCrypto = () => {
         <div className="flex justify-center items-center">
           <div className=" w-full  p-4">
             <div className="flex justify-start items-center mb-2">
-              <NavLink className="flex items-center gap-1 " to="/wallet">
+              <NavLink className="flex items-center gap-1 " to="/crypto">
                 <FaArrowLeft className="text- cursor-pointer" />
                 <p className="text-[15px]">Back</p>
               </NavLink>
@@ -191,15 +191,13 @@ const SwapCrypto = () => {
                     </div>
                   </div>
 
-
-                       <div className="w-full flex mt-7 justify-end">
-                      <div className="flex items-center gap-3">
-                      
-                        <button className="border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]">
-                          Swap Now
-                        </button>
-                      </div>
+                  <div className="w-full flex mt-7 justify-end">
+                    <div className="flex items-center gap-3">
+                      <button className="border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]">
+                        Swap Now
+                      </button>
                     </div>
+                  </div>
                 </div>
               </div>
             </div>
