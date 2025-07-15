@@ -124,11 +124,13 @@ const Referals = () => {
       case "amount":
         if (!value.trim()) {
           setErrors("This field is required");
+        } else if (referralBonus === 0) {
+          setErrors("You have no referral bonus to withdraw");
         } else if (isNaN(enteredAmount)) {
           setErrors("Please enter a valid number");
         } else if (enteredAmount > referralBonus) {
           setErrors(
-            `You can't withdthraw amount greater than ${referralBonus}`
+            `You can't withdraw an amount greater than ₦${referralBonus}`
           );
         } else {
           setErrors("");
@@ -242,7 +244,7 @@ const Referals = () => {
             </div>
 
             <div className="border w-full lg:w-[60%] rounded-[10px] h-fit border-[#D0DAE6]">
-              <ul className="space-y-3 py-[2rem] sm:px-[2rem] px-[1rem]">
+              <ul className="space-y-3 pt-[2rem] pb-[1rem] sm:px-[2rem] px-[1rem]">
                 {loading ? (
                   <ul className="space-y-4">
                     {Array.from({ length: 6 }).map((_, index) => (
