@@ -37,8 +37,8 @@ const DashboardLayoutt = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { isSuccessModalStore, setDataSuccessModal } = useModalStore();
-
   const [showSetPinModal, setShowSetPinModal] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -71,24 +71,28 @@ const DashboardLayoutt = () => {
   };
 
   const { user } = useUserStore();
+
   const passcodeSet = useUserStore((state) => state.user?.passcodeSet);
-  // const kysSet = useUserStore((state) => state.user?.kycSet);
 
   useEffect(() => {
-    if (!passcodeSet) {
-      setShowSetPinModal(true);
+    if (hydrated) {
+      if (!passcodeSet) {
+        setShowSetPinModal(true);
+      } else {
+        setShowSetPinModal(false);
+      }
     }
+  }, [passcodeSet, hydrated]);
 
-    // const kycS = false;
-    // if (!kycS) {
-    //   setShowKycModal(true);
-    // }
+  // When fetchUser finishes, set hydrated to true
+  useEffect(() => {
+    const fetchUserData = async () => {
+      await useUserStore.getState().fetchUser();
+      setHydrated(true); 
+    };
+    fetchUserData();
+  }, []);
 
-    // const kycComplete = localStorage.getItem("kycComplete");
-    // if (kycComplete !== "true" && location.pathname === "/dashboard") {
-    //   setShowKycModal(true);
-    // }
-  }, [passcodeSet]);
   // Get logout function from store
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);

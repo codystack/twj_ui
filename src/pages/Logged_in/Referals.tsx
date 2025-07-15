@@ -6,34 +6,23 @@ import eye from "../../assets/dashboard_img/Eye_opne_dark.svg";
 import cancel from "../../assets/dashboard_img/profile/cancel.svg";
 import Button from "../../components/Button";
 import api from "../../services/api";
+import { useUserStore } from "../../store/useUserStore";
+import SuccessModal from "./SuccessModal";
 
-type Ref = {
+export type Referral = {
   id: string;
-  name: string;
-  date: string;
-  status: string;
+  referredUserId: string;
+  referrerId: string;
+  userName: string;
+  status: "Pending" | "Approved" | "Rejected" | string;
+  expiryDate: string;
+  referredDate: string | null;
+  firstName: string | null;
+  lastName: string | null;
 };
-// const ref: Ref[] = [
-//   { id: "1", name: "ertyuioipo", status: "Pending", date: "2024-03-01" },
-//   { id: "2", name: "iuytretytui", status: "Successfull", date: "2024-03-01" },
-
-// ];
-
-const ref: Ref[] = [
-  { id: "1", name: "John Doe", status: "Pending", date: "2024-03-01" },
-  { id: "2", name: "Jane Smith", status: "Successful", date: "2024-03-02" },
-  { id: "3", name: "Michael Brown", status: "Failed", date: "2024-03-03" },
-  { id: "4", name: "Sarah Johnson", status: "Successful", date: "2024-03-04" },
-  { id: "5", name: "David Wilson", status: "Pending", date: "2024-03-05" },
-  { id: "6", name: "Emily Davis", status: "Failed", date: "2024-03-06" },
-  { id: "7", name: "Daniel White", status: "Successful", date: "2024-03-07" },
-  { id: "8", name: "Jessica Martin", status: "Pending", date: "2024-03-08" },
-  { id: "9", name: "Chris Taylor", status: "Successful", date: "2024-03-09" },
-  { id: "10", name: "Sophia Anderson", status: "Failed", date: "2024-03-10" },
-];
 
 const Referals = () => {
-  const walletAmount = "20,500";
+  // const walletAmount = "20,500";
   const [copied, setCopied] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [referral, setReferral] = useState("");
@@ -43,9 +32,14 @@ const Referals = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // pending
-  const [referrals, setReferrals] = useState([]);
+  const [successModal, setSuccessModal] = useState(false);
+  const [referrals, setReferrals] = useState<Referral[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const referralBonus = useUserStore(
+    (state) => state.user?.referralBonusBalance ?? 0
+  );
+  const fetchUser = useUserStore((state) => state.fetchUser);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -58,15 +52,29 @@ const Referals = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default form behavior
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     setIsSubmitting(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await api.post(
+        `/Referrals/withdraw-bonus?amount=${parseFloat(amount)}`
+      );
+
+      if (response.data?.statusCode === "OK") {
+        // console.log("Withdrawal successful:", response.data);
+        setIsModalOpen(false);
+        setSuccessModal(true);
+        fetchUser();
+      } else {
+        setIsModalOpen(true);
+      }
+    } catch (error) {
+      console.error("Error withdrawing referral bonus:", error);
+    } finally {
       setIsSubmitting(false);
-      setIsModalOpen(false);
-    }, 2000);
+    }
   };
 
   // Toggle password visibility
@@ -84,9 +92,11 @@ const Referals = () => {
 
   useEffect(() => {
     const fetchReferrals = async () => {
+      setLoading(true);
       try {
         const response = await api.get("/Referrals/getUserReferrals");
-        setReferrals(response.data);
+        setReferrals(response?.data?.data?.referrals);
+        // console.log("ref", referrals);
       } catch (err: any) {
         console.error("Error fetching referrals:", err);
         setError("Failed to fetch referrals");
@@ -106,11 +116,20 @@ const Referals = () => {
   };
 
   // Field Validation using Switch Statement
+
   const validateField = (fieldName: string, value: string) => {
+    const enteredAmount = parseFloat(value);
+
     switch (fieldName) {
       case "amount":
         if (!value.trim()) {
           setErrors("This field is required");
+        } else if (isNaN(enteredAmount)) {
+          setErrors("Please enter a valid number");
+        } else if (enteredAmount > referralBonus) {
+          setErrors(
+            `You can't withdthraw amount greater than ${referralBonus}`
+          );
         } else {
           setErrors("");
         }
@@ -119,13 +138,21 @@ const Referals = () => {
         break;
     }
   };
+
   // Update form field value
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setAmount(value);
+    const rawValue = e.target.value;
 
-    validateField("amount", value);
+    const numericValue = rawValue.replace(/[^0-9.]/g, "");
+
+    const cleanValue =
+      numericValue.split(".").length > 2
+        ? numericValue.slice(0, numericValue.lastIndexOf("."))
+        : numericValue;
+
+    setAmount(cleanValue);
+    validateField("amount", cleanValue);
   };
 
   const isFormInvalid = Object.values(errors).some((error) => error) || !amount;
@@ -151,7 +178,7 @@ const Referals = () => {
                       {isHidden ? "" : " ₦"}
                     </span>
                     <p className="text-[32px] text-[#27014F] font-semibold">
-                      {isHidden ? "*******" : walletAmount}
+                      {isHidden ? "*******" : referralBonus}
                     </p>
                     <span className="text-[16px] text-[#7688B4] ml-[-8px] mt-[0.8rem] ">
                       {isHidden ? "" : ".00"}
@@ -216,40 +243,74 @@ const Referals = () => {
 
             <div className="border w-full lg:w-[60%] rounded-[10px] h-fit border-[#D0DAE6]">
               <ul className="space-y-3 py-[2rem] sm:px-[2rem] px-[1rem]">
-                {ref.map((ref) => (
-                  <li
-                    key={ref.id}
-                    className="flex justify-between items-center border-b border-b-[#E2E8F0] pb-6 last:border-b-0"
-                  >
-                    {/* Left side: Status + Name */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-[#27014F] text-[16px] text-left font-[600]">
-                        {ref.name}
-                      </span>
-                      {/* Unique Status Icon */}
-                      {ref.status === "Successful" && (
-                        <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                          SUCCESSFULL
+                {loading ? (
+                  <ul className="space-y-4">
+                    {Array.from({ length: 6 }).map((_, index) => (
+                      <li
+                        key={index}
+                        className="flex justify-between items-center border-b border-b-[#E2E8F0] pb-6 last:border-b-0 animate-pulse"
+                      >
+                        {/* Left side: Skeleton name and status */}
+                        <div className="flex items-center gap-2">
+                          <div className="h-4 w-24 bg-gray-300 rounded"></div>
+                          <div className="h-3 w-14 bg-gray-200 rounded"></div>
                         </div>
-                      )}
-                      {ref.status === "Pending" && (
-                        <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
-                          PENDING
-                        </div>
-                      )}
-                      {ref.status === "Failed" && (
-                        <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
-                          FAILED
-                        </div>
-                      )}
-                    </div>
+                        {/* Right side: Skeleton date */}
+                        <div className="h-3 w-28 bg-gray-200 rounded"></div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <ul>
+                    {referrals.map((ref) => (
+                      <li
+                        key={ref.id}
+                        className="flex justify-between items-center border-b border-b-[#E2E8F0] pb-6 last:border-b-0"
+                      >
+                        {/* Left side: Status + Name */}
+                        <div className="flex items-center gap-2">
+                          <span className="text-[#27014F] text-[16px] text-left font-[600]">
+                            {ref.firstName
+                              ? `${ref.firstName} ${ref.lastName}`
+                              : ref.userName}
+                          </span>
 
-                    {/* Right side: Date */}
-                    <span className="text-[#343E65] text-[13px]">
-                      {ref.date}
-                    </span>
-                  </li>
-                ))}
+                          {ref.status === "Successful" && (
+                            <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                              SUCCESSFULL
+                            </div>
+                          )}
+                          {ref.status === "Pending" && (
+                            <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
+                              PENDING
+                            </div>
+                          )}
+                          {ref.status === "Failed" && (
+                            <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
+                              FAILED
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Right side: Date */}
+                        <span className="text-[#343E65] text-[13px]">
+                          {ref.referredDate
+                            ? new Date(ref.referredDate).toLocaleString(
+                                "en-US",
+                                {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                  hour: "numeric",
+                                  minute: "2-digit",
+                                }
+                              )
+                            : "N/A"}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </ul>
             </div>
           </div>
@@ -261,15 +322,14 @@ const Referals = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
           <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
             <div className="bg-white py-6 px-4 rounded-lg  sm:w-[600px] w-[100vw]  sm:h-auto h-[min(100dvh,100vh)] max-h-screen  overflow-y-auto  ">
-              <button
-                className="text-black p-[5px] cursor-pointer flex flex-row-reverse justify-end"
-                style={{ position: "absolute", top: "1rem", right: "1rem" }}
-                onClick={closeModal}
-              >
-                <img className="sm:w-4 w-5" src={cancel} alt="" />
-              </button>
-
-
+              <div className="flex justify-end">
+                <button
+                  className="text-black mr-3 p-[5px] cursor-pointer"
+                  onClick={closeModal}
+                >
+                  <img className="sm:w-4 w-5" src={cancel} alt="" />
+                </button>
+              </div>
 
               <div className="flex justify-center items-center">
                 <div className="sm:w-[80%] w-full  flex flex-col items-center ">
@@ -282,7 +342,7 @@ const Referals = () => {
                       ₦
                     </span>
                     <p className="text-[32px] text-[#27014F] font-semibold">
-                      {walletAmount}
+                      {referralBonus}
                     </p>
                   </div>
                   <p className=" text-[#0A2E65]/60 text-center  mb-[0.4rem] text-[15px]">
@@ -312,12 +372,12 @@ const Referals = () => {
                       )}
                     </div>
 
-                    {/* Submit Button */}
-                    <div className="sm:w-[360px] w-full sm:mt-[1.5rem] mt-[2rem] mb-[2rem]">
+                    <div className="w-full mt-[2rem] mb-[2rem]">
                       <Button
                         type="submit"
                         isDisabled={isFormInvalid}
                         isLoading={isSubmitting}
+                        // className="w-full"
                       >
                         Withdraw to Wallet
                       </Button>
@@ -328,6 +388,16 @@ const Referals = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {successModal && (
+        <SuccessModal
+          title="Withdrawal Successful!"
+          message="Your referral bonus has been withdrawn to your wallet successfully."
+          onClose={() => {
+            setSuccessModal(false);
+          }}
+        />
       )}
     </>
   );

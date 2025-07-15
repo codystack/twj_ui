@@ -16,9 +16,9 @@ type User = {
   twjUserId: string;
   accountBalance: number;
   accountNumber: number;
-  
   kycSet: boolean;
   passcodeSet: boolean;
+  referralBonusBalance: number;
 };
 
 type UserStore = {
@@ -51,9 +51,9 @@ export const useUserStore = create<UserStore>((set) => ({
           bankName: data.data.bankName,
           accountName: data.data.accountName,
           accountNumber: data.data.accountNumber,
-          
           kycSet: data.data.isKycComplete,
           passcodeSet: data.data.isPasscodeSet,
+          referralBonusBalance: data.data.referralBonusBalance ?? 0,
         },
         loading: false,
         error: null,
