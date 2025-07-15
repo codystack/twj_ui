@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Backspace from "../../../../assets/dashboard_img/profile/icon-park-solid_delete-two.svg";
 import lock from "../../../../assets/dashboard_img/profile/Lock.svg";
-import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
+// import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
 import api from "../../../../services/api";
 import { useModalStore } from "../../../../store/modalStore";
 
@@ -83,17 +83,18 @@ const SetPinModal = ({ onClose }: { onClose: () => void }) => {
         return;
       }
 
-      // ✅ Get Zustand functions
-      const { setPasscodeSet, setSetPinModal, setSuccessModalStore } = useModalStore.getState();
+      //Get Zustand functions
+      const { setPasscodeSet, setSetPinModal, setSuccessModalStore } =
+        useModalStore.getState();
 
-      // ✅ Set passcode in Zustand and localStorage
+      //Set passcode in Zustand and localStorage
       setPasscodeSet(true);
-      setSuccessModalStore(true)
+      setSuccessModalStore(true);
       setPin("");
       setConfirmPin("");
       setStep("enter");
 
-      // ✅ Close SetPinModal only, keep showPinModal open if needed
+      // Close SetPinModal only, keep showPinModal open if needed
       setSetPinModal(false);
       handleClose();
       setLoading(false);
@@ -144,12 +145,12 @@ const SetPinModal = ({ onClose }: { onClose: () => void }) => {
         <div className="p-[0.8rem] rounded-[20px] bg-[#fff]/20">
           <div className="bg-white sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto sm:rounded-[10px]">
             <div className="flex flex-row-reverse">
-              <button
+              {/* <button
                 className="px-4 py-2 mr-[5px] cursor-pointer mt-[1rem]"
                 onClick={handleClose}
               >
                 <img className="sm:w-4 w-5" src={cancel} alt="" />
-              </button>
+              </button> */}
             </div>
             <div className="flex items-center justify-center">
               <div className="px-6 pt-4 rounded-lg w-[300px] flex flex-col mb-[2rem] items-center">
@@ -230,11 +231,6 @@ const SetPinModal = ({ onClose }: { onClose: () => void }) => {
           </div>
         </div>
       </div>
-
-
-     
-
-
     </>
   );
 };

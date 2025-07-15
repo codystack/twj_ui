@@ -26,6 +26,9 @@ import BuyCrypto from "./crpto/BuyCrypto";
 import SellCrypto from "./crpto/SellCrypto";
 import SwapCrypto from "./crpto/SwapCrypto";
 import Crypto from "./Crypto";
+import SetPinModal from "./Logged_in_components/someUtilityComponent/SetPinModal";
+import SuccessModal from "./SuccessModal";
+import { useModalStore } from "../../store/modalStore";
 
 const DashboardLayoutt = () => {
   const [name, setName] = useState<string>("");
@@ -33,6 +36,9 @@ const DashboardLayoutt = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const { isSuccessModalStore, setDataSuccessModal } = useModalStore();
+  const [showSetPinModal, setShowSetPinModal] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -65,6 +71,28 @@ const DashboardLayoutt = () => {
   };
 
   const { user } = useUserStore();
+
+  const passcodeSet = useUserStore((state) => state.user?.passcodeSet);
+
+  useEffect(() => {
+    if (hydrated) {
+      if (!passcodeSet) {
+        setShowSetPinModal(true);
+      } else {
+        setShowSetPinModal(false);
+      }
+    }
+  }, [passcodeSet, hydrated]);
+
+  // When fetchUser finishes, set hydrated to true
+  useEffect(() => {
+    const fetchUserData = async () => {
+      await useUserStore.getState().fetchUser();
+      setHydrated(true); 
+    };
+    fetchUserData();
+  }, []);
+
   // Get logout function from store
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
@@ -602,6 +630,21 @@ const DashboardLayoutt = () => {
         onClose={() => setIsModalOpen(false)}
         onConfirm={() => logout(navigate)}
       />
+
+      {showSetPinModal && (
+        <SetPinModal onClose={() => setShowSetPinModal(false)} />
+      )}
+
+      {isSuccessModalStore && (
+        <SuccessModal
+          title="PIN Set Successfully"
+          message="Your transaction PIN has been created!"
+          onClose={() => {
+            setDataSuccessModal(false);
+            // fetchUser();
+          }}
+        />
+      )}
     </>
   );
 };

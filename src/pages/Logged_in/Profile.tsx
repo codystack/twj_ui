@@ -23,7 +23,7 @@ import PinModal from "./Logged_in_components/someUtilityComponent/PinModal";
 import SuccessModal from "./SuccessModal";
 import cancel from "../../assets/dashboard_img/profile/cancel.svg";
 import SetPinModal from "./Logged_in_components/someUtilityComponent/SetPinModal";
-import { useModalStore } from "../../store/modalStore";
+// import { useModalStore } from "../../store/modalStore";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 // const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -59,7 +59,7 @@ const Profile = () => {
   const [proceedToSetPin, setProceedToSetPin] = useState(false);
   // const [showKycPrompt, setShowKycPrompt] = useState(false);
   const [shouldCheckPasscode, setShouldCheckPasscode] = useState(false);
-  const { isSuccessModalStore, setDataSuccessModal } = useModalStore();
+  // const { isSuccessModalStore, setDataSuccessModal } = useModalStore();
   const {
     bankList,
     // isFetchingBanks,
@@ -606,7 +606,7 @@ const Profile = () => {
               />
             )}
 
-            {isSuccessModalStore && (
+            {/* {isSuccessModalStore && (
               <SuccessModal
                 title="PIN Set Successfully"
                 message="Your transaction PIN has been created!"
@@ -615,7 +615,7 @@ const Profile = () => {
                   // fetchUser();
                 }}
               />
-            )}
+            )} */}
 
             {/* Dynamic Content Security*/}
             {activeTab === "security" && <ProfileSecurity />}
