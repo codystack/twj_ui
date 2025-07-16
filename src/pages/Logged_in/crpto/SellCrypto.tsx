@@ -137,7 +137,7 @@ const SellCrypto = () => {
                 <div className="w-full flex mt-9 justify-end">
                   <div className="flex items-center gap-3">
                     <NavLink
-                      to="/wallet/swapcrypto"
+                      to="/crypto/swapcrypto"
                       className="border-[2px] cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
                     >
                       Swap Asset

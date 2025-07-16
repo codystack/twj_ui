@@ -8,6 +8,7 @@ import Button from "../../components/Button";
 import api from "../../services/api";
 import { useUserStore } from "../../store/useUserStore";
 import SuccessModal from "./SuccessModal";
+import warning from "../../assets/dashboard_img/disabled-warning .png";
 
 export type Referral = {
   id: string;
@@ -35,7 +36,7 @@ const Referals = () => {
   const [successModal, setSuccessModal] = useState(false);
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
   const referralBonus = useUserStore(
     (state) => state.user?.referralBonusBalance ?? 0
   );
@@ -99,7 +100,7 @@ const Referals = () => {
         // console.log("ref", referrals);
       } catch (err: any) {
         console.error("Error fetching referrals:", err);
-        setError("Failed to fetch referrals");
+        // setError("Failed to fetch referrals");
       } finally {
         setLoading(false);
       }
@@ -162,9 +163,9 @@ const Referals = () => {
   return (
     <>
       {/* Just for deployment purpose */}
-      {referrals.length === 0 && loading && (
+      {/* {referrals.length === 0 && loading && (
         <div className="hidden">{error}</div>
-      )}
+      )} */}
       <div className="w-full z-10 overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
         <div className="flex-1 overflow-y-auto  md:px-4 px-2.5">
           <div className="h-[2rem] sm:block hidden not-only: md:block bg-[white] w-[98%] fixed  z-20 "></div>
@@ -262,6 +263,15 @@ const Referals = () => {
                       </li>
                     ))}
                   </ul>
+                ) : referrals.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-[calc(100vh-18rem)]">
+                    <img
+                      src={warning}
+                      className="md:w-[9rem] w-[5rem]"
+                      alt=""
+                    />
+                    <p className="text-gray-500 text-lg">No referrals yet!</p>
+                  </div>
                 ) : (
                   <ul>
                     {referrals.map((ref) => (
@@ -271,7 +281,7 @@ const Referals = () => {
                       >
                         {/* Left side: Status + Name */}
                         <div className="flex items-center gap-2">
-                          <span className="text-[#27014F] text-[16px] text-left font-[600]">
+                          <span className="text-[#27014F] text-[17px] text-left font-[500]">
                             {ref.firstName
                               ? `${ref.firstName} ${ref.lastName}`
                               : ref.userName}
@@ -279,7 +289,7 @@ const Referals = () => {
 
                           {ref.status === "Successful" && (
                             <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                              SUCCESSFULL
+                              SUCCESSFUL
                             </div>
                           )}
                           {ref.status === "Pending" && (
