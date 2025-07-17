@@ -8,8 +8,9 @@ import SetPinModal from "./someUtilityComponent/SetPinModal";
 import api from "../../../services/api";
 import { AxiosError } from "axios";
 import SuccessModal from "../SuccessModal";
+import { useUserStore } from "../../../store/useUserStore";
 
-const     ProfileSecurity = () => {
+const ProfileSecurity = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [changePinModal, SetChangePinModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -18,21 +19,20 @@ const     ProfileSecurity = () => {
   });
   const [errors, setErrors] = useState({ oldPassword: "", newPassword: "" });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isPasscodeSet, setIsPasscodeSet] = useState(false);
   const [openSetPinModal, setOpenSetPinModal] = useState(false);
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const passcodeSet = localStorage.getItem("passcodeSet");
+  const { fetchUser } = useUserStore();
 
-    if (passcodeSet === "true") {
-      setIsPasscodeSet(true);
-    } else {
-      setIsPasscodeSet(false);
-    }
+  useEffect(() => {
+    fetchUser();
   }, []);
+
+  const passcodeSet = useUserStore((state) => state.user?.passcodeSet);
+
+
 
   const validateField = (
     fieldName: string,
@@ -166,7 +166,9 @@ const     ProfileSecurity = () => {
       <div className=" mt-[5%]  md:mt-[1%] lg:[-1%]     w-full md:w-[60%]   lg:w-[40%]">
         <div className="flex items-center justify-between leading-[1.2rem]">
           <div className=" flex mt-[2rem] md:mt-0 flex-col">
-            <p className="font-[500] text-[17px] md:text-[15px]">Update Password</p>
+            <p className="font-[500] text-[17px] md:text-[15px]">
+              Update Password
+            </p>
             <p className="md:text-[12px] text-[14px] text-[#7688B4]">
               Change your old password to a new one
             </p>
@@ -184,7 +186,9 @@ const     ProfileSecurity = () => {
               <div className="p-[1rem] rounded-[20px] bg-[#fff]/20">
                 <div className="bg-white p-6 text-[#27014F] sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] overflow-y-auto  sm:rounded-[15px] ">
                   <div className="flex justify-between items-center pb-[1rem] mb-[2rem] border-b-[#E2E8F0]  border-b ">
-                    <h2 className="text-[20px] sm:text-[17px] pl-[10px] ">Change Password</h2>
+                    <h2 className="text-[20px] sm:text-[17px] pl-[10px] ">
+                      Change Password
+                    </h2>
                     <button
                       className="cursor-pointer mr-[10px] p-[10px]"
                       onClick={closeModal}
@@ -339,14 +343,9 @@ const     ProfileSecurity = () => {
               Change or reset your TWJ PIN
             </p>
           </div>
-          {/* <button
-          onClick={openChangePinModal}
-          className="text-[#8003A9] cursor-pointer"
-        >
-          Change Pin
-        </button> */}
+
           <>
-            {isPasscodeSet ? (
+            {passcodeSet ? (
               <button
                 onClick={openChangePinModal}
                 className="text-[#8003A9] cursor-pointer"
@@ -370,7 +369,9 @@ const     ProfileSecurity = () => {
         </div>
         <div className="flex items-center md:mt-[10%] mt-[16%] justify-between leading-[1.2rem]">
           <div className=" flex flex-col">
-            <p className="font-[500] md:text-[15px] text-[17px]">Two-Factor Authentication</p>
+            <p className="font-[500] md:text-[15px] text-[17px]">
+              Two-Factor Authentication
+            </p>
             <p className="md:text-[12px] text-[14px]  text-[#7688B4]">
               Protect your TWJ account from unauthorised <br /> transaction
               using a software token
