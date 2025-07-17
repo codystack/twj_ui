@@ -133,18 +133,16 @@ const SignUp = () => {
     return !Object.values(newErrors).some((error) => error);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+ 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const isValid = validateForm();
 
     if (isValid) {
-      // setIsLoading(true); // Start loading
       try {
-        // console.log({ formData });
-        // console.log(refCode);
-        // return;
-        signUp(formData, navigate, refCode);
+        await signUp(formData, navigate, refCode);
+
         setFormData({
           userName: "",
           email: "",
@@ -152,9 +150,9 @@ const SignUp = () => {
           phoneNumber: "",
           isChecked: false,
         });
-        // setErrors({});
       } catch (error: any) {
         if (error.response) {
+          // console.error("Signup error:", error.response.data);
           return error;
         }
       }
