@@ -2,46 +2,41 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import kyc from "../assets/dashboard_img/kyc.svg";
 import cancel from "../assets/dashboard_img/profile/cancel.svg";
-// import Button from "./Button";
 import Select from "react-select";
 import { AxiosError } from "axios";
 import api from "../services/api";
-import { SingleValue } from "react-select";
-import check from "../assets/dashboard_img/profile/Check_round_fill (1).svg";
 import SuccessModal from "../pages/Logged_in/SuccessModal";
 import { useUserStore } from "../store/useUserStore";
 import "../App.css";
-// import "../App.css";
-
-const customStyles = {
-  control: (provided: any, state: any) => ({
-    ...provided,
-    borderRadius: "8px",
-    padding: "4px",
-    boxShadow: "none",
-    outline: "none",
-    textAlign: "left",
-    border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
-    "&:hover": {
-      border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
-    },
-  }),
-  menuPortal: (base: any) => ({
-    ...base,
-    zIndex: 9999,
-  }),
-  option: (provided: any, state: any) => ({
-    ...provided,
-    cursor: "pointer",
-    textAlign: "left",
-    backgroundColor: state.isSelected
-      ? "#8003A9"
-      : state.isFocused
-      ? "#F8E0FF" // Hover background color
-      : "#fff",
-    color: state.isSelected ? "#fff" : "#27014F", // Text color change on selection
-  }),
-};
+// const customStyles = {
+//   control: (provided: any, state: any) => ({
+//     ...provided,
+//     borderRadius: "8px",
+//     padding: "4px",
+//     boxShadow: "none",
+//     outline: "none",
+//     textAlign: "left",
+//     border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
+//     "&:hover": {
+//       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
+//     },
+//   }),
+//   menuPortal: (base: any) => ({
+//     ...base,
+//     zIndex: 9999,
+//   }),
+//   option: (provided: any, state: any) => ({
+//     ...provided,
+//     cursor: "pointer",
+//     textAlign: "left",
+//     backgroundColor: state.isSelected
+//       ? "#8003A9"
+//       : state.isFocused
+//       ? "#F8E0FF" // Hover background color
+//       : "#fff",
+//     color: state.isSelected ? "#fff" : "#27014F", // Text color change on selection
+//   }),
+// };
 
 const customStyleSelect = (hasError: boolean) => ({
   control: (provided: any, state: any) => ({
@@ -169,12 +164,12 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   const [selectedVerificationMeans, setSelectedVerificationMeans] =
     useState("");
 
-  const [accountName, setAccountName] = useState<string | null>("");
-  const [accountLastName, setAccountLastName] = useState<string | null>("");
-  const [accountNameError, setAccountNameError] = useState<string | null>("");
+  // const [accountName, setAccountName] = useState<string | null>("");
+  // const [accountLastName, setAccountLastName] = useState<string | null>("");
+  // const [accountNameError, setAccountNameError] = useState<string | null>("");
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showKycModal, setShowKycModal] = useState(false);
   const [step, setStep] = useState<number>(1);
@@ -344,8 +339,6 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
         gender: "",
         dob: "",
       });
-      setAccountLastName("");
-      setAccountName("");
       setLoading(false);
       return response;
     } catch (e) {
@@ -571,8 +564,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
 
   const closeShowKyc = () => {
     setShowKycModal(false);
-    setAccountLastName("");
-    setAccountName("");
+
     setFormData({
       verificationMeans: "",
       bvn: "",
