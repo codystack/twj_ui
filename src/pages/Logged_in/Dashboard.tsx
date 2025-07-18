@@ -30,10 +30,7 @@ import { useGiftCardStore } from "../../store/useGiftCardStore";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-// const options = [
-//   { value: "postpaid", label: "postpaid" },
-//   { value: "prepaid", label: "prepaid" },
-// ];
+
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -48,12 +45,7 @@ const customStyles = {
       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
     },
   }),
-  // option: (provided: any, state: any) => ({
-  //   ...provided,
-  //   cursor: "pointer",
-  //   textAlign: "left",
-  //   backgroundColor: state.isSelected ? "#8003A9" : "#fff",
-  // }),
+ 
   option: (provided: any, state: any) => ({
     ...provided,
     cursor: "pointer",
@@ -89,7 +81,6 @@ const Dashboard = () => {
     bank: "",
   });
 
-  // const textToCopy = user?.accountNumber ?? "";
   const textToCopy = user?.accountNumber?.toString() ?? "";
 
   const handleCopy = async () => {
@@ -100,7 +91,6 @@ const Dashboard = () => {
       setTimeout(() => setCopied(false), 2000); // Hide after 2s
     } catch (err) {
       return err;
-      // console.error("Failed to copy text: ", err);
     }
   };
 
@@ -108,10 +98,12 @@ const Dashboard = () => {
     setIsHidden((prev) => !prev);
   };
 
+  const isKycComplete = useUserStore((state) => state.user?.kycSet);
+
   const openModal = () => {
     const completeKyc = localStorage.getItem("kycComplete");
 
-    if (completeKyc === "true") {
+    if (isKycComplete && completeKyc === "true") {
       setShowTopupModal(true);
       setShowKycModal(false);
     } else {
@@ -175,8 +167,7 @@ const Dashboard = () => {
     fetchUser();
     // console.log(textToCopy);
     const timeout = setTimeout(() => {
-      const kycComplete = localStorage.getItem("kycComplete");
-      if (kycComplete !== "true" && location.pathname === "/dashboard") {
+      if (!isKycComplete && location.pathname === "/dashboard") {
         setShowKycModal(true);
       }
     }, 500);
