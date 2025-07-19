@@ -247,7 +247,7 @@ const Wallet = () => {
 
   return (
     <>
-   {showWithdrawalModal && (
+      {showWithdrawalModal && (
         <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
           <div className="p-[0.8rem] rounded-[20px] bg-[#fff]/20">
             <div className="bg-white  py-6 px-4 sm:rounded-2xl sm:w-[600px] sm:h-auto h-[min(100dvh,100vh)] max-h-screen  w-[100vw] text-center">
@@ -286,7 +286,7 @@ const Wallet = () => {
                 ) : (
                   <form className="flex flex-col h-full items-center ">
                     <div className="flex flex-col sm:flex-row items-center justify-between w-full">
-                      <div className="sm:w-[70%] w-full flex flex-col justify-center">
+                      <div className="sm:w-[70%] mx-auto w-full flex flex-col justify-center">
                         <h5 className="text-[#0A2E65]/60 sm:text-[15px] text-[17px] ">
                           Available Balance
                         </h5>
