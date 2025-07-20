@@ -1,11 +1,22 @@
 import { FaArrowLeft } from "react-icons/fa";
 import { NavLink } from "react-router";
-import USDT from "../../../assets/crpto_icons/USDT-b-coin.svg";
+// import USDT from "../../../assets/crpto_icons/USDT-b-coin.svg";
 import BITCOIN from "../../../assets/crpto_icons/BITCOIN.svg";
 import NGN from "../../../assets/crpto_icons/MaskNGN.svg";
 import ETHER from "../../../assets/crpto_icons/ETHER.svg";
 import CustomSelect from "../../../components/CustomSelect";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Wallet } from "../../../types/types.ts";
+import btc from "../../../assets/crpto_icons/wallet_icons/Bitcoin.svg";
+import eth from "../../../assets/crpto_icons/wallet_icons/Ethereumm.svg";
+import usdt from "../../../assets/crpto_icons/wallet_icons/usdt.svg";
+import bnb from "../../../assets/crpto_icons/wallet_icons/Binace_coin.svg";
+import sol from "../../../assets/crpto_icons/wallet_icons/solana.svg";
+import usdc from "../../../assets/crpto_icons/wallet_icons/USDC.svg";
+import trx from "../../../assets/crpto_icons/wallet_icons/Tron.svg";
+import ton from "../../../assets/crpto_icons/wallet_icons/ton_coin.svg";
+import { useUserStore } from "../../../store/useUserStore";
 
 export type Optiontype = {
   id: string;
@@ -15,38 +26,38 @@ export type Optiontype = {
   displayValue?: string;
 };
 
-const coins = [
-  {
-    name: "Bitcoin",
-    short: "BTC",
-    value: "(0.00 BTC)",
-    img: BITCOIN,
-  },
-  {
-    name: "Ethereum",
-    short: "ETH",
-    value: "(1.25 ETH)",
-    img: ETHER,
-  },
-  {
-    name: "Tether",
-    short: "USDT",
-    value: "(20.00 USDT)",
-    img: USDT,
-  },
-  {
-    name: "Binance Coin",
-    short: "BNB",
-    value: "(5.10 BNB)",
-    img: BITCOIN,
-  },
-  {
-    name: "Solana",
-    short: "SOL",
-    value: "(12.00 SOL)",
-    img: ETHER,
-  },
-];
+// const coins = [
+//   {
+//     name: "Bitcoin",
+//     short: "BTC",
+//     value: "(0.00 BTC)",
+//     img: BITCOIN,
+//   },
+//   {
+//     name: "Ethereum",
+//     short: "ETH",
+//     value: "(1.25 ETH)",
+//     img: ETHER,
+//   },
+//   {
+//     name: "Tether",
+//     short: "USDT",
+//     value: "(20.00 USDT)",
+//     img: USDT,
+//   },
+//   {
+//     name: "Binance Coin",
+//     short: "BNB",
+//     value: "(5.10 BNB)",
+//     img: BITCOIN,
+//   },
+//   {
+//     name: "Solana",
+//     short: "SOL",
+//     value: "(12.00 SOL)",
+//     img: ETHER,
+//   },
+// ];
 
 const options = [
   {
@@ -69,6 +80,67 @@ const BuyCrypto = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const [selectedCoin, setSelectedCoin] = useState<Optiontype>(options[0]);
+  const [wallets, setWallets] = useState<Wallet[]>([]);
+  // const [rawWallets, setRawWallets] = useState<Wallet[]>([]);
+  const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState<string | null>(null);
+
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  const currencyIcons: Record<string, string> = {
+    btc,
+    eth,
+    usdt,
+    usdc,
+    bnb,
+    sol,
+    trx,
+    ton,
+  };
+
+  const allowedCurrencies = [
+    "btc",
+    "usdt",
+    "eth",
+    "usdc",
+    "bnb",
+    "sol",
+    "trx",
+    "ton",
+  ];
+  const userSubAccountId = useUserStore(
+    (state) => state.user?.userSubAccountId
+  );
+
+  useEffect(() => {
+    const fetchWallets = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${BASE_URL}/Crypto/users/wallets?userId=${userSubAccountId}`
+        );
+
+        const rawResponse: Wallet[] = response.data?.data?.data;
+
+        // setRawWallets(rawResponse);
+
+        const filteredWallets = rawResponse.filter((wallet) =>
+          allowedCurrencies.includes(wallet.currency.toLowerCase())
+        );
+
+        setWallets(filteredWallets);
+      } catch (err) {
+        // setError("Failed to fetch wallets");
+        return err;
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (userSubAccountId) {
+      fetchWallets();
+    }
+  }, [userSubAccountId]);
 
   const handleSelection = (selected: Optiontype) => {
     console.log("Selected from parent:", selected);
@@ -76,8 +148,8 @@ const BuyCrypto = () => {
     setSelectedCoin(selected);
   };
   const secHandleChange = (val: Optiontype) => {
-  console.log(val);
-};
+    console.log(val);
+  };
 
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
@@ -95,22 +167,28 @@ const BuyCrypto = () => {
               <div className=" ">
                 <h3 className="text-[18px] my-[1rem]">Crypto Wallets</h3>
                 <div className="flex flex-col gap-4">
-                  {coins.map((coin, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-4 border border-gray-300 rounded-lg"
-                    >
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={coin.img}
-                          alt={coin.name}
-                          className="w-6 h-6"
-                        />
-                        <span className="font-medium">{coin.name}</span>
-                      </div>
-                      <span className="text-gray-500">{coin.value}</span>
-                    </div>
-                  ))}
+                  {loading
+                    ? Array.from({ length: 5 }).map((_, index) => (
+                        <WalletSkeleton key={index} />
+                      ))
+                    : wallets.map((wallet, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-4 border border-gray-300 rounded-lg"
+                        >
+                          <div className="flex items-center gap-3">
+                            <img
+                              src={currencyIcons[wallet.currency.toLowerCase()]}
+                              alt={wallet.currency}
+                              className="w-7 h-7"
+                            />
+                            <span className="font-medium">{wallet.name}</span>
+                          </div>
+                          <span className="text-gray-500">
+                            {wallet.balance}
+                          </span>
+                        </div>
+                      ))}
                 </div>
               </div>
 
@@ -297,3 +375,13 @@ const BuyCrypto = () => {
 };
 
 export default BuyCrypto;
+
+const WalletSkeleton = () => (
+  <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg animate-pulse">
+    <div className="flex items-center gap-3">
+      <div className="w-6 h-6 bg-gray-200 rounded-full" />
+      <div className="w-24 h-4 bg-gray-200 rounded" />
+    </div>
+    <div className="w-12 h-4 bg-gray-200 rounded" />
+  </div>
+);
