@@ -85,6 +85,13 @@ const BuyCrypto = () => {
   const [loading, setLoading] = useState(false);
   // const [error, setError] = useState<string | null>(null);
 
+  const {
+    user,
+    fetchUser,
+    // loading,
+    // error
+  } = useUserStore();
+
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const currencyIcons: Record<string, string> = {
@@ -136,7 +143,7 @@ const BuyCrypto = () => {
         setLoading(false);
       }
     };
-
+    fetchUser();
     if (userSubAccountId) {
       fetchWallets();
     }
@@ -146,9 +153,6 @@ const BuyCrypto = () => {
     console.log("Selected from parent:", selected);
     console.log("Backend value:", selected.value);
     setSelectedCoin(selected);
-  };
-  const secHandleChange = (val: Optiontype) => {
-    console.log(val);
   };
 
   return (
@@ -210,7 +214,8 @@ const BuyCrypto = () => {
                             options={options}
                             defaultSelected={options[0]}
                             inputWidth="w-full"
-                            optionsWidth="w-full"
+                            optionsWidth="w-[10rem]"
+                            optionsOffsetX={-50}
                             px="px-1"
                             py="py-1"
                             textSize="text-[15px]"
@@ -232,8 +237,16 @@ const BuyCrypto = () => {
                       <div className="flex items-center justify-between text-[#6779A7] ">
                         <p className="mr-1">Wallel Balance:</p>
                         <span className="flex justify-center items-center">
-                          <span>N</span>
-                          <span>50,000</span>
+                          {/* <span>N</span> */}
+
+                          <span>
+                            {user
+                              ? user.accountBalance.toLocaleString("en-NG", {
+                                  style: "currency",
+                                  currency: "NGN",
+                                })
+                              : "₦0.00"}
+                          </span>
                         </span>
                       </div>
                     </div>
@@ -271,18 +284,19 @@ const BuyCrypto = () => {
                           <div className="ml-auto w-[50%]">
                             <CustomSelect
                               options={options}
-                              defaultSelected={options[0]}
                               inputWidth="w-full"
                               optionsWidth="w-full"
                               px="px-1"
                               py="py-1"
-                              textSize="text-[15px]"
-                              onChange={secHandleChange}
+                              textSize="text-[1rem]"
+                              value={selectedCoin}
                               borderColor="#fff"
                               backgroundColor="#EAEFF6"
                               optionsPx="px-1"
                               optionsPy="py-1"
                               showDropdownIcon={false}
+                              readOnly={true}
+                              defaultSelected={selectedCoin}
                             />
                           </div>
                         </div>
