@@ -10,7 +10,7 @@ type Option = {
 };
 
 interface CustomSelectProps {
-  options: Option[];
+  options?: Option[];
   defaultSelected?: Option;
   value?: Option;
   onChange?: (selected: Option) => void;
@@ -27,6 +27,7 @@ interface CustomSelectProps {
   showDropdownIcon?: boolean;
   optionsOffsetX?: number;
   readOnly?: boolean;
+  displayValue?: boolean;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -47,6 +48,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   showDropdownIcon = true,
   optionsOffsetX = 0,
   readOnly = false,
+  displayValue = false,
 }) => {
   const [selected, setSelected] = useState<Option | undefined>(
     value || defaultSelected
@@ -92,15 +94,15 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                 <img
                   src={selected.image}
                   alt={selected.label}
-                  className="w-6 h-6 rounded-full"
+                  className="w-6 h-6 rounded-full ml-1.5 my-1"
                 />
               )}
               <span className="font-medium">{selected.label}</span>
             </div>
             <div className="flex items-center gap-1">
               {selected.displayValue && (
-                <span className="text-gray-400 text-sm">
-                  {selected.displayValue}
+                <span className="text-gray-400 ml-2 text-sm">
+                  {displayValue ? selected.displayValue : ""}
                 </span>
               )}
               {showDropdownIcon && (
@@ -129,7 +131,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             left: `${optionsOffsetX}px`,
           }}
         >
-          {options.map((option) => (
+          {options?.map((option) => (
             <li
               key={option.id}
               onClick={() => handleSelect(option)}
@@ -178,3 +180,4 @@ export default CustomSelect;
 // | `optionsPx`       | `string` *(optional)*                     | Tailwind horizontal padding for each dropdown option (e.g., `"px-4"`).                                                                      |
 // | `optionsPy`       | `string` *(optional)*                     | Tailwind vertical padding for each dropdown option (e.g., `"py-3"`).                                                                        |
 // | `optionsOffsetX`  | `string` *(optional)*                     | Tailwind horizontal offset for each dropdown option (e.g., `"-50%"`).                                                                        |
+// | `displayValue`    | `boolean` *(optional)*                    | Whether to display the value of the selected option. Defaults to `false`.                                                                     |

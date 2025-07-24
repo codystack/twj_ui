@@ -17,6 +17,7 @@ import usdc from "../../../assets/crpto_icons/wallet_icons/USDC.svg";
 import trx from "../../../assets/crpto_icons/wallet_icons/Tron.svg";
 import ton from "../../../assets/crpto_icons/wallet_icons/ton_coin.svg";
 import { useUserStore } from "../../../store/useUserStore";
+import api from "../../../services/api.ts";
 
 export type Optiontype = {
   id: string;
@@ -81,9 +82,14 @@ const BuyCrypto = () => {
 
   const [selectedCoin, setSelectedCoin] = useState<Optiontype>(options[0]);
   const [wallets, setWallets] = useState<Wallet[]>([]);
-  // const [rawWallets, setRawWallets] = useState<Wallet[]>([]);
   const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState<string | null>(null);
+  const [selectOptions, setSelectOptions] = useState<Optiontype[]>([]);
+  const [amount, setAmount] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [toAmount, setToAmount] = useState<string>("");
+  const [currency, setCurrency] = useState<string>("");
+  const [loadingData, setLoadingData] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const {
     user,
@@ -129,8 +135,6 @@ const BuyCrypto = () => {
 
         const rawResponse: Wallet[] = response.data?.data?.data;
 
-        // setRawWallets(rawResponse);
-
         const filteredWallets = rawResponse.filter((wallet) =>
           allowedCurrencies.includes(wallet.currency.toLowerCase())
         );
@@ -149,10 +153,71 @@ const BuyCrypto = () => {
     }
   }, [userSubAccountId]);
 
-  const handleSelection = (selected: Optiontype) => {
-    console.log("Selected from parent:", selected);
-    console.log("Backend value:", selected.value);
-    setSelectedCoin(selected);
+  useEffect(() => {
+    if (wallets.length > 0) {
+      const options = wallets.map((wallet) => ({
+        id: wallet.id,
+        label: wallet.name,
+        value: wallet.currency.toLowerCase(),
+        image: currencyIcons[wallet.currency.toLowerCase()],
+        displayValue: wallet.balance ? `${wallet.balance}` : "",
+      }));
+      setSelectOptions(options);
+      setSelectedCoin(options[0]);
+    }
+  }, [wallets]);
+
+  const balance = user?.accountBalance ?? 0;
+  
+  const numericAmount = parseFloat(amount);
+  const handleBlur = async () => {
+    setError("");
+    setIsInputFocused(false);
+
+    if (!amount || isNaN(numericAmount)) {
+      setError("Amount is required.");
+      return;
+    }
+
+    if (numericAmount > balance) {
+      setError("Insufficient wallet balance.");
+      return;
+    }
+
+    if (numericAmount <= 999) {
+      setError("Amount must be atleast NGN1000");
+      return;
+    }
+
+    try {
+      setLoadingData(true);
+      const res = await api.post("/Crypto/swapQuotation?userId=me", {
+        fromCurrency: "ngn",
+        toCurrency: selectedCoin.value,
+        fromAmount: numericAmount,
+      });
+      const response = res?.data;
+
+      setToAmount(response?.data?.toAmount);
+      setCurrency(response?.data?.toCurrency);
+    } catch (err) {
+      setError("Failed to submit amount.");
+      console.error(err);
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only allow numbers and decimal
+    if (/^\d*\.?\d*$/.test(value)) {
+      setAmount(value);
+    }
+  };
+
+  const handleFocus = () => {
+    setIsInputFocused(true);
   };
 
   return (
@@ -209,22 +274,22 @@ const BuyCrypto = () => {
                       </p>
 
                       <div className="w-full flex">
-                        <div className="ml-auto w-[50%]">
+                        <div className="ml-auto w-auto">
                           <CustomSelect
-                            options={options}
-                            defaultSelected={options[0]}
-                            inputWidth="w-full"
-                            optionsWidth="w-[10rem]"
-                            optionsOffsetX={-50}
+                            options={selectOptions}
+                            value={selectedCoin}
+                            onChange={(val) => setSelectedCoin(val)}
+                            inputWidth="w-auto"
+                            optionsWidth="w-[15rem]"
+                            optionsOffsetX={-90}
                             px="px-1"
                             py="py-1"
                             textSize="text-[15px]"
-                            onChange={handleSelection}
+                            // onChange={handleSelection}
                             borderColor="#fff"
                             backgroundColor="#EAEFF6"
                             optionsPx="px-1"
                             optionsPy="py-1"
-                            //  showDropdownIcon={false}
                           />
                         </div>
                       </div>
@@ -266,9 +331,19 @@ const BuyCrypto = () => {
                       <input
                         type="text"
                         placeholder="50,000"
-                        className="w-full px-1 py-2 outline-none bg-white rounded-r-md text-sm"
+                        className="w-full px-1 py-3 outline-none bg-white rounded-r-md text-[16px]"
+                        value={amount}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        onFocus={handleFocus}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            handleBlur();
+                          }
+                        }}
                       />
                     </div>
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
 
                     <div className="mt-[0.5rem]">
                       <p className="pt-2 pb-1 text-[14px] text-[#000]">
@@ -277,13 +352,19 @@ const BuyCrypto = () => {
 
                       <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
                         <p className="w-full text-[16px] font-medium">
-                          0.00237
+                          {loadingData ? (
+                            <div className="w-5 h-5 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
+                          ) : toAmount ? (
+                            `${toAmount} ${currency.toUpperCase()}`
+                          ) : (
+                            "0.00"
+                          )}
                         </p>
 
                         <div className="w-full flex">
-                          <div className="ml-auto w-[50%]">
+                          <div className="ml-auto w-auto">
                             <CustomSelect
-                              options={options}
+                              // options={options}
                               inputWidth="w-full"
                               optionsWidth="w-full"
                               px="px-1"
@@ -305,8 +386,13 @@ const BuyCrypto = () => {
                       <div className="w-full flex mt-9 justify-end">
                         <div className="flex items-center gap-3">
                           <button
+                            disabled={isInputFocused || !!error}
                             onClick={() => setShowConfirmation(true)}
-                            className="border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
+                            className={`border-[2px] ${
+                              isInputFocused || error
+                                ? "opacity-50 cursor-not-allowed"
+                                : "cursor-pointer"
+                            } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
                           >
                             Continue
                           </button>
@@ -325,7 +411,7 @@ const BuyCrypto = () => {
                           <span>0.0003667</span> <span>BTC</span>
                         </h4>
                         <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
-                          <span>-</span> <span>50,000</span>
+                          <span>-</span> <span>{numericAmount}</span>
                           <span>NGN</span>
                         </p>
                       </div>
@@ -342,7 +428,7 @@ const BuyCrypto = () => {
                       <div className="flex justify-between text-[15px] mb-4">
                         <p className="">Cost</p>
                         <span className=" flex items-center gap-1">
-                          <span>50,000</span>
+                          <span>{numericAmount}</span>
                           <span>NGN</span>
                         </span>
                       </div>
@@ -353,7 +439,7 @@ const BuyCrypto = () => {
                           <span>0.0012</span>
                           <span>BTC</span>
                         </span>
-                      </div>
+                      </div>  
 
                       <div className="flex justify-between text-[15px] ">
                         <p className="">You will receive</p>
