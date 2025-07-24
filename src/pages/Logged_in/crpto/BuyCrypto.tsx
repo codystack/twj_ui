@@ -7,6 +7,7 @@ import ETHER from "../../../assets/crpto_icons/ETHER.svg";
 import CustomSelect from "../../../components/CustomSelect";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import warning from "../../../assets/crpto_icons/Alarm.svg";
 import { Wallet } from "../../../types/types.ts";
 import btc from "../../../assets/crpto_icons/wallet_icons/Bitcoin.svg";
 import eth from "../../../assets/crpto_icons/wallet_icons/Ethereumm.svg";
@@ -18,6 +19,7 @@ import trx from "../../../assets/crpto_icons/wallet_icons/Tron.svg";
 import ton from "../../../assets/crpto_icons/wallet_icons/ton_coin.svg";
 import { useUserStore } from "../../../store/useUserStore";
 import api from "../../../services/api.ts";
+import useAutoRefreshSwap from "./count/useAutoRefreshSwap.tsx";
 
 export type Optiontype = {
   id: string;
@@ -26,39 +28,6 @@ export type Optiontype = {
   image?: string;
   displayValue?: string;
 };
-
-// const coins = [
-//   {
-//     name: "Bitcoin",
-//     short: "BTC",
-//     value: "(0.00 BTC)",
-//     img: BITCOIN,
-//   },
-//   {
-//     name: "Ethereum",
-//     short: "ETH",
-//     value: "(1.25 ETH)",
-//     img: ETHER,
-//   },
-//   {
-//     name: "Tether",
-//     short: "USDT",
-//     value: "(20.00 USDT)",
-//     img: USDT,
-//   },
-//   {
-//     name: "Binance Coin",
-//     short: "BNB",
-//     value: "(5.10 BNB)",
-//     img: BITCOIN,
-//   },
-//   {
-//     name: "Solana",
-//     short: "SOL",
-//     value: "(12.00 SOL)",
-//     img: ETHER,
-//   },
-// ];
 
 const options = [
   {
@@ -90,6 +59,9 @@ const BuyCrypto = () => {
   const [currency, setCurrency] = useState<string>("");
   const [loadingData, setLoadingData] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [quotePrice, setQuotePrice] = useState<string>("");
+  // const [countdown, setCountdown] = useState(0);
+  const [quoteId, setQuoteId] = useState<string>("");
 
   const {
     user,
@@ -167,9 +139,39 @@ const BuyCrypto = () => {
     }
   }, [wallets]);
 
+  // const startCountdown = (duration: number = 15) => {
+  //   setCountdown(duration);
+
+  //   const interval = setInterval(() => {
+  //     setCountdown((prev) => {
+  //       if (prev <= 1) {
+  //         clearInterval(interval);
+  //         return 0;
+  //       }
+  //       return prev - 1;
+  //     });
+  //   }, 1000);
+  // };
+
+  // const startCountdown = (duration: number = 13) => {
+  //   setCountdown(duration);
+
+  //   const interval = setInterval(() => {
+  //     setCountdown((prev) => {
+  //       if (prev <= 1) {
+  //         clearInterval(interval);
+  //         refreshSwapQuotation();
+  //         return 0;
+  //       }
+  //       return prev - 1;
+  //     });
+  //   }, 1000);
+  // };
+
   const balance = user?.accountBalance ?? 0;
-  
+
   const numericAmount = parseFloat(amount);
+
   const handleBlur = async () => {
     setError("");
     setIsInputFocused(false);
@@ -198,8 +200,11 @@ const BuyCrypto = () => {
       });
       const response = res?.data;
 
+      startCountdown(13);
       setToAmount(response?.data?.toAmount);
       setCurrency(response?.data?.toCurrency);
+      setQuotePrice(response?.data?.quotedPrice);
+      setQuoteId(response?.data?.id);
     } catch (err) {
       setError("Failed to submit amount.");
       console.error(err);
@@ -207,6 +212,42 @@ const BuyCrypto = () => {
       setLoadingData(false);
     }
   };
+
+  // const refreshSwapQuotation = async () => {
+  //   if (!quoteId || !selectedCoin?.value || !numericAmount) return;
+
+  //   try {
+  //     const res = await api.post(
+  //       `/Crypto/refreshSwapQuotation?quotationId=${quoteId}&userId=me`,
+  //       {
+  //         fromCurrency: "ngn",
+  //         toCurrency: selectedCoin.value,
+  //         fromAmount: numericAmount,
+  //       }
+  //     );
+
+  //     const refreshedData = res?.data?.data;
+
+  //     setToAmount(refreshedData?.toAmount);
+  //     setCurrency(refreshedData?.toCurrency);
+  //     setQuotePrice(refreshedData?.quotedPrice);
+
+  //     startCountdown(13);
+  //   } catch (err) {
+  //     console.error("Failed to refresh quotation:", err);
+  //     setError("Failed to refresh quotation.");
+  //   }
+  // };
+
+  const { countdown, isLoading, startCountdown } = useAutoRefreshSwap({
+    quoteId,
+    selectedCoin,
+    numericAmount,
+    setToAmount,
+    setCurrency,
+    setQuotePrice,
+    setError,
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -263,6 +304,19 @@ const BuyCrypto = () => {
 
               {/* Right section */}
               <div className=" mt-[1rem] ml-[2rem]">
+                {countdown > 0 && (
+                  <div className="flex justify-center items-center">
+                    <div className="flex justify-center w-[60%] items-center px-5 py-2 mt-4 rounded-[10px] bg-[#FBEEFF]">
+                      <div className="flex items-center gap-3 justify-center">
+                        <img src={warning} alt="" />
+                        <p className="leading-[0.9rem] text-[#8003A9] text-left text-[13px]">
+                          0:{countdown < 10 ? `0${countdown}` : countdown}{" "}
+                          seconds to refresh asset rates
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 {!showConfirmation ? (
                   <>
                     <p className="pt-2 pb-1 text-[14px] text-[#000]">
@@ -389,7 +443,12 @@ const BuyCrypto = () => {
                             disabled={isInputFocused || !!error}
                             onClick={() => setShowConfirmation(true)}
                             className={`border-[2px] ${
-                              isInputFocused || error
+                              isInputFocused ||
+                              error ||
+                              loadingData ||
+                              !amount ||
+                              countdown < 1 ||
+                              isLoading
                                 ? "opacity-50 cursor-not-allowed"
                                 : "cursor-pointer"
                             } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
@@ -408,7 +467,11 @@ const BuyCrypto = () => {
                           Purchase
                         </p>
                         <h4 className="flex justify-center gap-0.5   items-center text-[24px]">
-                          <span>0.0003667</span> <span>BTC</span>
+                          <span>
+                            {toAmount
+                              ? `${toAmount} ${currency.toUpperCase()}`
+                              : 0.0}
+                          </span>
                         </h4>
                         <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
                           <span>-</span> <span>{numericAmount}</span>
@@ -420,8 +483,8 @@ const BuyCrypto = () => {
                       <div className="flex justify-between text-[15px] mb-4">
                         <p className="">Price Per Asset</p>
                         <span className="  flex items-center gap-1">
-                          <span>3,505.03</span>
-                          <span>NGN</span>
+                          <span>{Number(quotePrice).toLocaleString()}</span>
+                          <span>{currency}</span>
                         </span>
                       </div>
 
@@ -433,19 +496,22 @@ const BuyCrypto = () => {
                         </span>
                       </div>
 
-                      <div className="flex justify-between text-[15px] mb-4">
+                      {/* <div className="flex justify-between text-[15px] mb-4">
                         <p className="">Transaction Fee</p>
                         <span className="flex items-center gap-1">
                           <span>0.0012</span>
                           <span>BTC</span>
                         </span>
-                      </div>  
+                      </div> */}
 
                       <div className="flex justify-between text-[15px] ">
                         <p className="">You will receive</p>
                         <span className="flex items-center gap-1">
-                          <span>0.0012</span>
-                          <span>BTC</span>
+                          <span>
+                            {toAmount
+                              ? `${toAmount} ${currency.toUpperCase()}`
+                              : 0.0}
+                          </span>
                         </span>
                       </div>
                     </div>
@@ -458,8 +524,14 @@ const BuyCrypto = () => {
                         >
                           Edit Purchase
                         </button>
-                        <button className="border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]">
-                          Create Wallet
+                        <button
+                          className={`border-[2px]   ${
+                            isLoading
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
+                        >
+                          Create Purchase
                         </button>
                       </div>
                     </div>
