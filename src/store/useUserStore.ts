@@ -13,6 +13,7 @@ type User = {
   userName: string;
   bankName: string;
   accountName: string;
+  userSubAccountId: string;
   twjUserId: string;
   accountBalance: number;
   accountNumber: number;
@@ -49,6 +50,7 @@ export const useUserStore = create<UserStore>((set) => ({
           accountBalance: data.data.walletBalance ?? 0,
           userName: data.data.username,
           bankName: data.data.bankName,
+          userSubAccountId: data?.data?.userSubAccountId ?? "",
           accountName: data.data.accountName,
           accountNumber: data.data.accountNumber,
           kycSet: data.data.isKycComplete,

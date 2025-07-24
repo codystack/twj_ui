@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
 type Option = {
@@ -10,8 +10,9 @@ type Option = {
 };
 
 interface CustomSelectProps {
-  options: Option[];
+  options?: Option[];
   defaultSelected?: Option;
+  value?: Option;
   onChange?: (selected: Option) => void;
   inputWidth?: string;
   optionsWidth?: string;
@@ -24,10 +25,14 @@ interface CustomSelectProps {
   optionsPx?: string;
   optionsPy?: string;
   showDropdownIcon?: boolean;
+  optionsOffsetX?: number;
+  readOnly?: boolean;
+  displayValue?: boolean;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
   options,
+  value,
   defaultSelected,
   onChange,
   inputWidth = "w-full",
@@ -41,8 +46,21 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   optionsPx = "px-4",
   optionsPy = "py-3",
   showDropdownIcon = true,
+  optionsOffsetX = 0,
+  readOnly = false,
+  displayValue = false,
 }) => {
-  const [selected, setSelected] = useState<Option | undefined>(defaultSelected);
+  const [selected, setSelected] = useState<Option | undefined>(
+    value || defaultSelected
+  );
+
+  // Sync internal state with external value
+  useEffect(() => {
+    if (value) {
+      setSelected(value);
+    }
+  }, [value]);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (option: Option) => {
@@ -56,8 +74,12 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       {/* Selected Field */}
       <div
         tabIndex={0}
-        onClick={() => setIsOpen((prev) => !prev)}
-        className={`outline-none ${px} ${py} ${textSize} rounded-md flex justify-between items-center cursor-pointer ${inputWidth}`}
+        onClick={() => {
+          if (!readOnly) setIsOpen((prev) => !prev);
+        }}
+        className={`outline-none ${px} ${py} ${textSize} rounded-md flex justify-between items-center ${inputWidth} ${
+          readOnly ? "cursor-not-allowed" : "cursor-pointer"
+        }`}
         style={{
           border: isOpen
             ? `2px solid ${borderColor}`
@@ -72,15 +94,15 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                 <img
                   src={selected.image}
                   alt={selected.label}
-                  className="w-6 h-6 rounded-full"
+                  className="w-6 h-6 rounded-full ml-1.5 my-1"
                 />
               )}
               <span className="font-medium">{selected.label}</span>
             </div>
             <div className="flex items-center gap-1">
               {selected.displayValue && (
-                <span className="text-gray-400 text-sm">
-                  {selected.displayValue}
+                <span className="text-gray-400 ml-2 text-sm">
+                  {displayValue ? selected.displayValue : ""}
                 </span>
               )}
               {showDropdownIcon && (
@@ -104,9 +126,12 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           className={`absolute mt-2 bg-white border rounded-md shadow z-10 max-h-60 overflow-y-auto ${
             optionsWidth || inputWidth
           }`}
-          style={{ border: "1px solid #8A95BF" }}
+          style={{
+            border: "1px solid #8A95BF",
+            left: `${optionsOffsetX}px`,
+          }}
         >
-          {options.map((option) => (
+          {options?.map((option) => (
             <li
               key={option.id}
               onClick={() => handleSelect(option)}
@@ -154,3 +179,5 @@ export default CustomSelect;
 // | `backgroundColor` | `string` *(optional)*                     | CSS background color for the input field (e.g., `"#f9f9f9"`, `"rgba(...)"`).                                                                |
 // | `optionsPx`       | `string` *(optional)*                     | Tailwind horizontal padding for each dropdown option (e.g., `"px-4"`).                                                                      |
 // | `optionsPy`       | `string` *(optional)*                     | Tailwind vertical padding for each dropdown option (e.g., `"py-3"`).                                                                        |
+// | `optionsOffsetX`  | `string` *(optional)*                     | Tailwind horizontal offset for each dropdown option (e.g., `"-50%"`).                                                                        |
+// | `displayValue`    | `boolean` *(optional)*                    | Whether to display the value of the selected option. Defaults to `false`.                                                                     |
