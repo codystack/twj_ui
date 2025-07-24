@@ -52,6 +52,15 @@ const useAutoRefreshSwap = ({
     }
   };
 
+  const stopCountdown = () => {
+  if (countdownRef.current) {
+    clearInterval(countdownRef.current);
+    countdownRef.current = null;
+  }
+  setCountdown(0);
+};
+
+
   const startCountdown = (seconds: number) => {
     if (countdownRef.current) {
       clearInterval(countdownRef.current);
@@ -83,6 +92,7 @@ const useAutoRefreshSwap = ({
     countdown,
     startCountdown,
     isLoading,
+    stopCountdown,
   };
 };
 

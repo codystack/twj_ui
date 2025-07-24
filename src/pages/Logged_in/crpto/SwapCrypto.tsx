@@ -21,39 +21,8 @@ import sol from "../../../assets/crpto_icons/wallet_icons/solana.svg";
 import usdc from "../../../assets/crpto_icons/wallet_icons/USDC.svg";
 import trx from "../../../assets/crpto_icons/wallet_icons/Tron.svg";
 import ton from "../../../assets/crpto_icons/wallet_icons/ton_coin.svg";
-
-// const coins = [
-//   {
-//     name: "Bitcoin",
-//     short: "BTC",
-//     value: "(0.00 BTC)",
-//     img: BITCOIN,
-//   },
-//   {
-//     name: "Ethereum",
-//     short: "ETH",
-//     value: "(1.25 ETH)",
-//     img: ETHER,
-//   },
-//   {
-//     name: "Tether",
-//     short: "USDT",
-//     value: "(20.00 USDT)",
-//     img: USDT,
-//   },
-//   {
-//     name: "Binance Coin",
-//     short: "BNB",
-//     value: "(5.10 BNB)",
-//     img: BITCOIN,
-//   },
-//   {
-//     name: "Solana",
-//     short: "SOL",
-//     value: "(12.00 SOL)",
-//     img: ETHER,
-//   },
-// ];
+import useAutoRefreshSwap from "./count/useAutoRefreshSwap.tsx";
+import api from "../../../services/api.ts";
 
 const options = [
   {
@@ -80,18 +49,34 @@ export type Optiontype = {
   displayValue?: string;
 };
 
-// interface WalletApiResponse {
-//   data: {
-//     data: Wallet[];
-//   };
-// }
-
 const SwapCrypto = () => {
   const [selectedCoin, setSelectedCoin] = useState<Optiontype>(options[0]);
+
+  const [shouldBlur, setShouldBlur] = useState(false);
   const [wallets, setWallets] = useState<Wallet[]>([]);
-  // const [rawWallets, setRawWallets] = useState<Wallet[]>([]);
   const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState<string | null>(null);
+  const [selectOptions, setSelectOptions] = useState<Optiontype[]>([]);
+  // const [amount, setAmount] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [toAmount, setToAmount] = useState<string>("");
+  const [currency, setCurrency] = useState<string>("");
+  const [loadingData, setLoadingData] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  const [quotePrice, setQuotePrice] = useState<string>("");
+  const [quoteId, setQuoteId] = useState<string>("");
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
+  const [openPinModal, setOpenPinModal] = useState(false);
+  const [editedValue, setEditedValue] = useState(
+    selectedCoin.displayValue || ""
+  );
+  const [inputError, setInputError] = useState("");
+
+  const {
+    user,
+    fetchUser,
+    // loading,
+    // error
+  } = useUserStore();
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -151,14 +136,119 @@ const SwapCrypto = () => {
   }, [userSubAccountId]);
 
   useEffect(() => {
-    console.log("Filtered wallets:", wallets);
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    if (shouldBlur && selectedCoin && editedValue > "0.0") {
+      timeoutId = setTimeout(() => {
+        handleBlur();
+        setShouldBlur(false);
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [selectedCoin, editedValue]);
+
+  useEffect(() => {
+    fetchUser();
+    if (wallets.length > 0) {
+      const options = wallets.map((wallet) => ({
+        id: wallet.id,
+        label: wallet.name,
+        value: wallet.currency.toLowerCase(),
+        image: currencyIcons[wallet.currency.toLowerCase()],
+        displayValue: wallet.balance ? `${wallet.balance}` : "",
+      }));
+      setSelectOptions(options);
+      setSelectedCoin(options[0]);
+    }
   }, [wallets]);
 
-  const handleSelection = (selected: Optiontype) => {
-    console.log("Selected from parent:", selected);
-    console.log("Backend value:", selected.value);
-    setSelectedCoin(selected);
+  useEffect(() => {
+    setEditedValue(selectedCoin.displayValue || "");
+  }, [selectedCoin]);
+
+  const originalValue = parseFloat(selectedCoin.displayValue || "0");
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setInputError("");
+
+    // Allow only numbers or decimals
+    if (!/^\d*\.?\d*$/.test(newValue)) return;
+
+    const numericValue = parseFloat(newValue);
+
+    // handleBlur();
+
+    if (!isNaN(numericValue) && numericValue > originalValue) {
+      setInputError("Amount cannot exceed your wallet balance");
+    } else {
+      setInputError("");
+    }
+
+    setEditedValue(newValue);
   };
+
+  // const balance = user?.accountBalance ?? 0;
+
+  const numericAmount = parseFloat(editedValue);
+
+  const handleBlur = async () => {
+    setError("");
+    setIsInputFocused(false);
+
+    if (!editedValue) {
+      setError("Amount is required.");
+      return;
+    }
+
+    if (numericAmount > originalValue) {
+      setError("Insufficient wallet balance.");
+      return;
+    }
+
+    // if (numericAmount <= ) {
+    //   setError("Amount must be atleast NGN1000");
+    //   return;
+    // }
+
+    try {
+      setLoadingData(true);
+      const res = await api.post(
+        `/Crypto/swapQuotation?userId=${userSubAccountId}`,
+        {
+          fromCurrency: selectedCoin.value,
+          toCurrency: "ngn",
+          fromAmount: numericAmount,
+        }
+      );
+      const response = res?.data;
+
+      startCountdown(13);
+      setToAmount(response?.data?.toAmount);
+      setCurrency(response?.data?.toCurrency);
+      setQuotePrice(response?.data?.quotedPrice);
+      setQuoteId(response?.data?.id);
+    } catch (err) {
+      setError("Failed to submit amount.");
+      console.error(err);
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  const { countdown, isLoading, startCountdown } = useAutoRefreshSwap({
+    quoteId,
+    selectedCoin,
+    numericAmount,
+    setToAmount,
+    setCurrency,
+    setQuotePrice,
+    setError,
+  });
+
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
       <div className="flex-1 overflow-y-auto p-4 ">
@@ -201,7 +291,7 @@ const SwapCrypto = () => {
               </div>
               {/* Right section */}
               <div className=" ml-[2rem] mt-[-1rem] ">
-                <div className="flex justify-center items-center">
+                {/* <div className="flex justify-center items-center">
                   <div className="flex justify-center w-[60%] items-center px-5 py-2 mt-4 rounded-[10px]  bg-[#FBEEFF] ">
                     <div className="flex items-center  gap-3 justify-center ">
                       <img src={warning} alt="" />
@@ -210,7 +300,20 @@ const SwapCrypto = () => {
                       </p>
                     </div>
                   </div>
-                </div>
+                </div> */}
+                {countdown > 0 && (
+                  <div className="flex justify-center items-center">
+                    <div className="flex justify-center w-[60%] items-center px-5 py-2 mt-4 rounded-[10px] bg-[#FBEEFF]">
+                      <div className="flex items-center gap-3 justify-center">
+                        <img src={warning} alt="" />
+                        <p className="leading-[0.9rem] text-[#8003A9] text-left text-[13px]">
+                          0:{countdown < 10 ? `0${countdown}` : countdown}{" "}
+                          seconds to refresh asset rates
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <div className="relative">
                   <img
                     src={swap}
@@ -227,31 +330,53 @@ const SwapCrypto = () => {
                       <p className=" pb-1 text-[14px] text-[#000]">
                         Select Cryptocurrency
                       </p>
-                      <div className="grid grid-cols-2 items-center px-2 py-1 border bg-white border-gray-300 rounded-lg">
-                        <p className="w-full text-[16px] font-medium">
-                          {selectedCoin.label}
-                        </p>
-
+                      <div
+                        className={`grid grid-cols-2 items-center px-2 py-1 border bg-white ${
+                          inputError ? "border-red-500" : "border-gray-300"
+                        } rounded-lg`}
+                      >
+                        <input
+                          type="text"
+                          value={editedValue}
+                          onChange={handleInputChange}
+                          onBlur={handleBlur}
+                          placeholder={
+                            loading || isLoading ? "Loading" : "0.00"
+                          }
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              handleBlur();
+                            }
+                          }}
+                          className={`w-full text-[16px] font-medium bg-transparent outline-none  `}
+                        />
                         <div className="w-full flex">
-                          <div className="ml-auto w-[60%]">
+                          <div className="ml-auto w-auto">
                             <CustomSelect
-                              options={options}
-                              defaultSelected={options[0]}
-                              inputWidth="w-full"
-                              optionsWidth="w-full"
+                              options={selectOptions}
+                              value={selectedCoin}
+                              onChange={(val) => {
+                                setInputError("");
+                                setSelectedCoin(val);
+                                setShouldBlur(true);
+                              }}
+                              inputWidth="w-auto"
+                              optionsWidth="w-[15rem]"
+                              optionsOffsetX={-90}
                               px="px-1"
                               py="py-1"
                               textSize="text-[15px]"
-                              onChange={handleSelection}
                               borderColor="#fff"
                               backgroundColor="#EAEFF6"
                               optionsPx="px-1"
                               optionsPy="py-1"
-                              //  showDropdownIcon={false}
                             />
                           </div>
                         </div>
                       </div>
+                      {inputError && (
+                        <p className="text-red-500 text-sm ">{inputError}</p>
+                      )}
                     </div>
                   </div>
                   <div className="mt-[6px] pt-10  px-12 pb-13.5 rounded-2xl bg-[#F5F7FA] ">
@@ -271,14 +396,31 @@ const SwapCrypto = () => {
                         </div>
 
                         {/* Input Field */}
-                        <input
-                          type="text"
-                          placeholder="50,000"
-                          className="w-full px-1 py-2 outline-none bg-white rounded-r-md text-sm"
-                        />
+                        <div className="relative w-full">
+                          <input
+                            type="text"
+                            readOnly
+                            value={
+                              loadingData || error
+                                ? ""
+                                : toAmount
+                                ? `${toAmount} ${currency.toUpperCase()}`
+                                : "0.00"
+                            }
+                            placeholder={loadingData ? "Loading..." : "50,000"}
+                            className="w-full px-1 py-2 outline-none bg-white rounded-r-md text-sm pr-8"
+                          />
+
+                          {loadingData && (
+                            <div className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
+                  {error && (
+                    <p className="text-red-500 text-sm mt-2">{error}</p>
+                  )}
 
                   <div className="w-full flex mt-7 justify-end">
                     <div className="flex items-center gap-3">

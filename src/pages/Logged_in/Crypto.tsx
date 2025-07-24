@@ -2,7 +2,7 @@
 import { Link, NavLink } from "react-router-dom"; // use 'react-router-dom', not 'react-router'
 import BuyCrypto from "../../assets/crpto_icons/c-down.svg";
 import SellCrypto from "../../assets/crpto_icons/c-sell.svg";
-import SwapCrypto from "../../assets/crpto_icons/c-swap.svg";
+import SwapCrypto from "../../assets/crpto_icons/swapp.svg";
 import { FaArrowLeft } from "react-icons/fa";
 
 const cardData = [

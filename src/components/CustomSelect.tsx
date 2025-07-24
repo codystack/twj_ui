@@ -69,6 +69,8 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     onChange?.(option);
   };
 
+  
+
   return (
     <div className="relative">
       {/* Selected Field */}
@@ -123,7 +125,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       {/* Dropdown Options */}
       {isOpen && (
         <ul
-          className={`absolute mt-2 bg-white border rounded-md shadow z-10 max-h-60 overflow-y-auto ${
+          className={`absolute mt-2 bg-white border z-20 rounded-md shadow  max-h-60 overflow-y-auto ${
             optionsWidth || inputWidth
           }`}
           style={{
