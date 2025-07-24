@@ -242,7 +242,12 @@ const Data = () => {
             }
           );
 
-          if (!purchaseResponse.data.isSuccessful) {
+          // if (!purchaseResponse.data.isSuccessful) {
+          //   throw new Error(
+          //     purchaseResponse.data.message || "An error occurred"
+          //   );
+          // }
+          if (purchaseResponse.data.statusCode !== "OK") {
             throw new Error(
               purchaseResponse.data.message || "An error occurred"
             );
@@ -368,7 +373,6 @@ const Data = () => {
                         </span>
                         <span className="text-[#0A2E65]/60">₦</span>
                         <span className="text-[#0A2E65]/60">
-              
                           {user?.accountBalance.toLocaleString("en-US")}
                         </span>
                       </div>
