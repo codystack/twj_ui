@@ -1,6 +1,5 @@
 import { FaArrowLeft } from "react-icons/fa";
 import { NavLink } from "react-router";
-// import USDT from "../../../assets/crpto_icons/USDT-b-coin.svg";
 import BITCOIN from "../../../assets/crpto_icons/BITCOIN.svg";
 import warning from "../../../assets/crpto_icons/Alarm.svg";
 import ETHER from "../../../assets/crpto_icons/ETHER.svg";
@@ -8,7 +7,6 @@ import CustomSelect from "../../../components/CustomSelect";
 import NGN from "../../../assets/crpto_icons/MaskNGN.svg";
 import empty from "../../../assets/crpto_icons/emptycircle.svg";
 import swap from "../../../assets/crpto_icons/swap.svg";
-
 import { useUserStore } from "../../../store/useUserStore";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -53,24 +51,22 @@ export type Optiontype = {
 
 const SwapCrypto = () => {
   const [selectedCoin, setSelectedCoin] = useState<Optiontype>(options[0]);
-
   const [shouldBlur, setShouldBlur] = useState(false);
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectOptions, setSelectOptions] = useState<Optiontype[]>([]);
-  // const [amount, setAmount] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [toAmount, setToAmount] = useState<string>("");
   const [currency, setCurrency] = useState<string>("");
   const [loadingData, setLoadingData] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
-  // const [quotePrice, setQuotePrice] = useState<string>("");
   const [quoteId, setQuoteId] = useState<string>("");
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [openPinModal, setOpenPinModal] = useState(false);
-  const [editedValue, setEditedValue] = useState(
-    selectedCoin.displayValue || ""
-  );
+  // const [editedValue, setEditedValue] = useState(
+  //   selectedCoin.displayValue || ""
+  // );
+  const [editedValue, setEditedValue] = useState("");
   const [inputError, setInputError] = useState("");
 
   const {
@@ -79,6 +75,24 @@ const SwapCrypto = () => {
     // loading,
     // error
   } = useUserStore();
+  const originalValue = parseFloat(selectedCoin.displayValue || "0");
+  const numericAmount = parseFloat(editedValue);
+
+  // useEffect(() => {
+  //   console.log("Selected value:", originalValue);
+  // }, [selectedCoin]);
+
+  const { countdown, startCountdown, stopCountdown, isLoading } =
+    useAutoRefreshSellSwap({
+      quoteId,
+      userId: user?.userSubAccountId,
+      selectedCoin,
+      numericAmount,
+      setToAmount,
+      setCurrency,
+      // setQuotePrice,
+      setError,
+    });
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -103,6 +117,7 @@ const SwapCrypto = () => {
     "trx",
     "ton",
   ];
+
   const userSubAccountId = useUserStore(
     (state) => state.user?.userSubAccountId
   );
@@ -167,11 +182,22 @@ const SwapCrypto = () => {
     }
   }, [wallets]);
 
-  useEffect(() => {
-    setEditedValue(selectedCoin.displayValue || "");
-  }, [selectedCoin]);
+  // useEffect(() => {
+  //   setEditedValue(selectedCoin.displayValue || "");
+  // }, [selectedCoin]);
 
-  const originalValue = parseFloat(selectedCoin.displayValue || "0");
+  useEffect(() => {
+    const allReady =
+      quoteId &&
+      // userId &&
+      selectedCoin?.value &&
+      numericAmount &&
+      numericAmount > 0;
+
+    if (allReady) {
+      startCountdown(60);
+    }
+  }, [quoteId, selectedCoin, numericAmount]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -194,8 +220,6 @@ const SwapCrypto = () => {
   };
 
   // const balance = user?.accountBalance ?? 0;
-
-  const numericAmount = parseFloat(editedValue);
 
   const handleBlur = async () => {
     setError("");
@@ -227,13 +251,13 @@ const SwapCrypto = () => {
         }
       );
       const response = res?.data;
-      console.log("Swap response:", response?.data);
-
-      startCountdown(13);
+      // console.log("Swap response:", response?.data);
       setToAmount(response?.data?.toAmount);
       setCurrency(response?.data?.toCurrency);
       // setQuotePrice(response?.data?.quotedPrice);
       setQuoteId(response?.data?.id);
+
+      startCountdown(60);
     } catch (err) {
       setError("Failed to submit amount.");
       console.error(err);
@@ -251,18 +275,6 @@ const SwapCrypto = () => {
   const handleFocus = () => {
     setIsInputFocused(true);
   };
-
-  const { countdown, startCountdown, stopCountdown, isLoading } =
-    useAutoRefreshSellSwap({
-      quoteId,
-      userId: user?.userSubAccountId,
-      selectedCoin,
-      numericAmount,
-      setToAmount,
-      setCurrency,
-      // setQuotePrice,
-      setError,
-    });
 
   const onVerify = () =>
     new Promise<void>((resolve, reject) => {
@@ -367,7 +379,7 @@ const SwapCrypto = () => {
                         <div className="flex items-center gap-3 justify-center">
                           <img src={warning} alt="" />
                           <p className="leading-[0.9rem] text-[#8003A9] text-left text-[13px]">
-                            0:{countdown < 10 ? `0${countdown}` : countdown}{" "}
+                            0:{countdown < 10 ? `0${countdown}` : countdown} 
                             seconds to refresh asset rates
                           </p>
                         </div>
@@ -419,7 +431,7 @@ const SwapCrypto = () => {
                                 onChange={(val) => {
                                   setInputError("");
                                   setSelectedCoin(val);
-                                  setShouldBlur(true);
+                                  setEditedValue("");
                                 }}
                                 inputWidth="w-auto"
                                 optionsWidth="w-[15rem]"
@@ -443,7 +455,7 @@ const SwapCrypto = () => {
                     <div className="mt-[6px] pt-10  px-12 pb-13.5 rounded-2xl bg-[#F5F7FA] ">
                       <div>
                         <p className=" pb-1 text-[14px] text-[#000]">
-                          What you'll receive.
+                          What you'll receive
                         </p>
                         <div className="flex items-center w-full border border-gray-300 bg-white rounded-md focus-within:border-2 focus-within:border-gray-300">
                           {/* Left Section with Flag and NGN */}
@@ -501,8 +513,7 @@ const SwapCrypto = () => {
                             isInputFocused ||
                             error ||
                             loadingData ||
-                            countdown < 1 ||
-                            isLoading
+                            countdown < 1
                               ? "cursor-not-allowed opacity-50"
                               : "cursor-pointer"
                           } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
