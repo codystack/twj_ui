@@ -268,7 +268,7 @@ const SwapCrypto = () => {
     new Promise<void>((resolve, reject) => {
       (async () => {
         try {
-          const res = await api.post("/Crypto/buyCrypto", {
+          const res = await api.post("/Crypto/sellCrypto", {
             amount: numericAmount,
             quotationId: quoteId,
           });
@@ -299,8 +299,8 @@ const SwapCrypto = () => {
       {/* Success Modal */}
       {isSuccessModal && (
         <SuccessModal
-          title="Buy Crypto"
-          message="Your purchase was successful"
+          title="Swap Crypto"
+          message="Your swap was successful"
           onClose={() => {
             setIsSuccessModal(false);
             fetchUser();

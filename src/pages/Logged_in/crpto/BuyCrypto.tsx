@@ -62,7 +62,6 @@ const BuyCrypto = () => {
   const [loadingData, setLoadingData] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [quotePrice, setQuotePrice] = useState<string>("");
-  // const [countdown, setCountdown] = useState(0);
   const [quoteId, setQuoteId] = useState<string>("");
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [openPinModal, setOpenPinModal] = useState(false);
@@ -97,6 +96,7 @@ const BuyCrypto = () => {
     "trx",
     "ton",
   ];
+  
   const userSubAccountId = useUserStore(
     (state) => state.user?.userSubAccountId
   );
@@ -322,6 +322,7 @@ const BuyCrypto = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    stopCountdown();
     // Only allow numbers and decimal
     if (/^\d*\.?\d*$/.test(value)) {
       setAmount(value);
@@ -479,7 +480,10 @@ const BuyCrypto = () => {
                           value={amount}
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          onFocus={handleFocus}
+                          onFocus={() => {
+                            stopCountdown();
+                            handleFocus();
+                          }}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") {
                               handleBlur();
