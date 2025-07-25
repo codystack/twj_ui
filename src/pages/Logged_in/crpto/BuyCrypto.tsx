@@ -70,11 +70,11 @@ const BuyCrypto = () => {
     // loading,
     // error
   } = useUserStore();
-  
+
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-  
+
   const numericAmount = parseFloat(amount);
-  
+
   const currencyIcons: Record<string, string> = {
     btc,
     eth,
@@ -143,51 +143,20 @@ const BuyCrypto = () => {
     }
   }, [wallets]);
 
+  useEffect(() => {
+    const allReady =
+      quoteId &&
+      // userId &&
+      selectedCoin?.value &&
+      numericAmount &&
+      numericAmount > 0;
 
-   useEffect(() => {
-      const allReady =
-        quoteId &&
-        // userId &&
-        selectedCoin?.value &&
-        numericAmount &&
-        numericAmount > 0;
-  
-      if (allReady) {
-        startCountdown(60); 
-      }
-    }, [quoteId, selectedCoin, numericAmount]);
-
-  // const startCountdown = (duration: number = 15) => {
-  //   setCountdown(duration);
-
-  //   const interval = setInterval(() => {
-  //     setCountdown((prev) => {
-  //       if (prev <= 1) {
-  //         clearInterval(interval);
-  //         return 0;
-  //       }
-  //       return prev - 1;
-  //     });
-  //   }, 1000);
-  // };
-
-  // const startCountdown = (duration: number = 13) => {
-  //   setCountdown(duration);
-
-  //   const interval = setInterval(() => {
-  //     setCountdown((prev) => {
-  //       if (prev <= 1) {
-  //         clearInterval(interval);
-  //         refreshSwapQuotation();
-  //         return 0;
-  //       }
-  //       return prev - 1;
-  //     });
-  //   }, 1000);
-  // };
+    if (allReady) {
+      startCountdown(60);
+    }
+  }, [quoteId, selectedCoin, numericAmount]);
 
   const balance = user?.accountBalance ?? 0;
-
 
   const handleBlur = async () => {
     setError("");
@@ -231,68 +200,6 @@ const BuyCrypto = () => {
       setLoadingData(false);
     }
   };
-
-  // const buyCrypto = async () => {
-  //   setError("");
-  //   setIsInputFocused(false);
-
-  //   if (!amount || isNaN(numericAmount)) {
-  //     setError("Amount is required.");
-  //     return;
-  //   }
-
-  //   if (numericAmount > balance) {
-  //     setError("Insufficient wallet balance.");
-  //     return;
-  //   }
-
-  //   if (numericAmount <= 999) {
-  //     setError("Amount must be atleast NGN1000");
-  //     return;
-  //   }
-
-  //   try {
-  //     setLoadingData(true);
-  //     const res = await api.post("/Crypto/buyCrypto", {
-  //       amount: numericAmount,
-  //       quotationId: quoteId,
-  //     });
-  //     const response = res?.data;
-
-  //     return response;
-  //   } catch (err) {
-  //     setError("Failed to submit amount.");
-  //     console.error(err);
-  //   } finally {
-  //     setLoadingData(false);
-  //   }
-  // };
-
-  // const refreshSwapQuotation = async () => {
-  //   if (!quoteId || !selectedCoin?.value || !numericAmount) return;
-
-  //   try {
-  //     const res = await api.post(
-  //       `/Crypto/refreshSwapQuotation?quotationId=${quoteId}&userId=me`,
-  //       {
-  //         fromCurrency: "ngn",
-  //         toCurrency: selectedCoin.value,
-  //         fromAmount: numericAmount,
-  //       }
-  //     );
-
-  //     const refreshedData = res?.data?.data;
-
-  //     setToAmount(refreshedData?.toAmount);
-  //     setCurrency(refreshedData?.toCurrency);
-  //     setQuotePrice(refreshedData?.quotedPrice);
-
-  //     startCountdown(13);
-  //   } catch (err) {
-  //     console.error("Failed to refresh quotation:", err);
-  //     setError("Failed to refresh quotation.");
-  //   }
-  // };
 
   const { countdown, isLoading, startCountdown, stopCountdown } =
     useAutoRefreshSwap({

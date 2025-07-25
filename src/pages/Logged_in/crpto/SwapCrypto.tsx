@@ -251,7 +251,7 @@ const SwapCrypto = () => {
         }
       );
       const response = res?.data;
-      console.log("Swap response:", response?.data);
+      // console.log("Swap response:", response?.data);
       setToAmount(response?.data?.toAmount);
       setCurrency(response?.data?.toCurrency);
       // setQuotePrice(response?.data?.quotedPrice);
