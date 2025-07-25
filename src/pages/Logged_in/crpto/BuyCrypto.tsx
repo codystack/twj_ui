@@ -19,7 +19,7 @@ import trx from "../../../assets/crpto_icons/wallet_icons/Tron.svg";
 import ton from "../../../assets/crpto_icons/wallet_icons/ton_coin.svg";
 import { useUserStore } from "../../../store/useUserStore";
 import api from "../../../services/api.ts";
-import useAutoRefreshSwap from "./count/useAutoRefreshSwap.tsx";
+import useAutoRefreshSwap from "./count_hooks/useAutoRefreshSwap.tsx";
 import PinModal from "../Logged_in_components/someUtilityComponent/PinModal.tsx";
 import SuccessModal from "../SuccessModal.tsx";
 
@@ -316,9 +316,9 @@ const BuyCrypto = () => {
       })();
     });
 
-    useEffect(() => {
-  stopCountdown(); 
-}, [selectedCoin]);
+  useEffect(() => {
+    stopCountdown();
+  }, [selectedCoin]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
