@@ -23,6 +23,8 @@ const useAutoRefreshSwap = ({
   const [countdown, setCountdown] = useState<number>(0);
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [callCount, setCallCount] = useState(0);
+
 
   const refreshSwapQuotation = async () => {
     if (!quoteId || !selectedCoin?.value || !numericAmount) return;
@@ -61,24 +63,49 @@ const useAutoRefreshSwap = ({
 };
 
 
-  const startCountdown = (seconds: number) => {
-    if (countdownRef.current) {
-      clearInterval(countdownRef.current);
-    }
+  // const startCountdown = (seconds: number) => {
+  //   if (countdownRef.current) {
+  //     clearInterval(countdownRef.current);
+  //   }
 
-    setCountdown(seconds);
+  //   setCountdown(seconds);
 
-    countdownRef.current = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(countdownRef.current!);
-          refreshSwapQuotation();
-          return 0;
+  //   countdownRef.current = setInterval(() => {
+  //     setCountdown((prev) => {
+  //       if (prev <= 1) {
+  //         clearInterval(countdownRef.current!);
+  //         refreshSwapQuotation();
+  //         return 0;
+  //       }
+  //       return prev - 1;
+  //     });
+  //   }, 1000);
+  // };
+
+const startCountdown = (seconds: number) => {
+  if (countdownRef.current) {
+    clearInterval(countdownRef.current);
+  }
+
+  setCountdown(seconds);
+
+  countdownRef.current = setInterval(() => {
+    setCountdown((prev) => {
+      if (prev <= 1) {
+        clearInterval(countdownRef.current!);
+        
+        if (callCount < 3) {
+          setCallCount((prevCount) => prevCount + 1);
+          refreshSwapQuotation(); // trigger the next call
         }
-        return prev - 1;
-      });
-    }, 1000);
-  };
+
+        return 0;
+      }
+      return prev - 1;
+    });
+  }, 1000);
+};
+
 
   useEffect(() => {
     return () => {
