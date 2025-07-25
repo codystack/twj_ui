@@ -19,8 +19,9 @@ import trx from "../../../assets/crpto_icons/wallet_icons/Tron.svg";
 import ton from "../../../assets/crpto_icons/wallet_icons/ton_coin.svg";
 import { useUserStore } from "../../../store/useUserStore";
 import api from "../../../services/api.ts";
-import useAutoRefreshSwap from "./count/useAutoRefreshSwap.tsx";
+import useAutoRefreshSwap from "./count_hooks/useAutoRefreshSwap.tsx";
 import PinModal from "../Logged_in_components/someUtilityComponent/PinModal.tsx";
+import SuccessModal from "../SuccessModal.tsx";
 
 export type Optiontype = {
   id: string;
@@ -61,7 +62,6 @@ const BuyCrypto = () => {
   const [loadingData, setLoadingData] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [quotePrice, setQuotePrice] = useState<string>("");
-  // const [countdown, setCountdown] = useState(0);
   const [quoteId, setQuoteId] = useState<string>("");
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [openPinModal, setOpenPinModal] = useState(false);
@@ -96,6 +96,7 @@ const BuyCrypto = () => {
     "trx",
     "ton",
   ];
+  
   const userSubAccountId = useUserStore(
     (state) => state.user?.userSubAccountId
   );
@@ -252,8 +253,6 @@ const BuyCrypto = () => {
   //   }
   // };
 
-  
-
   // const refreshSwapQuotation = async () => {
   //   if (!quoteId || !selectedCoin?.value || !numericAmount) return;
 
@@ -280,20 +279,20 @@ const BuyCrypto = () => {
   //   }
   // };
 
-  const { countdown, isLoading, startCountdown } = useAutoRefreshSwap({
-    quoteId,
-    selectedCoin,
-    numericAmount,
-    setToAmount,
-    setCurrency,
-    setQuotePrice,
-    setError,
-  });
+  const { countdown, isLoading, startCountdown, stopCountdown } =
+    useAutoRefreshSwap({
+      quoteId,
+      selectedCoin,
+      numericAmount,
+      setToAmount,
+      setCurrency,
+      setQuotePrice,
+      setError,
+    });
 
   const onVerify = () =>
     new Promise<void>((resolve, reject) => {
       (async () => {
-        
         try {
           const res = await api.post("/Crypto/buyCrypto", {
             amount: numericAmount,
@@ -317,8 +316,13 @@ const BuyCrypto = () => {
       })();
     });
 
+  useEffect(() => {
+    stopCountdown();
+  }, [selectedCoin]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    stopCountdown();
     // Only allow numbers and decimal
     if (/^\d*\.?\d*$/.test(value)) {
       setAmount(value);
@@ -334,6 +338,19 @@ const BuyCrypto = () => {
       {openPinModal && (
         <PinModal onVerify={onVerify} onClose={() => setOpenPinModal(false)} />
       )}
+
+      {/* Success Modal */}
+      {isSuccessModal && (
+        <SuccessModal
+          title="Buy Crypto"
+          message="Your purchase was successful"
+          onClose={() => {
+            setIsSuccessModal(false);
+            fetchUser();
+          }}
+        />
+      )}
+
       <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
         <div className="flex-1 overflow-y-auto p-4 ">
           <div className="flex justify-center items-center">
@@ -463,7 +480,10 @@ const BuyCrypto = () => {
                           value={amount}
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          onFocus={handleFocus}
+                          onFocus={() => {
+                            stopCountdown();
+                            handleFocus();
+                          }}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") {
                               handleBlur();

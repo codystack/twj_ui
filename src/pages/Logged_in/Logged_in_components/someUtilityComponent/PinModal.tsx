@@ -105,7 +105,7 @@ const PinModal = ({
     <>
       <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-20">
         <div className="p-[0.8rem] rounded-[20px] bg-[#fff]/20">
-          <div className="bg-white sm:w-[600px] w-[100vw] sm:h-auto h-[100vh] sm:rounded-[10px]">
+          <div className="bg-white sm:w-[600px] w-[100vw] z-50 sm:h-auto h-[100vh] sm:rounded-[10px]">
             <div className="flex flex-row-reverse">
               <button
                 className="px-4 py-2 mr-[5px] cursor-pointer mt-[1rem]"
