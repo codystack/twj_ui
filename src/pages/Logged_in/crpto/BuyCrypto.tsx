@@ -330,12 +330,12 @@ const BuyCrypto = () => {
                 <div className=" mt-[1rem] ml-[2rem]">
                   {countdown > 0 && (
                     <div className="flex justify-center items-center">
-                      <div className="flex justify-center w-[60%] items-center px-5 py-2 mt-4 rounded-[10px] bg-[#FBEEFF]">
+                      <div className="flex justify-center w-[70%] items-center px-5 py-2 mt-4 rounded-[10px] bg-[#FBEEFF]">
                         <div className="flex items-center gap-3 justify-center">
                           <img src={warning} alt="" />
                           <p className="leading-[0.9rem] text-[#8003A9] text-left text-[13px]">
                             0:{countdown < 10 ? `0${countdown}` : countdown}{" "}
-                            left to complete your transaction
+                            seconds left to complete your transaction
                           </p>
                         </div>
                       </div>
@@ -347,10 +347,13 @@ const BuyCrypto = () => {
                         Select Cryptocurrency
                       </p>
                       <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
-                        <p className="w-full text-[16px] font-medium">
-                          {selectedCoin.label}
-                        </p>
-
+                        {loading ? (
+                          <div className="w-5 h-5 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
+                        ) : (
+                          <p className="w-full text-[16px] font-medium">
+                            {selectedCoin.label}
+                          </p>
+                        )}
                         <div className="w-full flex">
                           <div className="ml-auto w-auto">
                             <CustomSelect
@@ -410,7 +413,7 @@ const BuyCrypto = () => {
                             alt="NGN flag"
                             className="w-4 h-4 rounded-sm"
                           />
-                          <span className="text-[13px] font-medium pr-2 ">
+                          <span className="text-[13px] font-medium pr-4 ">
                             NGN
                           </span>
                         </div>
