@@ -82,17 +82,23 @@ const SwapCrypto = () => {
   //   console.log("Selected value:", originalValue);
   // }, [selectedCoin]);
 
-  const { countdown, startCountdown, stopCountdown, isLoading } =
-    useAutoRefreshSellSwap({
-      quoteId,
-      userId: user?.userSubAccountId,
-      selectedCoin,
-      numericAmount,
-      setToAmount,
-      setCurrency,
-      // setQuotePrice,
-      setError,
-    });
+  const {
+    countdown,
+    startCountdown,
+    pauseCountdown,
+    stopCountdown,
+    isLoading,
+    resumeCountdown,
+  } = useAutoRefreshSellSwap({
+    quoteId,
+    userId: user?.userSubAccountId,
+    selectedCoin,
+    numericAmount,
+    setToAmount,
+    setCurrency,
+    // setQuotePrice,
+    setError,
+  });
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -202,6 +208,7 @@ const SwapCrypto = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputError("");
+    pauseCountdown();
 
     // Allow only numbers or decimals
     if (!/^\d*\.?\d*$/.test(newValue)) return;
@@ -257,6 +264,7 @@ const SwapCrypto = () => {
       // setQuotePrice(response?.data?.quotedPrice);
       setQuoteId(response?.data?.id);
 
+      resumeCountdown();
       startCountdown(60);
     } catch (err) {
       setError("Failed to submit amount.");
@@ -285,19 +293,22 @@ const SwapCrypto = () => {
             quotationId: quoteId,
           });
 
-          // if (!res.data.isSuccessful) {
-          //   throw new Error(
-          //     res.data.message || "An error occurred"
-          //   );
-          // }
-
           if (res.data.statusCode !== "OK") {
             throw new Error(res.data.message || "An error occurred");
           }
           setIsSuccessModal(true);
+          setToAmount("");
+          setCurrency("");
+          setQuoteId("");
+          setSelectedCoin(options[0]);
+          stopCountdown();
+          setIsSuccessModal(true);
+
           resolve();
         } catch (e) {
           reject(e);
+        } finally {
+          stopCountdown();
         }
       })();
     });
@@ -305,7 +316,14 @@ const SwapCrypto = () => {
   return (
     <>
       {openPinModal && (
-        <PinModal onVerify={onVerify} onClose={() => setOpenPinModal(false)} />
+        <PinModal
+          onVerify={onVerify}
+          onClose={() => {
+            stopCountdown();
+            setToAmount("");
+            setOpenPinModal(false);
+          }}
+        />
       )}
 
       {/* Success Modal */}
@@ -314,6 +332,12 @@ const SwapCrypto = () => {
           title="Swap Crypto"
           message="Your swap was successful"
           onClose={() => {
+            stopCountdown();
+            setToAmount("");
+            setCurrency("");
+            setQuoteId("");
+            setSelectedCoin(options[0]);
+            setEditedValue("");
             setIsSuccessModal(false);
             fetchUser();
           }}
@@ -342,7 +366,7 @@ const SwapCrypto = () => {
                       : wallets.map((wallet, index) => (
                           <div
                             key={index}
-                            className="flex items-center justify-between p-4 border border-gray-300 rounded-lg"
+                            className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg"
                           >
                             <div className="flex items-center gap-3">
                               <img
@@ -379,130 +403,130 @@ const SwapCrypto = () => {
                         <div className="flex items-center gap-3 justify-center">
                           <img src={warning} alt="" />
                           <p className="leading-[0.9rem] text-[#8003A9] text-left text-[13px]">
-                            0:{countdown < 10 ? `0${countdown}` : countdown} 
-                            seconds to refresh asset rates
+                            0:{countdown < 10 ? `0${countdown}` : countdown}{" "}
+                            left to complete your transaction
                           </p>
                         </div>
                       </div>
                     </div>
                   )}
-                  <div className="relative">
-                    <img
-                      src={swap}
-                      className="absolute top-[9.67rem] z-10 right-[16.25rem]"
-                      alt=""
-                    />
-                    <img
-                      src={empty}
-                      className="absolute top-[8.6rem] right-[15rem]"
-                      alt=""
-                    />
-                    <div className="mt-[1rem] pt-10 px-12 pb-13.5 rounded-2xl bg-[#F5F7FA] ">
-                      <div>
-                        <p className=" pb-1 text-[14px] text-[#000]">
-                          Select Cryptocurrency
-                        </p>
-                        <div
-                          className={`grid grid-cols-2 items-center px-2 py-1 border bg-white ${
-                            inputError ? "border-red-500" : "border-gray-300"
-                          } rounded-lg`}
-                        >
-                          <input
-                            type="text"
-                            value={editedValue}
-                            onChange={handleInputChange}
-                            onBlur={handleBlur}
-                            onFocus={handleFocus}
-                            placeholder={
-                              loading || isLoading ? "Loading" : "0.00"
-                            }
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") {
-                                handleBlur();
+                  <>
+                    <div className="relative w-full">
+                      <img
+                        src={swap}
+                        className="absolute top-[10.1rem] z-10 right-[16.25rem]"
+                        alt=""
+                      />
+                      <img
+                        src={empty}
+                        className="absolute top-[9rem] right-[15rem]"
+                        alt=""
+                      />
+
+                      <div className="mt-[1rem] pt-10 px-12 pb-13.5 rounded-2xl bg-[#F5F7FA] ">
+                        <div>
+                          <p className=" pb-1 text-[14px] text-[#000]">
+                            Select Cryptocurrency
+                          </p>
+                          <div
+                            className={`grid grid-cols-2 items-center px-2 py-1 border bg-white ${
+                              inputError ? "border-red-500" : "border-gray-300"
+                            } rounded-lg`}
+                          >
+                            <input
+                              type="text"
+                              value={editedValue}
+                              onChange={handleInputChange}
+                              onBlur={handleBlur}
+                              onFocus={handleFocus}
+                              placeholder={
+                                loading || isLoading ? "Loading" : "0.00"
                               }
-                            }}
-                            className={`w-full text-[16px] font-medium bg-transparent outline-none  `}
-                          />
-                          <div className="w-full flex">
-                            <div className="ml-auto w-auto">
-                              <CustomSelect
-                                options={selectOptions}
-                                value={selectedCoin}
-                                onChange={(val) => {
-                                  setInputError("");
-                                  setSelectedCoin(val);
-                                  setEditedValue("");
-                                }}
-                                inputWidth="w-auto"
-                                optionsWidth="w-[15rem]"
-                                optionsOffsetX={-90}
-                                px="px-1"
-                                py="py-1"
-                                textSize="text-[15px]"
-                                borderColor="#fff"
-                                backgroundColor="#EAEFF6"
-                                optionsPx="px-1"
-                                optionsPy="py-1"
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  handleBlur();
+                                }
+                              }}
+                              className={`w-full text-[16px] font-medium bg-transparent outline-none  `}
+                            />
+                            <div className="w-full flex">
+                              <div className="ml-auto w-auto">
+                                <CustomSelect
+                                  options={selectOptions}
+                                  value={selectedCoin}
+                                  onChange={(val) => {
+                                    setInputError("");
+                                    setSelectedCoin(val);
+                                    setEditedValue("");
+                                  }}
+                                  inputWidth="w-auto"
+                                  optionsWidth="w-[15rem]"
+                                  optionsOffsetX={-90}
+                                  px="px-1"
+                                  py="py-1"
+                                  textSize="text-[15px]"
+                                  borderColor="#fff"
+                                  backgroundColor="#EAEFF6"
+                                  optionsPx="px-1"
+                                  optionsPy="py-1"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          {inputError && (
+                            <p className="text-red-500 text-sm ">
+                              {inputError}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="mt-[6px] pt-10  px-12 pb-13.5 rounded-2xl bg-[#F5F7FA] ">
+                        <div>
+                          <p className=" pb-1 text-[14px] text-[#000]">
+                            What you'll receive
+                          </p>
+                          <div className="flex items-center w-full border border-gray-300 bg-white rounded-md focus-within:border-2 focus-within:border-gray-300">
+                            {/* Left Section with Flag and NGN */}
+                            <div className="flex items-center mx-1 my-1 gap-1 px-3 py-2 bg-[#EAEFF6] rounded-l-md">
+                              <img
+                                src={NGN}
+                                alt="NGN flag"
+                                className="w-4 h-4 rounded-sm"
                               />
+                              <span className="text-[13px] font-medium pr-2">
+                                NGN
+                              </span>
+                            </div>
+
+                            {/* Input Field */}
+                            <div className="relative w-full">
+                              <input
+                                type="text"
+                                readOnly
+                                value={
+                                  loadingData || error
+                                    ? ""
+                                    : toAmount
+                                    ? `${toAmount} ${currency.toUpperCase()}`
+                                    : "0.00"
+                                }
+                                placeholder={
+                                  loadingData ? "Loading..." : "50,000"
+                                }
+                                className="w-full px-1 py-3 text-[15px] outline-none bg-white rounded-r-md text-sm pr-8"
+                              />
+
+                              {loadingData && (
+                                <div className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
+                              )}
                             </div>
                           </div>
                         </div>
-                        {inputError && (
-                          <p className="text-red-500 text-sm ">{inputError}</p>
-                        )}
                       </div>
+                      {error && (
+                        <p className="text-red-500 text-sm mt-2">{error}</p>
+                      )}
                     </div>
-                    <div className="mt-[6px] pt-10  px-12 pb-13.5 rounded-2xl bg-[#F5F7FA] ">
-                      <div>
-                        <p className=" pb-1 text-[14px] text-[#000]">
-                          What you'll receive
-                        </p>
-                        <div className="flex items-center w-full border border-gray-300 bg-white rounded-md focus-within:border-2 focus-within:border-gray-300">
-                          {/* Left Section with Flag and NGN */}
-                          <div className="flex items-center mx-1 my-1 gap-1 px-3 py-2 bg-[#EAEFF6] rounded-l-md">
-                            <img
-                              src={NGN}
-                              alt="NGN flag"
-                              className="w-4 h-4 rounded-sm"
-                            />
-                            <span className="text-[13px] font-medium">NGN</span>
-                          </div>
-
-                          {/* Input Field */}
-                          <div className="relative w-full">
-                            <input
-                              type="text"
-                              readOnly
-                              // value={
-                              //   loadingData || error
-                              //     ? ""
-                              //     : toAmount
-                              //     ? `${toAmount} ${currency.toUpperCase()}`
-                              //     : "0.00"
-                              // }
-                              value={
-                                loadingData || error
-                                  ? ""
-                                  : toAmount
-                                  ? `${toAmount} ${currency.toUpperCase()}`
-                                  : "0.00"
-                              }
-                              placeholder={
-                                loadingData ? "Loading..." : "50,000"
-                              }
-                              className="w-full px-1 py-2 outline-none bg-white rounded-r-md text-sm pr-8"
-                            />
-
-                            {loadingData && (
-                              <div className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {error && (
-                      <p className="text-red-500 text-sm mt-2">{error}</p>
-                    )}
 
                     <div className="w-full flex mt-7 justify-end">
                       <div className="flex items-center gap-3">
@@ -522,7 +546,7 @@ const SwapCrypto = () => {
                         </button>
                       </div>
                     </div>
-                  </div>
+                  </>
                 </div>
               </div>
             </div>

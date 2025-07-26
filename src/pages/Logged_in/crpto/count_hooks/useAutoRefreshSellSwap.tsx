@@ -20,13 +20,14 @@ const useAutoRefreshSellSwap = ({
 }) => {
   const [countdown, setCountdown] = useState<number>(0);
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const refreshIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
-    null
-  );
+  const refreshIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const refreshCountRef = useRef<number>(0);
+  const countdownPausedRef = useRef<boolean>(false); // ✅ new ref
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const refreshSellSwapQuotation = async () => {
     if (!quoteId || !selectedCoin?.value || !numericAmount || !userId) return;
+    if (countdownPausedRef.current) return; // ✅ prevent refresh if paused
 
     try {
       setIsLoading(true);
@@ -40,7 +41,6 @@ const useAutoRefreshSellSwap = ({
       );
 
       const refreshedData = res?.data?.data;
-
       setToAmount(refreshedData?.data?.to_amount);
       setCurrency(refreshedData?.data?.to_currency);
     } catch (err) {
@@ -62,37 +62,26 @@ const useAutoRefreshSellSwap = ({
       refreshIntervalRef.current = null;
     }
 
+    refreshCountRef.current = 0;
+    countdownPausedRef.current = false; // ✅ reset pause state
     setCountdown(0);
   };
 
-  //   const startCountdown = (seconds: number) => {
-  //     stopCountdown(); // Clear any existing intervals
+  const pauseCountdown = () => {
+    countdownPausedRef.current = true;
+  };
 
-  //     setCountdown(seconds);
-
-  //     // Countdown timer (decrements every second)
-  //     countdownRef.current = setInterval(() => {
-  //       setCountdown((prev) => {
-  //         if (prev <= 1) {
-  //           stopCountdown(); // Stop both countdown and refresh
-  //           return 0;
-  //         }
-  //         return prev - 1;
-  //       });
-  //     }, 1000);
-
-  //     // Auto-refresh every 7 seconds
-  //     refreshIntervalRef.current = setInterval(() => {
-  //       refreshSellSwapQuotation();
-  //     }, 7000);
-  //   };
+  const resumeCountdown = () => {
+    countdownPausedRef.current = false;
+  };
 
   const startCountdown = (seconds: number) => {
     stopCountdown();
-
     setCountdown(seconds);
+    refreshCountRef.current = 0;
+    countdownPausedRef.current = false;
 
-    // Countdown
+    // Countdown display logic
     countdownRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -103,7 +92,15 @@ const useAutoRefreshSellSwap = ({
       });
     }, 1000);
 
+    // Refresh logic (every 7s, up to 8 times)
     refreshIntervalRef.current = setInterval(() => {
+      if (countdownPausedRef.current) return;
+      if (refreshCountRef.current >= 8) {
+        stopCountdown();
+        return;
+      }
+
+      refreshCountRef.current += 1;
       refreshSellSwapQuotation();
     }, 7000);
   };
@@ -118,6 +115,8 @@ const useAutoRefreshSellSwap = ({
     countdown,
     startCountdown,
     stopCountdown,
+    pauseCountdown,
+    resumeCountdown,
     isLoading,
   };
 };
