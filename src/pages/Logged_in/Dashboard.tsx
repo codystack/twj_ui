@@ -162,8 +162,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchBanks();
-    // fetchUser();
-    // console.log(textToCopy);
     const timeout = setTimeout(() => {
       if (!isKycComplete && location.pathname === "/dashboard") {
         setShowKycModal(true);
@@ -193,6 +191,16 @@ const Dashboard = () => {
     Object.values(errors).some((error) => error) ||
     !formData.amount ||
     !formData.bank;
+
+  // dashboard balance
+  const formattedBalance = !isHidden
+    ? user?.accountBalance?.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+    : null;
+
+  const [whole, fraction] = formattedBalance?.split(".") || [];
 
   return (
     <>
@@ -429,7 +437,7 @@ const Dashboard = () => {
                         <span className=" mb-[8px] mr-[-5px] text-[16px]">
                           {isHidden ? "" : " ₦"}
                         </span>
-                        <p className="sm:text-[32px] text-[30px] font-semibold">
+                        {/* <p className="sm:text-[32px] text-[30px] font-semibold">
                           {isHidden
                             ? "*******"
                             : user?.accountBalance?.toLocaleString()}
@@ -437,7 +445,23 @@ const Dashboard = () => {
 
                         <span className="text-[16px] mt-[12px] ml-[-7px] ">
                           {isHidden ? "" : ".00"}
-                        </span>
+                        </span> */}
+
+                        {!isHidden ? (
+                          <>
+                            <p className="sm:text-[32px] text-[30px] font-semibold inline">
+                              {whole}
+                            </p>
+
+                            <span className="text-[16px] mt-[12px] ml-[-7px]">
+                              .{fraction || "00"}
+                            </span>
+                          </>
+                        ) : (
+                          <p className="sm:text-[32px] text-[30px] font-semibold">
+                            *******
+                          </p>
+                        )}
                         <button
                           onClick={toggleVisibility}
                           className=" ml-[2px] cursor-pointer "

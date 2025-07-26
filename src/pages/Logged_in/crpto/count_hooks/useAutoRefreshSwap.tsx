@@ -20,8 +20,10 @@ import api from "../../../../services/api";
 // }) => {
 //   const [countdown, setCountdown] = useState<number>(0);
 //   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+//   const refreshIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
+//     null
+//   );
 //   const [isLoading, setIsLoading] = useState<boolean>(false);
-//   const [callCount, setCallCount] = useState(0);
 
 //   const refreshSwapQuotation = async () => {
 //     if (!quoteId || !selectedCoin?.value || !numericAmount) return;
@@ -38,14 +40,13 @@ import api from "../../../../services/api";
 //       );
 
 //       const refreshedData = res?.data?.data;
-
 //       setToAmount(refreshedData?.data?.to_amount);
 //       setCurrency(refreshedData?.data?.to_currency);
 //       setQuotePrice(refreshedData?.data?.quoted_price);
-//       startCountdown(13);
 //     } catch (err) {
-//       console.error("Failed to refresh quotation:", err);
-//       setError("Failed to refresh quotation.");
+//       // console.error("Failed to refresh quotation:", err);
+//       setError("network error, please try again in a few mins");
+//       return err
 //     } finally {
 //       setIsLoading(false);
 //     }
@@ -56,57 +57,40 @@ import api from "../../../../services/api";
 //       clearInterval(countdownRef.current);
 //       countdownRef.current = null;
 //     }
+
+//     if (refreshIntervalRef.current) {
+//       clearInterval(refreshIntervalRef.current);
+//       refreshIntervalRef.current = null;
+//     }
+
 //     setCountdown(0);
 //   };
 
-//   // const startCountdown = (seconds: number) => {
-//   //   if (countdownRef.current) {
-//   //     clearInterval(countdownRef.current);
-//   //   }
+//   const startCountdown = (totalSeconds: number) => {
+//     stopCountdown(); // clear existing intervals
 
-//   //   setCountdown(seconds);
+//     setCountdown(totalSeconds);
 
-//   //   countdownRef.current = setInterval(() => {
-//   //     setCountdown((prev) => {
-//   //       if (prev <= 1) {
-//   //         clearInterval(countdownRef.current!);
-//   //         refreshSwapQuotation();
-//   //         return 0;
-//   //       }
-//   //       return prev - 1;
-//   //     });
-//   //   }, 1000);
-//   // };
-
-//   const startCountdown = (seconds: number) => {
-//     if (countdownRef.current) {
-//       clearInterval(countdownRef.current);
-//     }
-
-//     setCountdown(seconds);
-
+//     // countdown timer
 //     countdownRef.current = setInterval(() => {
 //       setCountdown((prev) => {
 //         if (prev <= 1) {
-//           clearInterval(countdownRef.current!);
-
-//           if (callCount < 3) {
-//             setCallCount((prevCount) => prevCount + 1);
-//             refreshSwapQuotation();
-//           }
-
+//           stopCountdown();
 //           return 0;
 //         }
 //         return prev - 1;
 //       });
 //     }, 1000);
+
+//     // refresh quotation every 7 seconds
+//     refreshIntervalRef.current = setInterval(() => {
+//       refreshSwapQuotation();
+//     }, 7000);
 //   };
 
 //   useEffect(() => {
 //     return () => {
-//       if (countdownRef.current) {
-//         clearInterval(countdownRef.current);
-//       }
+//       stopCountdown();
 //     };
 //   }, []);
 
@@ -142,6 +126,7 @@ const useAutoRefreshSwap = ({
   const refreshIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
     null
   );
+  const refreshCountRef = useRef<number>(0); // Track how many times refresh has run
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const refreshSwapQuotation = async () => {
@@ -163,8 +148,8 @@ const useAutoRefreshSwap = ({
       setCurrency(refreshedData?.data?.to_currency);
       setQuotePrice(refreshedData?.data?.quoted_price);
     } catch (err) {
-      console.error("Failed to refresh quotation:", err);
-      setError("Failed to refresh quotation.");
+      setError("Network error, please try again in a few mins");
+      return err;
     } finally {
       setIsLoading(false);
     }
@@ -181,15 +166,16 @@ const useAutoRefreshSwap = ({
       refreshIntervalRef.current = null;
     }
 
+    refreshCountRef.current = 0;
     setCountdown(0);
   };
 
   const startCountdown = (totalSeconds: number) => {
-    stopCountdown(); // clear existing intervals
-
+    stopCountdown();
     setCountdown(totalSeconds);
+    refreshCountRef.current = 0;
 
-    // countdown timer
+    // ⏱ Countdown timer
     countdownRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -200,8 +186,14 @@ const useAutoRefreshSwap = ({
       });
     }, 1000);
 
-    // refresh quotation every 7 seconds
+    // Refresh every 7 seconds (max 8 times)
     refreshIntervalRef.current = setInterval(() => {
+      if (refreshCountRef.current >= 8) {
+        stopCountdown();
+        return;
+      }
+
+      refreshCountRef.current += 1;
       refreshSwapQuotation();
     }, 7000);
   };
