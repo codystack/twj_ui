@@ -163,7 +163,7 @@ const BuyCrypto = () => {
     setIsInputFocused(false);
 
     if (!amount || isNaN(numericAmount)) {
-      setError("Amount is required.");
+      // setError("Amount is required.");
       return;
     }
 

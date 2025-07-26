@@ -226,12 +226,12 @@ const SwapCrypto = () => {
     setIsInputFocused(false);
 
     if (!editedValue) {
-      setError("Amount is required.");
+      // setError("Amount is required.");
       return;
     }
 
     if (numericAmount > originalValue) {
-      setError("Insufficient wallet balance.");
+      // setError("Insufficient wallet balance.");
       return;
     }
 
