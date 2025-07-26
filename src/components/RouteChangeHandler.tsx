@@ -611,7 +611,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   const isBvnOrNinValid =
     (bvn.trim() !== "" && !errors.bvn) || (nin.trim() !== "" && !errors.nin);
 
-  // 🔒 Final check
+  //Final check
   const isFormInvalidForNextButton =
     isAnyRequiredFieldEmpty || !isBvnOrNinValid || hasAnyFieldError;
 
@@ -1008,7 +1008,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                           )}
                         </div>
 
-                        <p className="text-[#0A2E65]/60 pb-[1px] pl-[5px] text-[15px] text-left  mt-[10px] ">
+                        {/* <p className="text-[#0A2E65]/60 pb-[1px] pl-[5px] text-[15px] text-left  mt-[10px] ">
                           Middle Name
                         </p>
                         <div className="w-full">
@@ -1032,7 +1032,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                               {errors.middleName}
                             </p>
                           )}
-                        </div>
+                        </div> */}
 
                         <p className="text-[#0A2E65]/60 pb-[1px] pl-[5px] text-[15px] text-left  mt-[10px] ">
                           Last Name

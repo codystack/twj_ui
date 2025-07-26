@@ -485,7 +485,7 @@ const SwapCrypto = () => {
                           <p className=" pb-1 text-[14px] text-[#000]">
                             What you'll receive
                           </p>
-                          <div className="flex items-center w-full border border-gray-300 bg-white rounded-md focus-within:border-2 focus-within:border-gray-300">
+                          <div className="flex items-center w-full border border-gray-300 bg-white rounded-md  focus-within:border-gray-300">
                             {/* Left Section with Flag and NGN */}
                             <div className="flex items-center mx-1 my-1 gap-1 px-3 py-2 bg-[#EAEFF6] rounded-l-md">
                               <img
