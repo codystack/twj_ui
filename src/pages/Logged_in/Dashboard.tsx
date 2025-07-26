@@ -30,8 +30,6 @@ import { useGiftCardStore } from "../../store/useGiftCardStore";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-
-
 const customStyles = {
   control: (provided: any, state: any) => ({
     ...provided,
@@ -45,7 +43,7 @@ const customStyles = {
       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
     },
   }),
- 
+
   option: (provided: any, state: any) => ({
     ...provided,
     cursor: "pointer",
@@ -68,7 +66,7 @@ const Dashboard = () => {
   const [showKycModal, setShowKycModal] = useState(false);
   const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
   const [showTopupModal, setShowTopupModal] = useState(false);
-  const { user, fetchUser } = useUserStore();
+  const { user, loading, fetchUser } = useUserStore();
   const { bankList, fetchBanks } = useBankStore();
   const [copied, setCopied] = useState(false);
   const [formData, setFormData] = useState({
@@ -98,7 +96,7 @@ const Dashboard = () => {
     setIsHidden((prev) => !prev);
   };
 
-  const isKycComplete = useUserStore((state) => state.user?.kycSet);
+  const isKycComplete = useUserStore((state) => state?.user?.kycSet);
 
   const openModal = () => {
     const completeKyc = localStorage.getItem("kycComplete");
@@ -164,7 +162,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchBanks();
-    fetchUser();
+    // fetchUser();
     // console.log(textToCopy);
     const timeout = setTimeout(() => {
       if (!isKycComplete && location.pathname === "/dashboard") {
@@ -174,6 +172,22 @@ const Dashboard = () => {
 
     return () => clearTimeout(timeout);
   }, [location.pathname]);
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    if (!loading && user !== null) {
+      // console.log("value of kycSet:", user.kycSet);
+
+      if (user.kycSet === false) {
+        setShowKycModal(true);
+      } else {
+        setShowKycModal(false);
+      }
+    }
+  }, [loading, user]);
 
   const isFormInvalid =
     Object.values(errors).some((error) => error) ||
