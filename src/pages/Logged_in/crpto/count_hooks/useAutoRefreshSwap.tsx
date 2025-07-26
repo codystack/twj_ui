@@ -103,7 +103,6 @@ import api from "../../../../services/api";
 // };
 
 // export default useAutoRefreshSwap;
-
 const useAutoRefreshSwap = ({
   quoteId,
   selectedCoin,
@@ -126,7 +125,9 @@ const useAutoRefreshSwap = ({
   const refreshIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
     null
   );
-  const refreshCountRef = useRef<number>(0); // Track how many times refresh has run
+  const refreshCountRef = useRef<number>(0);
+  const countdownPausedRef = useRef<boolean>(false); // ✅
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const refreshSwapQuotation = async () => {
@@ -149,13 +150,12 @@ const useAutoRefreshSwap = ({
       setQuotePrice(refreshedData?.data?.quoted_price);
     } catch (err) {
       setError("Network error, please try again in a few mins");
-      return err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const stopCountdown = () => {
+  const stopCountdown = (pause: boolean = true) => {
     if (countdownRef.current) {
       clearInterval(countdownRef.current);
       countdownRef.current = null;
@@ -166,16 +166,21 @@ const useAutoRefreshSwap = ({
       refreshIntervalRef.current = null;
     }
 
+    if (pause) {
+      countdownPausedRef.current = true; // ✅ prevent accidental restart
+    }
+
     refreshCountRef.current = 0;
     setCountdown(0);
   };
 
   const startCountdown = (totalSeconds: number) => {
-    stopCountdown();
+    if (countdownPausedRef.current) return; // ❌ paused? do nothing
+
+    stopCountdown(false); // ✅ stop without pausing
     setCountdown(totalSeconds);
     refreshCountRef.current = 0;
 
-    // ⏱ Countdown timer
     countdownRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -186,7 +191,6 @@ const useAutoRefreshSwap = ({
       });
     }, 1000);
 
-    // Refresh every 7 seconds (max 8 times)
     refreshIntervalRef.current = setInterval(() => {
       if (refreshCountRef.current >= 8) {
         stopCountdown();
@@ -204,11 +208,16 @@ const useAutoRefreshSwap = ({
     };
   }, []);
 
+  const resumeCountdown = () => {
+    countdownPausedRef.current = false;
+  };
+
   return {
     countdown,
     startCountdown,
     isLoading,
     stopCountdown,
+    resumeCountdown,
   };
 };
 

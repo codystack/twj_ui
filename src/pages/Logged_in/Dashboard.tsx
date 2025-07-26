@@ -437,15 +437,6 @@ const Dashboard = () => {
                         <span className=" mb-[8px] mr-[-5px] text-[16px]">
                           {isHidden ? "" : " ₦"}
                         </span>
-                        {/* <p className="sm:text-[32px] text-[30px] font-semibold">
-                          {isHidden
-                            ? "*******"
-                            : user?.accountBalance?.toLocaleString()}
-                        </p>
-
-                        <span className="text-[16px] mt-[12px] ml-[-7px] ">
-                          {isHidden ? "" : ".00"}
-                        </span> */}
 
                         {!isHidden ? (
                           <>

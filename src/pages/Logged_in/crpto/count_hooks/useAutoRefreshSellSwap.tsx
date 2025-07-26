@@ -20,14 +20,14 @@ const useAutoRefreshSellSwap = ({
 }) => {
   const [countdown, setCountdown] = useState<number>(0);
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const refreshIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
-    null
-  );
+  const refreshIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const refreshCountRef = useRef<number>(0);
+  const countdownPausedRef = useRef<boolean>(false); // ✅ new ref
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const refreshSellSwapQuotation = async () => {
     if (!quoteId || !selectedCoin?.value || !numericAmount || !userId) return;
+    if (countdownPausedRef.current) return; // ✅ prevent refresh if paused
 
     try {
       setIsLoading(true);
@@ -41,7 +41,6 @@ const useAutoRefreshSellSwap = ({
       );
 
       const refreshedData = res?.data?.data;
-
       setToAmount(refreshedData?.data?.to_amount);
       setCurrency(refreshedData?.data?.to_currency);
     } catch (err) {
@@ -64,13 +63,23 @@ const useAutoRefreshSellSwap = ({
     }
 
     refreshCountRef.current = 0;
+    countdownPausedRef.current = false; // ✅ reset pause state
     setCountdown(0);
+  };
+
+  const pauseCountdown = () => {
+    countdownPausedRef.current = true;
+  };
+
+  const resumeCountdown = () => {
+    countdownPausedRef.current = false;
   };
 
   const startCountdown = (seconds: number) => {
     stopCountdown();
     setCountdown(seconds);
     refreshCountRef.current = 0;
+    countdownPausedRef.current = false;
 
     // Countdown display logic
     countdownRef.current = setInterval(() => {
@@ -85,6 +94,7 @@ const useAutoRefreshSellSwap = ({
 
     // Refresh logic (every 7s, up to 8 times)
     refreshIntervalRef.current = setInterval(() => {
+      if (countdownPausedRef.current) return;
       if (refreshCountRef.current >= 8) {
         stopCountdown();
         return;
@@ -105,6 +115,8 @@ const useAutoRefreshSellSwap = ({
     countdown,
     startCountdown,
     stopCountdown,
+    pauseCountdown,
+    resumeCountdown,
     isLoading,
   };
 };

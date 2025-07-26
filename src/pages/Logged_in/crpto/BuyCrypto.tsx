@@ -152,6 +152,7 @@ const BuyCrypto = () => {
       numericAmount > 0;
 
     if (allReady) {
+      if (countdown > 0) return;
       startCountdown(60);
     }
   }, [quoteId, selectedCoin, numericAmount]);
@@ -191,7 +192,8 @@ const BuyCrypto = () => {
       setCurrency(response?.data?.toCurrency);
       setQuotePrice(response?.data?.quotedPrice);
       setQuoteId(response?.data?.id);
-
+      resumeCountdown();
+      if (countdown > 0) return;
       startCountdown(60);
     } catch (err) {
       setError("Failed to submit amount.");
@@ -201,7 +203,7 @@ const BuyCrypto = () => {
     }
   };
 
-  const { countdown, isLoading, startCountdown, stopCountdown } =
+  const { countdown, startCountdown, resumeCountdown, stopCountdown } =
     useAutoRefreshSwap({
       quoteId,
       selectedCoin,
@@ -209,6 +211,7 @@ const BuyCrypto = () => {
       setToAmount,
       setCurrency,
       setQuotePrice,
+
       setError,
     });
 
@@ -231,20 +234,27 @@ const BuyCrypto = () => {
             throw new Error(res.data.message || "An error occurred");
           }
           setIsSuccessModal(true);
+          setToAmount("");
+          setAmount("");
+          setCurrency("");
+          setQuoteId("");
+          setQuotePrice("");
+          setSelectedCoin(options[0]);
+          stopCountdown();
+
           resolve();
         } catch (e) {
           reject(e);
+        } finally {
+          stopCountdown();
         }
       })();
     });
 
-  useEffect(() => {
-    stopCountdown();
-  }, [selectedCoin]);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    stopCountdown();
+    setError("");
+
     // Only allow numbers and decimal
     if (/^\d*\.?\d*$/.test(value)) {
       setAmount(value);
@@ -267,6 +277,7 @@ const BuyCrypto = () => {
           title="Buy Crypto"
           message="Your purchase was successful"
           onClose={() => {
+            setShowConfirmation(false);
             setIsSuccessModal(false);
             fetchUser();
           }}
@@ -295,7 +306,7 @@ const BuyCrypto = () => {
                       : wallets.map((wallet, index) => (
                           <div
                             key={index}
-                            className="flex items-center justify-between p-4 border border-gray-300 rounded-lg"
+                            className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg"
                           >
                             <div className="flex items-center gap-3">
                               <img
@@ -324,7 +335,7 @@ const BuyCrypto = () => {
                           <img src={warning} alt="" />
                           <p className="leading-[0.9rem] text-[#8003A9] text-left text-[13px]">
                             0:{countdown < 10 ? `0${countdown}` : countdown}{" "}
-                            seconds to refresh asset rates
+                            left to complete your transaction
                           </p>
                         </div>
                       </div>
@@ -345,7 +356,15 @@ const BuyCrypto = () => {
                             <CustomSelect
                               options={selectOptions}
                               value={selectedCoin}
-                              onChange={(val) => setSelectedCoin(val)}
+                              onChange={(val) => {
+                                setError("");
+                                setToAmount("");
+                                setAmount("");
+                                setCurrency("");
+                                setQuoteId("");
+                                setSelectedCoin(val);
+                                stopCountdown();
+                              }}
                               inputWidth="w-auto"
                               optionsWidth="w-[15rem]"
                               optionsOffsetX={-90}
@@ -391,7 +410,9 @@ const BuyCrypto = () => {
                             alt="NGN flag"
                             className="w-4 h-4 rounded-sm"
                           />
-                          <span className="text-[13px] font-medium">NGN</span>
+                          <span className="text-[13px] font-medium pr-2 ">
+                            NGN
+                          </span>
                         </div>
 
                         {/* Input Field */}
@@ -400,7 +421,10 @@ const BuyCrypto = () => {
                           placeholder="50,000"
                           className="w-full px-1 py-3 outline-none bg-white rounded-r-md text-[16px]"
                           value={amount}
-                          onChange={handleChange}
+                          onChange={(e) => {
+                            stopCountdown();
+                            handleChange(e);
+                          }}
                           onBlur={handleBlur}
                           onFocus={() => {
                             stopCountdown();
@@ -540,11 +564,7 @@ const BuyCrypto = () => {
                             Edit Purchase
                           </button>
                           <button
-                            className={`border-[2px]   ${
-                              isLoading
-                                ? "opacity-50 cursor-not-allowed"
-                                : "cursor-pointer"
-                            } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
+                            className={`border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
                             onClick={() => setOpenPinModal(true)}
                           >
                             Create Purchase
