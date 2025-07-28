@@ -114,7 +114,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                   className="w-6 h-6 rounded-full ml-1.5 my-1"
                 />
               )}
-              <span className="font-medium">{selected.label}</span>
+              <span className="font-medium pr-1">{selected.label}</span>
             </div>
             <div className="flex items-center gap-1">
               {selected.displayValue && (
