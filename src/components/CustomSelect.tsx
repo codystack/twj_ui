@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
 type Option = {
@@ -53,6 +53,25 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   const [selected, setSelected] = useState<Option | undefined>(
     value || defaultSelected
   );
+  const [isOpen, setIsOpen] = useState(false);
+  const selectRef = useRef<HTMLDivElement>(null);
+
+  // Close the dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        selectRef.current &&
+        !selectRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Sync internal state with external value
   useEffect(() => {
@@ -61,18 +80,14 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     }
   }, [value]);
 
-  const [isOpen, setIsOpen] = useState(false);
-
   const handleSelect = (option: Option) => {
     setSelected(option);
     setIsOpen(false);
     onChange?.(option);
   };
 
-  
-
   return (
-    <div className="relative">
+    <div className="relative" ref={selectRef}>
       {/* Selected Field */}
       <div
         tabIndex={0}

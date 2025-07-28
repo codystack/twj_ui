@@ -21,6 +21,7 @@ import api from "../../../services/api.ts";
 import useAutoRefreshSwap from "./count_hooks/useAutoRefreshSwap.tsx";
 import PinModal from "../Logged_in_components/someUtilityComponent/PinModal.tsx";
 import SuccessModal from "../SuccessModal.tsx";
+import SendCrypto from "./SendCrypto.tsx";
 
 export type Optiontype = {
   id: string;
@@ -337,12 +338,13 @@ const BuyCrypto = () => {
                             ? "bg-[#fff] text-[#8003A9]"
                             : "bg-transparent text-[#7688B4]"
                         } ${
-                          showConfirmation || loading 
+                          showConfirmation || loading
                             ? "pointer-events-none opacity-50"
                             : ""
                         }`}
                         onClick={() => {
-                          if (!showConfirmation && !loading) setActiveTab("buy");
+                          if (!showConfirmation && !loading)
+                            setActiveTab("buy");
                         }}
                       >
                         Buy
@@ -359,7 +361,8 @@ const BuyCrypto = () => {
                             : ""
                         }`}
                         onClick={() => {
-                          if (!showConfirmation && !loading) setActiveTab("send");
+                          if (!showConfirmation && !loading)
+                            setActiveTab("send");
                         }}
                       >
                         Send
@@ -385,7 +388,176 @@ const BuyCrypto = () => {
                     activeTab === "buy" ? (
                       <>
                         {/* Buy Form UI */}
+                        <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                          Select Cryptocurrency
+                        </p>
+                        <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
+                          {loading ? (
+                            <div className="w-5 h-5 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
+                          ) : (
+                            <p className="w-full text-[16px] font-medium">
+                              {selectedCoin.label}
+                            </p>
+                          )}
+                          <div className="w-full flex">
+                            <div className="ml-auto w-auto">
+                              <CustomSelect
+                                options={selectOptions}
+                                value={selectedCoin}
+                                onChange={(val) => {
+                                  setError("");
+                                  setToAmount("");
+                                  setAmount("");
+                                  setCurrency("");
+                                  setQuoteId("");
+                                  setSelectedCoin(val);
+                                  stopCountdown();
+                                }}
+                                inputWidth="w-auto"
+                                optionsWidth="w-[15rem]"
+                                optionsOffsetX={-90}
+                                px="px-1"
+                                py="py-1"
+                                textSize="text-[15px]"
+                                // onChange={handleSelection}
+                                borderColor="#fff"
+                                backgroundColor="#EAEFF6"
+                                optionsPx="px-1"
+                                optionsPy="py-1"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between  mt-[0.5rem]   items-center">
+                          <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                            Enter Amount
+                          </p>
+
+                          <div className="flex items-center justify-between text-[#6779A7] ">
+                            <p className="mr-1">Wallel Balance:</p>
+                            <span className="flex justify-center items-center">
+                              {/* <span>N</span> */}
+
+                              <span>
+                                {user
+                                  ? user.accountBalance.toLocaleString(
+                                      "en-NG",
+                                      {
+                                        style: "currency",
+                                        currency: "NGN",
+                                      }
+                                    )
+                                  : "₦0.00"}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
+                          {/* Left Section with Flag and NGN */}
+                          <div className="flex items-center mx-1 my-1 gap-1 px-3 py-2 bg-[#EAEFF6] rounded-l-md">
+                            <img
+                              src={NGN}
+                              alt="NGN flag"
+                              className="w-4 h-4 rounded-sm"
+                            />
+                            <span className="text-[13px] font-medium pr-4 ">
+                              NGN
+                            </span>
+                          </div>
+
+                          {/* Input Field */}
+                          <input
+                            type="text"
+                            placeholder="50,000"
+                            className="w-full px-1 py-3 outline-none bg-white rounded-r-md text-[16px]"
+                            value={amount}
+                            onChange={(e) => {
+                              stopCountdown();
+                              handleChange(e);
+                            }}
+                            onBlur={handleBlur}
+                            onFocus={() => {
+                              stopCountdown();
+                              handleFocus();
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                handleBlur();
+                              }
+                            }}
+                          />
+                        </div>
+                        {error && (
+                          <p className="text-red-500 text-sm">{error}</p>
+                        )}
+
+                        <div className="mt-[0.5rem]">
+                          <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                            What you'll receive
+                          </p>
+
+                          <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
+                            <p className="w-full text-[16px] font-medium">
+                              {loadingData ? (
+                                <div className="w-5 h-5 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
+                              ) : toAmount ? (
+                                `${toAmount} ${currency.toUpperCase()}`
+                              ) : (
+                                "0.00"
+                              )}
+                            </p>
+
+                            <div className="w-full flex">
+                              <div className="ml-auto w-auto">
+                                <CustomSelect
+                                  // options={options}
+                                  inputWidth="w-full"
+                                  optionsWidth="w-full"
+                                  px="px-1"
+                                  py="py-1"
+                                  textSize="text-[1rem]"
+                                  value={selectedCoin}
+                                  borderColor="#fff"
+                                  backgroundColor="#EAEFF6"
+                                  optionsPx="px-1"
+                                  optionsPy="py-1"
+                                  showDropdownIcon={false}
+                                  readOnly={true}
+                                  defaultSelected={selectedCoin}
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="w-full flex mt-9 justify-end">
+                            <div className="flex items-center gap-3">
+                              <button
+                                disabled={isInputFocused || !!error}
+                                onClick={() => setShowConfirmation(true)}
+                                className={`border-[2px] ${
+                                  isInputFocused ||
+                                  error ||
+                                  loadingData ||
+                                  !amount ||
+                                  countdown < 1
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : "cursor-pointer"
+                                } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
+                              >
+                                Continue
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    ) : activeTab === "send" ? (
+                      <>
+                        {/* Pending Send Form UI */}
+                        {/* <SendCrypto wallets={wallets} /> */}
+
                         <>
+                          {/* Buy Form UI */}
                           <p className="pt-2 pb-1 text-[14px] text-[#000]">
                             Select Cryptocurrency
                           </p>
@@ -394,7 +566,7 @@ const BuyCrypto = () => {
                               <div className="w-5 h-5 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
                             ) : (
                               <p className="w-full text-[16px] font-medium">
-                                {selectedCoin.label}
+                                {selectedCoin.displayValue}
                               </p>
                             )}
                             <div className="w-full flex">
@@ -549,11 +721,6 @@ const BuyCrypto = () => {
                             </div>
                           </div>
                         </>
-                      </>
-                    ) : activeTab === "send" ? (
-                      <>
-                        {/* Pending Send Form UI */}
-                        <p>Send form (pending state UI)</p>
                       </>
                     ) : null
                   ) : activeTab === "buy" ? (
