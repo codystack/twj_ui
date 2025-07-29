@@ -170,8 +170,6 @@ const Betting = () => {
       [name]: value,
     }));
 
-
-    
     validateField(name, value);
   };
 
@@ -268,12 +266,13 @@ const Betting = () => {
               amount: Number(amount),
             }
           );
-
-          if (!purchaseResponse.data.isSuccessful) {
+          
+          if (purchaseResponse?.data?.statusCode !== "OK") {
             throw new Error(
-              purchaseResponse.data.message || "An error occurred"
+              purchaseResponse?.data?.message || "An error occurred"
             );
           }
+
           setIsSuccessModal(true);
           resolve();
         } catch (e) {
