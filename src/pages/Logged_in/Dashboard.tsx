@@ -16,7 +16,7 @@ import GiftCard from "./Logged_in_components/someUtilityComponent/GiftCard";
 import Support from "./Logged_in_components/someUtilityComponent/Support";
 import ErrorBoundary from "../../components/error/ErrorBoundry";
 import RouteChangeHandler from "../../components/RouteChangeHandler";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import cancel from "../../assets/dashboard_img/profile/cancel.svg";
 import { useUserStore } from "../../store/useUserStore";
 import copyImg from "../../assets/dashboard_img/withdrawal-copy-.svg";
@@ -72,7 +72,7 @@ const customStyles = {
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   const { showSuccessModal, setShowSuccessModal } = useGiftCardStore();
 
   const [isHidden, setIsHidden] = useState(false);
@@ -99,7 +99,7 @@ const Dashboard = () => {
       await navigator.clipboard.writeText(String(textToCopy));
       console.log(textToCopy);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000); // Hide after 2s
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       return err;
     }
@@ -122,6 +122,7 @@ const Dashboard = () => {
       setShowKycModal(true);
     }
   };
+
   const cryptoKycOpenModal = () => {
     const completeKyc = localStorage.getItem("kycComplete");
 
@@ -183,29 +184,28 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    fetchBanks();
-    const timeout = setTimeout(() => {
-      if (!isKycComplete && location.pathname === "/dashboard") {
-        setShowKycModal(true);
-      }
-    }, 500);
-
-    return () => clearTimeout(timeout);
-  }, [location.pathname]);
-
-  useEffect(() => {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    if (!loading && user !== null) {
-      // console.log("value of kycSet:", user.kycSet);
+  // useEffect(() => {
+  //   fetchBanks();
+  //   const timeout = setTimeout(() => {
+  //     if (!isKycComplete && location.pathname === "/dashboard") {
+  //       setShowKycModal(true);
+  //     }
+  //   }, 500);
 
-      if (user.kycSet === false) {
-        setShowKycModal(true);
-      } else {
-        setShowKycModal(false);
-      }
+  //   return () => clearTimeout(timeout);
+  // }, [location.pathname]);
+
+  useEffect(() => {
+    // fetchBanks();
+    if (loading || user === null) return;
+
+    if (user.kycSet === false) {
+      setShowKycModal(true);
+    } else {
+      setShowKycModal(false);
     }
   }, [loading, user]);
 

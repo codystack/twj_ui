@@ -655,7 +655,7 @@ const BuyCrypto = () => {
                           </div>
                           <div className="flex justify-between  mt-[0.5rem]   items-center">
                             <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                              Network
+                              Network <span className="text-gray-400">(Optional)</span>
                             </p>
                           </div>
 
