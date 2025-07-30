@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import giftcardsbg from "../../../../assets/dashboard_img/giftcardbg.svg";
 import Giftcard from "../../../../assets/dashboard_img/dashboard_icons/fluent_gift-card-20-filled.svg";
 import { useState } from "react";
@@ -18,7 +17,7 @@ const GiftCard = () => {
 
   const openNestedModal = (view: string) => {
     setModalStack((prev) => [...prev, view]);
-    setIsModalOpen(false); // Close the outer modal
+    setIsModalOpen(false); 
   };
 
   const goBack = () => setModalStack((prev) => prev.slice(0, -1));
@@ -58,8 +57,7 @@ const GiftCard = () => {
               <div className=" block sm:flex  justify-center mt-[1.5rem] py-[2.5rem] gap-[20px] items-center">
                 <div className="sm:mb-0 mb-8  ">
                   <BuyGiftCard
-                    // onClose={closeNestedModal}
-                    // onBack={goBack}
+                 
                     onOpenNestedModal={openNestedModal}
                   />
                 </div>
@@ -99,7 +97,6 @@ const GiftCard = () => {
 export default GiftCard;
 
 // Rendered compnents
-
 type ModalWrapperProps = {
   onClose: () => void;
   children: React.ReactNode;

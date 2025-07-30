@@ -89,26 +89,26 @@ const stateOptions = [
 ];
 
 const countryOptions = [
-  { value: "nigeria", label: "Nigeria" },
-  { value: "ghana", label: "Ghana" },
-  { value: "kenya", label: "Kenya" },
-  { value: "south-africa", label: "South Africa" },
-  { value: "egypt", label: "Egypt" },
-  { value: "united-states", label: "United States" },
-  { value: "canada", label: "Canada" },
-  { value: "united-kingdom", label: "United Kingdom" },
-  { value: "germany", label: "Germany" },
-  { value: "france", label: "France" },
-  { value: "italy", label: "Italy" },
-  { value: "australia", label: "Australia" },
-  { value: "india", label: "India" },
-  { value: "china", label: "China" },
-  { value: "japan", label: "Japan" },
-  { value: "brazil", label: "Brazil" },
-  { value: "mexico", label: "Mexico" },
-  { value: "argentina", label: "Argentina" },
-  { value: "spain", label: "Spain" },
-  { value: "netherlands", label: "Netherlands" },
+  { value: "Nigeria", label: "Nigeria" },
+  { value: "Ghana", label: "Ghana" },
+  { value: "Kenya", label: "Kenya" },
+  { value: "South-Africa", label: "South Africa" },
+  { value: "Egypt", label: "Egypt" },
+  { value: "United-States", label: "United States" },
+  { value: "Canada", label: "Canada" },
+  { value: "United-Kingdom", label: "United Kingdom" },
+  { value: "Germany", label: "Germany" },
+  { value: "France", label: "France" },
+  { value: "Italy", label: "Italy" },
+  { value: "Australia", label: "Australia" },
+  { value: "India", label: "India" },
+  { value: "China", label: "China" },
+  { value: "Japan", label: "Japan" },
+  { value: "Brazil", label: "Brazil" },
+  { value: "Mexico", label: "Mexico" },
+  { value: "Argentina", label: "Argentina" },
+  { value: "Spain", label: "Spain" },
+  { value: "Netherlands", label: "Netherlands" },
 ];
 const genderOptions = [
   { value: "male", label: "male" },
@@ -117,8 +117,8 @@ const genderOptions = [
 ];
 
 const options = [
-  { value: "bvn", label: "BVN (recommended)" },
-  { value: "nin", label: "NIN" },
+  { value: "Bvn", label: "BVN (recommended)" },
+  { value: "Nin", label: "NIN" },
 ];
 
 type KycModalProps = {
@@ -142,6 +142,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   const [accountName, setAccountName] = useState("");
   const [accountLastName, setAccountLastName] = useState("");
   const [accountNameError, setAccountNameError] = useState("");
+  const [statusCode, setStatusCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     verificationMeans: "",
@@ -234,11 +235,11 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
     const { verificationMeans, nin, bvn, firstName, lastName, country, dob } =
       formData;
 
-    const kycValue = verificationMeans === "bvn" ? bvn : nin;
+    const kycValue = verificationMeans === "Bvn" ? bvn : nin;
 
     const payload = {
       kycType: verificationMeans,
-      kycValue: verificationMeans === "bvn" ? bvn : nin,
+      kycValue: verificationMeans === "Bvn" ? bvn : nin,
       firstName: firstName,
       lastName: lastName,
       dateOfBirth: dob,
@@ -258,10 +259,12 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
 
       const firstName = response?.data?.data?.firstName || "";
       const lastName = response?.data?.data?.lastName || "";
+      const statusCode = response?.data?.statusCode || "";
 
       setAccountName(firstName);
       setAccountLastName(lastName);
-      // console.log(firstName, lastName);
+      setStatusCode(statusCode);
+      console.log(firstName, lastName);
       setAccountNameError("");
       setIsLoading(false);
       return;
@@ -412,8 +415,8 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
         }
         break;
 
-      case "bvn":
-      case "nin":
+      case "Bvn":
+      case "Nin":
         if (!value.trim()) {
           setErrors((prev) => ({
             ...prev,
@@ -563,7 +566,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
 
   const isFormInvalid =
     Object.entries(errors).some(([key, value]) => {
-      if (key === "bvn" || key === "nin") return false;
+      if (key === "Bvn" || key === "Nin") return false;
       return !!value;
     }) ||
     Object.values(restFields).some((val) => val === "") ||
@@ -585,6 +588,9 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   //Final check
   const isFormInvalidForNextButton =
     isAnyRequiredFieldEmpty || !isBvnOrNinValid || hasAnyFieldError;
+
+  const isSuccess = statusCode === "OK" && accountName;
+  const isError = !isLoading && !isSuccess && accountNameError;
 
   return (
     <>
@@ -793,7 +799,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                             </p>
                           )}
                         </div>
-                        {selectedVerificationMeans === "bvn" && (
+                        {selectedVerificationMeans === "Bvn" && (
                           <>
                             <p className="text-[#0A2E65]/60 pb-[1px] pl-[5px] text-[15px] text-left  mt-[10px] ">
                               BVN
@@ -825,7 +831,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                           </>
                         )}
 
-                        {selectedVerificationMeans === "nin" && (
+                        {selectedVerificationMeans === "Nin" && (
                           <>
                             <p className="text-[#0A2E65]/60 pb-[1px] pl-[5px] text-[15px] text-left  mt-[10px] ">
                               NIN
@@ -1004,14 +1010,25 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                             </p>
                           )}
                         </div>
-
-                        <div className="flex ml-1 text-[14px] items-center gap-1 ">
-                          <img src={check} alt="" />
-                          <div className="flex justify-center items-center gap-1.5">
-                            <p>Ukpoju</p>
-                            <p>Arome</p>
+                        {isLoading ? (
+                          <p className="text-sm text-gray-500 flex items-center ">
+                            Verifying
+                            <span className="loading-dots text-lg font-semibold"></span>
+                          </p>
+                        ) : isSuccess ? (
+                          <div className="flex ml-1 text-[14px] items-center gap-1">
+                            <img src={check} alt="" />
+                            <div className="flex justify-center items-center gap-1.5">
+                              <p>{accountName}</p>
+                              <p>{accountLastName}</p>
+                            </div>
                           </div>
-                        </div>
+                        ) : isError ? (
+                          <p className="text-sm text-red-500">
+                            {accountNameError ||
+                              "An error occurred. Please try again."}
+                          </p>
+                        ) : null}
 
                         <div className="flex gap-[1rem] w-full ">
                           {/* City Field (65%) */}
