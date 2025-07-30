@@ -135,6 +135,59 @@ input[type="checkbox"]:checked:before {
   display: none; /* Chrome, Safari, Opera */
 }
 
+@keyframes onAutoFillStart {
+  from {
+  }
+  to {
+  }
+}
+
+@keyframes onAutoFillCancel {
+  from {
+  }
+  to {
+  }
+}
+
+/* For detecting autofill start */
+input:-webkit-autofill {
+  animation-name: onAutoFillStart;
+  animation-duration: 0.01s;
+}
+
+/* Optional: to detect cancel */
+input:not(:-webkit-autofill) {
+  animation-name: onAutoFillCancel;
+  animation-duration: 0.01s;
+}
+
+/* Auto fill detection */
+@keyframes onAutoFillStart {
+  from {
+  }
+  to {
+  }
+}
+
+@keyframes onAutoFillCancel {
+  from {
+  }
+  to {
+  }
+}
+
+/* For detecting autofill start */
+input:-webkit-autofill {
+  animation-name: onAutoFillStart;
+  animation-duration: 0.01s;
+}
+
+/* Optional: to detect cancel */
+input:not(:-webkit-autofill) {
+  animation-name: onAutoFillCancel;
+  animation-duration: 0.01s;
+}
+
 /* animated dots */
 @keyframes loadingDots {
   0% {
@@ -170,6 +223,6 @@ input[type="checkbox"]:checked:before {
   display: inline-block;
   white-space: pre;
   font-size: 1.25rem; /* Increase size here */
-  font-weight: bold;  /* Optional: make them bolder */
+  font-weight: bold; /* Optional: make them bolder */
   line-height: 1;
 }
