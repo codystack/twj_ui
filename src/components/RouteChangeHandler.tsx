@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import kyc from "../assets/dashboard_img/kyc.svg";
 import check from "../assets/dashboard_img/profile/Check_round_fill (1).svg";
@@ -142,6 +142,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   const [accountName, setAccountName] = useState("");
   const [accountLastName, setAccountLastName] = useState("");
   const [accountNameError, setAccountNameError] = useState("");
+  const [finalError, setFinalError] = useState("");
   const [statusCode, setStatusCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -232,6 +233,9 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   const handleBlur = async () => {
     setIsLoading(true);
 
+    setFinalError("");
+    setAccountNameError("");
+
     const { verificationMeans, nin, bvn, firstName, lastName, country, dob } =
       formData;
 
@@ -287,6 +291,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
     e.preventDefault();
     setLoading(true);
 
+    setFinalError("");
     const { address, state, city, postalCode } = formData;
 
     const payload = {
@@ -325,7 +330,8 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
         ("response" in error && error.response?.data?.message) ||
         error.message ||
         "An error occurred. Please try again.";
-      console.log(errorMessage);
+      // console.log(errorMessage);
+      setFinalError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -569,6 +575,8 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
       if (key === "Bvn" || key === "Nin") return false;
       return !!value;
     }) ||
+    !accountName ||
+    isLoading ||
     Object.values(restFields).some((val) => val === "") ||
     !((bvn && !errors.bvn) || (nin && !errors.nin));
 
@@ -591,6 +599,16 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
 
   const isSuccess = statusCode === "OK" && accountName;
   const isError = !isLoading && !isSuccess && accountNameError;
+
+  // Calling the endpoint on auto_fill
+  const hasTriggered = useRef(false);
+
+  useEffect(() => {
+    if (formData.lastName && !hasTriggered.current) {
+      hasTriggered.current = true;
+      handleBlur();
+    }
+  }, [formData.lastName]);
 
   return (
     <>
@@ -1018,7 +1036,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                         ) : isSuccess ? (
                           <div className="flex ml-1 text-[14px] items-center gap-1">
                             <img src={check} alt="" />
-                            <div className="flex justify-center items-center gap-1.5">
+                            <div className="flex justify-center items-center gap-1">
                               <p>{accountName}</p>
                               <p>{accountLastName}</p>
                             </div>
@@ -1092,6 +1110,12 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                           </div>
                         </div>
                       </>
+                    )}
+
+                    {finalError && (
+                      <p className="text-sm text-red-500">
+                        {finalError || "An error occurred. Please try again."}
+                      </p>
                     )}
 
                     {/* Button Group */}
