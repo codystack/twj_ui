@@ -3,6 +3,7 @@ import { NavLink } from "react-router";
 import BITCOIN from "../../../assets/crpto_icons/BITCOIN.svg";
 import NGN from "../../../assets/crpto_icons/MaskNGN.svg";
 import ETHER from "../../../assets/crpto_icons/ETHER.svg";
+import scan from "../../../assets/crpto_icons/Scan_alt.svg";
 import CustomSelect from "../../../components/CustomSelect";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -21,6 +22,7 @@ import api from "../../../services/api.ts";
 import useAutoRefreshSwap from "./count_hooks/useAutoRefreshSwap.tsx";
 import PinModal from "../Logged_in_components/someUtilityComponent/PinModal.tsx";
 import SuccessModal from "../SuccessModal.tsx";
+// import SendCrypto from "./SendCrypto.tsx";
 
 export type Optiontype = {
   id: string;
@@ -46,6 +48,22 @@ const options = [
     image: ETHER,
   },
 ];
+const networkOptions = [
+  {
+    id: "brc20",
+    label: "Bitcoin BRC20",
+    value: "btc_backend_id_123",
+    // displayValue: ".102 BTC",
+    // image: BITCOIN,
+  },
+  {
+    id: "usd",
+    label: "brc20(usdt)",
+    value: "usd_backend_id_789",
+    // displayValue: ".504 ETH",
+    // image: ETHER,
+  },
+];
 
 const BuyCrypto = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -63,6 +81,13 @@ const BuyCrypto = () => {
   const [quoteId, setQuoteId] = useState<string>("");
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [openPinModal, setOpenPinModal] = useState(false);
+  const [activeTab, setActiveTab] = useState<"buy" | "send">("buy");
+  const [form, setForm] = useState({
+    narration: "",
+    network: "",
+    amount: "",
+    quotationId: "",
+  });
 
   const {
     user,
@@ -265,6 +290,9 @@ const BuyCrypto = () => {
     setIsInputFocused(true);
   };
 
+  const isDisabled =
+    isInputFocused || !!error || loadingData || !amount || countdown < 1;
+
   return (
     <>
       {openPinModal && (
@@ -328,8 +356,61 @@ const BuyCrypto = () => {
 
                 {/* Right section */}
                 <div className=" mt-[1rem] ml-[2rem]">
+                  <div className="py-[2.3%] md:ml-0 ml-[-7px] flex justify-center w-z-20 bg-[#fff]">
+                    <div className="bg-[#F5F7FA] w-[60%] pr[2rem] h-[3rem] flex items-center rounded-[50px] justify-between px-[7px]">
+                      <button
+                        className={`flex-1 px-[20px] text-[17px] cursor-pointer py-[5px] rounded-[40px] ${
+                          activeTab === "buy"
+                            ? "bg-[#fff] text-[#8003A9]"
+                            : "bg-transparent text-[#7688B4]"
+                        } ${
+                          showConfirmation || loading
+                            ? "pointer-events-none opacity-50"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          if (!showConfirmation && !loading)
+                            setActiveTab("buy");
+                          setError("");
+                          setToAmount("");
+                          setAmount("");
+                          setCurrency("");
+                          setQuoteId("");
+                          // setSelectedCoin(options[0]);
+                          stopCountdown();
+                          setForm({
+                            narration: "",
+                            network: "",
+                            amount: "",
+                            quotationId: "",
+                          });
+                        }}
+                      >
+                        Buy
+                      </button>
+
+                      <button
+                        className={`flex-1 px-[20px] text-[17px] cursor-pointer py-[5px] rounded-[40px] ${
+                          activeTab === "send"
+                            ? "bg-[#fff] text-[#8003A9]"
+                            : "bg-transparent  text-[#7688B4]"
+                        } ${
+                          showConfirmation || loading
+                            ? "pointer-events-none opacity-50"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          if (!showConfirmation && !loading)
+                            setActiveTab("send");
+                        }}
+                      >
+                        Send
+                      </button>
+                    </div>
+                  </div>
+
                   {countdown > 0 && (
-                    <div className="flex justify-center items-center">
+                    <div className="flex justify-center mb-[1rem] items-center">
                       <div className="flex justify-center w-[70%] items-center px-5 py-2 mt-4 rounded-[10px] bg-[#FBEEFF]">
                         <div className="flex items-center gap-3 justify-center">
                           <img src={warning} alt="" />
@@ -341,204 +422,398 @@ const BuyCrypto = () => {
                       </div>
                     </div>
                   )}
+
                   {!showConfirmation ? (
-                    <>
-                      <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                        Select Cryptocurrency
-                      </p>
-                      <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
-                        {loading ? (
-                          <div className="w-5 h-5 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
-                        ) : (
-                          <p className="w-full text-[16px] font-medium">
-                            {selectedCoin.label}
-                          </p>
-                        )}
-                        <div className="w-full flex">
-                          <div className="ml-auto w-auto">
-                            <CustomSelect
-                              options={selectOptions}
-                              value={selectedCoin}
-                              onChange={(val) => {
-                                setError("");
-                                setToAmount("");
-                                setAmount("");
-                                setCurrency("");
-                                setQuoteId("");
-                                setSelectedCoin(val);
-                                stopCountdown();
-                              }}
-                              inputWidth="w-auto"
-                              optionsWidth="w-[15rem]"
-                              optionsOffsetX={-90}
-                              px="px-1"
-                              py="py-1"
-                              textSize="text-[15px]"
-                              // onChange={handleSelection}
-                              borderColor="#fff"
-                              backgroundColor="#EAEFF6"
-                              optionsPx="px-1"
-                              optionsPy="py-1"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex justify-between  mt-[0.5rem]   items-center">
+                    activeTab === "buy" ? (
+                      <>
+                        {/* Buy Form UI */}
                         <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                          Enter Amount
+                          Select Cryptocurrency
                         </p>
-
-                        <div className="flex items-center justify-between text-[#6779A7] ">
-                          <p className="mr-1">Wallel Balance:</p>
-                          <span className="flex justify-center items-center">
-                            {/* <span>N</span> */}
-
-                            <span>
-                              {user
-                                ? user.accountBalance.toLocaleString("en-NG", {
-                                    style: "currency",
-                                    currency: "NGN",
-                                  })
-                                : "₦0.00"}
-                            </span>
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
-                        {/* Left Section with Flag and NGN */}
-                        <div className="flex items-center mx-1 my-1 gap-1 px-3 py-2 bg-[#EAEFF6] rounded-l-md">
-                          <img
-                            src={NGN}
-                            alt="NGN flag"
-                            className="w-4 h-4 rounded-sm"
-                          />
-                          <span className="text-[13px] font-medium pr-4 ">
-                            NGN
-                          </span>
-                        </div>
-
-                        {/* Input Field */}
-                        <input
-                          type="text"
-                          placeholder="50,000"
-                          className="w-full px-1 py-3 outline-none bg-white rounded-r-md text-[16px]"
-                          value={amount}
-                          onChange={(e) => {
-                            stopCountdown();
-                            handleChange(e);
-                          }}
-                          onBlur={handleBlur}
-                          onFocus={() => {
-                            stopCountdown();
-                            handleFocus();
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              handleBlur();
-                            }
-                          }}
-                        />
-                      </div>
-                      {error && <p className="text-red-500 text-sm">{error}</p>}
-
-                      <div className="mt-[0.5rem]">
-                        <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                          What you'll receive
-                        </p>
-
                         <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
-                          <p className="w-full text-[16px] font-medium">
-                            {loadingData ? (
-                              <div className="w-5 h-5 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
-                            ) : toAmount ? (
-                              `${toAmount} ${currency.toUpperCase()}`
-                            ) : (
-                              "0.00"
-                            )}
-                          </p>
-
+                          {loading ? (
+                            <div className="w-5 h-5 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
+                          ) : (
+                            <p className="w-full text-[16px] font-medium">
+                              {selectedCoin.label}
+                            </p>
+                          )}
                           <div className="w-full flex">
                             <div className="ml-auto w-auto">
                               <CustomSelect
-                                // options={options}
-                                inputWidth="w-full"
-                                optionsWidth="w-full"
+                                options={selectOptions}
+                                value={selectedCoin}
+                                onChange={(val) => {
+                                  setError("");
+                                  setToAmount("");
+                                  setAmount("");
+                                  setCurrency("");
+                                  setQuoteId("");
+                                  setSelectedCoin(val);
+                                  stopCountdown();
+                                }}
+                                inputWidth="w-auto"
+                                optionsWidth="w-[15rem]"
+                                optionsOffsetX={-90}
                                 px="px-1"
                                 py="py-1"
-                                textSize="text-[1rem]"
-                                value={selectedCoin}
+                                textSize="text-[15px]"
+                                // onChange={handleSelection}
                                 borderColor="#fff"
                                 backgroundColor="#EAEFF6"
                                 optionsPx="px-1"
                                 optionsPy="py-1"
-                                showDropdownIcon={false}
-                                readOnly={true}
-                                defaultSelected={selectedCoin}
                               />
                             </div>
                           </div>
                         </div>
+                        <div className="flex justify-between  mt-[0.5rem]   items-center">
+                          <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                            Enter Amount
+                          </p>
 
-                        <div className="w-full flex mt-9 justify-end">
-                          <div className="flex items-center gap-3">
-                            <button
-                              disabled={isInputFocused || !!error}
-                              onClick={() => setShowConfirmation(true)}
-                              className={`border-[2px] ${
-                                isInputFocused ||
-                                error ||
-                                loadingData ||
-                                !amount ||
-                                countdown < 1
-                                  ? "opacity-50 cursor-not-allowed"
-                                  : "cursor-pointer"
-                              } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
-                            >
-                              Continue
-                            </button>
+                          <div className="flex items-center justify-between text-[#6779A7] ">
+                            <p className="mr-1">Wallel Balance:</p>
+                            <span className="flex justify-center items-center">
+                              {/* <span>N</span> */}
+
+                              <span>
+                                {user
+                                  ? user.accountBalance.toLocaleString(
+                                      "en-NG",
+                                      {
+                                        style: "currency",
+                                        currency: "NGN",
+                                      }
+                                    )
+                                  : "₦0.00"}
+                              </span>
+                            </span>
                           </div>
                         </div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex items-center justify-center">
-                        <div className="flex flex-col gap-[2px]">
-                          <p className="text-[18px] mb-[-8px] text-center">
-                            Purchase
-                          </p>
-                          <h4 className="flex justify-center gap-0.5   items-center text-[24px]">
-                            <span>
-                              {toAmount
-                                ? `${toAmount} ${currency.toUpperCase()}`
-                                : 0.0}
+
+                        <div className="flex items-center w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
+                          {/* Left Section with Flag and NGN */}
+                          <div className="flex items-center mx-1 my-1 gap-1 px-3 py-2 bg-[#EAEFF6] rounded-l-md">
+                            <img
+                              src={NGN}
+                              alt="NGN flag"
+                              className="w-4 h-4 rounded-sm"
+                            />
+                            <span className="text-[13px] font-medium pr-4 ">
+                              NGN
                             </span>
-                          </h4>
-                          <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
-                            <span>-</span> <span>{numericAmount}</span>
-                            <span>NGN</span>
+                          </div>
+
+                          {/* Input Field */}
+                          <input
+                            type="text"
+                            placeholder="50,000"
+                            className="w-full px-1 py-3 outline-none bg-white rounded-r-md text-[16px]"
+                            value={amount}
+                            onChange={(e) => {
+                              stopCountdown();
+                              handleChange(e);
+                            }}
+                            onBlur={handleBlur}
+                            onFocus={() => {
+                              stopCountdown();
+                              handleFocus();
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                handleBlur();
+                              }
+                            }}
+                          />
+                        </div>
+                        {error && (
+                          <p className="text-red-500 text-sm">{error}</p>
+                        )}
+
+                        <div className="mt-[0.5rem]">
+                          <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                            What you'll receive
                           </p>
-                        </div>
-                      </div>
-                      <div className="border border-gray-300 mt-[2rem] px-4 py-6 rounded-md bg-white shadow">
-                        <div className="flex justify-between text-[15px] mb-4">
-                          <p className="">Price Per Asset</p>
-                          <span className="  flex items-center gap-1">
-                            <span>{Number(quotePrice).toLocaleString()}</span>
-                            <span>{currency}</span>
-                          </span>
-                        </div>
 
-                        <div className="flex justify-between text-[15px] mb-4">
-                          <p className="">Cost</p>
-                          <span className=" flex items-center gap-1">
-                            <span>{numericAmount}</span>
-                            <span>NGN</span>
-                          </span>
-                        </div>
+                          <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
+                            <p className="w-full text-[16px] font-medium">
+                              {loadingData ? (
+                                <div className="w-5 h-5 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
+                              ) : toAmount ? (
+                                `${toAmount} ${currency.toUpperCase()}`
+                              ) : (
+                                "0.00"
+                              )}
+                            </p>
 
-                        {/* <div className="flex justify-between text-[15px] mb-4">
+                            <div className="w-full flex">
+                              <div className="ml-auto w-auto">
+                                <CustomSelect
+                                  // options={options}
+                                  inputWidth="w-full"
+                                  optionsWidth="w-full"
+                                  px="px-1"
+                                  py="py-1"
+                                  textSize="text-[1rem]"
+                                  value={selectedCoin}
+                                  borderColor="#fff"
+                                  backgroundColor="#EAEFF6"
+                                  optionsPx="px-1"
+                                  optionsPy="py-1"
+                                  showDropdownIcon={false}
+                                  readOnly={true}
+                                  defaultSelected={selectedCoin}
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="w-full flex mt-9 justify-end">
+                            <div className="flex items-center gap-3">
+                              <button
+                                disabled={isDisabled}
+                                onClick={() => setShowConfirmation(true)}
+                                className={`border-[2px] ${
+                                  isDisabled
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : "cursor-pointer"
+                                } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
+                              >
+                                Continue
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    ) : activeTab === "send" ? (
+                      <>
+                        {/* Pending Send Form UI */}
+                        {/* <SendCrypto wallets={wallets} /> */}
+
+                        <>
+                          {/* Buy Form UI */}
+                          <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                            Select Cryptocurrency
+                          </p>
+                          <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
+                            {loading ? (
+                              <div className="w-5 h-5 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
+                            ) : (
+                              <p className="w-full text-[16px] font-medium">
+                                {selectedCoin.displayValue}
+                              </p>
+                            )}
+                            <div className="w-full flex">
+                              <div className="ml-auto w-auto">
+                                <CustomSelect
+                                  options={selectOptions}
+                                  value={selectedCoin}
+                                  onChange={(val) => {
+                                    setError("");
+                                    setToAmount("");
+                                    setAmount("");
+                                    setCurrency("");
+                                    setQuoteId("");
+                                    setSelectedCoin(val);
+                                    stopCountdown();
+                                  }}
+                                  inputWidth="w-auto"
+                                  optionsWidth="w-[15rem]"
+                                  optionsOffsetX={-90}
+                                  px="px-1"
+                                  py="py-1"
+                                  textSize="text-[15px]"
+                                  // onChange={handleSelection}
+                                  borderColor="#fff"
+                                  backgroundColor="#EAEFF6"
+                                  optionsPx="px-1"
+                                  optionsPy="py-1"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex justify-between  mt-[0.5rem]   items-center">
+                            <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                              Address
+                            </p>
+                          </div>
+
+                          <div className=" relative flex items-center w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
+                            {/* Input Field */}
+                            <input
+                              type="text"
+                              placeholder="Paste [name of crypto] wallet address"
+                              className="w-full px-3 py-3 outline-none bg-white text-[16px] rounded-md"
+                            />
+
+                            <img
+                              src={scan}
+                              className="absolute right-2"
+                              alt=""
+                            />
+                          </div>
+                          <div className="flex justify-between  mt-[0.5rem]   items-center">
+                            <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                              Network
+                            </p>
+                          </div>
+
+                          <div className="w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
+                            <CustomSelect
+                              options={networkOptions}
+                              // value={networkOptions}
+                              onChange={(val) => {
+                                setForm({ ...form });
+                                form.network = val.value;
+                              }}
+                              placeholder="Select Network"
+                              inputWidth="w-auto"
+                              optionsWidth="w-full"
+                              // optionsOffsetX={-90}
+                              px="px-2"
+                              py="py-3"
+                              textSize="text-[15px]"
+                              // onChange={handleSelection}
+                              borderColor="border-gray-300"
+                              backgroundColor="#fff"
+                              optionsPx="px-1"
+                              optionsPy="py-1"
+                            />
+                          </div>
+
+                          <div className="mt-[0.5rem]">
+                            <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                              Amount
+                            </p>
+
+                            <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
+                              <input
+                                type="text"
+                                placeholder="0.00104"
+                                className="w-full pr-3 py-3 outline-none bg-white text-[16px] rounded-md"
+                                value={amount}
+                                onChange={(e) => {
+                                  stopCountdown();
+                                  handleChange(e);
+                                }}
+                              />
+                              <div className="w-full flex">
+                                <div className="ml-auto w-auto">
+                                  <CustomSelect
+                                    // options={options}
+                                    inputWidth="w-full"
+                                    optionsWidth="w-full"
+                                    px="px-1"
+                                    py="py-1"
+                                    textSize="text-[1rem]"
+                                    value={selectedCoin}
+                                    borderColor="#fff"
+                                    backgroundColor="#EAEFF6"
+                                    optionsPx="px-1"
+                                    optionsPy="py-1"
+                                    showDropdownIcon={false}
+                                    readOnly={true}
+                                    defaultSelected={selectedCoin}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex justify-between  mt-[0.5rem]   items-center">
+                              <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                                Narration
+                              </p>
+                            </div>
+                            <div className="w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
+                              <input
+                                type="text"
+                                placeholder="Enter narration"
+                                className="w-full px-3 py-3 outline-none bg-white text-[16px] rounded-md"
+                                value={form.narration}
+                                onChange={(e) =>
+                                  setForm({
+                                    ...form,
+                                    narration: e.target.value,
+                                  })
+                                }
+                                onBlur={handleBlur}
+                                onFocus={() => {
+                                  stopCountdown();
+                                  handleFocus();
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") {
+                                    handleBlur();
+                                  }
+                                }}
+                              />
+                            </div>
+
+                            {/* {error && (
+                              <p className="text-red-500 text-sm">{error}</p>
+                            )} */}
+
+                            <div className="w-full flex mt-9 justify-end">
+                              <div className="flex items-center gap-3">
+                                <button
+                                  disabled={isDisabled}
+                                  onClick={() => setShowConfirmation(true)}
+                                  className={`border-[2px] ${
+                                    isDisabled
+                                      ? "opacity-50 cursor-not-allowed"
+                                      : "cursor-pointer"
+                                  } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
+                                >
+                                  Continue
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      </>
+                    ) : null
+                  ) : activeTab === "buy" ? (
+                    <>
+                      {/* Confirmation UI for Buy */}
+
+                      <>
+                        <div className="flex items-center justify-center">
+                          <div className="flex flex-col gap-[2px]">
+                            <p className="text-[18px] mb-[-8px] text-center">
+                              Purchase
+                            </p>
+                            <h4 className="flex justify-center gap-0.5   items-center text-[24px]">
+                              <span>
+                                {toAmount
+                                  ? `${toAmount} ${currency.toUpperCase()}`
+                                  : 0.0}
+                              </span>
+                            </h4>
+                            <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
+                              <span>-</span> <span>{numericAmount}</span>
+                              <span>NGN</span>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="border border-gray-300 mt-[2rem] px-4 py-6 rounded-md bg-white shadow">
+                          <div className="flex justify-between text-[15px] mb-4">
+                            <p className="">Price Per Asset</p>
+                            <span className="  flex items-center gap-1">
+                              <span>{Number(quotePrice).toLocaleString()}</span>
+                              <span>{currency}</span>
+                            </span>
+                          </div>
+
+                          <div className="flex justify-between text-[15px] mb-4">
+                            <p className="">Cost</p>
+                            <span className=" flex items-center gap-1">
+                              <span>{numericAmount}</span>
+                              <span>NGN</span>
+                            </span>
+                          </div>
+
+                          {/* <div className="flex justify-between text-[15px] mb-4">
                         <p className="">Transaction Fee</p>
                         <span className="flex items-center gap-1">
                           <span>0.0012</span>
@@ -546,36 +821,42 @@ const BuyCrypto = () => {
                         </span>
                       </div> */}
 
-                        <div className="flex justify-between text-[15px] ">
-                          <p className="">You will receive</p>
-                          <span className="flex items-center gap-1">
-                            <span>
-                              {toAmount
-                                ? `${toAmount} ${currency.toUpperCase()}`
-                                : 0.0}
+                          <div className="flex justify-between text-[15px] ">
+                            <p className="">You will receive</p>
+                            <span className="flex items-center gap-1">
+                              <span>
+                                {toAmount
+                                  ? `${toAmount} ${currency.toUpperCase()}`
+                                  : 0.0}
+                              </span>
                             </span>
-                          </span>
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="w-full flex mt-9 justify-end">
-                        <div className="flex items-center gap-3">
-                          <button
-                            onClick={() => setShowConfirmation(false)}
-                            className="border-[2px] cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
-                          >
-                            Edit Purchase
-                          </button>
-                          <button
-                            className={`border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
-                            onClick={() => setOpenPinModal(true)}
-                          >
-                            Create Purchase
-                          </button>
+                        <div className="w-full flex mt-9 justify-end">
+                          <div className="flex items-center gap-3">
+                            <button
+                              onClick={() => setShowConfirmation(false)}
+                              className="border-[2px] cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
+                            >
+                              Edit Purchase
+                            </button>
+                            <button
+                              className={`border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
+                              onClick={() => setOpenPinModal(true)}
+                            >
+                              Create Purchase
+                            </button>
+                          </div>
                         </div>
-                      </div>
+                      </>
                     </>
-                  )}
+                  ) : activeTab === "send" ? (
+                    <>
+                      {/* Pending Confirmation UI for Send */}
+                      <p>Send confirmation (pending state UI)</p>
+                    </>
+                  ) : null}
                 </div>
               </div>
             </div>

@@ -42,8 +42,8 @@ input[type="checkbox"]:checked:before {
 }
 
 .PhoneInputInput {
- padding: 16px 10px;
-    /* font-size: 16px; */
+  padding: 16px 10px;
+  /* font-size: 16px; */
   border: 1px solid #a4a4a4;
   outline: none;
   font-size: 16px;
@@ -54,7 +54,6 @@ input[type="checkbox"]:checked:before {
 /* .PhoneInputInput:focus {
 
 } */
- 
 
 .PhoneInputCountry {
   padding: 0 10px 0 10px;
@@ -121,7 +120,6 @@ input[type="checkbox"]:checked:before {
   clip-path: circle(50%);
 }
 
-
 .custom-flag-select-wrapper .ReactFlagsSelect-module_selectFlag__2q5gC {
   font-size: 5rem;
   border: 100% !important;
@@ -137,4 +135,41 @@ input[type="checkbox"]:checked:before {
   display: none; /* Chrome, Safari, Opera */
 }
 
+/* animated dots */
+@keyframes loadingDots {
+  0% {
+    content: "";
+  }
+  20% {
+    content: ".";
+  }
+  40% {
+    content: "..";
+  }
+  60% {
+    content: "...";
+  }
+  80% {
+    content: "";
+  }
+  100% {
+    content: "";
+  }
+}
 
+/* .loading-dots::after {
+  content: "";
+  animation: loadingDots 1.5s steps(4, end) infinite;
+  display: inline-block;
+  white-space: pre;
+} */
+
+.loading-dots::after {
+  content: "";
+  animation: loadingDots 1.5s steps(4, end) infinite;
+  display: inline-block;
+  white-space: pre;
+  font-size: 1.25rem; /* Increase size here */
+  font-weight: bold;  /* Optional: make them bolder */
+  line-height: 1;
+}

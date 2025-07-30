@@ -9,7 +9,7 @@ const cardData = [
   {
     id: 1,
     icon: BuyCrypto,
-    title: "Buy Crypto",
+    title: "Buy or Send Crypto",
     description:
       "Buy various cryptocurrencies easily and instantly at the best market rates.",
     link: "/crypto/buycrypto",
@@ -32,6 +32,9 @@ const cardData = [
 ];
 
 const Crypto = () => {
+
+
+
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
       <div className="flex-1 overflow-y-auto p-4 ">

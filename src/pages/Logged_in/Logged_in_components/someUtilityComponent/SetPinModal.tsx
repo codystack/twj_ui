@@ -57,63 +57,6 @@ const SetPinModal = ({ onClose }: { onClose: () => void }) => {
     }
   }, [confirmPin]);
 
-  // const validatePin = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const email = localStorage.getItem("email");
-
-  //     const pinResponse = await api.post(
-  //       `${BASE_URL}/Authentication/createPin`,
-  //       {
-  //         passCode: pin,
-  //         email: email,
-  //       }
-  //     );
-
-  //     // console.log(pinResponse);
-  //     if (pinResponse.data.statusCode !== "OK") {
-  //       setError("Invalid PIN. Please try again.");
-  //       setTimeout(() => {
-  //         setConfirmPin("");
-  //         setPin("");
-  //         setStep("enter");
-  //       }, 1500);
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     //Get Zustand functions
-  //     const { setPasscodeSet, setSetPinModal, setSuccessModalStore } =
-  //       useModalStore.getState();
-
-  //     //Set passcode in Zustand and localStorage
-  //     setPasscodeSet(true);
-  //     setSuccessModalStore(true);
-  //     setPin("");
-  //     setConfirmPin("");
-  //     setStep("enter");
-
-  //     // Close SetPinModal only, keep showPinModal open if needed
-  //     setSetPinModal(false);
-  //     handleClose();
-  //     setLoading(false);
-  //     return;
-  //   } catch (error: any) {
-  //     setError(
-  //       error.response?.data?.errors?.email ||
-  //         "An error occurred. Please try again."
-  //     );
-
-  //     setTimeout(() => {
-  //       setConfirmPin("");
-  //       setPin("");
-  //       setStep("enter");
-  //     }, 1500);
-  //   }
-
-  //   setLoading(false);
-  // };
-
   const validatePin = async () => {
     setLoading(true);
     try {

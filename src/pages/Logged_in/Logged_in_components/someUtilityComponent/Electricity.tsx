@@ -324,9 +324,9 @@ const Electricity = () => {
             }
           );
 
-          if (!purchaseResponse.data.isSuccessful) {
+          if (purchaseResponse?.data?.statusCode !== "OK") {
             throw new Error(
-              purchaseResponse.data.message || "An error occurred"
+              purchaseResponse?.data?.message || "An error occurred"
             );
           }
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import kyc from "../assets/dashboard_img/kyc.svg";
+import check from "../assets/dashboard_img/profile/Check_round_fill (1).svg";
 import cancel from "../assets/dashboard_img/profile/cancel.svg";
 import Select from "react-select";
 import { AxiosError } from "axios";
@@ -8,35 +9,6 @@ import api from "../services/api";
 import SuccessModal from "../pages/Logged_in/SuccessModal";
 import { useUserStore } from "../store/useUserStore";
 import "../App.css";
-// const customStyles = {
-//   control: (provided: any, state: any) => ({
-//     ...provided,
-//     borderRadius: "8px",
-//     padding: "4px",
-//     boxShadow: "none",
-//     outline: "none",
-//     textAlign: "left",
-//     border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
-//     "&:hover": {
-//       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
-//     },
-//   }),
-//   menuPortal: (base: any) => ({
-//     ...base,
-//     zIndex: 9999,
-//   }),
-//   option: (provided: any, state: any) => ({
-//     ...provided,
-//     cursor: "pointer",
-//     textAlign: "left",
-//     backgroundColor: state.isSelected
-//       ? "#8003A9"
-//       : state.isFocused
-//       ? "#F8E0FF" // Hover background color
-//       : "#fff",
-//     color: state.isSelected ? "#fff" : "#27014F", // Text color change on selection
-//   }),
-// };
 
 const customStyleSelect = (hasError: boolean) => ({
   control: (provided: any, state: any) => ({
@@ -47,7 +19,7 @@ const customStyleSelect = (hasError: boolean) => ({
     outline: "none",
     textAlign: "left",
     border: hasError
-      ? "1px solid #f87171" // Tailwind red-500
+      ? "1px solid #f87171"
       : state.isFocused
       ? "2px solid #8003A9"
       : "1px solid #a4a4a4",
@@ -117,26 +89,26 @@ const stateOptions = [
 ];
 
 const countryOptions = [
-  { value: "nigeria", label: "Nigeria" },
-  { value: "ghana", label: "Ghana" },
-  { value: "kenya", label: "Kenya" },
-  { value: "south-africa", label: "South Africa" },
-  { value: "egypt", label: "Egypt" },
-  { value: "united-states", label: "United States" },
-  { value: "canada", label: "Canada" },
-  { value: "united-kingdom", label: "United Kingdom" },
-  { value: "germany", label: "Germany" },
-  { value: "france", label: "France" },
-  { value: "italy", label: "Italy" },
-  { value: "australia", label: "Australia" },
-  { value: "india", label: "India" },
-  { value: "china", label: "China" },
-  { value: "japan", label: "Japan" },
-  { value: "brazil", label: "Brazil" },
-  { value: "mexico", label: "Mexico" },
-  { value: "argentina", label: "Argentina" },
-  { value: "spain", label: "Spain" },
-  { value: "netherlands", label: "Netherlands" },
+  { value: "Nigeria", label: "Nigeria" },
+  { value: "Ghana", label: "Ghana" },
+  { value: "Kenya", label: "Kenya" },
+  { value: "South-Africa", label: "South Africa" },
+  { value: "Egypt", label: "Egypt" },
+  { value: "United-States", label: "United States" },
+  { value: "Canada", label: "Canada" },
+  { value: "United-Kingdom", label: "United Kingdom" },
+  { value: "Germany", label: "Germany" },
+  { value: "France", label: "France" },
+  { value: "Italy", label: "Italy" },
+  { value: "Australia", label: "Australia" },
+  { value: "India", label: "India" },
+  { value: "China", label: "China" },
+  { value: "Japan", label: "Japan" },
+  { value: "Brazil", label: "Brazil" },
+  { value: "Mexico", label: "Mexico" },
+  { value: "Argentina", label: "Argentina" },
+  { value: "Spain", label: "Spain" },
+  { value: "Netherlands", label: "Netherlands" },
 ];
 const genderOptions = [
   { value: "male", label: "male" },
@@ -145,8 +117,8 @@ const genderOptions = [
 ];
 
 const options = [
-  { value: "bvn", label: "BVN (recommended)" },
-  { value: "nin", label: "NIN" },
+  { value: "Bvn", label: "BVN (recommended)" },
+  { value: "Nin", label: "NIN" },
 ];
 
 type KycModalProps = {
@@ -160,19 +132,18 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   if (!isVisible) return null;
 
   const location = useLocation();
-  //   const navigate = useNavigate();
   const [selectedVerificationMeans, setSelectedVerificationMeans] =
     useState("");
-
-  // const [accountName, setAccountName] = useState<string | null>("");
-  // const [accountLastName, setAccountLastName] = useState<string | null>("");
-  // const [accountNameError, setAccountNameError] = useState<string | null>("");
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showKycModal, setShowKycModal] = useState(false);
   const [step, setStep] = useState<number>(1);
+  const [accountName, setAccountName] = useState("");
+  const [accountLastName, setAccountLastName] = useState("");
+  const [accountNameError, setAccountNameError] = useState("");
+  const [statusCode, setStatusCode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     verificationMeans: "",
     bvn: "",
@@ -184,7 +155,6 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
     country: "",
     lastName: "",
     firstName: "",
-    middleName: "",
     gender: "",
     dob: "",
   });
@@ -200,7 +170,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
     country: "",
     firstName: "",
     lastName: "",
-    middleName: "",
+    // middleName: "",
     gender: "",
     dob: "",
   });
@@ -250,7 +220,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
       country: "",
       firstName: "",
       lastName: "",
-      middleName: "",
+      // middleName: "",
       gender: "",
       dob: "",
     });
@@ -259,50 +229,58 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   };
 
   // API logic for onBlur and handlwSubmit
-  // const handleBlur = async () => {
-  //   setIsLoading(true);
+  const handleBlur = async () => {
+    setIsLoading(true);
 
-  //   const { verificationMeans, nin, bvn } = formData;
+    const { verificationMeans, nin, bvn, firstName, lastName, country, dob } =
+      formData;
 
-  //   const kycValue = verificationMeans === "bvn" ? bvn : nin;
+    const kycValue = verificationMeans === "Bvn" ? bvn : nin;
 
-  //   const payload = {
-  //     kycType: verificationMeans,
-  //     kycValue: verificationMeans === "bvn" ? bvn : nin,
-  //   };
+    const payload = {
+      kycType: verificationMeans,
+      kycValue: verificationMeans === "Bvn" ? bvn : nin,
+      firstName: firstName,
+      lastName: lastName,
+      dateOfBirth: dob,
+      country: country,
+    };
 
-  //   if (!kycValue) {
-  //     setAccountNameError("Field is required");
-  //     setIsLoading(false);
-  //     return;
-  //   }
+    if (!kycValue) {
+      setAccountNameError("Field is required");
+      setIsLoading(false);
+      return;
+    }
 
-  //   try {
-  //     const response = await api.post("/Onboarding/verifyIdentity", payload);
-  //     // const data = response;
+    try {
+      const response = await api.post("/Onboarding/verifyIdentity", payload);
+      // const data = response;
+      console.log(response);
 
-  //     const firstName = response?.data?.data?.firstName || "";
-  //     const lastName = response?.data?.data?.lastName || "";
+      const firstName = response?.data?.data?.firstName || "";
+      const lastName = response?.data?.data?.lastName || "";
+      const statusCode = response?.data?.statusCode || "";
 
-  //     setAccountName(firstName);
-  //     setAccountLastName(lastName);
-  //     // console.log(firstName, lastName);
-  //     setAccountNameError("");
-  //     setIsLoading(false);
-  //     return;
-  //   } catch (e) {
-  //     const error = e as AxiosError<{ message: string }> | Error;
-  //     const errorMessage =
-  //       ("response" in error && error.response?.data?.message) ||
-  //       error.message ||
-  //       "An error occurred. Please try again.";
-  //     setAccountName("");
-  //     // console.log(error);
-  //     setAccountNameError(errorMessage);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+      setAccountName(firstName);
+      setAccountLastName(lastName);
+      setStatusCode(statusCode);
+      console.log(firstName, lastName);
+      setAccountNameError("");
+      setIsLoading(false);
+      return;
+    } catch (e) {
+      const error = e as AxiosError<{ message: string }> | Error;
+      const errorMessage =
+        ("response" in error && error.response?.data?.message) ||
+        error.message ||
+        "An error occurred. Please try again.";
+      setAccountName("");
+      // console.log(error);
+      setAccountNameError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Handle submit below
   const handleSubmitt = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -335,7 +313,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
         country: "",
         firstName: "",
         lastName: "",
-        middleName: "",
+        // middleName: "",
         gender: "",
         dob: "",
       });
@@ -437,8 +415,8 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
         }
         break;
 
-      case "bvn":
-      case "nin":
+      case "Bvn":
+      case "Nin":
         if (!value.trim()) {
           setErrors((prev) => ({
             ...prev,
@@ -576,34 +554,30 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
       country: "",
       firstName: "",
       lastName: "",
-      middleName: "",
+      // middleName: "",
       gender: "",
       dob: "",
     });
   };
 
-  const {
-    bvn,
-    nin,
-    verificationMeans,
-    state,
-    country,
-    city,
-    postalCode,
-    ...restFormData
-  } = formData;
+  const { bvn, nin, verificationMeans, state, country, dob, gender } = formData;
+
+  const { bvn: _bvn, nin: _nin, ...restFields } = formData;
 
   const isFormInvalid =
-    Object.values(errors).some((error) => error) ||
-    Object.values(restFormData).some((val) => val === "") ||
-    (bvn === "" && nin === "");
+    Object.entries(errors).some(([key, value]) => {
+      if (key === "Bvn" || key === "Nin") return false;
+      return !!value;
+    }) ||
+    Object.values(restFields).some((val) => val === "") ||
+    !((bvn && !errors.bvn) || (nin && !errors.nin));
 
   const isAnyRequiredFieldEmpty = [
     verificationMeans,
     state,
     country,
-    city,
-    postalCode,
+    dob,
+    gender,
   ].some((field) => field.trim() === "");
 
   const hasAnyFieldError = Object.values(errors).some((err) => Boolean(err));
@@ -615,8 +589,8 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   const isFormInvalidForNextButton =
     isAnyRequiredFieldEmpty || !isBvnOrNinValid || hasAnyFieldError;
 
-
-    
+  const isSuccess = statusCode === "OK" && accountName;
+  const isError = !isLoading && !isSuccess && accountNameError;
 
   return (
     <>
@@ -825,7 +799,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                             </p>
                           )}
                         </div>
-                        {selectedVerificationMeans === "bvn" && (
+                        {selectedVerificationMeans === "Bvn" && (
                           <>
                             <p className="text-[#0A2E65]/60 pb-[1px] pl-[5px] text-[15px] text-left  mt-[10px] ">
                               BVN
@@ -857,7 +831,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                           </>
                         )}
 
-                        {selectedVerificationMeans === "nin" && (
+                        {selectedVerificationMeans === "Nin" && (
                           <>
                             <p className="text-[#0A2E65]/60 pb-[1px] pl-[5px] text-[15px] text-left  mt-[10px] ">
                               NIN
@@ -892,58 +866,59 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                           {/* City Field (65%) */}
                           <div className="flex flex-col w-[65%]">
                             <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left mt-[10px]">
-                              City
+                              Gender
                             </p>
                             <div className="w-full">
-                              <input
-                                type="text"
-                                placeholder="Enter City"
-                                name="city"
-                                value={formData.city}
-                                onChange={handleInputChange}
-                                onBlur={(e) =>
-                                  validateField(e.target.name, e.target.value)
+                              <Select
+                                options={genderOptions}
+                                getOptionLabel={(e) => e.label}
+                                getOptionValue={(e) => e.value}
+                                value={genderOptions.find(
+                                  (p) => p.value === formData.gender
+                                )}
+                                styles={customStyleSelect(!!errors.gender)}
+                                onChange={(option) =>
+                                  handleSelectChange("gender", option)
                                 }
-                                className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
-                                  errors.city
-                                    ? "border border-red-600"
-                                    : "focus:border-purple-800"
-                                }`}
+                                onBlur={() =>
+                                  validateField("gender", formData.gender)
+                                }
+                                placeholder="Select Gender"
                               />
-                              {errors.city && (
-                                <p className="text-red-500 text-left text-[13px] ">
-                                  {errors.city}
-                                </p>
-                              )}
                             </div>
+                            {errors.gender && (
+                              <p className="text-red-500 text-left text-[13px] ">
+                                {errors.gender}
+                              </p>
+                            )}
                           </div>
 
                           {/* Postal Code Field (35%) */}
                           <div className="flex flex-col w-[35%]">
                             <div className="mt-[10px] flex justify-between items-center">
                               <p className="text-[#0A2E65]/60 pl-[5px] text-[15px] pb-[3px] text-left">
-                                Postal Code
+                                Date of Birth
                               </p>
                             </div>
                             <div className="w-full mb-4">
                               <input
                                 type="text"
-                                placeholder="203110"
-                                name="postalCode"
-                                value={formData.postalCode}
+                                placeholder="20/12/2001"
+                                name="dob"
+                                value={formData.dob}
                                 onChange={handleInputChange}
                                 onBlur={(e) =>
                                   validateField(e.target.name, e.target.value)
                                 }
                                 className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
-                                  errors.postalCode
+                                  errors.dob
                                     ? "border border-red-600"
                                     : "focus:border-purple-800"
                                 }`}
                               />
-                              {errors.postalCode && (
+                              {errors.dob && (
                                 <p className="text-red-500 text-left text-[13px] mt-1">
-                                  {errors.postalCode}
+                                  {errors.dob}
                                 </p>
                               )}
                             </div>
@@ -1008,32 +983,6 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                           )}
                         </div>
 
-                        {/* <p className="text-[#0A2E65]/60 pb-[1px] pl-[5px] text-[15px] text-left  mt-[10px] ">
-                          Middle Name
-                        </p>
-                        <div className="w-full">
-                          <input
-                            type="text"
-                            placeholder="Okechukwu"
-                            name="middleName"
-                            value={formData.middleName}
-                            onChange={handleInputChange}
-                            onBlur={(e) =>
-                              validateField(e.target.name, e.target.value)
-                            }
-                            className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
-                              errors.middleName
-                                ? "border border-red-600"
-                                : "focus:border-purple-800"
-                            }`}
-                          />
-                          {errors.middleName && (
-                            <p className="text-red-500 text-left text-[13px] ">
-                              {errors.middleName}
-                            </p>
-                          )}
-                        </div> */}
-
                         <p className="text-[#0A2E65]/60 pb-[1px] pl-[5px] text-[15px] text-left  mt-[10px] ">
                           Last Name
                         </p>
@@ -1044,9 +993,10 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                             name="lastName"
                             value={formData.lastName}
                             onChange={handleInputChange}
-                            onBlur={(e) =>
-                              validateField(e.target.name, e.target.value)
-                            }
+                            onBlur={async (e) => {
+                              validateField(e.target.name, e.target.value);
+                              await handleBlur();
+                            }}
                             className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                               errors.lastName
                                 ? "border border-red-600"
@@ -1060,64 +1010,82 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                             </p>
                           )}
                         </div>
+                        {isLoading ? (
+                          <p className="text-sm text-gray-500 flex items-center ">
+                            Verifying
+                            <span className="loading-dots text-lg font-semibold"></span>
+                          </p>
+                        ) : isSuccess ? (
+                          <div className="flex ml-1 text-[14px] items-center gap-1">
+                            <img src={check} alt="" />
+                            <div className="flex justify-center items-center gap-1.5">
+                              <p>{accountName}</p>
+                              <p>{accountLastName}</p>
+                            </div>
+                          </div>
+                        ) : isError ? (
+                          <p className="text-sm text-red-500">
+                            {accountNameError ||
+                              "An error occurred. Please try again."}
+                          </p>
+                        ) : null}
 
                         <div className="flex gap-[1rem] w-full ">
                           {/* City Field (65%) */}
                           <div className="flex flex-col w-[65%]">
                             <p className="text-[#0A2E65]/60 pb-[3px] pl-[5px] text-[15px] text-left mt-[10px]">
-                              Gender
+                              City
                             </p>
                             <div className="w-full">
-                              <Select
-                                options={genderOptions}
-                                getOptionLabel={(e) => e.label}
-                                getOptionValue={(e) => e.value}
-                                value={genderOptions.find(
-                                  (p) => p.value === formData.gender
-                                )}
-                                styles={customStyleSelect(!!errors.gender)}
-                                onChange={(option) =>
-                                  handleSelectChange("gender", option)
+                              <input
+                                type="text"
+                                placeholder="Enter City"
+                                name="city"
+                                value={formData.city}
+                                onChange={handleInputChange}
+                                onBlur={(e) =>
+                                  validateField(e.target.name, e.target.value)
                                 }
-                                onBlur={() =>
-                                  validateField("gender", formData.gender)
-                                }
-                                placeholder="Select Gender"
+                                className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                                  errors.city
+                                    ? "border border-red-600"
+                                    : "focus:border-purple-800"
+                                }`}
                               />
+                              {errors.city && (
+                                <p className="text-red-500 text-left text-[13px] ">
+                                  {errors.city}
+                                </p>
+                              )}
                             </div>
-                            {errors.gender && (
-                              <p className="text-red-500 text-left text-[13px] ">
-                                {errors.gender}
-                              </p>
-                            )}
                           </div>
 
                           {/* Postal Code Field (35%) */}
                           <div className="flex flex-col w-[35%]">
                             <div className="mt-[10px] flex justify-between items-center">
                               <p className="text-[#0A2E65]/60 pl-[5px] text-[15px] pb-[3px] text-left">
-                                Date of Birth
+                                Postal Code
                               </p>
                             </div>
                             <div className="w-full mb-4">
                               <input
                                 type="text"
-                                placeholder="20/12/2001"
-                                name="dob"
-                                value={formData.dob}
+                                placeholder="203110"
+                                name="postalCode"
+                                value={formData.postalCode}
                                 onChange={handleInputChange}
                                 onBlur={(e) =>
                                   validateField(e.target.name, e.target.value)
                                 }
                                 className={`p-2.5 pl-3 pr-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
-                                  errors.dob
+                                  errors.postalCode
                                     ? "border border-red-600"
                                     : "focus:border-purple-800"
                                 }`}
                               />
-                              {errors.dob && (
+                              {errors.postalCode && (
                                 <p className="text-red-500 text-left text-[13px] mt-1">
-                                  {errors.dob}
+                                  {errors.postalCode}
                                 </p>
                               )}
                             </div>
