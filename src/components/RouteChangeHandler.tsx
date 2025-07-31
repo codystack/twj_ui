@@ -241,12 +241,15 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
 
     const kycValue = verificationMeans === "Bvn" ? bvn : nin;
 
+    const [day, month, year] = dob.split("/");
+    const isoDob = new Date(`${year}-${month}-${day}`).toISOString();
+
     const payload = {
       kycType: verificationMeans,
       kycValue: verificationMeans === "Bvn" ? bvn : nin,
       firstName: firstName,
       lastName: lastName,
-      dateOfBirth: dob,
+      dateOfBirth: isoDob,
       country: country,
     };
 
@@ -1124,7 +1127,10 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
                         <>
                           <button
                             type="button"
-                            onClick={() => setStep(1)}
+                            onClick={() => {
+                              setFinalError("");
+                              setStep(1);
+                            }}
                             className="w-full md:w-1/2 cursor-pointer border border-[#8003A9] text-[#8003A9] py-3 text-[17px] px-4 rounded-md"
                           >
                             Back

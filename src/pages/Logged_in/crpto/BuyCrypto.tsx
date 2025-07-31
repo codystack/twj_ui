@@ -48,22 +48,6 @@ const options = [
     image: ETHER,
   },
 ];
-const networkOptions = [
-  {
-    id: "brc20",
-    label: "Bitcoin BRC20",
-    value: "btc_backend_id_123",
-    // displayValue: ".102 BTC",
-    // image: BITCOIN,
-  },
-  {
-    id: "usd",
-    label: "brc20(usdt)",
-    value: "usd_backend_id_789",
-    // displayValue: ".504 ETH",
-    // image: ETHER,
-  },
-];
 
 const BuyCrypto = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -71,6 +55,15 @@ const BuyCrypto = () => {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectOptions, setSelectOptions] = useState<Optiontype[]>([]);
+
+  const [networkOptions, setNetworkOptions] = useState<Optiontype[]>([]);
+  // const [selectedNetwork, setSelectedNetwork] = useState<Optiontype | null>(
+  //   null
+  // );
+  const [selectedNetwork, setSelectedNetwork] = useState<
+    Optiontype | undefined
+  >(undefined);
+
   const [amount, setAmount] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [toAmount, setToAmount] = useState<string>("");
@@ -82,11 +75,18 @@ const BuyCrypto = () => {
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [openPinModal, setOpenPinModal] = useState(false);
   const [activeTab, setActiveTab] = useState<"buy" | "send">("buy");
-  const [form, setForm] = useState({
-    narration: "",
+  const [sendFormError, setSendFormError] = useState<string>("");
+  // const [form, setForm] = useState({
+  //   narration: "",
+  //   network: "",
+  //   amount: "",
+  //   quotationId: "",
+  // });
+  const [sendForm, setSendForm] = useState({
+    address: "",
     network: "",
     amount: "",
-    quotationId: "",
+    narration: "",
   });
 
   const {
@@ -241,39 +241,58 @@ const BuyCrypto = () => {
     });
 
   const onVerify = () =>
-    new Promise<void>((resolve, reject) => {
-      (async () => {
-        try {
-          const res = await api.post("/Crypto/buyCrypto", {
+    new Promise<void>(async (resolve, reject) => {
+      try {
+        let payload;
+        let endpoint;
+
+        if (activeTab === "buy") {
+          endpoint = "/Crypto/buyCrypto";
+          payload = {
             amount: numericAmount,
             quotationId: quoteId,
-          });
-
-          // if (!res.data.isSuccessful) {
-          //   throw new Error(
-          //     res.data.message || "An error occurred"
-          //   );
-          // }
-
-          if (res.data.statusCode !== "OK") {
-            throw new Error(res.data.message || "An error occurred");
-          }
-          setIsSuccessModal(true);
-          setToAmount("");
-          setAmount("");
-          setCurrency("");
-          setQuoteId("");
-          setQuotePrice("");
-          setSelectedCoin(options[0]);
-          stopCountdown();
-
-          resolve();
-        } catch (e) {
-          reject(e);
-        } finally {
-          stopCountdown();
+          };
+        } else {
+          endpoint = "/Crypto/sendCrypto";
+          payload = {
+            currency: selectedCoin.value,
+            walletAddress: sendForm.address,
+            amount: parseFloat(sendForm.amount),
+            transactionNote: sendForm.narration,
+            narration: sendForm.narration,
+            network: selectedNetwork?.id,
+          };
         }
-      })();
+
+        // console.log("dynamic payload", payload);
+        // return;
+        const res = await api.post(endpoint, payload);
+
+        if (res.data.statusCode !== "OK") {
+          throw new Error(res.data.message || "An error occurred");
+        }
+
+        setIsSuccessModal(true);
+        setToAmount("");
+        setAmount("");
+        setCurrency("");
+        setQuoteId("");
+        setQuotePrice("");
+        setSelectedCoin(options[0]);
+        stopCountdown();
+        setSendForm({
+          address: "",
+          network: "",
+          amount: "",
+          narration: "",
+        });
+
+        resolve();
+      } catch (e) {
+        reject(e);
+      } finally {
+        stopCountdown();
+      }
     });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -286,12 +305,87 @@ const BuyCrypto = () => {
     }
   };
 
+  const handleSendFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    if (name === "amount") {
+      // Allow only numeric input
+      if (!/^\d*\.?\d*$/.test(value)) return;
+
+      const numericValue = parseFloat(value);
+      const walletBalance = parseFloat(
+        selectedCoin.displayValue?.toString() || "0"
+      );
+
+      if (numericValue > walletBalance) {
+        setSendFormError("Amount cannot be more than wallet balance.");
+        // return;
+      } else {
+        setSendFormError("");
+      }
+    }
+
+    setSendForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // send crypto
+  useEffect(() => {
+    updateNetworksForCoin(selectedCoin);
+  }, [selectedCoin, wallets]);
+
+  type OptionType = {
+    label: string;
+    value: string;
+  };
+
+  const updateNetworksForCoin = (coin: OptionType | null) => {
+    if (!coin) {
+      setNetworkOptions([]);
+      setSelectedNetwork(undefined);
+      return;
+    }
+
+    const selectedWallet = wallets.find(
+      (wallet) => wallet.currency.toLowerCase() === coin.value
+    );
+
+    if (selectedWallet) {
+      const networks = selectedWallet.networks || [];
+      const formattedNetworks = networks.map((net) => ({
+        id: net.id,
+        label: net.id,
+        value: net.id,
+      }));
+      setNetworkOptions(formattedNetworks);
+      setSelectedNetwork(formattedNetworks[0] || null);
+    } else {
+      setNetworkOptions([]);
+      setSelectedNetwork(undefined);
+    }
+  };
+
   const handleFocus = () => {
     setIsInputFocused(true);
   };
 
   const isDisabled =
     isInputFocused || !!error || loadingData || !amount || countdown < 1;
+
+  const amountValue = parseFloat(sendForm.amount);
+  const coinBalance = parseFloat(selectedCoin?.displayValue || "0");
+
+  const isInvalid =
+    !sendForm.narration ||
+    !sendForm.address ||
+    !sendForm.amount ||
+    !!sendFormError ||
+    amountValue <= 0 ||
+    amountValue > coinBalance;
 
   return (
     <>
@@ -378,12 +472,13 @@ const BuyCrypto = () => {
                           setQuoteId("");
                           // setSelectedCoin(options[0]);
                           stopCountdown();
-                          setForm({
-                            narration: "",
-                            network: "",
-                            amount: "",
-                            quotationId: "",
-                          });
+                          setSelectedNetwork(undefined);
+                          // setForm({
+                          //   narration: "",
+                          //   network: "",
+                          //   amount: "",
+                          //   quotationId: "",
+                          // });
                         }}
                       >
                         Buy
@@ -617,6 +712,7 @@ const BuyCrypto = () => {
                                     setQuoteId("");
                                     setSelectedCoin(val);
                                     stopCountdown();
+                                    updateNetworksForCoin(val);
                                   }}
                                   inputWidth="w-auto"
                                   optionsWidth="w-[15rem]"
@@ -643,8 +739,11 @@ const BuyCrypto = () => {
                             {/* Input Field */}
                             <input
                               type="text"
+                              name="address"
                               placeholder="Paste [name of crypto] wallet address"
                               className="w-full px-3 py-3 outline-none bg-white text-[16px] rounded-md"
+                              value={sendForm.address}
+                              onChange={(e) => handleSendFormChange(e)}
                             />
 
                             <img
@@ -655,18 +754,20 @@ const BuyCrypto = () => {
                           </div>
                           <div className="flex justify-between  mt-[0.5rem]   items-center">
                             <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                              Network
+                              Network{" "}
+                              <span className="text-gray-400">(Optional)</span>
                             </p>
                           </div>
 
                           <div className="w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
                             <CustomSelect
                               options={networkOptions}
-                              // value={networkOptions}
-                              onChange={(val) => {
-                                setForm({ ...form });
-                                form.network = val.value;
-                              }}
+                              value={selectedNetwork}
+                              onChange={(val) => setSelectedNetwork(val)}
+                              // onChange={(val) => {
+                              //   setForm({ ...form });
+                              //   form.network = val.value;
+                              // }}
                               placeholder="Select Network"
                               inputWidth="w-auto"
                               optionsWidth="w-full"
@@ -687,16 +788,20 @@ const BuyCrypto = () => {
                               Amount
                             </p>
 
-                            <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
+                            <div
+                              className={`grid grid-cols-2 items-center px-2 py-1 border ${
+                                sendFormError
+                                  ? "border-red-500"
+                                  : "border-gray-300"
+                              }  rounded-lg`}
+                            >
                               <input
                                 type="text"
+                                name="amount"
                                 placeholder="0.00104"
                                 className="w-full pr-3 py-3 outline-none bg-white text-[16px] rounded-md"
-                                value={amount}
-                                onChange={(e) => {
-                                  stopCountdown();
-                                  handleChange(e);
-                                }}
+                                value={sendForm.amount}
+                                onChange={(e) => handleSendFormChange(e)}
                               />
                               <div className="w-full flex">
                                 <div className="ml-auto w-auto">
@@ -719,6 +824,11 @@ const BuyCrypto = () => {
                                 </div>
                               </div>
                             </div>
+                            {sendFormError && (
+                              <p className="text-red-500 text-sm">
+                                {sendFormError}
+                              </p>
+                            )}
 
                             <div className="flex justify-between  mt-[0.5rem]   items-center">
                               <p className="pt-2 pb-1 text-[14px] text-[#000]">
@@ -728,25 +838,21 @@ const BuyCrypto = () => {
                             <div className="w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
                               <input
                                 type="text"
+                                name="narration"
                                 placeholder="Enter narration"
                                 className="w-full px-3 py-3 outline-none bg-white text-[16px] rounded-md"
-                                value={form.narration}
-                                onChange={(e) =>
-                                  setForm({
-                                    ...form,
-                                    narration: e.target.value,
-                                  })
-                                }
-                                onBlur={handleBlur}
-                                onFocus={() => {
-                                  stopCountdown();
-                                  handleFocus();
-                                }}
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter") {
-                                    handleBlur();
-                                  }
-                                }}
+                                value={sendForm.narration}
+                                onChange={(e) => handleSendFormChange(e)}
+                                // onBlur={handleBlur}
+                                // onFocus={() => {
+                                //   stopCountdown();
+                                //   handleFocus();
+                                // }}
+                                // onKeyDown={(e) => {
+                                //   if (e.key === "Enter") {
+                                //     handleBlur();
+                                //   }
+                                // }}
                               />
                             </div>
 
@@ -757,10 +863,10 @@ const BuyCrypto = () => {
                             <div className="w-full flex mt-9 justify-end">
                               <div className="flex items-center gap-3">
                                 <button
-                                  disabled={isDisabled}
+                                  disabled={isInvalid}
                                   onClick={() => setShowConfirmation(true)}
                                   className={`border-[2px] ${
-                                    isDisabled
+                                    isInvalid
                                       ? "opacity-50 cursor-not-allowed"
                                       : "cursor-pointer"
                                   } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
@@ -853,8 +959,71 @@ const BuyCrypto = () => {
                     </>
                   ) : activeTab === "send" ? (
                     <>
-                      {/* Pending Confirmation UI for Send */}
-                      <p>Send confirmation (pending state UI)</p>
+                      {/* Confirmation UI for Send */}
+
+                      <>
+                        <div className="flex items-center justify-center">
+                          <div className="flex flex-col gap-[2px]">
+                            <p className="text-[18px] mb-[-8px] text-center">
+                              Sending
+                            </p>
+                            <h4 className="flex justify-center gap-0.5   items-center text-[24px]">
+                              <span>{selectedCoin.displayValue}</span>
+                            </h4>
+                            <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
+                              <span>-</span> <span>{sendForm.amount}</span>
+                              {/* <span>NGN</span> */}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="border border-gray-300 mt-[2rem] px-4 py-6 rounded-md bg-white shadow">
+                          <div className="flex justify-between text-[15px] mb-4">
+                            <p className="">Amount</p>
+                            <span className="  flex items-center gap-1">
+                              <span>{sendForm.amount}</span>
+                              {/* <span>{currency}</span> */}
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-[15px] mb-4">
+                            <p className="">Wallet balance</p>
+                            <span className="  flex items-center gap-1">
+                              {selectedCoin.displayValue}
+                            </span>
+                          </div>
+                          {/* 
+                          <div className="flex justify-between text-[15px] mb-4">
+                            <p className="">Transaction fee</p>
+                            <span className=" flex items-center gap-1">
+                              <span>{numericAmount}</span>
+                              <span>NGN</span>
+                            </span>
+                          </div> */}
+
+                          <div className="flex justify-between text-[15px] ">
+                            <p className="">Address</p>
+                            <span className="flex items-center gap-1">
+                              <span>{sendForm.address}</span>
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="w-full flex mt-9 justify-end">
+                          <div className="flex items-center gap-3">
+                            <button
+                              onClick={() => setShowConfirmation(false)}
+                              className="border-[2px] cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
+                            >
+                              Edit Purchase
+                            </button>
+                            <button
+                              className={`border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
+                              onClick={() => setOpenPinModal(true)}
+                            >
+                              Create Purchase
+                            </button>
+                          </div>
+                        </div>
+                      </>
                     </>
                   ) : null}
                 </div>
