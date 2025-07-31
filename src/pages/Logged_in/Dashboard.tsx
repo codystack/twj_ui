@@ -187,6 +187,8 @@ const Dashboard = () => {
     fetchUser();
   }, []);
 
+  // kyc fix commented below
+
   // useEffect(() => {
   //   fetchBanks();
   //   const timeout = setTimeout(() => {

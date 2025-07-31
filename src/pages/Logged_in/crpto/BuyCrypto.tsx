@@ -48,22 +48,23 @@ const options = [
     image: ETHER,
   },
 ];
-const networkOptions = [
-  {
-    id: "brc20",
-    label: "Bitcoin BRC20",
-    value: "btc_backend_id_123",
-    // displayValue: ".102 BTC",
-    // image: BITCOIN,
-  },
-  {
-    id: "usd",
-    label: "brc20(usdt)",
-    value: "usd_backend_id_789",
-    // displayValue: ".504 ETH",
-    // image: ETHER,
-  },
-];
+
+// const networkOptions = [
+//   {
+//     id: "brc20",
+//     label: "Bitcoin BRC20",
+//     value: "btc_backend_id_123",
+//     // displayValue: ".102 BTC",
+//     // image: BITCOIN,
+//   },
+//   {
+//     id: "usd",
+//     label: "brc20(usdt)",
+//     value: "usd_backend_id_789",
+//     // displayValue: ".504 ETH",
+//     // image: ETHER,
+//   },
+// ];
 
 const BuyCrypto = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -71,6 +72,14 @@ const BuyCrypto = () => {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectOptions, setSelectOptions] = useState<Optiontype[]>([]);
+
+  const [networkOptions, setNetworkOptions] = useState<Optiontype[]>([]);
+  // const [selectedNetwork, setSelectedNetwork] = useState<Optiontype | null>(
+  //   null
+  // );
+  const [selectedNetwork, setSelectedNetwork] = useState<Optiontype | undefined>(undefined);
+
+
   const [amount, setAmount] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [toAmount, setToAmount] = useState<string>("");
@@ -286,6 +295,43 @@ const BuyCrypto = () => {
     }
   };
 
+  // send crypto
+
+  useEffect(() => {
+    updateNetworksForCoin(selectedCoin);
+  }, [selectedCoin, wallets]);
+
+  type OptionType = {
+    label: string;
+    value: string;
+  };
+
+  const updateNetworksForCoin = (coin: OptionType | null) => {
+    if (!coin) {
+      setNetworkOptions([]);
+      setSelectedNetwork(undefined);
+      return;
+    }
+
+    const selectedWallet = wallets.find(
+      (wallet) => wallet.currency.toLowerCase() === coin.value
+    );
+
+    if (selectedWallet) {
+      const networks = selectedWallet.networks || [];
+      const formattedNetworks = networks.map((net) => ({
+        id: net.id,
+        label: net.id,
+        value: net.id,
+      }));
+      setNetworkOptions(formattedNetworks);
+      setSelectedNetwork(formattedNetworks[0] || null);
+    } else {
+      setNetworkOptions([]);
+      setSelectedNetwork(undefined);
+    }
+  };
+
   const handleFocus = () => {
     setIsInputFocused(true);
   };
@@ -378,6 +424,7 @@ const BuyCrypto = () => {
                           setQuoteId("");
                           // setSelectedCoin(options[0]);
                           stopCountdown();
+                          setSelectedNetwork(undefined)
                           setForm({
                             narration: "",
                             network: "",
@@ -443,15 +490,16 @@ const BuyCrypto = () => {
                               <CustomSelect
                                 options={selectOptions}
                                 value={selectedCoin}
-                                onChange={(val) => {
-                                  setError("");
-                                  setToAmount("");
-                                  setAmount("");
-                                  setCurrency("");
-                                  setQuoteId("");
-                                  setSelectedCoin(val);
-                                  stopCountdown();
-                                }}
+                                // onChange={(val) => {
+                                //   setError("");
+                                //   setToAmount("");
+                                //   setAmount("");
+                                //   setCurrency("");
+                                //   setQuoteId("");
+                                //   setSelectedCoin(val);
+                                //   stopCountdown();
+                                // }}
+
                                 inputWidth="w-auto"
                                 optionsWidth="w-[15rem]"
                                 optionsOffsetX={-90}
@@ -617,6 +665,7 @@ const BuyCrypto = () => {
                                     setQuoteId("");
                                     setSelectedCoin(val);
                                     stopCountdown();
+                                    updateNetworksForCoin(val);
                                   }}
                                   inputWidth="w-auto"
                                   optionsWidth="w-[15rem]"
@@ -655,18 +704,20 @@ const BuyCrypto = () => {
                           </div>
                           <div className="flex justify-between  mt-[0.5rem]   items-center">
                             <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                              Network <span className="text-gray-400">(Optional)</span>
+                              Network{" "}
+                              <span className="text-gray-400">(Optional)</span>
                             </p>
                           </div>
 
                           <div className="w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
                             <CustomSelect
                               options={networkOptions}
-                              // value={networkOptions}
-                              onChange={(val) => {
-                                setForm({ ...form });
-                                form.network = val.value;
-                              }}
+                              value={selectedNetwork}
+                              onChange={(val) => setSelectedNetwork(val)}
+                              // onChange={(val) => {
+                              //   setForm({ ...form });
+                              //   form.network = val.value;
+                              // }}
                               placeholder="Select Network"
                               inputWidth="w-auto"
                               optionsWidth="w-full"
@@ -757,7 +808,7 @@ const BuyCrypto = () => {
                             <div className="w-full flex mt-9 justify-end">
                               <div className="flex items-center gap-3">
                                 <button
-                                  disabled={isDisabled}
+                                  // disabled={isDisabled}
                                   onClick={() => setShowConfirmation(true)}
                                   className={`border-[2px] ${
                                     isDisabled
@@ -853,8 +904,88 @@ const BuyCrypto = () => {
                     </>
                   ) : activeTab === "send" ? (
                     <>
-                      {/* Pending Confirmation UI for Send */}
-                      <p>Send confirmation (pending state UI)</p>
+                      {/* Confirmation UI for Send */}
+
+                      <>
+                        <div className="flex items-center justify-center">
+                          <div className="flex flex-col gap-[2px]">
+                            <p className="text-[18px] mb-[-8px] text-center">
+                              Sending
+                            </p>
+                            <h4 className="flex justify-center gap-0.5   items-center text-[24px]">
+                              <span>
+                                {toAmount
+                                  ? `${toAmount} ${currency.toUpperCase()}`
+                                  : 0.0}
+                              </span>
+                            </h4>
+                            <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
+                              <span>-</span> <span>{numericAmount}</span>
+                              <span>NGN</span>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="border border-gray-300 mt-[2rem] px-4 py-6 rounded-md bg-white shadow">
+                          <div className="flex justify-between text-[15px] mb-4">
+                            <p className="">Amount</p>
+                            <span className="  flex items-center gap-1">
+                              <span>{Number(quotePrice).toLocaleString()}</span>
+                              <span>{currency}</span>
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-[15px] mb-4">
+                            <p className="">Wallet balance</p>
+                            <span className="  flex items-center gap-1">
+                              <span>{Number(quotePrice).toLocaleString()}</span>
+                              <span>{currency}</span>
+                            </span>
+                          </div>
+
+                          <div className="flex justify-between text-[15px] mb-4">
+                            <p className="">Transaction fee</p>
+                            <span className=" flex items-center gap-1">
+                              <span>{numericAmount}</span>
+                              <span>NGN</span>
+                            </span>
+                          </div>
+
+                          {/* <div className="flex justify-between text-[15px] mb-4">
+                        <p className="">Transaction Fee</p>
+                        <span className="flex items-center gap-1">
+                          <span>0.0012</span>
+                          <span>BTC</span>
+                        </span>
+                      </div> */}
+
+                          <div className="flex justify-between text-[15px] ">
+                            <p className="">Address</p>
+                            <span className="flex items-center gap-1">
+                              <span>
+                                {toAmount
+                                  ? `${toAmount} ${currency.toUpperCase()}`
+                                  : 0.0}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="w-full flex mt-9 justify-end">
+                          <div className="flex items-center gap-3">
+                            <button
+                              onClick={() => setShowConfirmation(false)}
+                              className="border-[2px] cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
+                            >
+                              Edit Purchase
+                            </button>
+                            <button
+                              className={`border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
+                              onClick={() => setOpenPinModal(true)}
+                            >
+                              Create Purchase
+                            </button>
+                          </div>
+                        </div>
+                      </>
                     </>
                   ) : null}
                 </div>
