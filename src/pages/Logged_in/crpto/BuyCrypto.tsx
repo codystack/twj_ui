@@ -740,7 +740,7 @@ const BuyCrypto = () => {
                             <input
                               type="text"
                               name="address"
-                              placeholder="Paste [name of crypto] wallet address"
+                              placeholder={`Paste ${selectedCoin.label.toLowerCase()} wallet address`}
                               className="w-full px-3 py-3 outline-none bg-white text-[16px] rounded-md"
                               value={sendForm.address}
                               onChange={(e) => handleSendFormChange(e)}
