@@ -240,53 +240,32 @@ const BuyCrypto = () => {
       setError,
     });
 
-  // const onVerify = () =>
-  //   new Promise<void>((resolve, reject) => {
-  //     (async () => {
-  //       try {
-  //         const res = await api.post("/Crypto/buyCrypto", {
-  //           amount: numericAmount,
-  //           quotationId: quoteId,
-  //         });
-
-  //         // if (!res.data.isSuccessful) {
-  //         //   throw new Error(
-  //         //     res.data.message || "An error occurred"
-  //         //   );
-  //         // }
-
-  //         if (res.data.statusCode !== "OK") {
-  //           throw new Error(res.data.message || "An error occurred");
-  //         }
-  //         setIsSuccessModal(true);
-  //         setToAmount("");
-  //         setAmount("");
-  //         setCurrency("");
-  //         setQuoteId("");
-  //         setQuotePrice("");
-  //         setSelectedCoin(options[0]);
-  //         stopCountdown();
-
-  //         resolve();
-  //       } catch (e) {
-  //         reject(e);
-  //       } finally {
-  //         stopCountdown();
-  //       }
-  //     })();
-  //   });
-
   const onVerify = () =>
     new Promise<void>(async (resolve, reject) => {
       try {
-        const payload = {
-          amount: numericAmount,
-          quotationId: quoteId,
-        };
+        let payload;
+        let endpoint;
 
-        const endpoint =
-          activeTab === "buy" ? "/Crypto/buyCrypto" : "/Crypto/sendCrypto";
+        if (activeTab === "buy") {
+          endpoint = "/Crypto/buyCrypto";
+          payload = {
+            amount: numericAmount,
+            quotationId: quoteId,
+          };
+        } else {
+          endpoint = "/Crypto/sendCrypto";
+          payload = {
+            currency: selectedCoin.value,
+            walletAddress: sendForm.address,
+            amount: parseFloat(sendForm.amount),
+            transactionNote: sendForm.narration,
+            narration: sendForm.narration,
+            network: selectedNetwork?.id,
+          };
+        }
 
+        // console.log("dynamic payload", payload);
+        // return;
         const res = await api.post(endpoint, payload);
 
         if (res.data.statusCode !== "OK") {
@@ -301,6 +280,12 @@ const BuyCrypto = () => {
         setQuotePrice("");
         setSelectedCoin(options[0]);
         stopCountdown();
+        setSendForm({
+          address: "",
+          network: "",
+          amount: "",
+          narration: "",
+        });
 
         resolve();
       } catch (e) {
@@ -319,22 +304,6 @@ const BuyCrypto = () => {
       setAmount(value);
     }
   };
-
-  // const handleSendFormChange = (
-  //   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  // ) => {
-  //   const { name, value } = e.target;
-
-  //   if (name === "amount") {
-  //     // Allow only numeric values
-  //     if (!/^\d*\.?\d*$/.test(value)) return;
-  //   }
-
-  //   setSendForm((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
 
   const handleSendFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -407,11 +376,16 @@ const BuyCrypto = () => {
   const isDisabled =
     isInputFocused || !!error || loadingData || !amount || countdown < 1;
 
+  const amountValue = parseFloat(sendForm.amount);
+  const coinBalance = parseFloat(selectedCoin?.displayValue || "0");
+
   const isInvalid =
     !sendForm.narration ||
     !sendForm.address ||
     !sendForm.amount ||
-    !!sendFormError;
+    !!sendFormError ||
+    amountValue <= 0 ||
+    amountValue > coinBalance;
 
   return (
     <>
