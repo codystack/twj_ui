@@ -49,23 +49,6 @@ const options = [
   },
 ];
 
-// const networkOptions = [
-//   {
-//     id: "brc20",
-//     label: "Bitcoin BRC20",
-//     value: "btc_backend_id_123",
-//     // displayValue: ".102 BTC",
-//     // image: BITCOIN,
-//   },
-//   {
-//     id: "usd",
-//     label: "brc20(usdt)",
-//     value: "usd_backend_id_789",
-//     // displayValue: ".504 ETH",
-//     // image: ETHER,
-//   },
-// ];
-
 const BuyCrypto = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [selectedCoin, setSelectedCoin] = useState<Optiontype>(options[0]);
@@ -77,8 +60,9 @@ const BuyCrypto = () => {
   // const [selectedNetwork, setSelectedNetwork] = useState<Optiontype | null>(
   //   null
   // );
-  const [selectedNetwork, setSelectedNetwork] = useState<Optiontype | undefined>(undefined);
-
+  const [selectedNetwork, setSelectedNetwork] = useState<
+    Optiontype | undefined
+  >(undefined);
 
   const [amount, setAmount] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -96,6 +80,12 @@ const BuyCrypto = () => {
     network: "",
     amount: "",
     quotationId: "",
+  });
+  const [sendForm, setSendForm] = useState({
+    address: "",
+    network: "",
+    amount: "",
+    narration: "",
   });
 
   const {
@@ -295,6 +285,22 @@ const BuyCrypto = () => {
     }
   };
 
+  const handleSendFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    if (name === "amount") {
+      // Allow only numeric values
+      if (!/^\d*\.?\d*$/.test(value)) return;
+    }
+
+    setSendForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   // send crypto
 
   useEffect(() => {
@@ -424,7 +430,7 @@ const BuyCrypto = () => {
                           setQuoteId("");
                           // setSelectedCoin(options[0]);
                           stopCountdown();
-                          setSelectedNetwork(undefined)
+                          setSelectedNetwork(undefined);
                           setForm({
                             narration: "",
                             network: "",
@@ -741,12 +747,13 @@ const BuyCrypto = () => {
                             <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
                               <input
                                 type="text"
+                                name="amount"
                                 placeholder="0.00104"
                                 className="w-full pr-3 py-3 outline-none bg-white text-[16px] rounded-md"
-                                value={amount}
+                                value={sendForm.amount}
                                 onChange={(e) => {
                                   stopCountdown();
-                                  handleChange(e);
+                                  handleSendFormChange(e);
                                 }}
                               />
                               <div className="w-full flex">
@@ -779,15 +786,11 @@ const BuyCrypto = () => {
                             <div className="w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
                               <input
                                 type="text"
+                                name="narration"
                                 placeholder="Enter narration"
                                 className="w-full px-3 py-3 outline-none bg-white text-[16px] rounded-md"
-                                value={form.narration}
-                                onChange={(e) =>
-                                  setForm({
-                                    ...form,
-                                    narration: e.target.value,
-                                  })
-                                }
+                                value={sendForm.narration}
+                                onChange={(e) => handleSendFormChange(e)}
                                 onBlur={handleBlur}
                                 onFocus={() => {
                                   stopCountdown();
@@ -808,7 +811,7 @@ const BuyCrypto = () => {
                             <div className="w-full flex mt-9 justify-end">
                               <div className="flex items-center gap-3">
                                 <button
-                                  // disabled={isDisabled}
+                                  disabled={isDisabled}
                                   onClick={() => setShowConfirmation(true)}
                                   className={`border-[2px] ${
                                     isDisabled

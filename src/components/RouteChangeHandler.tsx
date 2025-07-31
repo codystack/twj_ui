@@ -241,12 +241,15 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
 
     const kycValue = verificationMeans === "Bvn" ? bvn : nin;
 
+    const [day, month, year] = dob.split("/");
+    const isoDob = new Date(`${year}-${month}-${day}`).toISOString();
+
     const payload = {
       kycType: verificationMeans,
       kycValue: verificationMeans === "Bvn" ? bvn : nin,
       firstName: firstName,
       lastName: lastName,
-      dateOfBirth: dob,
+      dateOfBirth: isoDob,
       country: country,
     };
 
