@@ -75,12 +75,13 @@ const BuyCrypto = () => {
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [openPinModal, setOpenPinModal] = useState(false);
   const [activeTab, setActiveTab] = useState<"buy" | "send">("buy");
-  const [form, setForm] = useState({
-    narration: "",
-    network: "",
-    amount: "",
-    quotationId: "",
-  });
+  const [sendFormError, setSendFormError] = useState<string>("");
+  // const [form, setForm] = useState({
+  //   narration: "",
+  //   network: "",
+  //   amount: "",
+  //   quotationId: "",
+  // });
   const [sendForm, setSendForm] = useState({
     address: "",
     network: "",
@@ -239,40 +240,74 @@ const BuyCrypto = () => {
       setError,
     });
 
+  // const onVerify = () =>
+  //   new Promise<void>((resolve, reject) => {
+  //     (async () => {
+  //       try {
+  //         const res = await api.post("/Crypto/buyCrypto", {
+  //           amount: numericAmount,
+  //           quotationId: quoteId,
+  //         });
+
+  //         // if (!res.data.isSuccessful) {
+  //         //   throw new Error(
+  //         //     res.data.message || "An error occurred"
+  //         //   );
+  //         // }
+
+  //         if (res.data.statusCode !== "OK") {
+  //           throw new Error(res.data.message || "An error occurred");
+  //         }
+  //         setIsSuccessModal(true);
+  //         setToAmount("");
+  //         setAmount("");
+  //         setCurrency("");
+  //         setQuoteId("");
+  //         setQuotePrice("");
+  //         setSelectedCoin(options[0]);
+  //         stopCountdown();
+
+  //         resolve();
+  //       } catch (e) {
+  //         reject(e);
+  //       } finally {
+  //         stopCountdown();
+  //       }
+  //     })();
+  //   });
+
   const onVerify = () =>
-    new Promise<void>((resolve, reject) => {
-      (async () => {
-        try {
-          const res = await api.post("/Crypto/buyCrypto", {
-            amount: numericAmount,
-            quotationId: quoteId,
-          });
+    new Promise<void>(async (resolve, reject) => {
+      try {
+        const payload = {
+          amount: numericAmount,
+          quotationId: quoteId,
+        };
 
-          // if (!res.data.isSuccessful) {
-          //   throw new Error(
-          //     res.data.message || "An error occurred"
-          //   );
-          // }
+        const endpoint =
+          activeTab === "buy" ? "/Crypto/buyCrypto" : "/Crypto/sendCrypto";
 
-          if (res.data.statusCode !== "OK") {
-            throw new Error(res.data.message || "An error occurred");
-          }
-          setIsSuccessModal(true);
-          setToAmount("");
-          setAmount("");
-          setCurrency("");
-          setQuoteId("");
-          setQuotePrice("");
-          setSelectedCoin(options[0]);
-          stopCountdown();
+        const res = await api.post(endpoint, payload);
 
-          resolve();
-        } catch (e) {
-          reject(e);
-        } finally {
-          stopCountdown();
+        if (res.data.statusCode !== "OK") {
+          throw new Error(res.data.message || "An error occurred");
         }
-      })();
+
+        setIsSuccessModal(true);
+        setToAmount("");
+        setAmount("");
+        setCurrency("");
+        setQuoteId("");
+        setQuotePrice("");
+        setSelectedCoin(options[0]);
+        stopCountdown();
+
+        resolve();
+      } catch (e) {
+        reject(e);
+      } finally {
+        stopCountdown();
+      }
     });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -285,14 +320,42 @@ const BuyCrypto = () => {
     }
   };
 
+  // const handleSendFormChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  // ) => {
+  //   const { name, value } = e.target;
+
+  //   if (name === "amount") {
+  //     // Allow only numeric values
+  //     if (!/^\d*\.?\d*$/.test(value)) return;
+  //   }
+
+  //   setSendForm((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
+
   const handleSendFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
 
     if (name === "amount") {
-      // Allow only numeric values
+      // Allow only numeric input
       if (!/^\d*\.?\d*$/.test(value)) return;
+
+      const numericValue = parseFloat(value);
+      const walletBalance = parseFloat(
+        selectedCoin.displayValue?.toString() || "0"
+      );
+
+      if (numericValue > walletBalance) {
+        setSendFormError("Amount cannot be more than wallet balance.");
+        // return;
+      } else {
+        setSendFormError("");
+      }
     }
 
     setSendForm((prev) => ({
@@ -302,7 +365,6 @@ const BuyCrypto = () => {
   };
 
   // send crypto
-
   useEffect(() => {
     updateNetworksForCoin(selectedCoin);
   }, [selectedCoin, wallets]);
@@ -344,6 +406,12 @@ const BuyCrypto = () => {
 
   const isDisabled =
     isInputFocused || !!error || loadingData || !amount || countdown < 1;
+
+  const isInvalid =
+    !sendForm.narration ||
+    !sendForm.address ||
+    !sendForm.amount ||
+    !!sendFormError;
 
   return (
     <>
@@ -431,12 +499,12 @@ const BuyCrypto = () => {
                           // setSelectedCoin(options[0]);
                           stopCountdown();
                           setSelectedNetwork(undefined);
-                          setForm({
-                            narration: "",
-                            network: "",
-                            amount: "",
-                            quotationId: "",
-                          });
+                          // setForm({
+                          //   narration: "",
+                          //   network: "",
+                          //   amount: "",
+                          //   quotationId: "",
+                          // });
                         }}
                       >
                         Buy
@@ -496,16 +564,15 @@ const BuyCrypto = () => {
                               <CustomSelect
                                 options={selectOptions}
                                 value={selectedCoin}
-                                // onChange={(val) => {
-                                //   setError("");
-                                //   setToAmount("");
-                                //   setAmount("");
-                                //   setCurrency("");
-                                //   setQuoteId("");
-                                //   setSelectedCoin(val);
-                                //   stopCountdown();
-                                // }}
-
+                                onChange={(val) => {
+                                  setError("");
+                                  setToAmount("");
+                                  setAmount("");
+                                  setCurrency("");
+                                  setQuoteId("");
+                                  setSelectedCoin(val);
+                                  stopCountdown();
+                                }}
                                 inputWidth="w-auto"
                                 optionsWidth="w-[15rem]"
                                 optionsOffsetX={-90}
@@ -698,8 +765,11 @@ const BuyCrypto = () => {
                             {/* Input Field */}
                             <input
                               type="text"
+                              name="address"
                               placeholder="Paste [name of crypto] wallet address"
                               className="w-full px-3 py-3 outline-none bg-white text-[16px] rounded-md"
+                              value={sendForm.address}
+                              onChange={(e) => handleSendFormChange(e)}
                             />
 
                             <img
@@ -744,17 +814,20 @@ const BuyCrypto = () => {
                               Amount
                             </p>
 
-                            <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
+                            <div
+                              className={`grid grid-cols-2 items-center px-2 py-1 border ${
+                                sendFormError
+                                  ? "border-red-500"
+                                  : "border-gray-300"
+                              }  rounded-lg`}
+                            >
                               <input
                                 type="text"
                                 name="amount"
                                 placeholder="0.00104"
                                 className="w-full pr-3 py-3 outline-none bg-white text-[16px] rounded-md"
                                 value={sendForm.amount}
-                                onChange={(e) => {
-                                  stopCountdown();
-                                  handleSendFormChange(e);
-                                }}
+                                onChange={(e) => handleSendFormChange(e)}
                               />
                               <div className="w-full flex">
                                 <div className="ml-auto w-auto">
@@ -777,6 +850,11 @@ const BuyCrypto = () => {
                                 </div>
                               </div>
                             </div>
+                            {sendFormError && (
+                              <p className="text-red-500 text-sm">
+                                {sendFormError}
+                              </p>
+                            )}
 
                             <div className="flex justify-between  mt-[0.5rem]   items-center">
                               <p className="pt-2 pb-1 text-[14px] text-[#000]">
@@ -791,16 +869,16 @@ const BuyCrypto = () => {
                                 className="w-full px-3 py-3 outline-none bg-white text-[16px] rounded-md"
                                 value={sendForm.narration}
                                 onChange={(e) => handleSendFormChange(e)}
-                                onBlur={handleBlur}
-                                onFocus={() => {
-                                  stopCountdown();
-                                  handleFocus();
-                                }}
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter") {
-                                    handleBlur();
-                                  }
-                                }}
+                                // onBlur={handleBlur}
+                                // onFocus={() => {
+                                //   stopCountdown();
+                                //   handleFocus();
+                                // }}
+                                // onKeyDown={(e) => {
+                                //   if (e.key === "Enter") {
+                                //     handleBlur();
+                                //   }
+                                // }}
                               />
                             </div>
 
@@ -811,10 +889,10 @@ const BuyCrypto = () => {
                             <div className="w-full flex mt-9 justify-end">
                               <div className="flex items-center gap-3">
                                 <button
-                                  disabled={isDisabled}
+                                  disabled={isInvalid}
                                   onClick={() => setShowConfirmation(true)}
                                   className={`border-[2px] ${
-                                    isDisabled
+                                    isInvalid
                                       ? "opacity-50 cursor-not-allowed"
                                       : "cursor-pointer"
                                   } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
@@ -916,15 +994,11 @@ const BuyCrypto = () => {
                               Sending
                             </p>
                             <h4 className="flex justify-center gap-0.5   items-center text-[24px]">
-                              <span>
-                                {toAmount
-                                  ? `${toAmount} ${currency.toUpperCase()}`
-                                  : 0.0}
-                              </span>
+                              <span>{selectedCoin.displayValue}</span>
                             </h4>
                             <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
-                              <span>-</span> <span>{numericAmount}</span>
-                              <span>NGN</span>
+                              <span>-</span> <span>{sendForm.amount}</span>
+                              {/* <span>NGN</span> */}
                             </p>
                           </div>
                         </div>
@@ -932,42 +1006,29 @@ const BuyCrypto = () => {
                           <div className="flex justify-between text-[15px] mb-4">
                             <p className="">Amount</p>
                             <span className="  flex items-center gap-1">
-                              <span>{Number(quotePrice).toLocaleString()}</span>
-                              <span>{currency}</span>
+                              <span>{sendForm.amount}</span>
+                              {/* <span>{currency}</span> */}
                             </span>
                           </div>
                           <div className="flex justify-between text-[15px] mb-4">
                             <p className="">Wallet balance</p>
                             <span className="  flex items-center gap-1">
-                              <span>{Number(quotePrice).toLocaleString()}</span>
-                              <span>{currency}</span>
+                              {selectedCoin.displayValue}
                             </span>
                           </div>
-
+                          {/* 
                           <div className="flex justify-between text-[15px] mb-4">
                             <p className="">Transaction fee</p>
                             <span className=" flex items-center gap-1">
                               <span>{numericAmount}</span>
                               <span>NGN</span>
                             </span>
-                          </div>
-
-                          {/* <div className="flex justify-between text-[15px] mb-4">
-                        <p className="">Transaction Fee</p>
-                        <span className="flex items-center gap-1">
-                          <span>0.0012</span>
-                          <span>BTC</span>
-                        </span>
-                      </div> */}
+                          </div> */}
 
                           <div className="flex justify-between text-[15px] ">
                             <p className="">Address</p>
                             <span className="flex items-center gap-1">
-                              <span>
-                                {toAmount
-                                  ? `${toAmount} ${currency.toUpperCase()}`
-                                  : 0.0}
-                              </span>
+                              <span>{sendForm.address}</span>
                             </span>
                           </div>
                         </div>

@@ -13,7 +13,7 @@ const PinModal = ({
   onVerify,
 }: {
   onClose: () => void;
-  onVerify: () => Promise<void>;
+  onVerify: (type?: "buy" | "send") => Promise<void>;
   // formData: any;
 }) => {
   const [pin, setPin] = useState("");
