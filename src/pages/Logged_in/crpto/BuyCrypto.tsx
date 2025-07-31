@@ -741,7 +741,7 @@ const BuyCrypto = () => {
                               type="text"
                               name="address"
                               placeholder={`Paste ${selectedCoin.label.toLowerCase()} wallet address`}
-                              className="w-full px-3 py-3 outline-none bg-white text-[16px] rounded-md"
+                              className="w-full px-3 py-4 outline-none bg-white text-[16px] rounded-md"
                               value={sendForm.address}
                               onChange={(e) => handleSendFormChange(e)}
                             />
@@ -764,18 +764,12 @@ const BuyCrypto = () => {
                               options={networkOptions}
                               value={selectedNetwork}
                               onChange={(val) => setSelectedNetwork(val)}
-                              // onChange={(val) => {
-                              //   setForm({ ...form });
-                              //   form.network = val.value;
-                              // }}
                               placeholder="Select Network"
                               inputWidth="w-auto"
                               optionsWidth="w-full"
-                              // optionsOffsetX={-90}
                               px="px-2"
-                              py="py-3"
+                              py="py-4  "
                               textSize="text-[15px]"
-                              // onChange={handleSelection}
                               borderColor="border-gray-300"
                               backgroundColor="#fff"
                               optionsPx="px-1"
@@ -840,25 +834,11 @@ const BuyCrypto = () => {
                                 type="text"
                                 name="narration"
                                 placeholder="Enter narration"
-                                className="w-full px-3 py-3 outline-none bg-white text-[16px] rounded-md"
+                                className="w-full px-3 py-4 outline-none bg-white text-[16px] rounded-md"
                                 value={sendForm.narration}
                                 onChange={(e) => handleSendFormChange(e)}
-                                // onBlur={handleBlur}
-                                // onFocus={() => {
-                                //   stopCountdown();
-                                //   handleFocus();
-                                // }}
-                                // onKeyDown={(e) => {
-                                //   if (e.key === "Enter") {
-                                //     handleBlur();
-                                //   }
-                                // }}
                               />
                             </div>
-
-                            {/* {error && (
-                              <p className="text-red-500 text-sm">{error}</p>
-                            )} */}
 
                             <div className="w-full flex mt-9 justify-end">
                               <div className="flex items-center gap-3">

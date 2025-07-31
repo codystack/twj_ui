@@ -28,6 +28,7 @@ interface CustomSelectProps {
   optionsOffsetX?: number;
   readOnly?: boolean;
   displayValue?: boolean;
+  optionDisplayValue?: boolean;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -49,6 +50,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   optionsOffsetX = 0,
   readOnly = false,
   displayValue = false,
+  optionDisplayValue = false,
 }) => {
   const [selected, setSelected] = useState<Option | undefined>(
     value || defaultSelected
@@ -166,7 +168,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
               </div>
               {option.displayValue && (
                 <span className="text-gray-400 text-sm">
-                  {option.displayValue}
+                  {optionDisplayValue ? option.displayValue : ""}
                 </span>
               )}
             </li>
@@ -198,3 +200,4 @@ export default CustomSelect;
 // | `optionsPy`       | `string` *(optional)*                     | Tailwind vertical padding for each dropdown option (e.g., `"py-3"`).                                                                        |
 // | `optionsOffsetX`  | `string` *(optional)*                     | Tailwind horizontal offset for each dropdown option (e.g., `"-50%"`).                                                                        |
 // | `displayValue`    | `boolean` *(optional)*                    | Whether to display the value of the selected option. Defaults to `false`.                                                                     |
+// | `optionDisplayValue`| `boolean` *(optional)*                  | Whether to display the value of the selected option. Defaults to `false`.                                                                     |
