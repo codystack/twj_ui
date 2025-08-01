@@ -54,7 +54,7 @@ const GiftCard = () => {
                 </button>
               </div>
 
-              <div className=" block sm:flex  justify-center mt-[1.5rem] py-[2.5rem] gap-[20px] items-center">
+              <div className=" block sm:flex mx-[2rem] justify-center mt-[1.5rem] py-[2.5rem] gap-[20px] items-center">
                 <div className="sm:mb-0 mb-8  ">
                   <BuyGiftCard
                  
