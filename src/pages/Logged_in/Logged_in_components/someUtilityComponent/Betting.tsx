@@ -111,20 +111,28 @@ const Betting = () => {
         break;
 
       case "amount":
-        if (!value) {
+        const sanitizedValue = value.replace(/,/g, "").trim();
+        const numericValue = Number(sanitizedValue);
+
+        if (!sanitizedValue) {
           setErrors((prev) => ({
             ...prev,
             amount: "This field is required",
           }));
-        } else if (isNaN(Number(value))) {
+        } else if (isNaN(numericValue)) {
           setErrors((prev) => ({
             ...prev,
             amount: "Amount must be a number",
           }));
-        } else if (Number(value) < 100) {
+        } else if (numericValue < 100) {
           setErrors((prev) => ({
             ...prev,
-            amount: "Amount must be greater than ₦100",
+            amount: "Amount must be at least ₦100",
+          }));
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            amount: "", // clear the error
           }));
         }
         break;
@@ -159,18 +167,28 @@ const Betting = () => {
       customerId: "",
       amount: "",
     });
+    setErrors({
+      betProvider: "",
+      customerId: "",
+      amount: "",
+    });
     setAccountName(null);
     setAccountNameError(null);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
+
+    // Only allow numeric input for the 'amount' field
+    const processedValue =
+      name === "amount" ? value.replace(/[^\d]/g, "") : value;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: processedValue,
     }));
 
-    validateField(name, value);
+    validateField(name, processedValue);
   };
 
   // API logics here
@@ -266,7 +284,7 @@ const Betting = () => {
               amount: Number(amount),
             }
           );
-          
+
           if (purchaseResponse?.data?.statusCode !== "OK") {
             throw new Error(
               purchaseResponse?.data?.message || "An error occurred"
