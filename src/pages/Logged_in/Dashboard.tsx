@@ -350,7 +350,7 @@ const Dashboard = () => {
         />
       )}
       {showWithdrawalModal && (
-        <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-20">
+        <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-30">
           <div className="p-[0.8rem] rounded-[20px] bg-[#fff]/20">
             <div className="bg-white  py-6 px-4 sm:rounded-2xl sm:w-[600px] sm:h-auto h-[min(100dvh,100vh)] max-h-screen  w-[100vw] text-center">
               <div className="flex justify-end">
