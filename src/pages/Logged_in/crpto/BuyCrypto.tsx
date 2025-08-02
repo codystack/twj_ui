@@ -168,19 +168,16 @@ const BuyCrypto = () => {
     }
   }, [wallets]);
 
+
+
   useEffect(() => {
     const allReady =
-      quoteId &&
-      // userId &&
-      selectedCoin?.value &&
-      numericAmount &&
-      numericAmount > 0;
+      quoteId && selectedCoin?.value && numericAmount && numericAmount > 0;
 
-    if (allReady) {
-      if (countdown > 0) return;
+    if (allReady && countdown === 0) {
       startCountdown(60);
     }
-  }, [quoteId, selectedCoin, numericAmount]);
+  }, [quoteId, selectedCoin?.value, numericAmount]);
 
   const balance = user?.accountBalance ?? 0;
 
@@ -211,6 +208,7 @@ const BuyCrypto = () => {
         fromAmount: numericAmount,
       });
       const response = res?.data;
+      console.log(response);
 
       // startCountdown(13);
       setToAmount(response?.data?.toAmount);
@@ -218,8 +216,8 @@ const BuyCrypto = () => {
       setQuotePrice(response?.data?.quotedPrice);
       setQuoteId(response?.data?.id);
       resumeCountdown();
-      if (countdown > 0) return;
-      startCountdown(60);
+      // if (countdown > 0) return;
+      // startCountdown(60);
     } catch (err) {
       setError("Failed to submit amount.");
       console.error(err);
@@ -240,60 +238,60 @@ const BuyCrypto = () => {
       setError,
     });
 
-    const onVerify = () =>
-      new Promise<void>(async (resolve, reject) => {
-        try {
-          let payload;
-          let endpoint;
+  const onVerify = () =>
+    new Promise<void>(async (resolve, reject) => {
+      try {
+        let payload;
+        let endpoint;
 
-          if (activeTab === "buy") {
-            endpoint = "/Crypto/buyCrypto";
-            payload = {
-              amount: numericAmount,
-              quotationId: quoteId,
-            };
-          } else {
-            endpoint = "/Crypto/sendCrypto";
-            payload = {
-              currency: selectedCoin.value,
-              walletAddress: sendForm.address,
-              amount: parseFloat(sendForm.amount),
-              transactionNote: sendForm.narration,
-              narration: sendForm.narration,
-              network: selectedNetwork?.id,
-            };
-          }
-
-          // console.log("dynamic payload", payload);
-          // return;
-          const res = await api.post(endpoint, payload);
-
-          if (res.data.statusCode !== "OK") {
-            throw new Error(res.data.message || "An error occurred");
-          }
-
-          setIsSuccessModal(true);
-          setToAmount("");
-          setAmount("");
-          setCurrency("");
-          setQuoteId("");
-          setQuotePrice("");
-          setSelectedCoin(options[0]);
-          stopCountdown();
-          setSendForm({
-            address: "",
-            network: "",
-            amount: "",
-            narration: "",
-          });
-
-          resolve();
-        } catch (e) {
-          reject(e);
-        } finally {
-          stopCountdown();
+        if (activeTab === "buy") {
+          endpoint = "/Crypto/buyCrypto";
+          payload = {
+            amount: numericAmount,
+            quotationId: quoteId,
+          };
+        } else {
+          endpoint = "/Crypto/sendCrypto";
+          payload = {
+            currency: selectedCoin.value,
+            walletAddress: sendForm.address,
+            amount: parseFloat(sendForm.amount),
+            transactionNote: sendForm.narration,
+            narration: sendForm.narration,
+            network: selectedNetwork?.id,
+          };
         }
-      });
+
+        // console.log("dynamic payload", payload);
+        // return;
+        const res = await api.post(endpoint, payload);
+
+        if (res.data.statusCode !== "OK") {
+          throw new Error(res.data.message || "An error occurred");
+        }
+
+        setIsSuccessModal(true);
+        setToAmount("");
+        setAmount("");
+        setCurrency("");
+        setQuoteId("");
+        setQuotePrice("");
+        setSelectedCoin(options[0]);
+        stopCountdown();
+        setSendForm({
+          address: "",
+          network: "",
+          amount: "",
+          narration: "",
+        });
+
+        resolve();
+      } catch (e) {
+        reject(e);
+      } finally {
+        stopCountdown();
+      }
+    });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
