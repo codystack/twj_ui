@@ -40,6 +40,8 @@ import Tvbg from "../../assets/dashboard_img/tvbg.svg";
 import TV from "../../assets/dashboard_img/dashboard_icons/wpf_retro-tv.svg";
 import Casino from "../../assets/dashboard_img/dashboard_icons/maki_casino.svg";
 import Casinobg from "../../assets/dashboard_img/casinobg.svg";
+import airtimebg from "../../assets/dashboard_img/airtimebg.svg";
+import Airtimeimg from "../../assets/dashboard_img/dashboard_icons/ic_round-phone-iphone.svg";
 import api from "../../services/api";
 import PinModal from "./Logged_in_components/someUtilityComponent/PinModal";
 
@@ -245,49 +247,6 @@ const Dashboard = () => {
   const [whole, fraction] = formattedBalance?.split(".") || [];
 
   // withdrawal function
-  // const onWithdraw = async () => {
-  //   setIsLoading(true);
-  //   setErrorMessage(null);
-
-  //   try {
-  //     const payload = {
-  //       amount: Number(formData.amount),
-  //       bankCode: formData.bankCode,
-  //       accountName: formData.accountName,
-  //       accountNumber: formData.accountNumber,
-  //       narration: formData.narration,
-  //     };
-
-  //     // console.log("bank details", payload);
-  //     // return;
-
-  //     const endpoint = "/Accounts/processWalletPayout";
-  //     const res = await api.post(endpoint, payload);
-
-  //     if (res.data.statusCode !== "OK") {
-  //       throw new Error(res.data.message || "An error occurred");
-  //     }
-
-  //     setSuccessWithdrawal(true);
-  //     setFormData({
-  //       amount: "",
-  //       bank: null,
-  //       narration: "",
-  //       bankName: "",
-  //       accountName: "",
-  //       accountNumber: "",
-  //       bankCode: "",
-  //     });
-  //     return res;
-  //   } catch (error: any) {
-  //     const message =
-  //       error?.response?.data?.message || error?.message || "An error occurred";
-  //     setErrorMessage(message);
-  //     return error;
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const onVerify = () =>
     new Promise<void>((resolve, reject) => {
@@ -307,15 +266,6 @@ const Dashboard = () => {
           }
 
           setSuccessWithdrawal(true);
-          // setFormData({
-          //   amount: "",
-          //   bank: null,
-          //   narration: "",
-          //   bankName: "",
-          //   accountName: "",
-          //   accountNumber: "",
-          //   bankCode: "",
-          // });
 
           resolve();
           return res;
@@ -810,6 +760,28 @@ const Dashboard = () => {
                     </button>
                   ) : (
                     <Data />
+                  )}
+                </>
+                <>
+                  {!isKycComplete ? (
+                    <button
+                      onClick={openModal}
+                      className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px]  sm:min-w-[252px] min-w-[152px]  border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]"
+                    >
+                      <div className="bg-[#F8E0FF] flex justify-center items-center p-[1rem] w-fit rounded-full self-start">
+                        <img src={Airtimeimg} alt="" />
+                      </div>
+                      <p className="text-[#27014F] tracking-[0.6px] text-[20px]  mt-[1rem]">
+                        Airtime
+                      </p>
+                      <img
+                        src={airtimebg}
+                        className="absolute right-0"
+                        alt=""
+                      />
+                    </button>
+                  ) : (
+                    <Airtime />
                   )}
                 </>
                 <>
