@@ -41,6 +41,7 @@ import TV from "../../assets/dashboard_img/dashboard_icons/wpf_retro-tv.svg";
 import Casino from "../../assets/dashboard_img/dashboard_icons/maki_casino.svg";
 import Casinobg from "../../assets/dashboard_img/casinobg.svg";
 import api from "../../services/api";
+import PinModal from "./Logged_in_components/someUtilityComponent/PinModal";
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -63,13 +64,11 @@ const customStyles = {
     backgroundColor: state.isSelected
       ? "#8003A9"
       : state.isFocused
-      ? "#F8E0FF" 
+      ? "#F8E0FF"
       : "#fff",
-    color: state.isSelected ? "#fff" : "#27014F", 
+    color: state.isSelected ? "#fff" : "#27014F",
   }),
 };
-
-
 
 interface BankOptionType {
   label: string;
@@ -95,6 +94,7 @@ const Dashboard = () => {
   const { bankList, fetchBanks } = useBankStore();
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [openPinModal, setOpenPinModal] = useState(false);
   const [successWithdrawal, setSuccessWithdrawal] = useState(false);
   const [formData, setFormData] = useState({
     amount: "",
@@ -103,6 +103,7 @@ const Dashboard = () => {
     bankName: "",
     accountName: "",
     accountNumber: "",
+    bankCode: "",
   });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [errors, setErrors] = useState({
@@ -158,9 +159,13 @@ const Dashboard = () => {
     setShowWithdrawalModal(true);
   };
 
+  // useEffect(() => {
+  //   console.log("bank list", bankList);
+  // }, [bankList]);
+
   const options: BankOptionType[] = bankList.map((bank) => ({
     label: `${bank.accountNumber} - ${bank.bankName}`,
-    value: bank.accountNumber, 
+    value: bank.accountNumber,
     id: bank.id,
     accountName: bank.accountName,
     bankName: bank.bankName,
@@ -205,7 +210,7 @@ const Dashboard = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-   
+
     validateField(name, value);
   };
 
@@ -240,53 +245,112 @@ const Dashboard = () => {
   const [whole, fraction] = formattedBalance?.split(".") || [];
 
   // withdrawal function
-  const onWithdraw = async () => {
-    setIsLoading(true);
-    setErrorMessage(null);
+  // const onWithdraw = async () => {
+  //   setIsLoading(true);
+  //   setErrorMessage(null);
 
-    try {
-      const payload = {
-        amount: Number(formData.amount),
-        bankName: formData.bankName,
-        accountName: formData.accountName,
-        accountNumber: formData.accountNumber,
-        narration: formData.narration,
-      };
+  //   try {
+  //     const payload = {
+  //       amount: Number(formData.amount),
+  //       bankCode: formData.bankCode,
+  //       accountName: formData.accountName,
+  //       accountNumber: formData.accountNumber,
+  //       narration: formData.narration,
+  //     };
 
-      // console.log("bank details", payload);
+  //     // console.log("bank details", payload);
+  //     // return;
 
-      const endpoint = "/Accounts/processWalletPayout";
-      const res = await api.post(endpoint, payload);
+  //     const endpoint = "/Accounts/processWalletPayout";
+  //     const res = await api.post(endpoint, payload);
 
-      if (res.data.statusCode !== "OK") {
-        throw new Error(res.data.message || "An error occurred");
-      }
+  //     if (res.data.statusCode !== "OK") {
+  //       throw new Error(res.data.message || "An error occurred");
+  //     }
 
-      setSuccessWithdrawal(true);
-      setFormData({
-        amount: "",
-        bank: null,
-        narration: "",
-        bankName: "",
-        accountName: "",
-        accountNumber: "",
-      });
-      return res;
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message || error?.message || "An error occurred";
-      setErrorMessage(message);
-      // console.error("Withdrawal error:", message);
-      return error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     setSuccessWithdrawal(true);
+  //     setFormData({
+  //       amount: "",
+  //       bank: null,
+  //       narration: "",
+  //       bankName: "",
+  //       accountName: "",
+  //       accountNumber: "",
+  //       bankCode: "",
+  //     });
+  //     return res;
+  //   } catch (error: any) {
+  //     const message =
+  //       error?.response?.data?.message || error?.message || "An error occurred";
+  //     setErrorMessage(message);
+  //     return error;
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const onVerify = () =>
+    new Promise<void>((resolve, reject) => {
+      (async () => {
+        try {
+          setIsLoading(true);
+          const res = await api.post("/Accounts/processWalletPayout", {
+            amount: Number(formData.amount),
+            bankCode: formData.bankCode,
+            accountName: formData.accountName,
+            accountNumber: formData.accountNumber,
+            narration: formData.narration,
+          });
+
+          if (res.data.statusCode !== "OK") {
+            throw new Error(res.data.message || "An error occurred");
+          }
+
+          setSuccessWithdrawal(true);
+          // setFormData({
+          //   amount: "",
+          //   bank: null,
+          //   narration: "",
+          //   bankName: "",
+          //   accountName: "",
+          //   accountNumber: "",
+          //   bankCode: "",
+          // });
+
+          resolve();
+          return res;
+        } catch (e) {
+          reject(e);
+        } finally {
+          setIsLoading(false);
+        }
+      })();
+    });
+
+  // const amount = user?.accountBalance ?? 0;
+  // const [wholeNum, decimal] = amount.toFixed(2).split(".");
 
   return (
     <>
+      {openPinModal && (
+        <PinModal
+          onVerify={onVerify}
+          onClose={() => {
+            setOpenPinModal(false);
+            setFormData({
+              amount: "",
+              bank: null,
+              narration: "",
+              bankName: "",
+              accountName: "",
+              accountNumber: "",
+              bankCode: "",
+            });
+          }}
+        />
+      )}
       {showWithdrawalModal && (
-        <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-20">
           <div className="p-[0.8rem] rounded-[20px] bg-[#fff]/20">
             <div className="bg-white  py-6 px-4 sm:rounded-2xl sm:w-[600px] sm:h-auto h-[min(100dvh,100vh)] max-h-screen  w-[100vw] text-center">
               <div className="flex justify-end">
@@ -300,6 +364,7 @@ const Dashboard = () => {
                       bankName: "",
                       accountName: "",
                       accountNumber: "",
+                      bankCode: "",
                     });
                     setErrorMessage(null);
                     setShowWithdrawalModal(false);
@@ -342,10 +407,10 @@ const Dashboard = () => {
                               ₦
                             </span>
                             <p className="text-[32px] text-center font-semibold">
-                              {user?.accountBalance?.toLocaleString() ?? ""}
+                              {whole}
                             </p>
                             <span className="text-[16px] mt-[12px] ml-[-7px]">
-                              .00
+                              .{fraction || "00"}
                             </span>
                           </div>
                         </div>
@@ -380,25 +445,6 @@ const Dashboard = () => {
                           Bank Account
                         </p>
                         <div className="w-full">
-                          {/* <Select
-                            options={options}
-                            getOptionLabel={(e) => e.label}
-                            getOptionValue={(e) => e.value}
-                            onChange={(selected) => {
-                              if (selected) {
-                                setFormData((prev) => ({
-                                  ...prev,
-                                  bank: selected.value,
-                                }));
-                              }
-                            }}
-                            styles={customStyles}
-                            value={options.find(
-                              (option) => option.value === formData.bank
-                            )}
-                            placeholder="Select Bank Account"
-                          /> */}
-
                           <Select
                             options={options}
                             getOptionLabel={(e) => e.label}
@@ -407,15 +453,16 @@ const Dashboard = () => {
                               if (selected) {
                                 setFormData((prev) => ({
                                   ...prev,
-                                  bank: selected, // You’re storing the full selected option
+                                  bank: selected,
                                   bankName: selected.bankName,
                                   accountName: selected.accountName,
                                   accountNumber: selected.accountNumber,
+                                  bankCode: selected.bankCode,
                                 }));
                               }
                             }}
                             styles={customStyles}
-                            value={formData.bank} // Make sure this is the full object from `options`, not just a value
+                            value={formData.bank}
                             placeholder="Select Bank Account"
                           />
                         </div>
@@ -445,7 +492,10 @@ const Dashboard = () => {
                         <div className="w-full mt-[1.5rem] mb-[2rem]">
                           <Button
                             type="button"
-                            onClick={onWithdraw}
+                            onClick={() => {
+                              setOpenPinModal(true);
+                              setShowWithdrawalModal(false);
+                            }}
                             isDisabled={isFormInvalid || isLoading}
                             // className="relative flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-blue-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                             // style={{ width: "180px" }} // fixed width to prevent resizing
@@ -865,14 +915,6 @@ const Dashboard = () => {
             fetchUser();
             setSuccessWithdrawal(false);
           }}
-          button={
-            <button
-              onClick={() => setSuccessWithdrawal(false)}
-              className="bg-[#8003A9] w-[75%] text-white px-8 py-3 rounded-[5px] mb-2"
-            >
-              OK
-            </button>
-          }
         />
       )}
     </>
