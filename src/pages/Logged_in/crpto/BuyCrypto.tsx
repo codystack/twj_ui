@@ -240,60 +240,60 @@ const BuyCrypto = () => {
       setError,
     });
 
-  const onVerify = () =>
-    new Promise<void>(async (resolve, reject) => {
-      try {
-        let payload;
-        let endpoint;
+    const onVerify = () =>
+      new Promise<void>(async (resolve, reject) => {
+        try {
+          let payload;
+          let endpoint;
 
-        if (activeTab === "buy") {
-          endpoint = "/Crypto/buyCrypto";
-          payload = {
-            amount: numericAmount,
-            quotationId: quoteId,
-          };
-        } else {
-          endpoint = "/Crypto/sendCrypto";
-          payload = {
-            currency: selectedCoin.value,
-            walletAddress: sendForm.address,
-            amount: parseFloat(sendForm.amount),
-            transactionNote: sendForm.narration,
-            narration: sendForm.narration,
-            network: selectedNetwork?.id,
-          };
+          if (activeTab === "buy") {
+            endpoint = "/Crypto/buyCrypto";
+            payload = {
+              amount: numericAmount,
+              quotationId: quoteId,
+            };
+          } else {
+            endpoint = "/Crypto/sendCrypto";
+            payload = {
+              currency: selectedCoin.value,
+              walletAddress: sendForm.address,
+              amount: parseFloat(sendForm.amount),
+              transactionNote: sendForm.narration,
+              narration: sendForm.narration,
+              network: selectedNetwork?.id,
+            };
+          }
+
+          // console.log("dynamic payload", payload);
+          // return;
+          const res = await api.post(endpoint, payload);
+
+          if (res.data.statusCode !== "OK") {
+            throw new Error(res.data.message || "An error occurred");
+          }
+
+          setIsSuccessModal(true);
+          setToAmount("");
+          setAmount("");
+          setCurrency("");
+          setQuoteId("");
+          setQuotePrice("");
+          setSelectedCoin(options[0]);
+          stopCountdown();
+          setSendForm({
+            address: "",
+            network: "",
+            amount: "",
+            narration: "",
+          });
+
+          resolve();
+        } catch (e) {
+          reject(e);
+        } finally {
+          stopCountdown();
         }
-
-        // console.log("dynamic payload", payload);
-        // return;
-        const res = await api.post(endpoint, payload);
-
-        if (res.data.statusCode !== "OK") {
-          throw new Error(res.data.message || "An error occurred");
-        }
-
-        setIsSuccessModal(true);
-        setToAmount("");
-        setAmount("");
-        setCurrency("");
-        setQuoteId("");
-        setQuotePrice("");
-        setSelectedCoin(options[0]);
-        stopCountdown();
-        setSendForm({
-          address: "",
-          network: "",
-          amount: "",
-          narration: "",
-        });
-
-        resolve();
-      } catch (e) {
-        reject(e);
-      } finally {
-        stopCountdown();
-      }
-    });
+      });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

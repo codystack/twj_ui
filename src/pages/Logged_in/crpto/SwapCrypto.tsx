@@ -387,16 +387,7 @@ const SwapCrypto = () => {
                 </div>
                 {/* Right section */}
                 <div className=" ml-[2rem] mt-[-1rem] ">
-                  {/* <div className="flex justify-center items-center">
-                  <div className="flex justify-center w-[60%] items-center px-5 py-2 mt-4 rounded-[10px]  bg-[#FBEEFF] ">
-                    <div className="flex items-center  gap-3 justify-center ">
-                      <img src={warning} alt="" />
-                      <p className="leading-[0.9rem] text-[#8003A9] text-left text-[13px]">
-                        0:15 seconds to refresh asset rates
-                      </p>
-                    </div>
-                  </div>
-                </div> */}
+              
                   {countdown > 0 && (
                     <div className="flex justify-center items-center">
                       <div className="flex justify-center w-[70%] items-center px-5 py-2 mt-4 rounded-[10px] bg-[#FBEEFF]">

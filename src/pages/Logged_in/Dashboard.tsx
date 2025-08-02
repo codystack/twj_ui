@@ -16,7 +16,6 @@ import GiftCard from "./Logged_in_components/someUtilityComponent/GiftCard";
 import Support from "./Logged_in_components/someUtilityComponent/Support";
 import ErrorBoundary from "../../components/error/ErrorBoundry";
 import RouteChangeHandler from "../../components/RouteChangeHandler";
-// import { useLocation } from "react-router-dom";
 import cancel from "../../assets/dashboard_img/profile/cancel.svg";
 import { useUserStore } from "../../store/useUserStore";
 import copyImg from "../../assets/dashboard_img/withdrawal-copy-.svg";
@@ -30,7 +29,6 @@ import { useGiftCardStore } from "../../store/useGiftCardStore";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import CryptoBG from "../../assets/dashboard_img/crptobg.svg";
-// import CryptoBG from "../../../../assets/dashboard_img/crptobg.svg";
 import crypto from "../../assets/dashboard_img/dashboard_icons/akar-icons_bitcoin-fill.svg";
 import giftcardsbg from "../../assets/dashboard_img/giftcardbg.svg";
 import Giftcard from "../../assets/dashboard_img/dashboard_icons/fluent_gift-card-20-filled.svg";
@@ -42,6 +40,8 @@ import Tvbg from "../../assets/dashboard_img/tvbg.svg";
 import TV from "../../assets/dashboard_img/dashboard_icons/wpf_retro-tv.svg";
 import Casino from "../../assets/dashboard_img/dashboard_icons/maki_casino.svg";
 import Casinobg from "../../assets/dashboard_img/casinobg.svg";
+import api from "../../services/api";
+import PinModal from "./Logged_in_components/someUtilityComponent/PinModal";
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -64,15 +64,26 @@ const customStyles = {
     backgroundColor: state.isSelected
       ? "#8003A9"
       : state.isFocused
-      ? "#F8E0FF" // Hover background color
+      ? "#F8E0FF"
       : "#fff",
-    color: state.isSelected ? "#fff" : "#27014F", // Text color change on selection
+    color: state.isSelected ? "#fff" : "#27014F",
   }),
 };
 
+interface BankOptionType {
+  label: string;
+  value: string;
+  id: string;
+  accountName: string;
+  bankName: string;
+  accountNumber: string;
+  bankCode: string;
+  accountType: string | null;
+  isDefault: boolean;
+}
+
 const Dashboard = () => {
   const navigate = useNavigate();
-  // const location = useLocation();
   const { showSuccessModal, setShowSuccessModal } = useGiftCardStore();
 
   const [isHidden, setIsHidden] = useState(false);
@@ -82,14 +93,23 @@ const Dashboard = () => {
   const { user, loading, fetchUser } = useUserStore();
   const { bankList, fetchBanks } = useBankStore();
   const [copied, setCopied] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [openPinModal, setOpenPinModal] = useState(false);
+  const [successWithdrawal, setSuccessWithdrawal] = useState(false);
   const [formData, setFormData] = useState({
     amount: "",
-    bank: "",
+    narration: "",
+    bank: null as BankOptionType | null,
+    bankName: "",
+    accountName: "",
+    accountNumber: "",
+    bankCode: "",
   });
-
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [errors, setErrors] = useState({
     amount: "",
     bank: "",
+    narration: "",
   });
 
   const textToCopy = user?.accountNumber?.toString() ?? "";
@@ -139,9 +159,20 @@ const Dashboard = () => {
     setShowWithdrawalModal(true);
   };
 
-  const options = bankList.map((bank) => ({
+  // useEffect(() => {
+  //   console.log("bank list", bankList);
+  // }, [bankList]);
+
+  const options: BankOptionType[] = bankList.map((bank) => ({
     label: `${bank.accountNumber} - ${bank.bankName}`,
     value: bank.accountNumber,
+    id: bank.id,
+    accountName: bank.accountName,
+    bankName: bank.bankName,
+    accountNumber: bank.accountNumber,
+    bankCode: bank.bankCode,
+    accountType: "",
+    isDefault: false,
   }));
 
   const validateField = (fieldName: string, value: string) => {
@@ -179,26 +210,13 @@ const Dashboard = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Validate the field on change
+
     validateField(name, value);
   };
 
   useEffect(() => {
     fetchUser();
   }, []);
-
-  // kyc fix commented below
-
-  // useEffect(() => {
-  //   fetchBanks();
-  //   const timeout = setTimeout(() => {
-  //     if (!isKycComplete && location.pathname === "/dashboard") {
-  //       setShowKycModal(true);
-  //     }
-  //   }, 500);
-
-  //   return () => clearTimeout(timeout);
-  // }, [location.pathname]);
 
   useEffect(() => {
     // fetchBanks();
@@ -226,17 +244,129 @@ const Dashboard = () => {
 
   const [whole, fraction] = formattedBalance?.split(".") || [];
 
+  // withdrawal function
+  // const onWithdraw = async () => {
+  //   setIsLoading(true);
+  //   setErrorMessage(null);
+
+  //   try {
+  //     const payload = {
+  //       amount: Number(formData.amount),
+  //       bankCode: formData.bankCode,
+  //       accountName: formData.accountName,
+  //       accountNumber: formData.accountNumber,
+  //       narration: formData.narration,
+  //     };
+
+  //     // console.log("bank details", payload);
+  //     // return;
+
+  //     const endpoint = "/Accounts/processWalletPayout";
+  //     const res = await api.post(endpoint, payload);
+
+  //     if (res.data.statusCode !== "OK") {
+  //       throw new Error(res.data.message || "An error occurred");
+  //     }
+
+  //     setSuccessWithdrawal(true);
+  //     setFormData({
+  //       amount: "",
+  //       bank: null,
+  //       narration: "",
+  //       bankName: "",
+  //       accountName: "",
+  //       accountNumber: "",
+  //       bankCode: "",
+  //     });
+  //     return res;
+  //   } catch (error: any) {
+  //     const message =
+  //       error?.response?.data?.message || error?.message || "An error occurred";
+  //     setErrorMessage(message);
+  //     return error;
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const onVerify = () =>
+    new Promise<void>((resolve, reject) => {
+      (async () => {
+        try {
+          setIsLoading(true);
+          const res = await api.post("/Accounts/processWalletPayout", {
+            amount: Number(formData.amount),
+            bankCode: formData.bankCode,
+            accountName: formData.accountName,
+            accountNumber: formData.accountNumber,
+            narration: formData.narration,
+          });
+
+          if (res.data.statusCode !== "OK") {
+            throw new Error(res.data.message || "An error occurred");
+          }
+
+          setSuccessWithdrawal(true);
+          // setFormData({
+          //   amount: "",
+          //   bank: null,
+          //   narration: "",
+          //   bankName: "",
+          //   accountName: "",
+          //   accountNumber: "",
+          //   bankCode: "",
+          // });
+
+          resolve();
+          return res;
+        } catch (e) {
+          reject(e);
+        } finally {
+          setIsLoading(false);
+        }
+      })();
+    });
+
+  // const amount = user?.accountBalance ?? 0;
+  // const [wholeNum, decimal] = amount.toFixed(2).split(".");
+
   return (
     <>
+      {openPinModal && (
+        <PinModal
+          onVerify={onVerify}
+          onClose={() => {
+            setOpenPinModal(false);
+            setFormData({
+              amount: "",
+              bank: null,
+              narration: "",
+              bankName: "",
+              accountName: "",
+              accountNumber: "",
+              bankCode: "",
+            });
+          }}
+        />
+      )}
       {showWithdrawalModal && (
-        <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-30">
           <div className="p-[0.8rem] rounded-[20px] bg-[#fff]/20">
             <div className="bg-white  py-6 px-4 sm:rounded-2xl sm:w-[600px] sm:h-auto h-[min(100dvh,100vh)] max-h-screen  w-[100vw] text-center">
               <div className="flex justify-end">
                 <button
                   onClick={() => {
-                    setErrors({ amount: "", bank: "" });
-                    setFormData({ amount: "", bank: "" });
+                    setErrors({ amount: "", bank: "", narration: "" });
+                    setFormData({
+                      amount: "",
+                      bank: null,
+                      narration: "",
+                      bankName: "",
+                      accountName: "",
+                      accountNumber: "",
+                      bankCode: "",
+                    });
+                    setErrorMessage(null);
                     setShowWithdrawalModal(false);
                   }}
                   className="px-4 py-2 sm:mr-[5px] mr-[-10px] cursor-pointer "
@@ -277,10 +407,10 @@ const Dashboard = () => {
                               ₦
                             </span>
                             <p className="text-[32px] text-center font-semibold">
-                              {user?.accountBalance?.toLocaleString() ?? ""}
+                              {whole}
                             </p>
                             <span className="text-[16px] mt-[12px] ml-[-7px]">
-                              .00
+                              .{fraction || "00"}
                             </span>
                           </div>
                         </div>
@@ -323,20 +453,62 @@ const Dashboard = () => {
                               if (selected) {
                                 setFormData((prev) => ({
                                   ...prev,
-                                  bank: selected.value,
+                                  bank: selected,
+                                  bankName: selected.bankName,
+                                  accountName: selected.accountName,
+                                  accountNumber: selected.accountNumber,
+                                  bankCode: selected.bankCode,
                                 }));
                               }
                             }}
                             styles={customStyles}
-                            value={options.find(
-                              (option) => option.value === formData.bank
-                            )}
+                            value={formData.bank}
                             placeholder="Select Bank Account"
                           />
                         </div>
+
+                        <div className="flex justify-between  mt-[0.5rem]   items-center">
+                          <p className="pt-2 pb-1 text-[14px] text-[#0A2E65]/60">
+                            Narration
+                          </p>
+                        </div>
+                        <div className="w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
+                          <input
+                            type="text"
+                            name="narration"
+                            placeholder="Enter narration"
+                            className="w-full px-3 py-4 outline-none bg-white text-[16px] rounded-md"
+                            value={formData.narration}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+
+                        {errorMessage && (
+                          <div className="mt-2 text-sm text-red-600 bg-red-100 p-2 rounded">
+                            {errorMessage}
+                          </div>
+                        )}
+
                         <div className="w-full mt-[1.5rem] mb-[2rem]">
-                          <Button type="submit" isDisabled={isFormInvalid}>
-                            Make Withdrawal
+                          <Button
+                            type="button"
+                            onClick={() => {
+                              setOpenPinModal(true);
+                              setShowWithdrawalModal(false);
+                            }}
+                            isDisabled={isFormInvalid || isLoading}
+                            // className="relative flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-blue-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                            // style={{ width: "180px" }} // fixed width to prevent resizing
+                          >
+                            {isLoading ? (
+                              <span
+                                className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"
+                                role="status"
+                                aria-label="Loading"
+                              />
+                            ) : (
+                              "Make Withdrawal"
+                            )}
                           </Button>
                         </div>
                       </div>
@@ -733,6 +905,16 @@ const Dashboard = () => {
               View Gift Card Detail
             </button>
           }
+        />
+      )}
+      {successWithdrawal && (
+        <SuccessModal
+          title="Successfull Withdrawal"
+          message={`Your withdrawal of ${formData.amount} is successfull!`}
+          onClose={() => {
+            fetchUser();
+            setSuccessWithdrawal(false);
+          }}
         />
       )}
     </>
