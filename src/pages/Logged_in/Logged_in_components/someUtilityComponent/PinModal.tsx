@@ -116,7 +116,16 @@ const PinModal = ({
             </div>
             <div className="flex items-center  h-[80%] justify-center">
               <div className="px-6 pt-4 rounded-lg w-[300px] flex flex-col mb-[2rem] items-center">
-                <img src={lock} alt="" />
+                {loading ? (
+                  <>
+                    <div className="w-10 h-10 border-4 border-gray-300 border-t-[#8003A9] rounded-full animate-spin"></div>
+                  </>
+                ) : (
+                  <>
+                    <img src={lock} alt="" />
+                  </>
+                )}
+
                 <h2 className="text-[20px] font-semibold text-[#27014F] mt-4">
                   Enter PIN
                 </h2>
@@ -179,11 +188,6 @@ const PinModal = ({
           </div>
         </div>
       </div>
-      {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
-          <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
-        </div>
-      )}
     </>
   );
 };
