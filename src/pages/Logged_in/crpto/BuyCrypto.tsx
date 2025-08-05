@@ -885,7 +885,8 @@ const BuyCrypto = () => {
                             <p className="">Price Per Asset</p>
                             <span className="  flex items-center gap-1">
                               <span>{Number(quotePrice).toLocaleString()}</span>
-                              <span>{currency}</span>
+                              <span>NGN</span>
+                              {/* <span>{currency}</span> */}
                             </span>
                           </div>
 
