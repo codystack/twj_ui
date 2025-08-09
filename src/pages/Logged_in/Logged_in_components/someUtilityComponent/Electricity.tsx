@@ -519,7 +519,6 @@ const Electricity = () => {
                         type="amount"
                         placeholder="₦0.00"
                         name="amount"
-                        // value={formData.amount}
                         value={
                           formData.amount
                             ? Number(formData.amount).toLocaleString()

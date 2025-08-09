@@ -434,7 +434,8 @@ const CableTv = () => {
                         placeholder="₦0.00"
                         name="amount"
                         readOnly
-                        value={amount}
+                        // value={amount}
+                        value={amount ? Number(amount).toLocaleString() : ""}
                         onChange={handleInputChange}
                         onBlur={() => validateField("email", formData.amount)}
                         className={`p-4 px-3 border text-[15px] border-[#A4A4A4] w-full  outline-none rounded-md ${

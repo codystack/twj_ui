@@ -383,7 +383,11 @@ const Data = () => {
                         placeholder="₦0.00"
                         name="amount"
                         readOnly
-                        value={formData.amount}
+                        value={
+                          formData.amount
+                            ? Number(formData.amount).toLocaleString()
+                            : ""
+                        }
                         onChange={handleChange}
                         // onBlur={() => validateField("email", formData.customerId)}
                         className={`p-4 px-3 border text-[16px] border-[#A4A4A4] w-full   outline-none rounded-md ${
