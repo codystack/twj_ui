@@ -210,7 +210,17 @@ const Dashboard = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+
+    if (name === "amount") {
+      const rawValue = value.replace(/,/g, "");
+      if (/^\d*\.?\d*$/.test(rawValue)) {
+        value = rawValue;
+      } else {
+        return;
+      }
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     validateField(name, value);
@@ -373,7 +383,11 @@ const Dashboard = () => {
                             type="amount"
                             placeholder="₦0.00"
                             name="amount"
-                            value={formData.amount}
+                            value={
+                              formData.amount
+                                ? Number(formData.amount).toLocaleString()
+                                : ""
+                            }
                             onChange={handleInputChange}
                             onBlur={() =>
                               validateField("amount", formData.amount)
