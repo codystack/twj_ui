@@ -38,12 +38,7 @@ const customStyles = {
       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
     },
   }),
-  // option: (provided: any, state: any) => ({
-  //   ...provided,
-  //   cursor: "pointer",
-  //   textAlign: "left",
-  //   backgroundColor: state.isSelected ? "#8003A9" : "#fff",
-  // }),
+
   option: (provided: any, state: any) => ({
     ...provided,
     cursor: "pointer",
@@ -186,7 +181,17 @@ const Electricity = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedAmount(null);
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+
+    if (name === "amount") {
+      const rawValue = value.replace(/,/g, "");
+      if (/^\d*\.?\d*$/.test(rawValue)) {
+        value = rawValue;
+      } else {
+        return;
+      }
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Validate the field on change
     validateField(name, value);
@@ -514,7 +519,11 @@ const Electricity = () => {
                         type="amount"
                         placeholder="₦0.00"
                         name="amount"
-                        value={formData.amount}
+                        value={
+                          formData.amount
+                            ? Number(formData.amount).toLocaleString()
+                            : ""
+                        }
                         onChange={handleInputChange}
                         // onBlur={() => validateField("email", formData.customerId)}
                         className={`p-4 px-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${

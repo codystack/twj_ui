@@ -27,12 +27,7 @@ const customStyles = {
       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
     },
   }),
-  // option: (provided: any, state: any) => ({
-  //   ...provided,
-  //   cursor: "pointer",
-  //   textAlign: "left",
-  //   backgroundColor: state.isSelected ? "#8003A9" : "#fff",
-  // }),
+
   option: (provided: any, state: any) => ({
     ...provided,
     cursor: "pointer",
@@ -180,8 +175,17 @@ const Betting = () => {
     const { name, value } = e.target;
 
     // Only allow numeric input for the 'amount' field
-    const processedValue =
+    let processedValue =
       name === "amount" ? value.replace(/[^\d]/g, "") : value;
+
+    if (name === "amount") {
+      const rawValue = value.replace(/,/g, "");
+      if (/^\d*\.?\d*$/.test(rawValue)) {
+        processedValue = rawValue;
+      } else {
+        return;
+      }
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -439,7 +443,11 @@ const Betting = () => {
                         type="text"
                         placeholder="₦0.00"
                         name="amount"
-                        value={formData.amount}
+                        value={
+                          formData.amount
+                            ? Number(formData.amount).toLocaleString()
+                            : ""
+                        }
                         onChange={handleInputChange}
                         onBlur={() => validateField("amount", formData.amount)}
                         className={`p-4 px-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
