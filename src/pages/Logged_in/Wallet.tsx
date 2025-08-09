@@ -37,12 +37,7 @@ const customStyles = {
       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
     },
   }),
-  // option: (provided: any, state: any) => ({
-  //   ...provided,
-  //   cursor: "pointer",
-  //   textAlign: "left",
-  //   backgroundColor: state.isSelected ? "#8003A9" : "#fff",
-  // }),
+  
   option: (provided: any, state: any) => ({
     ...provided,
     cursor: "pointer",
@@ -93,14 +88,7 @@ const Wallet = () => {
     // const completeKyc = localStorage.getItem("kycComplete");
     fetchBanks();
     setShowWithdrawalModal(true);
-    // console.log(bankList);
-    // if (completeKyc === "true") {
-    //   setShowTopupModal(true);
-    //   setShowKycModal(false);
-    // } else {
-    //   setShowTopupModal(false);
-    //   setShowKycModal(true);
-    // }
+
   };
 
   const openModal = () => {

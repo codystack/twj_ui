@@ -1,6 +1,3 @@
-import MyStaticLogo from "../../../assets/dashboard_img/profile//transactions/bitcoin.svg";
-import ArrowDownIcon from "../../../assets/dashboard_img/profile/transactions/transactio_up.svg";
-import ArrowUpIcon from "../../../assets/dashboard_img/profile//transactions/transaction_down.svg";
 import { useState } from "react";
 import Delete from "../../../assets/dashboard_img/profile/cancel.svg";
 import Copy from "../../../assets/dashboard_img/profile/transactions/Copy_light.svg";
@@ -9,43 +6,25 @@ import Report from "../../../assets/dashboard_img/profile/transactions/report.sv
 import Credit from "../../../assets/dashboard_img/BigCredit.svg";
 import Debit from "../../../assets/dashboard_img/BigDebit.svg";
 import warning from "../../../assets/dashboard_img/disabled-warning .png";
-// import "../../../App.css";
-
-type Transaction = {
-  id: string;
-  name: string;
-  type: string;
-  amount: string;
-  date: string;
-  direction: string;
-  status: string;
-  quantity: string;
-  network: string;
-  time: string;
-  reference: string;
-  address: string;
-  walletCategory: string;
-};
 
 interface TransactionType {
-  name: string;
   id: string;
-  time: string;
   amount: number;
   description: string;
+  date: string;
+  type: string;
   status: string;
   transactionStatus: string;
+  time: string;
+  name: string;
+  direction: string;
   billPaymentCategory: string;
   transactionDate: string;
   transactionReference: string;
-
-  date: string;
-  walletCategory: string;
-  type: string;
-  direction: string;
   network: string;
   quantity: string;
   reference: string;
+  walletCategory: string;
 }
 
 const CreditDebitTransactions: React.FC<{
@@ -53,7 +32,7 @@ const CreditDebitTransactions: React.FC<{
   noTransaction: string | null;
 }> = ({ transactions, noTransaction }) => {
   const [selectedTransaction, setSelectedTransaction] =
-    useState<Transaction | null>(null);
+    useState<TransactionType | null>(null);
   const [showReportForm, setShowReportForm] = useState(false);
   const [message, setMessage] = useState({
     reference: "",
@@ -113,7 +92,7 @@ const CreditDebitTransactions: React.FC<{
     !message.reference ||
     !message.messageSent;
 
-  const handleOpenModal = (transaction: any) => {
+  const handleOpenModal = (transaction: TransactionType) => {
     setSelectedTransaction(transaction);
   };
 
@@ -139,12 +118,6 @@ const CreditDebitTransactions: React.FC<{
   const handleReportClick = () => {
     setShowReportForm(true);
   };
-
-  // Handle form submission
-  // const handleSubmitReport = () => {
-  //   console.log("Report Submitted:", message.messageSent);
-  //   setShowReportForm(false);
-  // };
 
   // Handle closing the modal
   const handleClose = () => {
@@ -174,32 +147,25 @@ const CreditDebitTransactions: React.FC<{
                     className="w-12 h-12"
                   />
                 ) : (
-                  <img src={Debit} alt="Outward Transaction" className="" />
+                  <img
+                    src={Debit}
+                    alt="Outward Transaction"
+                    className="w-12 h-12"
+                  />
                 )}
-
-                {/* Unique Direction Arrow (Absolute Positioning) */}
-                {/* {transaction.direction === "inward" ? (
-                <img
-                  src={ArrowDownIcon}
-                  alt="Inward Transaction"
-                  className="absolute bottom-1 right-5 w-4 h-4"
-                />
-              ) : (
-                <img
-                  src={ArrowUpIcon}
-                  alt="Outward Transaction"
-                  className="absolute right-0 bottom-0 w-4 h-4"
-                />
-              )} */}
               </div>
 
               {/* Transaction Details */}
               <div>
                 <p className="text-[16px] text-left text-[#27014F]">
                   Wallet{" "}
-                  {transaction.walletCategory
-                    .replace(/([a-z])([A-Z])/g, "$1 $2") // Add space before capital letters
-                    .toLowerCase()}
+                  {(() => {
+                    const word = transaction.walletCategory
+                      .replace(/([a-z])([A-Z])/g, "$1 $2")
+                      .toLowerCase();
+
+                    return word === "withdraw" ? "withdrawal" : word;
+                  })()}
                 </p>
                 <div className="flex items-center gap-2 text-gray-600">
                   {/* Tracking ID */}
@@ -229,7 +195,7 @@ const CreditDebitTransactions: React.FC<{
             {/* Right Side: Date & Amount */}
             <div className="text-right">
               <p className="font-semibold text-[#27014F]  ">
-                {transaction.amount}
+                ₦{transaction.amount}
               </p>
               <p className="text-sm text-[#27014F] text-[11px]">
                 {new Date(transaction.transactionDate).toLocaleString("en-US", {
@@ -267,27 +233,21 @@ const CreditDebitTransactions: React.FC<{
 
                   <div className="flex justify-between  border-b border-b-[#E2E8F0] pb-[1rem] items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
-                      {selectedTransaction.amount}
+                      ₦{selectedTransaction.amount}
                     </h2>
 
                     <div className="relative">
-                      <img
-                        src={MyStaticLogo}
-                        alt="Transaction Logo"
-                        className="w-12 h-12"
-                      />
-                      {/* Unique Direction Arrow (Absolute Positioning) */}
-                      {selectedTransaction.direction === "inward" ? (
+                      {selectedTransaction.walletCategory === "TopUp" ? (
                         <img
-                          src={ArrowDownIcon}
-                          alt="Inward Transaction"
-                          className="absolute bottom-0 right-0 w-4 h-4"
+                          src={Credit}
+                          alt="Transaction Logo"
+                          className="w-15 h-15"
                         />
                       ) : (
                         <img
-                          src={ArrowUpIcon}
+                          src={Debit}
                           alt="Outward Transaction"
-                          className="absolute right-0 bottom-0 w-4 h-4"
+                          className="w-15 h-15"
                         />
                       )}
                     </div>
@@ -295,62 +255,116 @@ const CreditDebitTransactions: React.FC<{
 
                   <div className="flex gap-[5rem] mt-[8%]">
                     <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
+                      <p className="text-[#0A2E65]/60 text-left mb-[10px]">
+                        Transaction type
+                      </p>
                       <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
-                        <p>{selectedTransaction.network}</p>
-                        <p>{selectedTransaction.quantity}</p>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Date</p>
-                      <div className="flex text-[#0A2E65] items-center text-[13px]">
-                        <p>{selectedTransaction.date}</p>
-                        <div className="w-[5px] h-[5px] rounded-full mx-[4px] bg-[#0A2E65]/70  ">
-                          .
-                        </div>
-                        <p>{selectedTransaction.time}</p>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
+                        <p className="text-[16px] text-left text-[#27014F]">
+                          Wallet{" "}
+                          {(() => {
+                            const word = selectedTransaction.walletCategory
+                              .replace(/([a-z])([A-Z])/g, "$1 $2")
+                              .toLowerCase();
 
-                      {/* Unique Status Icon */}
-                      {selectedTransaction.status === "success" && (
-                        <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                          SUCCESSLL
-                        </div>
-                      )}
-                      {selectedTransaction.status === "pending" && (
-                        <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
-                          PENDING
-                        </div>
-                      )}
-                      {selectedTransaction.status === "failed" && (
-                        <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
-                          FAILED
-                        </div>
-                      )}
+                            return word === "withdraw" ? "withdrawal" : word;
+                          })()}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[#0A2E65]/60 mb-[10px] text-left">
+                        Date
+                      </p>
+
+                      <>
+                        {(() => {
+                          const dateObj = new Date(
+                            selectedTransaction.transactionDate
+                          );
+                          const formattedDate = dateObj.toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          );
+                          // const formattedTime = dateObj.toLocaleTimeString(
+                          //   "en-US",
+                          //   {
+                          //     hour: "2-digit",
+                          //     minute: "2-digit",
+                          //   }
+                          // );
+
+                          return (
+                            <>
+                              <div className="flex text-[#0A2E65] items-center text-[13px]">
+                                <p>{formattedDate}</p>
+                                {/* <p>{formattedTime}</p> */}
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </>
+                    </div>
+                    <div>
+                      <p className="text-[#0A2E65]/60 mb-[10px] text-left">
+                        Time
+                      </p>
+
+                      <>
+                        {(() => {
+                          const dateObj = new Date(
+                            selectedTransaction.transactionDate
+                          );
+                          // const formattedDate = dateObj.toLocaleDateString(
+                          //   "en-US",
+                          //   {
+                          //     year: "numeric",
+                          //     month: "long",
+                          //     day: "numeric",
+                          //   }
+                          // );
+                          const formattedTime = dateObj.toLocaleTimeString(
+                            "en-US",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          );
+
+                          return (
+                            <>
+                              <div className="flex text-[#0A2E65] items-center text-[13px]">
+                                {/* <p>{formattedDate}</p> */}
+                                <p>{formattedTime}</p>
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </>
                     </div>
                   </div>
                   <div className="flex gap-[3rem]">
                     <div className="my-[6%]">
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Reference</p>
+                      <p className="text-[#0A2E65]/60 text-left mb-[10px]">
+                        Reference
+                      </p>
                       <div className="flex text-[#0A2E65] items-center text-[13px]">
                         <div className="flex items-center">
-                          <p>{selectedTransaction.reference}</p>
+                          <p>{selectedTransaction.id}</p>
                           <button></button>
 
                           <button
-                            onClick={() =>
-                              handleCopy(selectedTransaction.reference)
-                            }
+                            onClick={() => handleCopy(selectedTransaction.id)}
                             className="relative flex items-center justify-center cursor-pointer"
                           >
                             <img src={Copy} alt="" />
-                            {copiedRef === selectedTransaction.reference && (
+                            {copiedRef === selectedTransaction.id && (
                               <span
                                 className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
-                                  copiedRef === selectedTransaction.reference
+                                  copiedRef === selectedTransaction.id
                                     ? "opacity-100"
                                     : "opacity-0"
                                 }`}
@@ -363,14 +377,28 @@ const CreditDebitTransactions: React.FC<{
                       </div>
                     </div>
                     <div className="my-[6%]">
-                      <p className="text-[#0A2E65]/60 mb-[10px]">
-                        Wallet Address
-                      </p>
-                      <div className="flex text-[#0A2E65] items-center text-[13px]">
-                        <div className="flex items-center">
-                          <p>{selectedTransaction.address}</p>
-                        </div>
-                      </div>
+                      <>
+                        <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
+
+                        {/* Unique Status Icon */}
+                        {selectedTransaction.transactionStatus ===
+                          "success" && (
+                          <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                            SUCCESSLL
+                          </div>
+                        )}
+                        {selectedTransaction.transactionStatus ===
+                          "pending" && (
+                          <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
+                            PENDING
+                          </div>
+                        )}
+                        {selectedTransaction.transactionStatus === "failed" && (
+                          <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
+                            FAILED
+                          </div>
+                        )}
+                      </>
                     </div>
                   </div>
                   {/* Report Button */}
