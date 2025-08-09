@@ -168,8 +168,6 @@ const BuyCrypto = () => {
     }
   }, [wallets]);
 
-
-
   useEffect(() => {
     const allReady =
       quoteId && selectedCoin?.value && numericAmount && numericAmount > 0;
@@ -294,10 +292,9 @@ const BuyCrypto = () => {
     });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setError("");
+    const value = e.target.value.replace(/,/g, "");
 
-    // Only allow numbers and decimal
+    // Allow only numbers and decimal
     if (/^\d*\.?\d*$/.test(value)) {
       setAmount(value);
     }
@@ -568,8 +565,6 @@ const BuyCrypto = () => {
                           <div className="flex items-center justify-between text-[#6779A7] ">
                             <p className="mr-1">Wallel Balance:</p>
                             <span className="flex justify-center items-center">
-                              {/* <span>N</span> */}
-
                               <span>
                                 {user
                                   ? user.accountBalance.toLocaleString(
@@ -603,7 +598,9 @@ const BuyCrypto = () => {
                             type="text"
                             placeholder="50,000"
                             className="w-full px-1 py-3 outline-none bg-white rounded-r-md text-[16px]"
-                            value={amount}
+                            value={
+                              amount ? Number(amount).toLocaleString() : ""
+                            }
                             onChange={(e) => {
                               stopCountdown();
                               handleChange(e);

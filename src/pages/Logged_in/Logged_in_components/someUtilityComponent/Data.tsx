@@ -386,10 +386,10 @@ const Data = () => {
                         value={formData.amount}
                         onChange={handleChange}
                         // onBlur={() => validateField("email", formData.customerId)}
-                        className={`p-4 px-3 border text-[16px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                        className={`p-4 px-3 border text-[16px] border-[#A4A4A4] w-full   outline-none rounded-md ${
                           errors.amount
                             ? "border border-red-600"
-                            : "focus:border-purple-800"
+                            : "cursor-not-allowed"
                         } `}
                       />
                       {errors.amount && (

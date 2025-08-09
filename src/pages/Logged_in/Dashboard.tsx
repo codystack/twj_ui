@@ -742,7 +742,7 @@ const Dashboard = () => {
                   )}
                 </>
 
-                <Airtime />
+                {/* <Airtime /> */}
 
                 <>
                   {!isKycComplete ? (

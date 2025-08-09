@@ -35,12 +35,6 @@ const customStyles = {
       border: state.isFocused ? "2px solid #8003A9" : "1px solid #a4a4a4",
     },
   }),
-  // option: (provided: any, state: any) => ({
-  //   ...provided,
-  //   cursor: "pointer",
-  //   textAlign: "left",
-  //   backgroundColor: state.isSelected ? "#8003A9" : "#fff",
-  // }),
   option: (provided: any, state: any) => ({
     ...provided,
     cursor: "pointer",
@@ -88,6 +82,7 @@ const CableTv = () => {
   const [shouldCheckPasscode, setShouldCheckPasscode] = useState(false);
   const [showPinModal, setShowPinModal] = useState(false);
   const [isSuccessModal, setIsSuccessModal] = useState(false);
+
   const validateField = (fieldName: string, value: string) => {
     switch (fieldName) {
       case "accountNumber":
@@ -442,10 +437,10 @@ const CableTv = () => {
                         value={amount}
                         onChange={handleInputChange}
                         onBlur={() => validateField("email", formData.amount)}
-                        className={`p-4 px-3 border text-[15px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                        className={`p-4 px-3 border text-[15px] border-[#A4A4A4] w-full  outline-none rounded-md ${
                           errors.amount
                             ? "border border-red-600"
-                            : "focus:border-purple-800"
+                            : "cursor-not-allowed"
                         } `}
                       />
                       {/* {errors.email && (

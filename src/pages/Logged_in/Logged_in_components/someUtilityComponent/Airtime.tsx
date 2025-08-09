@@ -28,7 +28,7 @@ const Airtime = () => {
     recipient: "",
   });
   const [activeImage, setActiveImage] = useState<string | null>(null);
- const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [showPinModal, setShowPinModal] = useState(false);
   const [isSuccessModal, setIsSuccessModal] = useState(false);
 
@@ -77,10 +77,20 @@ const Airtime = () => {
     return error;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedAmount(null);
     const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
+
+    let newValue: string | boolean = type === "checkbox" ? checked : value;
+
+    if (name === "amount") {
+      const rawValue = value.replace(/,/g, "");
+      if (/^\d*\.?\d*$/.test(rawValue)) {
+        newValue = rawValue;
+      } else {
+        return; 
+      }
+    }
 
     setFormData((prevState) => ({
       ...prevState,
@@ -94,8 +104,6 @@ const Airtime = () => {
     setFormData((prev) => ({ ...prev, amount: amount.toString() }));
     setSelectedAmount(amount);
   };
-
-
 
   const openModal = () => {
     const completeKyc = localStorage.getItem("kycComplete");
@@ -309,9 +317,13 @@ const Airtime = () => {
                     <div className="w-full mb-4">
                       <input
                         type="text"
-                        placeholder="₦0.00"
+                        placeholder="₦100.00"
                         name="amount"
-                        value={formData.amount}
+                        value={
+                          formData.amount
+                            ? Number(formData.amount).toLocaleString()
+                            : ""
+                        }
                         onChange={handleChange}
                         onBlur={() => validateField("amount", formData.amount)}
                         className={`p-4 px-3  border text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
