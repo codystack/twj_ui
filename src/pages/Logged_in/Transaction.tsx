@@ -6,6 +6,7 @@ import GiftCardTransaction from "./Logged_in_components/GiftcardTransaction";
 import UtilityTransaction from "./Logged_in_components/UtilityBillsTransaction";
 import TransactionSkeleton from "../../components/TransactionSkeleton";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 interface TransactionType {
   id: string;
   amount: number;
@@ -25,6 +26,22 @@ interface TransactionType {
   reference: string;
 }
 
+interface CryptoTransactionType {
+  amount: number;
+  billPaymentCategory: string;
+  cryptoCategory: string;
+  currency: string;
+  id: string;
+  network: string | null;
+  transactionDate: string;
+  transactionId: string | null;
+  transactionReference: string;
+  transactionStatus: "Processing" | "success" | "Failed" | string;
+  transactionType: string;
+  twjUserId: string;
+  walletCategory: string;
+}
+
 const Transaction = () => {
   const [activeTab, setActiveTab] = useState<
     "Crypto" | "GiftCard" | "BillsPayment"
@@ -32,7 +49,13 @@ const Transaction = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [noTransaction, setNoTransaction] = useState<string | null>(null);
   const [transaction, setTransaction] = useState<TransactionType[]>([]);
-  const [page, setPage] = useState(0); // react-paginate starts from 0
+  const [cryptoTransaction, setCryptoTransaction] = useState<
+    CryptoTransactionType[]
+  >([]);
+  const [giftcardTransaction, setGiftcardTransaction] = useState<
+    TransactionType[]
+  >([]);
+  const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const scrollContainer = useRef<HTMLDivElement | null>(null);
@@ -53,11 +76,18 @@ const Transaction = () => {
         `${BASE_URL}/Transaction/allTransactions?TransactionType=${type}&page=${page}&pageSize=${pageSize}&BillPaymentCategory=${"all"}`
       );
 
-      const transactions: TransactionType[] = response.data.data.data;
+      const transactions = response.data.data.data;
       const noTransactionMessage = response.data.message;
       const totalRecords = response.data.data.totalRecords;
 
-      setTransaction(transactions);
+      if (type === "Crypto") {
+        setCryptoTransaction(transactions as CryptoTransactionType[]);
+      } else if (type === "GiftCard") {
+        setGiftcardTransaction(transactions);
+      } else if (type === "BillsPayment") {
+        setTransaction(transactions as TransactionType[]);
+      }
+
       setTotalPages(Math.ceil(totalRecords / pageSize));
       setNoTransaction(noTransactionMessage);
       scrollContainer.current?.scrollTo({ top: 0 });
@@ -73,9 +103,16 @@ const Transaction = () => {
     fetchTransactions(activeTab, page + 1);
   }, [page, activeTab]);
 
+  useEffect(() => {
+    if (activeTab === "Crypto") {
+      console.log("transaction for Crypto ", cryptoTransaction);
+    } else if (activeTab === "GiftCard") {
+      console.log("transaction for giftcard", giftcardTransaction);
+    }
+  }, [activeTab, cryptoTransaction, giftcardTransaction]);
+
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPage(selectedItem.selected);
-    // window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (

@@ -21,7 +21,6 @@ interface TransactionType {
   billPaymentCategory: string;
   transactionDate: string;
   transactionReference: string;
-
   date: string;
   type: string;
   direction: string;
@@ -30,14 +29,10 @@ interface TransactionType {
   reference: string;
 }
 
-// interface Transaction {
-//   transactions: TransactionType[];
-// }
 const UtilityTransaction: React.FC<{
   transactions: TransactionType[];
   noTransaction: string | null;
 }> = ({ transactions, noTransaction }) => {
-  // const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [selectedTransaction, setSelectedTransaction] =
     useState<TransactionType | null>(null);
 
@@ -64,7 +59,6 @@ const UtilityTransaction: React.FC<{
   const validateField = (fieldName: string, value: string) => {
     switch (fieldName) {
       case "reference":
-        // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!value.trim()) {
           setErrors((prev) => ({
             ...prev,
@@ -128,12 +122,6 @@ const UtilityTransaction: React.FC<{
     setShowReportForm(true);
   };
 
-  // Handle form submission
-  // const handleSubmitReport = () => {
-  //   console.log("Report Submitted:", message.messageSent);
-  //   setShowReportForm(false);
-  // };
-
   // Handle closing the modal
   const handleClose = () => {
     setMessage({ reference: "", messageSent: "" });
@@ -142,8 +130,6 @@ const UtilityTransaction: React.FC<{
     handleCloseModal();
   };
 
-
-
   useEffect(() => {
     if (transactions.length > 0) {
       setTimeout(() => {
@@ -151,7 +137,6 @@ const UtilityTransaction: React.FC<{
       }, 500); // short delay lets the DOM update
     }
   }, [transactions]);
-  
 
   return (
     <div className="space-y-1 p-4">
@@ -274,7 +259,7 @@ const UtilityTransaction: React.FC<{
 
                   <div className="flex justify-between pb-[4%] border-b border-b-[#E2E8F0]  items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
-                    ₦{selectedTransaction.amount}
+                      ₦{selectedTransaction.amount}
                     </h2>
 
                     {selectedTransaction.billPaymentCategory === "Data" && (
@@ -284,7 +269,8 @@ const UtilityTransaction: React.FC<{
                         className="w-12 h-12"
                       />
                     )}
-                    {selectedTransaction.billPaymentCategory === "Electricity" && (
+                    {selectedTransaction.billPaymentCategory ===
+                      "Electricity" && (
                       <img
                         src={Electricity}
                         alt="Transaction Logo"
@@ -318,7 +304,7 @@ const UtilityTransaction: React.FC<{
                     <div>
                       <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
                       <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
-                        <p>{selectedTransaction.network}</p>
+                        <p>{selectedTransaction.network.toUpperCase()}</p>
                         <p>{selectedTransaction.quantity}</p>
                       </div>
                     </div>
@@ -338,9 +324,9 @@ const UtilityTransaction: React.FC<{
 
                       {/* Unique Status Icon */}
                       {selectedTransaction.transactionStatus === "success" && (
-                            <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                            SUCCESSLL
-                          </div>
+                        <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                          SUCCESSLL
+                        </div>
                       )}
                       {selectedTransaction.transactionStatus ===
                         "processing" && (
@@ -367,10 +353,12 @@ const UtilityTransaction: React.FC<{
                           className="relative flex items-center justify-center cursor-pointer"
                         >
                           <img src={Copy} alt="" />
-                          {copiedRef === selectedTransaction.transactionReference && (
+                          {copiedRef ===
+                            selectedTransaction.transactionReference && (
                             <span
                               className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
-                                copiedRef === selectedTransaction.transactionReference
+                                copiedRef ===
+                                selectedTransaction.transactionReference
                                   ? "opacity-100"
                                   : "opacity-0"
                               }`}
