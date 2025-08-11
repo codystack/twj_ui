@@ -1,63 +1,23 @@
 import MyStaticLogo from "../../../assets/dashboard_img/profile//transactions/bitcoin.svg";
 import ArrowDownIcon from "../../../assets/dashboard_img/profile/transactions/transactio_up.svg";
+import swap from "../../../assets/crpto_icons/swap_crypto.svg";
+import send from "../../../assets/crpto_icons/out_crypto.svg";
+import buy from "../../../assets/crpto_icons/in_crypto.svg";
 import ArrowUpIcon from "../../../assets/dashboard_img/profile//transactions/transaction_down.svg";
 import { useState } from "react";
 import Delete from "../../../assets/dashboard_img/profile/cancel.svg";
 import Copy from "../../../assets/dashboard_img/profile/transactions/Copy_light.svg";
 import HrtBroken from "../../../assets/dashboard_img/profile/transactions/heartbroken.svg";
 import Report from "../../../assets/dashboard_img/profile/transactions/report.svg";
-// import "../../../App.css";
 
-const transactions = [
-  {
-    id: "QYWTU578HG",
-    type: "Inward Crypto Transfer",
-    amount: "₦1,880,500",
-    date: "Mar 4, 2025",
-    direction: "inward",
-    status: "success",
-    network: "USDT TRC20",
-    time: "19:45",
-    reference: "324578765342232334",
-    address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
-  },
-  {
-    id: "XYZ123456",
-    type: "Outward Crypto Transfer",
-    amount: "₦200,500",
-    date: "Mar 3, 2025",
-    direction: "outward",
-    status: "pending",
-    time: "10:42",
-    network: "USDT TRC20",
-    reference: "32457876534123454",
-    address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
-  },
-  {
-    id: "ABCD7890JK",
-    type: "Outward Crypto Transfer",
-    amount: "₦1,167,500",
-    date: "Mar 2, 2025",
-    direction: "outward",
-    status: "failed",
-    network: "USDT TRC20",
-    reference: "324577564342232334",
-    time: "1:26",
-    address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
-  },
-  {
-    id: "LMNOP45678",
-    type: "Inward Crypto Transfer",
-    amount: "₦1,200,750",
-    date: "Mar 1, 2025",
-    direction: "inward",
-    status: "success",
-    network: "USDT TRC20",
-    time: "19:45",
-    reference: "324578765342232334",
-    address: "TRCuyghIlkWnnosqAb7jrrwpHGHJedwfwY8dqwx",
-  },
-];
+import btc from "../../../assets/crpto_icons/wallet_icons/Bitcoin.svg";
+import eth from "../../../assets/crpto_icons/wallet_icons/Ethereumm.svg";
+import usdt from "../../../assets/crpto_icons/wallet_icons/usdt.svg";
+import bnb from "../../../assets/crpto_icons/wallet_icons/Binace_coin.svg";
+import sol from "../../../assets/crpto_icons/wallet_icons/solana.svg";
+import usdc from "../../../assets/crpto_icons/wallet_icons/USDC.svg";
+import trx from "../../../assets/crpto_icons/wallet_icons/Tron.svg";
+import ton from "../../../assets/crpto_icons/wallet_icons/ton_coin.svg";
 
 type Transaction = {
   id: string;
@@ -74,7 +34,26 @@ type Transaction = {
   address: string;
 };
 
-const CrytoTransaction = () => {
+interface CryptoTransactionType {
+  amount: number;
+  billPaymentCategory: string;
+  cryptoCategory: string;
+  currency: string;
+  id: string;
+  network: string | null;
+  transactionDate: string;
+  transactionId: string | null;
+  transactionReference: string;
+  transactionStatus: "Processing" | "success" | "Failed" | string;
+  transactionType: string;
+  twjUserId: string;
+  walletCategory: string;
+}
+
+const CrytoTransaction: React.FC<{
+  transactions: CryptoTransactionType[];
+  noTransaction: string | null;
+}> = ({ transactions, noTransaction }) => {
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
   const [showReportForm, setShowReportForm] = useState(false);
@@ -144,7 +123,6 @@ const CrytoTransaction = () => {
     setSelectedTransaction(null);
   };
 
-  // for report
   // Handle input change
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -163,12 +141,6 @@ const CrytoTransaction = () => {
     setShowReportForm(true);
   };
 
-  // Handle form submission
-  // const handleSubmitReport = () => {
-  //   console.log("Report Submitted:", message.messageSent);
-  //   setShowReportForm(false);
-  // };
-
   // Handle closing the modal
   const handleClose = () => {
     setMessage({ reference: "", messageSent: "" });
@@ -179,76 +151,134 @@ const CrytoTransaction = () => {
 
   return (
     <div className="space-y-4 p-4">
-      {transactions.map((transaction) => (
-        <button
-          onClick={() => handleOpenModal(transaction)}
-          key={transaction.id}
-          className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  md:p-4 py-3"
-        >
-          {/* Left Side: Static Logo + Transaction Details */}
-          <div className="flex items-center gap-4 relative">
-            {/* Static Logo Container */}
-            <div className="relative">
-              <img
-                src={MyStaticLogo}
-                alt="Transaction Logo"
-                className="w-12 h-12"
-              />
-              {/* Unique Direction Arrow (Absolute Positioning) */}
-              {transaction.direction === "inward" ? (
-                <img
-                  src={ArrowDownIcon}
-                  alt="Inward Transaction"
-                  className="absolute bottom-0 right-0 w-4 h-4"
-                />
-              ) : (
-                <img
-                  src={ArrowUpIcon}
-                  alt="Outward Transaction"
-                  className="absolute right-0 bottom-0 w-4 h-4"
-                />
-              )}
-            </div>
+      {transactions.length > 0 ? (
+        transactions.map((transaction) => (
+          <button
+            onClick={() => handleOpenModal(transaction)}
+            key={transaction.id}
+            className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  md:p-4 py-3"
+          >
+            {/* Left Side: Static Logo + Transaction Details */}
+            <div className="flex items-center gap-4 relative">
+              {/* Static Logo Container */}
+              <div className="relative">
+                {transaction.currency === "btc" && (
+                  <img src={btc} alt="Transaction Logo" className="w-12 h-12" />
+                )}
+                {transaction.currency === "usdt" && (
+                  <img
+                    src={usdt}
+                    alt="Transaction Logo"
+                    className="w-12 h-12"
+                  />
+                )}
+                {transaction.currency === "ton" && (
+                  <img src={ton} alt="Transaction Logo" className="w-12 h-12" />
+                )}
+                {transaction.currency === "eth" && (
+                  <img src={eth} alt="Transaction Logo" className="w-12 h-12" />
+                )}
+                {transaction.currency === "bnb" && (
+                  <img src={bnb} alt="Transaction Logo" className="w-12 h-12" />
+                )}
+                {transaction.currency === "usdc" && (
+                  <img
+                    src={usdc}
+                    alt="Transaction Logo"
+                    className="w-12 h-12"
+                  />
+                )}
+                {transaction.currency === "trx" && (
+                  <img src={trx} alt="Transaction Logo" className="w-12 h-12" />
+                )}
+                {transaction.currency === "sol" && (
+                  <img src={sol} alt="Transaction Logo" className="w-12 h-12" />
+                )}
 
-            {/* Transaction Details */}
-            <div>
-              <p className="text-[16px] text-[#27014F]">{transaction.type}</p>
-              <div className="flex items-center gap-2 text-gray-600">
-                {/* Tracking ID */}
-                <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
-                  {transaction.id}
-                </span>
-                {/* Unique Status Icon */}
-                {transaction.status === "success" && (
-                  <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                    SUCCESSFULL
-                  </div>
+                {/* Unique Direction Arrow (Absolute Positioning) */}
+                {transaction.cryptoCategory === "Buy" && (
+                  <img
+                    src={buy}
+                    alt="Inward Transaction"
+                    className="absolute bottom-0 right-0 "
+                  />
                 )}
-                {transaction.status === "pending" && (
-                  <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
-                    PENDING
-                  </div>
+                {transaction.cryptoCategory === "Swap" && (
+                  <img
+                    src={swap}
+                    alt="Inward Transaction"
+                    className="absolute bottom-0 right-0"
+                  />
                 )}
-                {transaction.status === "failed" && (
-                  <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
-                    FAILED
-                  </div>
+                {transaction.cryptoCategory === "Send" && (
+                  <img
+                    src={send}
+                    alt="Inward Transaction"
+                    className="absolute bottom-0 right-0"
+                  />
                 )}
               </div>
-            </div>
-          </div>
 
-          {/* Right Side: Date & Amount */}
-          <div className="text-right">
-            <p className="font-semibold text-[#27014F]  ">
-              {transaction.amount}
-            </p>
-            <p className="text-sm text-[#27014F] text-[11px]">
-              {transaction.date}
-            </p>
-          </div>
-        </button>
-      ))}
+              {/* Transaction Details */}
+              <div>
+                <p className="text-[16px] text-[#27014F] text-left">
+                  {transaction.cryptoCategory.charAt(0).toUpperCase() +
+                    transaction.cryptoCategory.slice(1).toLowerCase()}{" "}
+                  {transaction.currency.toUpperCase()}
+                </p>
+                <div className="flex items-center gap-2 text-gray-600">
+                  {/* Tracking ID */}
+                  <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
+                    {transaction.transactionReference}
+                  </span>
+                  {/* Unique Status Icon */}
+                  {transaction.transactionStatus === "success" && (
+                    <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                      SUCCESSFULL
+                    </div>
+                  )}
+                  {transaction.transactionStatus === "Processing" && (
+                    <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
+                      PENDING
+                    </div>
+                  )}
+                  {transaction.transactionStatus === "failed" && (
+                    <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
+                      FAILED
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side: Date & Amount */}
+            <div className="text-right">
+              <p className="font-semibold text-[#27014F]  ">
+                {transaction.currency.toUpperCase() === "NGN"
+                  ? "₦"
+                  : transaction.currency.toUpperCase()}{" "}
+                {transaction.amount}
+              </p>
+              <p className="text-sm text-[#27014F] text-[11px]">
+                {new Date(transaction.transactionDate).toLocaleDateString(
+                  "en-US",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }
+                )}
+              </p>
+            </div>
+          </button>
+        ))
+      ) : (
+        <div className="flex items-center justify-center h-[calc(100vh-18rem)]">
+          <p className="text-gray-500 text-lg">{noTransaction}</p>
+        </div>
+      )}
 
       {selectedTransaction && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -323,7 +353,7 @@ const CrytoTransaction = () => {
                           SUCCESSLL
                         </div>
                       )}
-                      {selectedTransaction.status === "pending" && (
+                      {selectedTransaction.status === "Processing" && (
                         <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
                           PENDING
                         </div>
