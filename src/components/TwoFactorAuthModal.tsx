@@ -79,9 +79,21 @@ export default function TwoFactorAuthModal({
 
   const phoneNumber = useUserStore((state) => state.user?.phoneNumber);
 
-  const trimmed = phoneNumber?.slice(4) ?? "";
-  const masked =
-    trimmed.length >= 4 ? `${trimmed.slice(0, 3)}****${trimmed.slice(-3)}` : "";
+  let masked = "";
+
+  if (phoneNumber) {
+    const digitsOnly = phoneNumber.replace(/\s+/g, "");
+
+    if (digitsOnly.length >= 14) {
+      // Format like +1234 8105063244
+      const trimmed = digitsOnly.slice(4);
+      masked = `${trimmed.slice(0, 3)}****${trimmed.slice(-3)}`;
+    } else if (digitsOnly.length === 11) {
+      // Format like 08105063244
+      const trimmed = digitsOnly.slice(1);
+      masked = `${trimmed.slice(0, 3)}****${trimmed.slice(-3)}`;
+    }
+  }
 
   return (
     <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">

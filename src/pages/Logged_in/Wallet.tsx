@@ -45,9 +45,9 @@ const customStyles = {
     backgroundColor: state.isSelected
       ? "#8003A9"
       : state.isFocused
-      ? "#F8E0FF" // Hover background color
+      ? "#F8E0FF"
       : "#fff",
-    color: state.isSelected ? "#fff" : "#27014F", // Text color change on selection
+    color: state.isSelected ? "#fff" : "#27014F",
   }),
 };
 
@@ -58,7 +58,7 @@ const Wallet = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [noTransaction, setNoTransaction] = useState<string | null>(null);
   const [transaction, setTransaction] = useState<TransactionType[]>([]);
-  const [page, setPage] = useState(0); // react-paginate starts from 0
+  const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
   const [isHidden, setIsHidden] = useState(false);
@@ -85,14 +85,12 @@ const Wallet = () => {
   };
 
   const openWithdrawalModal = () => {
-    // const completeKyc = localStorage.getItem("kycComplete");
     fetchBanks();
     setShowWithdrawalModal(true);
   };
 
   const openModal = () => {
     const completeKyc = localStorage.getItem("kycComplete");
-
     if (completeKyc === "true") {
       setShowTopupModal(true);
       setShowKycModal(false);
@@ -141,7 +139,6 @@ const Wallet = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
-
     if (name === "amount") {
       const rawValue = value.replace(/,/g, "");
       if (/^\d*\.?\d*$/.test(rawValue)) {
@@ -152,13 +149,11 @@ const Wallet = () => {
     }
 
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Validate the field on change
     validateField(name, value);
   };
 
   useEffect(() => {
     fetchUser();
-    // console.log(textToCopy);
     const timeout = setTimeout(() => {
       const kycComplete = localStorage.getItem("kycComplete");
       if (kycComplete !== "true" && location.pathname === "/wallet") {
@@ -174,13 +169,11 @@ const Wallet = () => {
       await navigator.clipboard.writeText(String(textToCopy));
       console.log(textToCopy);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000); // Hide after 2s
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error("Failed to copy text: ", err);
     }
   };
-
-  // Function to fetch wallet transactions based on the activeTab and page
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   interface TransactionType {
@@ -217,10 +210,9 @@ const Wallet = () => {
       const totalRecords = response.data.data.totalRecords;
 
       setTransaction(transactions);
-      console.log(transactions);
+      // console.log(transactions);
       setTotalPages(Math.ceil(totalRecords / pageSize));
       setNoTransaction("No transactions yet!");
-      // scrollContainer.current?.scrollTo({ top: 0,});
     } catch (err) {
       return err;
       // console.error("Error fetching transactions:", err);
@@ -235,7 +227,6 @@ const Wallet = () => {
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPage(selectedItem.selected);
-    // window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const isFormInvalid =
     Object.values(errors).some((error) => error) ||
