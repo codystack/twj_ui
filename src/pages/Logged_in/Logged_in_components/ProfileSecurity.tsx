@@ -9,6 +9,7 @@ import api from "../../../services/api";
 import { AxiosError } from "axios";
 import SuccessModal from "../SuccessModal";
 import { useUserStore } from "../../../store/useUserStore";
+import TwoFactorAuthModal from "../../../components/TwoFactorAuthModal";
 
 const ProfileSecurity = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,16 +24,27 @@ const ProfileSecurity = () => {
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isTwoFAEnabled, setIsTwoFAEnabled] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalStep, setModalStep] = useState<"start" | "code">("start");
+  const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [twoFaSuccess, setTwoFaSuccess] = useState(false);
 
   const { fetchUser } = useUserStore();
+  const isTwoFASet = useUserStore((state) => state.user?.isTwoFASet);
 
   useEffect(() => {
     fetchUser();
   }, []);
 
+  useEffect(() => {
+    if (typeof isTwoFASet === "boolean") {
+      setIsTwoFAEnabled(isTwoFASet);
+    }
+  }, [isTwoFASet]);
+
   const passcodeSet = useUserStore((state) => state.user?.passcodeSet);
-
-
 
   const validateField = (
     fieldName: string,
@@ -161,9 +173,51 @@ const ProfileSecurity = () => {
     !formData.newPassword ||
     !formData.newPassword;
 
+  // functions for 2FA
+  const handleToggle = () => {
+    if (!isTwoFAEnabled) {
+      setModalStep("start");
+      setIsModalVisible(true);
+    } else {
+      api
+        .post("/Authentication/disable2Fa")
+        .then(() => setIsTwoFAEnabled(false));
+    }
+  };
+
+  const reSendCode = async () => {
+    await api.post("/Authentication/enable2Fa");
+    // setModalStep("code");
+  };
+
+  const handleSendCode = async () => {
+    try {
+      setLoading(true);
+      await api.post("/Authentication/enable2Fa");
+      setModalStep("code");
+    } catch (error) {
+      // console.error("Error sending 2FA code:", error);
+      return error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyCode = async () => {
+    // console.log(code);
+    // return;
+    const res = await api.post("/Authentication/verify2Fa", { code });
+    if (res?.data?.statusCode === "OK") {
+      setIsTwoFAEnabled(true);
+      setIsModalVisible(false);
+      setTwoFaSuccess(true);
+      setCode("");
+    }
+  };
+
   return (
     <>
-      <div className=" mt-[5%]  md:mt-[1%] lg:[-1%]     w-full md:w-[60%]   lg:w-[40%]">
+      <div className=" mt-[5%]  md:mt-[1%] lg:[-1%]  w-full md:w-[60%]   lg:w-[40%]">
         <div className="flex items-center justify-between leading-[1.2rem]">
           <div className=" flex mt-[2rem] md:mt-0 flex-col">
             <p className="font-[500] text-[17px] md:text-[15px]">
@@ -325,6 +379,16 @@ const ProfileSecurity = () => {
           )}
 
           {/* Success Modal */}
+          {twoFaSuccess && (
+            <SuccessModal
+              title="2FA Activated"
+              message="You have activated 2FA successfully."
+              onClose={() => {
+                setTwoFaSuccess(false);
+                fetchUser();
+              }}
+            />
+          )}
           {isSuccessModal && (
             <SuccessModal
               title="Password Changed"
@@ -377,9 +441,24 @@ const ProfileSecurity = () => {
               using a software token
             </p>
           </div>
-          <button className="text-[#8003A9] cursor-pointer">
-            <ToggleButton />
-          </button>
+
+          <>
+            <button className="text-[#8003A9] cursor-pointer">
+              <ToggleButton isOn={isTwoFAEnabled} onToggle={handleToggle} />
+            </button>
+
+            <TwoFactorAuthModal
+              isVisible={isModalVisible}
+              step={modalStep}
+              code={code}
+              loading={loading}
+              onResend={reSendCode}
+              onCodeChange={setCode}
+              onClose={() => setIsModalVisible(false)}
+              onContinue={handleSendCode}
+              onVerify={handleVerifyCode}
+            />
+          </>
         </div>
       </div>
 

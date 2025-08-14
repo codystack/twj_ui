@@ -21,7 +21,7 @@ import RegSuccessful from "./pages/RegSuccessful.tsx";
 import RecoverAccount from "./pages/RecoverAccount.tsx";
 import AccountUpgrade from "./pages/Logged_in/AccountUpgrade.tsx";
 import Referals from "./pages/Logged_in/Referals.tsx";
-import RouteChangeHandler from "./components/RouteChangeHandler.tsx";
+import RouteChangeHandler from "./components/KycHandler.tsx";
 import Help from "./pages/Logged_in/Help.tsx";
 import BuyCrypto from "./pages/Logged_in/crpto/BuyCrypto.tsx";
 import SellCrypto from "./pages/Logged_in/crpto/SellCrypto.tsx";

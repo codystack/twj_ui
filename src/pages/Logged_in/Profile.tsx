@@ -11,11 +11,9 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import ProfileSecurity from "./Logged_in_components/ProfileSecurity";
 import ProfileBank from "./Logged_in_components/ProfileBank";
-// import { PhoneNumber } from "react-phone-number-input";
 import PhoneEditModal from "./Logged_in_components/PhoneEditModal";
 import "../../App.css";
 import { useBankStore } from "../../store/useBankStore";
-// import { useAuthorizationStore } from "../../store/authorizationStore";
 import { useUserStore } from "../../store/useUserStore";
 import { useLocation, Location } from "react-router-dom";
 import api from "../../services/api";
@@ -23,10 +21,8 @@ import PinModal from "./Logged_in_components/someUtilityComponent/PinModal";
 import SuccessModal from "./SuccessModal";
 import cancel from "../../assets/dashboard_img/profile/cancel.svg";
 import SetPinModal from "./Logged_in_components/someUtilityComponent/SetPinModal";
-// import { useModalStore } from "../../store/modalStore";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-// const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<"account" | "security" | "bank">(
@@ -138,10 +134,6 @@ const Profile = () => {
     !formData.reason ||
     !formData.password;
 
-  // const handlePhoneNumberChange = (newPhoneNumber: string) => {
-  //   setFormData((prev) => ({ ...prev, phoneNumber: newPhoneNumber }));
-  // };
-
   useEffect(() => {
     // Get email and name from localStorage
     const phoneNumber = localStorage.getItem("phoneNumber");
@@ -155,8 +147,6 @@ const Profile = () => {
     setUserName(userName ?? "");
     setName(name ?? "");
     setEmail(email ?? "");
-    // console.log(user?.dateOfBirth)
-    // setName(storedName ?? "");
   }, []);
 
   useEffect(() => {
@@ -605,17 +595,6 @@ const Profile = () => {
                 }}
               />
             )}
-
-            {/* {isSuccessModalStore && (
-              <SuccessModal
-                title="PIN Set Successfully"
-                message="Your transaction PIN has been created!"
-                onClose={() => {
-                  setDataSuccessModal(false);
-                  // fetchUser();
-                }}
-              />
-            )} */}
 
             {/* Dynamic Content Security*/}
             {activeTab === "security" && <ProfileSecurity />}

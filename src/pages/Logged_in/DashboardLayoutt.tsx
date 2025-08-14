@@ -5,13 +5,9 @@ import userIcon from "../../assets/dashboard_img/profile/userIcon.svg";
 import { useEffect, useState, useRef } from "react";
 
 import Dashboard from "./Dashboard";
-// import Bills from "./Bills";
-// import Crypto from "./Crypto";
 import Wallet from "./Wallet";
-// import Sidebar from "./Sidebar";
 import Transaction from "./Transaction";
 import Profile from "./Profile";
-// import Rates from "./Rates";
 import AccountUpgrade from "./AccountUpgrade";
 import Referals from "./Referals";
 import LogoutModal from "../../modals/LogoutModal";
@@ -88,7 +84,7 @@ const DashboardLayoutt = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       await useUserStore.getState().fetchUser();
-      setHydrated(true); 
+      setHydrated(true);
     };
     fetchUserData();
   }, []);
@@ -156,11 +152,10 @@ const DashboardLayoutt = () => {
   }, [user]);
 
   useEffect(() => {
-    // Get email and name from localStorage
     const storedEmail = localStorage.getItem("email");
     const storedName = localStorage.getItem("userName");
 
-    setEmail(storedEmail ?? ""); // Use empty string if null
+    setEmail(storedEmail ?? "");
     setName(storedName ?? "");
   }, []);
 

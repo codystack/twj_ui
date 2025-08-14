@@ -19,6 +19,7 @@ type User = {
   accountNumber: number;
   kycSet: boolean;
   passcodeSet: boolean;
+  isTwoFASet: boolean;
   referralBonusBalance: number;
 };
 
@@ -55,6 +56,7 @@ export const useUserStore = create<UserStore>((set) => ({
           accountNumber: data.data.accountNumber,
           kycSet: data.data.isKycComplete,
           passcodeSet: data.data.isPasscodeSet,
+          isTwoFASet: data.data.is2FASet,
           referralBonusBalance: data.data.referralBonusBalance ?? 0,
         },
         loading: false,

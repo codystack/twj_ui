@@ -1,14 +1,17 @@
-import { useState } from "react";
+import React from "react";
 
-const ToggleButton = () => {
-  const [isOn, setIsOn] = useState(false);
+interface ToggleButtonProps {
+  isOn: boolean;
+  onToggle: () => void;
+}
 
+const ToggleButton: React.FC<ToggleButtonProps> = ({ isOn, onToggle }) => {
   return (
     <div
       className={`w-[50px] h-[25px] flex items-center rounded-full p-[3px] cursor-pointer transition-all duration-300 ${
         isOn ? "bg-[#8003A9]" : "bg-[#D0DAE6]"
       }`}
-      onClick={() => setIsOn(!isOn)}
+      onClick={onToggle}
     >
       {/* Knob */}
       <div

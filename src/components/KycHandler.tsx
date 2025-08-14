@@ -128,7 +128,7 @@ type KycModalProps = {
 
 // const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
+const KycHandler = ({ isVisible, onClose }: KycModalProps) => {
   if (!isVisible) return null;
 
   const location = useLocation();
@@ -524,17 +524,6 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
     });
   };
 
-  // const handleStateSelectChange = (
-  //   newValue: SingleValue<{ value: string; label: string }>
-  // ) => {
-  //   if (newValue) {
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       state: newValue.value,
-  //     }));
-  //   }
-  // };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -563,7 +552,6 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
       country: "",
       firstName: "",
       lastName: "",
-      // middleName: "",
       gender: "",
       dob: "",
     });
@@ -1175,4 +1163,4 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
   );
 };
 
-export default RouteChangeHandler;
+export default KycHandler;
