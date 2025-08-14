@@ -30,6 +30,7 @@ const ProfileSecurity = () => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [twoFaSuccess, setTwoFaSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const { fetchUser } = useUserStore();
   const isTwoFASet = useUserStore((state) => state.user?.isTwoFASet);
 
@@ -173,20 +174,21 @@ const ProfileSecurity = () => {
     !formData.newPassword;
 
   // functions for 2FA
-  const handleToggle = () => {
+  const handleToggle = async () => {
     if (!isTwoFAEnabled) {
       setModalStep("start");
       setIsModalVisible(true);
     } else {
+      setIsTwoFAEnabled(false);
       api
         .post("/Authentication/disable2Fa")
         .then(() => setIsTwoFAEnabled(false));
+      await fetchUser();
     }
   };
 
   const reSendCode = async () => {
     await api.post("/Authentication/enable2Fa");
-    // setModalStep("code");
   };
 
   const handleSendCode = async () => {
@@ -195,7 +197,6 @@ const ProfileSecurity = () => {
       await api.post("/Authentication/enable2Fa");
       setModalStep("code");
     } catch (error) {
-      // console.error("Error sending 2FA code:", error);
       return error;
     } finally {
       setLoading(false);
@@ -203,14 +204,28 @@ const ProfileSecurity = () => {
   };
 
   const handleVerifyCode = async () => {
-    // console.log(code);
-    // return;
-    const res = await api.post("/Authentication/verify2Fa", { code });
-    if (res?.data?.statusCode === "OK") {
-      setIsTwoFAEnabled(true);
-      setIsModalVisible(false);
-      setTwoFaSuccess(true);
-      setCode("");
+    try {
+      setLoading(true);
+      setErrorMessage("");
+
+      const res = await api.post("/Authentication/verify2Fa", {
+        twoFactorCode: code,
+      });
+
+      if (res?.data?.statusCode === "OK") {
+        setIsTwoFAEnabled(true);
+        setIsModalVisible(false);
+        setTwoFaSuccess(true);
+        setCode("");
+      } else {
+        setErrorMessage("Invalid verification code. Please try again.");
+      }
+    } catch (error) {
+      // console.error("Error verifying 2FA:", error);
+      setErrorMessage("Something went wrong. Please try again.");
+      return error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -453,9 +468,13 @@ const ProfileSecurity = () => {
               loading={loading}
               onResend={reSendCode}
               onCodeChange={setCode}
-              onClose={() => setIsModalVisible(false)}
+              onClose={() => {
+                setErrorMessage("");
+                setIsModalVisible(false);
+              }}
               onContinue={handleSendCode}
               onVerify={handleVerifyCode}
+              errorMessage={errorMessage}
             />
           </>
         </div>

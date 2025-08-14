@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 type Props = {
   isVisible: boolean;
   loading?: boolean;
+  errorMessage?: string;
   step: "start" | "code";
   onClose: () => void;
   onContinue: () => void;
@@ -19,6 +20,7 @@ export default function TwoFactorAuthModal({
   isVisible,
   step,
   loading,
+  errorMessage,
   onClose,
   onResend,
   onContinue,
@@ -83,7 +85,7 @@ export default function TwoFactorAuthModal({
 
   return (
     <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-      <div className="rounded-[20px] bg-[#fff]/20 p-[0.8rem] w-full max-w-[600px]">
+      <div className="rounded-[20px] bg-[#fff]/20 md:p-[0.8rem] w-full max-w-[600px]">
         <div className="bg-white rounded-[15px] w-full h-auto p-6 shadow-xl text-center">
           {step === "start" && (
             <div className="flex justify-end">
@@ -94,9 +96,7 @@ export default function TwoFactorAuthModal({
           )}
           {step === "code" && (
             <div className="flex justify-between border-b border-b-[#E2E8F0] pb-2 items-center">
-              <h2 className="text-xl font-semibold text-[#27014F] mb-2">
-                Enter 2FA Code
-              </h2>
+              <h2 className="text-xl  text-[#27014F] mb-2">Enter 2FA Code</h2>
               <div className="flex justify-end">
                 <button className="cursor-pointer" onClick={onClose}>
                   <img src={cancel} alt="" />
@@ -151,7 +151,7 @@ export default function TwoFactorAuthModal({
               </p>
 
               {/* OTP Input Fields */}
-              <div className="flex justify-center gap-[1rem]  mt-[2rem]">
+              <div className="flex justify-center gap-[1rem] mx-[1rem] mt-[2rem]">
                 {token.map((digit, index) => (
                   <input
                     key={index}
@@ -180,7 +180,13 @@ export default function TwoFactorAuthModal({
                     : "cursor-pointer"
                 }`}
               >
-                Activate 2FA
+                {loading ? (
+                  <div className="flex w-full  justify-center items-center">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                ) : (
+                  "Activate 2FA"
+                )}
               </button>
 
               <div className="flex text-[14px] my-[1.5rem] justify-center items-center">
@@ -192,6 +198,10 @@ export default function TwoFactorAuthModal({
                   Resend Code
                 </button>
               </div>
+
+              {errorMessage && (
+                <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
+              )}
             </>
           )}
         </div>
