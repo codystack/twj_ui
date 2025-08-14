@@ -524,16 +524,7 @@ const RouteChangeHandler = ({ isVisible, onClose }: KycModalProps) => {
     });
   };
 
-  // const handleStateSelectChange = (
-  //   newValue: SingleValue<{ value: string; label: string }>
-  // ) => {
-  //   if (newValue) {
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       state: newValue.value,
-  //     }));
-  //   }
-  // };
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

@@ -287,9 +287,6 @@ const Dashboard = () => {
       })();
     });
 
-  // const amount = user?.accountBalance ?? 0;
-  // const [wholeNum, decimal] = amount.toFixed(2).split(".");
-
   return (
     <>
       {openPinModal && (

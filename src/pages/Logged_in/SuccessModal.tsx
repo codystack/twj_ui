@@ -6,7 +6,7 @@ interface SuccessModalProps {
   title: string;
   message: string;
   onClose: () => void;
-  button?: React.ReactNode; // Optional button
+  button?: React.ReactNode; 
 }
 
 const SuccessModal: React.FC<SuccessModalProps> = ({
