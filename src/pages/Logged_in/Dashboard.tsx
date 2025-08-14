@@ -15,7 +15,7 @@ import Crypto from "./Logged_in_components/someUtilityComponent/Crypto";
 import GiftCard from "./Logged_in_components/someUtilityComponent/GiftCard";
 import Support from "./Logged_in_components/someUtilityComponent/Support";
 import ErrorBoundary from "../../components/error/ErrorBoundry";
-import RouteChangeHandler from "../../components/RouteChangeHandler";
+import KycHandler from "../../components/KycHandler";
 import cancel from "../../assets/dashboard_img/profile/cancel.svg";
 import { useUserStore } from "../../store/useUserStore";
 import copyImg from "../../assets/dashboard_img/withdrawal-copy-.svg";
@@ -552,7 +552,7 @@ const Dashboard = () => {
       )}
 
       {showKycModal && (
-        <RouteChangeHandler
+        <KycHandler
           isVisible={showKycModal}
           onClose={() => {
             setShowKycModal(false);

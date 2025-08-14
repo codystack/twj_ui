@@ -15,7 +15,7 @@ import bankImg from "../../assets/dashboard_img/withdrawal_bank-icon.svg";
 import Select from "react-select";
 import Button from "../../components/Button";
 import { useBankStore } from "../../store/useBankStore";
-import RouteChangeHandler from "../../components/RouteChangeHandler";
+import RouteChangeHandler from "../../components/KycHandler";
 import CreditDebitTransactions from "./Logged_in_components/CreditDebitTransactions";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
