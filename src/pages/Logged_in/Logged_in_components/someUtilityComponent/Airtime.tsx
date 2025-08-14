@@ -153,7 +153,6 @@ const Airtime = () => {
     new Promise<void>((resolve, reject) => {
       (async () => {
         try {
-          // Proceed with Airtime Purchase
           const { network, amount, recipient } = formData;
 
           const purchaseResponse = await api.post(
