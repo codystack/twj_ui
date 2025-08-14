@@ -30,7 +30,6 @@ const ProfileSecurity = () => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [twoFaSuccess, setTwoFaSuccess] = useState(false);
-
   const { fetchUser } = useUserStore();
   const isTwoFASet = useUserStore((state) => state.user?.isTwoFASet);
 

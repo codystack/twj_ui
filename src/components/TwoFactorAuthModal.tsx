@@ -27,7 +27,6 @@ export default function TwoFactorAuthModal({
   onCodeChange,
 }: Props) {
   if (!isVisible) return null;
-
   const [token, setToken] = useState<string[]>(new Array(6).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -95,7 +94,9 @@ export default function TwoFactorAuthModal({
           )}
           {step === "code" && (
             <div className="flex justify-between border-b border-b-[#E2E8F0] pb-2 items-center">
-              <h2 className="text-xl font-semibold mb-2">Enter 2FA Code</h2>
+              <h2 className="text-xl font-semibold text-[#27014F] mb-2">
+                Enter 2FA Code
+              </h2>
               <div className="flex justify-end">
                 <button className="cursor-pointer" onClick={onClose}>
                   <img src={cancel} alt="" />
@@ -172,10 +173,16 @@ export default function TwoFactorAuthModal({
               </div>
               <button
                 onClick={onVerify}
-                className="bg-[#8003A9] text-white w-[80%] mt-[2rem] py-3 px-6 rounded-md "
+                disabled={token.some((digit) => digit === "")}
+                className={`bg-[#8003A9] text-white w-[80%] mt-[2rem] py-3 px-6 rounded-md ${
+                  token.some((digit) => digit === "")
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
               >
                 Activate 2FA
               </button>
+
               <div className="flex text-[14px] my-[1.5rem] justify-center items-center">
                 <p className="text-[#0A2E65]/60 ">Didn't get any code?</p>
                 <button
