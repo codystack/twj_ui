@@ -165,12 +165,6 @@ const Airtime = () => {
             }
           );
 
-          // if (!purchaseResponse?.data?.statusCode !== "OK") {
-          //   throw new Error(
-          //     purchaseResponse?.data?.message || "An error occurred"
-          //   );
-          // }
-
           if (purchaseResponse?.data?.statusCode !== "OK") {
             throw new Error(
               purchaseResponse?.data?.message || "An error occurred"
