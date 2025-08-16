@@ -6,7 +6,7 @@ import ETHER from "../../../assets/crpto_icons/ETHER.svg";
 import scan from "../../../assets/crpto_icons/Scan_alt.svg";
 import CustomSelect from "../../../components/CustomSelect";
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import warning from "../../../assets/crpto_icons/Alarm.svg";
 import { Wallet } from "../../../types/types.ts";
 import btc from "../../../assets/crpto_icons/wallet_icons/Bitcoin.svg";
@@ -55,11 +55,7 @@ const BuyCrypto = () => {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectOptions, setSelectOptions] = useState<Optiontype[]>([]);
-
   const [networkOptions, setNetworkOptions] = useState<Optiontype[]>([]);
-  // const [selectedNetwork, setSelectedNetwork] = useState<Optiontype | null>(
-  //   null
-  // );
   const [selectedNetwork, setSelectedNetwork] = useState<
     Optiontype | undefined
   >(undefined);
@@ -76,12 +72,6 @@ const BuyCrypto = () => {
   const [openPinModal, setOpenPinModal] = useState(false);
   const [activeTab, setActiveTab] = useState<"buy" | "send">("buy");
   const [sendFormError, setSendFormError] = useState<string>("");
-  // const [form, setForm] = useState({
-  //   narration: "",
-  //   network: "",
-  //   amount: "",
-  //   quotationId: "",
-  // });
   const [sendForm, setSendForm] = useState({
     address: "",
     network: "",
@@ -130,9 +120,7 @@ const BuyCrypto = () => {
     const fetchWallets = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `${BASE_URL}/Crypto/users/wallets?userId=${userSubAccountId}`
-        );
+        const response = await api.get(`${BASE_URL}/Crypto/users/wallets`);
 
         const rawResponse: Wallet[] = response.data?.data?.data;
 
