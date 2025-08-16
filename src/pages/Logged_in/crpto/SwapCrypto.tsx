@@ -9,7 +9,7 @@ import empty from "../../../assets/crpto_icons/emptycircle.svg";
 import swap from "../../../assets/crpto_icons/swap.svg";
 import { useUserStore } from "../../../store/useUserStore";
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { Wallet } from "../../../types/types.ts";
 import btc from "../../../assets/crpto_icons/wallet_icons/Bitcoin.svg";
 import eth from "../../../assets/crpto_icons/wallet_icons/Ethereumm.svg";
@@ -63,9 +63,6 @@ const SwapCrypto = () => {
   const [quoteId, setQuoteId] = useState<string>("");
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [openPinModal, setOpenPinModal] = useState(false);
-  // const [editedValue, setEditedValue] = useState(
-  //   selectedCoin.displayValue || ""
-  // );
   const [editedValue, setEditedValue] = useState("");
   const [inputError, setInputError] = useState("");
 
@@ -132,8 +129,8 @@ const SwapCrypto = () => {
     const fetchWallets = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `${BASE_URL}/Crypto/users/wallets?userId=${userSubAccountId}`
+        const response = await api.get(
+          `${BASE_URL}/Crypto/users/wallets`
         );
 
         const rawResponse: Wallet[] = response.data?.data?.data;
