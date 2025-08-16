@@ -144,9 +144,7 @@ const SellCrypto = () => {
   const fetchWallets = async () => {
     try {
       setLoading(true);
-      const response = await api.get(
-        `${BASE_URL}/Crypto/users/allWallets`
-      );
+      const response = await api.get(`${BASE_URL}/Crypto/users/allWallets`);
 
       const rawResponse: Wallet[] = response.data?.data;
       console.log("rawResponse:", rawResponse);
