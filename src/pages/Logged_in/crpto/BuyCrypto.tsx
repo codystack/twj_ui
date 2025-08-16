@@ -72,6 +72,7 @@ const BuyCrypto = () => {
   const [openPinModal, setOpenPinModal] = useState(false);
   const [activeTab, setActiveTab] = useState<"buy" | "send">("buy");
   const [sendFormError, setSendFormError] = useState<string>("");
+
   const [sendForm, setSendForm] = useState({
     address: "",
     network: "",
@@ -120,7 +121,9 @@ const BuyCrypto = () => {
     const fetchWallets = async () => {
       try {
         setLoading(true);
-        const response = await api.get(`${BASE_URL}/Crypto/users/wallets`);
+        const response = await api.get(
+          `${BASE_URL}/Crypto/users/wallets?userId=${userSubAccountId}`
+        );
 
         const rawResponse: Wallet[] = response.data?.data?.data;
 
