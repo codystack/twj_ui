@@ -3,7 +3,6 @@ import CustomSelect from "../../../components/CustomSelect";
 import Bitcoin from "../../../assets/crpto_icons/Btc-coin.757f6cb3 2.svg";
 import Eth from "../../../assets/crpto_icons/ETH-b-coin.eac01ea4 1.svg";
 import warning from "../../../assets/crpto_icons/warning_c.svg";
-// import NoWalletWarning from "../../../assets/crpto_icons/icon_nowallet.png";
 import DOGE from "../../../assets/crpto_icons/Doge-coin.de2aebc7 1.svg";
 import USDT from "../../../assets/crpto_icons/USDT-b-coin.9404ef8d 1.svg";
 import BITCOIN from "../../../assets/crpto_icons/BITCOIN.svg";
@@ -26,7 +25,6 @@ import trx from "../../../assets/crpto_icons/wallet_icons/Tron.svg";
 import ton from "../../../assets/crpto_icons/wallet_icons/ton_coin.svg";
 import placeholder from "../../../assets/crpto_icons/no_address.svg";
 import { useUserStore } from "../../../store/useUserStore";
-import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import api from "../../../services/api.ts";
@@ -99,15 +97,11 @@ const SellCrypto = () => {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [selectOptions, setSelectOptions] = useState<Optiontype[]>([]);
   const [selectedCoin, setSelectedCoin] = useState<Optiontype>(options[0]);
-  // const [currencyCode, setCurrencyCode] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [successModal, setSuccessModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [networkOptions, setNetworkOptions] = useState<Optiontype[]>([]);
-  // const [selectedNetwork, setSelectedNetwork] = useState<Optiontype | null>(
-  //   null
-  // );
   const [selectedNetwork, setSelectedNetwork] = useState<
     Optiontype | undefined
   >(undefined);
@@ -147,14 +141,15 @@ const SellCrypto = () => {
     // error
   } = useUserStore();
 
-  const fetchWallets = async (userId: string) => {
+  const fetchWallets = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        `${BASE_URL}/Crypto/users/wallets?userId=${userId}`
+      const response = await api.get(
+        `${BASE_URL}/Crypto/users/allWallets`
       );
 
-      const rawResponse: Wallet[] = response.data?.data?.data;
+      const rawResponse: Wallet[] = response.data?.data;
+      console.log("rawResponse:", rawResponse);
 
       const filteredWallets = rawResponse.filter((wallet) =>
         allowedCurrencies.includes(wallet.currency.toLowerCase())
@@ -172,7 +167,7 @@ const SellCrypto = () => {
   useEffect(() => {
     fetchUser();
     if (userSubAccountId) {
-      fetchWallets(userSubAccountId);
+      fetchWallets();
     }
   }, [userSubAccountId]);
 
@@ -294,8 +289,7 @@ const SellCrypto = () => {
           }
           onClose={() => {
             setSuccessModal(false);
-            if (!userSubAccountId) return;
-            fetchWallets(userSubAccountId);
+            fetchWallets();
           }}
         />
       )}
