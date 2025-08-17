@@ -303,7 +303,7 @@ const SwapCrypto = () => {
           setSelectedCoin(options[0]);
           stopCountdown();
           setIsSuccessModal(true);
-
+          setError("");
           resolve();
         } catch (e) {
           reject(e);
@@ -387,7 +387,6 @@ const SwapCrypto = () => {
                 </div>
                 {/* Right section */}
                 <div className=" ml-[2rem] mt-[-1rem] ">
-              
                   {countdown > 0 && (
                     <div className="flex justify-center items-center">
                       <div className="flex justify-center w-[70%] items-center px-5 py-2 mt-4 rounded-[10px] bg-[#FBEEFF]">
@@ -395,26 +394,26 @@ const SwapCrypto = () => {
                           <img src={warning} alt="" />
                           <p className="leading-[0.9rem] text-[#8003A9] text-left text-[13px]">
                             0:{countdown < 10 ? `0${countdown}` : countdown}{" "}
-                             seconds left to complete your transaction
+                            seconds left to complete your transaction
                           </p>
                         </div>
                       </div>
                     </div>
                   )}
                   <>
-                    <div className="relative w-full">
+                    <div className="relative mt-[1rem]  h-auto w-full">
                       <img
                         src={swap}
-                        className="absolute top-[10.1rem] z-10 right-[16.25rem]"
+                        className="absolute top-[10rem] z-10 right-[0rem] left-[0rem] mx-auto"
                         alt=""
                       />
                       <img
                         src={empty}
-                        className="absolute top-[9rem] right-[15rem]"
+                        className="absolute top-[8.9rem] right-[0rem] left-0 mx-auto "
                         alt=""
                       />
 
-                      <div className="mt-[1rem] pt-10 px-12 pb-13.5 rounded-2xl bg-[#F5F7FA] ">
+                      <div className=" pt-10 px-12 pb-13.5 rounded-2xl bg-[#F5F7FA] ">
                         <div>
                           <p className=" pb-1 text-[14px] text-[#000]">
                             Select Cryptocurrency

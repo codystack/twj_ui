@@ -3,12 +3,12 @@ import CustomSelect from "../../../components/CustomSelect";
 import Bitcoin from "../../../assets/crpto_icons/Btc-coin.757f6cb3 2.svg";
 import Eth from "../../../assets/crpto_icons/ETH-b-coin.eac01ea4 1.svg";
 import warning from "../../../assets/crpto_icons/warning_c.svg";
-import DOGE from "../../../assets/crpto_icons/Doge-coin.de2aebc7 1.svg";
-import USDT from "../../../assets/crpto_icons/USDT-b-coin.9404ef8d 1.svg";
-import BITCOIN from "../../../assets/crpto_icons/BITCOIN.svg";
-import ETHER from "../../../assets/crpto_icons/ETHER.svg";
-import positive from "../../../assets/crpto_icons/positive.svg";
-import negative from "../../../assets/crpto_icons/negative.svg";
+// import DOGE from "../../../assets/crpto_icons/Doge-coin.de2aebc7 1.svg";
+// import USDT from "../../../assets/crpto_icons/USDT-b-coin.9404ef8d 1.svg";
+// import BITCOIN from "../../../assets/crpto_icons/BITCOIN.svg";
+// import ETHER from "../../../assets/crpto_icons/ETHER.svg";
+// import positive from "../../../assets/crpto_icons/positive.svg";
+// import negative from "../../../assets/crpto_icons/negative.svg";
 import QR from "../../../assets/crpto_icons/qrcodee.svg";
 import copy from "../../../assets/crpto_icons/Copy_lightC.svg";
 import warRed from "../../../assets/crpto_icons/warn_red.svg";
@@ -48,40 +48,40 @@ const options = [
   },
 ];
 
-const cryptoData = [
-  {
-    id: "btc",
-    shortName: "BTC",
-    fullName: "Bitcoin",
-    priceNGN: "₦75,300,000",
-    percentChange: 2.15,
-    image: BITCOIN,
-  },
-  {
-    id: "eth",
-    shortName: "ETH",
-    fullName: "Ethereum",
-    priceNGN: "₦4,580,000",
-    percentChange: -1.32,
-    image: ETHER,
-  },
-  {
-    id: "usdt",
-    shortName: "USDT",
-    fullName: "Tether",
-    priceNGN: "₦1,320",
-    percentChange: 0.05,
-    image: USDT,
-  },
-  {
-    id: "usdc",
-    shortName: "DOGE",
-    fullName: "Doge",
-    priceNGN: "₦1,310",
-    percentChange: -0.12,
-    image: DOGE,
-  },
-];
+// const cryptoData = [
+//   {
+//     id: "btc",
+//     shortName: "BTC",
+//     fullName: "Bitcoin",
+//     priceNGN: "₦75,300,000",
+//     percentChange: 2.15,
+//     image: BITCOIN,
+//   },
+//   {
+//     id: "eth",
+//     shortName: "ETH",
+//     fullName: "Ethereum",
+//     priceNGN: "₦4,580,000",
+//     percentChange: -1.32,
+//     image: ETHER,
+//   },
+//   {
+//     id: "usdt",
+//     shortName: "USDT",
+//     fullName: "Tether",
+//     priceNGN: "₦1,320",
+//     percentChange: 0.05,
+//     image: USDT,
+//   },
+//   {
+//     id: "usdc",
+//     shortName: "DOGE",
+//     fullName: "Doge",
+//     priceNGN: "₦1,310",
+//     percentChange: -0.12,
+//     image: DOGE,
+//   },
+// ];
 
 export type Optiontype = {
   id: string;
@@ -378,6 +378,7 @@ const SellCrypto = () => {
 
                   <div className="w-full flex mt-9 justify-end">
                     <div className="flex items-center gap-3">
+                      {/* <button onClick={fetchWallets}>fetch Wallet</button> */}
                       <NavLink
                         to="/crypto/swapcrypto"
                         className="border-[2px] cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
@@ -401,7 +402,7 @@ const SellCrypto = () => {
                       </button>
                     </div>
                   </div>
-
+{/* 
                   <div>
                     <div className="mt-7">
                       <p className=" text-[19px] font-[500]">Market</p>
@@ -415,7 +416,7 @@ const SellCrypto = () => {
                             index !== cryptoData.length - 1 ? "border-b" : ""
                           } border-[#8A95BF]`}
                         >
-                          {/* Left: Coin Image + Name */}
+                         
                           <div className="flex items-center gap-3">
                             <img
                               src={coin.image}
@@ -430,7 +431,7 @@ const SellCrypto = () => {
                             </div>
                           </div>
 
-                          {/* Right: Price + Change */}
+                        
                           <div className="text-right leading-tight flex flex-col items-end">
                             <p className="text-[15px]">{coin.priceNGN}</p>
                             <p
@@ -457,11 +458,11 @@ const SellCrypto = () => {
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Right section */}
-                <div className=" relative mt-[-3rem] ml-5 w-full h-full flex justify-center items-center ">
+                <div className=" relative ml-5 w-full h-full flex justify-center items-center ">
                   <div className="border border-[#8A95BF] rounded-[10px] bg-[#F5F7FA] w-[85%] border-dashed">
                     {loading ? (
                       <>

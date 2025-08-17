@@ -150,7 +150,7 @@ const Login = () => {
                 <span className="flex items-center gap-1 text-[#15aa64] text-[16px]">
                   <FaLock /> <p>https://</p>
                 </span>
-                <span className="text-[#27014F]">app.twjhub.com</span>
+                <span className="text-[#27014F]">twjhub.app</span>
               </div>
             </div>
             <h2 className="text-2xl sm-mt-0 mt-5 font-bold md:mb-[0.4rem] mb-0 md:text-[40px] text-[30px] text-[#27014F] w-full leading-[2.5rem]">

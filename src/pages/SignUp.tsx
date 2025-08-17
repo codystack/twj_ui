@@ -133,7 +133,6 @@ const SignUp = () => {
     return !Object.values(newErrors).some((error) => error);
   };
 
- 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -213,7 +212,7 @@ const SignUp = () => {
                   <span className="flex items-center gap-1 text-[#15aa64] text-[16px]">
                     <FaLock /> <p>https://</p>
                   </span>
-                  <span className="text-[#27014F]">app.twjhub.com/signup</span>
+                  <span className="text-[#27014F]">twjhub.app/signup</span>
                 </div>
               </div>
               <h2 className="text-2xl font-bold sm:mb-[0.4rem]  sm:text-[40px] text-[30px] text-[#27014F] w-full leading-[2.5rem]">
