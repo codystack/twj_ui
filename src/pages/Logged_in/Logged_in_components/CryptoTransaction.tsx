@@ -152,128 +152,159 @@ const CrytoTransaction: React.FC<{
   return (
     <div className="space-y-4 p-4">
       {transactions.length > 0 ? (
-        transactions.map((transaction) => (
-          <button
-            onClick={() => handleOpenModal(transaction)}
-            key={transaction.id}
-            className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  md:p-4 py-3"
-          >
-            {/* Left Side: Static Logo + Transaction Details */}
-            <div className="flex items-center gap-4 relative">
-              {/* Static Logo Container */}
-              <div className="relative">
-                {transaction.currency === "btc" && (
-                  <img src={btc} alt="Transaction Logo" className="w-12 h-12" />
-                )}
-                {transaction.currency === "usdt" && (
-                  <img
-                    src={usdt}
-                    alt="Transaction Logo"
-                    className="w-12 h-12"
-                  />
-                )}
-                {transaction.currency === "ton" && (
-                  <img src={ton} alt="Transaction Logo" className="w-12 h-12" />
-                )}
-                {transaction.currency === "eth" && (
-                  <img src={eth} alt="Transaction Logo" className="w-12 h-12" />
-                )}
-                {transaction.currency === "bnb" && (
-                  <img src={bnb} alt="Transaction Logo" className="w-12 h-12" />
-                )}
-                {transaction.currency === "usdc" && (
-                  <img
-                    src={usdc}
-                    alt="Transaction Logo"
-                    className="w-12 h-12"
-                  />
-                )}
-                {transaction.currency === "trx" && (
-                  <img src={trx} alt="Transaction Logo" className="w-12 h-12" />
-                )}
-                {transaction.currency === "sol" && (
-                  <img src={sol} alt="Transaction Logo" className="w-12 h-12" />
-                )}
-
-                {/* Unique Direction Arrow (Absolute Positioning) */}
-                {transaction.cryptoCategory === "Buy" && (
-                  <img
-                    src={buy}
-                    alt="Inward Transaction"
-                    className="absolute bottom-0 right-0 "
-                  />
-                )}
-                {transaction.cryptoCategory === "Swap" && (
-                  <img
-                    src={swap}
-                    alt="Inward Transaction"
-                    className="absolute bottom-0 right-0"
-                  />
-                )}
-                {transaction.cryptoCategory === "Send" && (
-                  <img
-                    src={send}
-                    alt="Inward Transaction"
-                    className="absolute bottom-0 right-0"
-                  />
-                )}
-              </div>
-
-              {/* Transaction Details */}
-              <div>
-                <p className="text-[16px] text-[#27014F] text-left">
-                  {transaction.cryptoCategory.charAt(0).toUpperCase() +
-                    transaction.cryptoCategory.slice(1).toLowerCase()}{" "}
-                  {transaction.currency.toUpperCase()}
-                </p>
-                <div className="flex items-center gap-2 text-gray-600">
-                  {/* Tracking ID */}
-                  <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
-                    {transaction.transactionReference}
-                  </span>
-                  {/* Unique Status Icon */}
-                  {transaction.transactionStatus === "success" && (
-                    <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                      SUCCESSFULL
-                    </div>
+        transactions
+          ?.slice()
+          .sort(
+            (a, b) =>
+              new Date(b.transactionDate).getTime() -
+              new Date(a.transactionDate).getTime()
+          )
+          .map((transaction) => (
+            <button
+              onClick={() => handleOpenModal(transaction)}
+              key={transaction.id}
+              className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  md:p-4 py-3"
+            >
+              {/* Left Side: Static Logo + Transaction Details */}
+              <div className="flex items-center gap-4 relative">
+                {/* Static Logo Container */}
+                <div className="relative">
+                  {transaction.currency === "btc" && (
+                    <img
+                      src={btc}
+                      alt="Transaction Logo"
+                      className="w-12 h-12"
+                    />
                   )}
-                  {transaction.transactionStatus === "Processing" && (
-                    <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
-                      PENDING
-                    </div>
+                  {transaction.currency === "usdt" && (
+                    <img
+                      src={usdt}
+                      alt="Transaction Logo"
+                      className="w-12 h-12"
+                    />
                   )}
-                  {transaction.transactionStatus === "failed" && (
-                    <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
-                      FAILED
-                    </div>
+                  {transaction.currency === "ton" && (
+                    <img
+                      src={ton}
+                      alt="Transaction Logo"
+                      className="w-12 h-12"
+                    />
+                  )}
+                  {transaction.currency === "eth" && (
+                    <img
+                      src={eth}
+                      alt="Transaction Logo"
+                      className="w-12 h-12"
+                    />
+                  )}
+                  {transaction.currency === "bnb" && (
+                    <img
+                      src={bnb}
+                      alt="Transaction Logo"
+                      className="w-12 h-12"
+                    />
+                  )}
+                  {transaction.currency === "usdc" && (
+                    <img
+                      src={usdc}
+                      alt="Transaction Logo"
+                      className="w-12 h-12"
+                    />
+                  )}
+                  {transaction.currency === "trx" && (
+                    <img
+                      src={trx}
+                      alt="Transaction Logo"
+                      className="w-12 h-12"
+                    />
+                  )}
+                  {transaction.currency === "sol" && (
+                    <img
+                      src={sol}
+                      alt="Transaction Logo"
+                      className="w-12 h-12"
+                    />
+                  )}
+
+                  {/* Unique Direction Arrow (Absolute Positioning) */}
+                  {transaction.cryptoCategory === "Buy" && (
+                    <img
+                      src={buy}
+                      alt="Inward Transaction"
+                      className="absolute bottom-0 right-0 "
+                    />
+                  )}
+                  {transaction.cryptoCategory === "Swap" && (
+                    <img
+                      src={swap}
+                      alt="Inward Transaction"
+                      className="absolute bottom-0 right-0"
+                    />
+                  )}
+                  {transaction.cryptoCategory === "Send" && (
+                    <img
+                      src={send}
+                      alt="Inward Transaction"
+                      className="absolute bottom-0 right-0"
+                    />
                   )}
                 </div>
-              </div>
-            </div>
 
-            {/* Right Side: Date & Amount */}
-            <div className="text-right">
-              <p className="font-semibold text-[#27014F]  ">
-                {transaction.currency.toUpperCase() === "NGN"
-                  ? "₦"
-                  : transaction.currency.toUpperCase()}{" "}
-                {transaction.amount}
-              </p>
-              <p className="text-sm text-[#27014F] text-[11px]">
-                {new Date(transaction.transactionDate).toLocaleDateString(
-                  "en-US",
-                  {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }
-                )}
-              </p>
-            </div>
-          </button>
-        ))
+                {/* Transaction Details */}
+                <div>
+                  <p className="text-[16px] text-[#27014F] text-left">
+                    {transaction.cryptoCategory.charAt(0).toUpperCase() +
+                      transaction.cryptoCategory.slice(1).toLowerCase()}{" "}
+                    {transaction.currency.toUpperCase()}
+                  </p>
+                  <div className="flex items-center gap-2 text-gray-600">
+                    {/* Tracking ID */}
+                    <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
+                      {transaction.transactionReference}
+                    </span>
+                    {/* Unique Status Icon */}
+                    {transaction.transactionStatus === "success" && (
+                      <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                        SUCCESSFULL
+                      </div>
+                    )}
+                    {transaction.transactionStatus === "Processing" && (
+                      <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
+                        PENDING
+                      </div>
+                    )}
+                    {transaction.transactionStatus === "failed" && (
+                      <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
+                        FAILED
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Side: Date & Amount */}
+              <div className="text-right">
+                <p className="font-semibold text-[#27014F]  ">
+                  {transaction.currency.toUpperCase() === "NGN"
+                    ? "₦"
+                    : transaction.currency.toUpperCase()}{" "}
+                  {transaction.amount}
+                </p>
+                <p className="text-sm text-[#27014F] text-[11px]">
+                  {new Date(transaction.transactionDate).toLocaleDateString(
+                    "en-US",
+                    {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}
+                </p>
+              </div>
+            </button>
+          ))
       ) : (
         <div className="flex items-center justify-center h-[calc(100vh-18rem)]">
           <p className="text-gray-500 text-lg">{noTransaction}</p>
