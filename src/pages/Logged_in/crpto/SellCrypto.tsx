@@ -302,9 +302,9 @@ const SellCrypto = () => {
                 </NavLink>
               </div>
 
-              <div className="w-full grid [grid-template-columns:45%_55%]   ">
+              <div className="w-full grid grid-cols-1 md:[grid-template-columns:45%_55%]">
                 {/* Left section */}
-                <div className=" ">
+                <div className="order-1  ">
                   <div className="flex flex-col">
                     <p className="pt-3 mb-1 text-[14px] text-[#000]">
                       Select Cryptocurrency Asset
@@ -377,18 +377,17 @@ const SellCrypto = () => {
                   )}
 
                   <div className="w-full flex mt-9 justify-end">
-                    <div className="flex items-center gap-3">
-                      {/* <button onClick={fetchWallets}>fetch Wallet</button> */}
-                      <NavLink
+                    <div className=" flex flex-col sm:flex-row  justify-end w-full md:items-center gap-3">
+                     <NavLink
                         to="/crypto/swapcrypto"
-                        className="border-[2px] cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
+                        className="border-[2px] text-center whitespace-nowrap cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
                       >
                         Swap Asset
                       </NavLink>
                       <button
                         onClick={handleCreateWallet}
                         disabled={loading || !!selectedCoin?.displayValue}
-                        className={`border-[2px] border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px] ${
+                        className={`border-[2px] whitespace-nowrap border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px] ${
                           loading || !!selectedCoin?.displayValue
                             ? "opacity-50 cursor-not-allowed"
                             : " cursor-pointer"
@@ -402,7 +401,7 @@ const SellCrypto = () => {
                       </button>
                     </div>
                   </div>
-{/* 
+                  {/* 
                   <div>
                     <div className="mt-7">
                       <p className=" text-[19px] font-[500]">Market</p>
@@ -462,7 +461,7 @@ const SellCrypto = () => {
                 </div>
 
                 {/* Right section */}
-                <div className=" relative ml-5 w-full h-full flex justify-center items-center ">
+                <div className=" order-2  relative mt-[2rem] mdmt-0 md:ml-5 w-full h-full flex justify-center items-center ">
                   <div className="border border-[#8A95BF] rounded-[10px] bg-[#F5F7FA] w-[85%] border-dashed">
                     {loading ? (
                       <>

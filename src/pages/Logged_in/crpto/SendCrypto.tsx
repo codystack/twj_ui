@@ -9,3 +9,4 @@ const SendCrypto: React.FC<SendCryptoProps> = ({ wallets }) => {
 };
 
 export default SendCrypto;
+// Was never used in the original code so far

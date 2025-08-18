@@ -144,6 +144,7 @@ const Airtime = () => {
     e.preventDefault();
     closeModal();
 
+    setShowPinModal(true);
     setTimeout(() => {
       setShowPinModal(true);
     }, 200);

@@ -395,16 +395,18 @@ const BuyCrypto = () => {
       <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
         <div className="flex-1 overflow-y-auto p-4 ">
           <div className="flex justify-center items-center">
-            <div className=" w-full  p-4">
+            <div className=" w-full  sm:p-4">
               <div className="flex justify-start items-center mb-2">
                 <NavLink className="flex items-center gap-1 " to="/crypto">
                   <FaArrowLeft className="text- cursor-pointer" />
                   <p className="text-[15px]">Back</p>
                 </NavLink>
               </div>
-              <div className="w-full grid [grid-template-columns:45%_55%]   ">
+              {/* <div className="w-full grid md:bg-amber-200 [grid-template-columns:45%_55%]   "> */}
+             <div className="w-full grid grid-cols-1 md:[grid-template-columns:45%_55%]">
+ 
                 {/* Left section */}
-                <div className=" ">
+                <div className="order-2 md:order-1 ">
                   <h3 className="text-[18px] my-[1rem]">Crypto Wallets</h3>
                   <div className="flex flex-col gap-4">
                     {loading
@@ -435,7 +437,7 @@ const BuyCrypto = () => {
                 </div>
 
                 {/* Right section */}
-                <div className=" mt-[1rem] ml-[2rem]">
+                <div className="order-1 md:order-2 mt-[1rem] md:ml-[2rem]">
                   <div className="py-[2.3%] md:ml-0 ml-[-7px] flex justify-center w-z-20 bg-[#fff]">
                     <div className="bg-[#F5F7FA] w-[60%] pr[2rem] h-[3rem] flex items-center rounded-[50px] justify-between px-[7px]">
                       <button
@@ -459,12 +461,6 @@ const BuyCrypto = () => {
                           // setSelectedCoin(options[0]);
                           stopCountdown();
                           setSelectedNetwork(undefined);
-                          // setForm({
-                          //   narration: "",
-                          //   network: "",
-                          //   amount: "",
-                          //   quotationId: "",
-                          // });
                         }}
                       >
                         Buy
