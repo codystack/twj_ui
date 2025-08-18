@@ -403,8 +403,7 @@ const BuyCrypto = () => {
                 </NavLink>
               </div>
               {/* <div className="w-full grid md:bg-amber-200 [grid-template-columns:45%_55%]   "> */}
-             <div className="w-full grid grid-cols-1 md:[grid-template-columns:45%_55%]">
- 
+              <div className="w-full grid grid-cols-1 md:[grid-template-columns:45%_55%]">
                 {/* Left section */}
                 <div className="order-2 md:order-1 ">
                   <h3 className="text-[18px] my-[1rem]">Crypto Wallets</h3>
@@ -441,14 +440,15 @@ const BuyCrypto = () => {
                   <div className="py-[2.3%] md:ml-0 ml-[-7px] flex justify-center w-z-20 bg-[#fff]">
                     <div className="bg-[#F5F7FA] w-[60%] pr[2rem] h-[3rem] flex items-center rounded-[50px] justify-between px-[7px]">
                       <button
-                        className={`flex-1 px-[20px] text-[17px] cursor-pointer py-[5px] rounded-[40px] ${
+                        disabled={showConfirmation || loading}
+                        className={`flex-1 px-[20px] text-[17px]w py-[5px] rounded-[40px] ${
                           activeTab === "buy"
                             ? "bg-[#fff] text-[#8003A9]"
                             : "bg-transparent text-[#7688B4]"
                         } ${
                           showConfirmation || loading
-                            ? "pointer-events-none opacity-50"
-                            : ""
+                            ? " cursor-not-allowed opacity-50"
+                            : "cursor-pointer "
                         }`}
                         onClick={() => {
                           if (!showConfirmation && !loading)
@@ -467,14 +467,15 @@ const BuyCrypto = () => {
                       </button>
 
                       <button
-                        className={`flex-1 px-[20px] text-[17px] cursor-pointer py-[5px] rounded-[40px] ${
+                        disabled={showConfirmation || loading}
+                        className={`flex-1 px-[20px] text-[17px] py-[5px] rounded-[40px] ${
                           activeTab === "send"
                             ? "bg-[#fff] text-[#8003A9]"
                             : "bg-transparent  text-[#7688B4]"
                         } ${
                           showConfirmation || loading
-                            ? "pointer-events-none opacity-50"
-                            : ""
+                            ? " cursor-not-allowed opacity-50"
+                            : "cursor-pointer "
                         }`}
                         onClick={() => {
                           if (!showConfirmation && !loading)
@@ -647,7 +648,7 @@ const BuyCrypto = () => {
                           </div>
 
                           <div className="w-full flex mt-9 justify-end">
-                            <div className="flex items-center gap-3">
+                            <div className="flex w-full justify-end items-center gap-3">
                               <button
                                 disabled={isDisabled}
                                 onClick={() => setShowConfirmation(true)}
@@ -655,7 +656,7 @@ const BuyCrypto = () => {
                                   isDisabled
                                     ? "opacity-50 cursor-not-allowed"
                                     : "cursor-pointer"
-                                } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
+                                } border-[#8003A9] bg-[#8003A9]   w-full sm:w-auto text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
                               >
                                 Continue
                               </button>
@@ -665,224 +666,213 @@ const BuyCrypto = () => {
                       </>
                     ) : activeTab === "send" ? (
                       <>
-                        {/* Pending Send Form UI */}
-                        {/* <SendCrypto wallets={wallets} /> */}
-
-                        <>
-                          {/* Buy Form UI */}
+                        {/* Buy Form UI */}
+                        <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                          Select Cryptocurrency
+                        </p>
+                        <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
+                          {loading ? (
+                            <div className="w-5 h-5 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
+                          ) : (
+                            <p className="w-full text-[16px] font-medium">
+                              {selectedCoin.displayValue}
+                            </p>
+                          )}
+                          <div className="w-full flex">
+                            <div className="ml-auto w-auto">
+                              <CustomSelect
+                                options={selectOptions}
+                                value={selectedCoin}
+                                onChange={(val) => {
+                                  setError("");
+                                  setToAmount("");
+                                  setAmount("");
+                                  setCurrency("");
+                                  setQuoteId("");
+                                  setSelectedCoin(val);
+                                  stopCountdown();
+                                  updateNetworksForCoin(val);
+                                }}
+                                inputWidth="w-auto"
+                                optionsWidth="w-[15rem]"
+                                optionsOffsetX={-90}
+                                px="px-1"
+                                py="py-1"
+                                textSize="text-[15px]"
+                                // onChange={handleSelection}
+                                borderColor="#fff"
+                                backgroundColor="#EAEFF6"
+                                optionsPx="px-1"
+                                optionsPy="py-1"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between  mt-[0.5rem]   items-center">
                           <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                            Select Cryptocurrency
+                            Address
                           </p>
-                          <div className="grid grid-cols-2 items-center px-2 py-1 border border-gray-300 rounded-lg">
-                            {loading ? (
-                              <div className="w-5 h-5 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
-                            ) : (
-                              <p className="w-full text-[16px] font-medium">
-                                {selectedCoin.displayValue}
-                              </p>
-                            )}
+                        </div>
+
+                        <div className=" relative flex items-center w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
+                          {/* Input Field */}
+                          <input
+                            type="text"
+                            name="address"
+                            placeholder={`Paste ${selectedCoin.label.toLowerCase()} wallet address`}
+                            className="w-full px-3 py-4 outline-none bg-white text-[16px] rounded-md"
+                            value={sendForm.address}
+                            onChange={(e) => handleSendFormChange(e)}
+                          />
+
+                          <img src={scan} className="absolute right-2" alt="" />
+                        </div>
+                        <div className="flex justify-between  mt-[0.5rem]   items-center">
+                          <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                            Network{" "}
+                            <span className="text-gray-400">(Optional)</span>
+                          </p>
+                        </div>
+
+                        <div className="w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
+                          <CustomSelect
+                            options={networkOptions}
+                            value={selectedNetwork}
+                            onChange={(val) => setSelectedNetwork(val)}
+                            placeholder="Select Network"
+                            inputWidth="w-auto"
+                            optionsWidth="w-full"
+                            px="px-2"
+                            py="py-4  "
+                            textSize="text-[15px]"
+                            borderColor="border-gray-300"
+                            backgroundColor="#fff"
+                            optionsPx="px-1"
+                            optionsPy="py-1"
+                          />
+                        </div>
+
+                        <div className="mt-[0.5rem]">
+                          <p className="pt-2 pb-1 text-[14px] text-[#000]">
+                            Amount
+                          </p>
+
+                          <div
+                            className={`grid grid-cols-2 items-center px-2 py-1 border ${
+                              sendFormError
+                                ? "border-red-500"
+                                : "border-gray-300"
+                            }  rounded-lg`}
+                          >
+                            <input
+                              type="text"
+                              name="amount"
+                              placeholder="0.00104"
+                              className="w-full pr-3 py-3 outline-none bg-white text-[16px] rounded-md"
+                              value={sendForm.amount}
+                              onChange={(e) => handleSendFormChange(e)}
+                            />
                             <div className="w-full flex">
                               <div className="ml-auto w-auto">
                                 <CustomSelect
-                                  options={selectOptions}
-                                  value={selectedCoin}
-                                  onChange={(val) => {
-                                    setError("");
-                                    setToAmount("");
-                                    setAmount("");
-                                    setCurrency("");
-                                    setQuoteId("");
-                                    setSelectedCoin(val);
-                                    stopCountdown();
-                                    updateNetworksForCoin(val);
-                                  }}
-                                  inputWidth="w-auto"
-                                  optionsWidth="w-[15rem]"
-                                  optionsOffsetX={-90}
+                                  // options={options}
+                                  inputWidth="w-full"
+                                  optionsWidth="w-full"
                                   px="px-1"
                                   py="py-1"
-                                  textSize="text-[15px]"
-                                  // onChange={handleSelection}
+                                  textSize="text-[1rem]"
+                                  value={selectedCoin}
                                   borderColor="#fff"
                                   backgroundColor="#EAEFF6"
                                   optionsPx="px-1"
                                   optionsPy="py-1"
+                                  showDropdownIcon={false}
+                                  readOnly={true}
+                                  defaultSelected={selectedCoin}
                                 />
                               </div>
                             </div>
                           </div>
+                          {sendFormError && (
+                            <p className="text-red-500 text-sm">
+                              {sendFormError}
+                            </p>
+                          )}
+
                           <div className="flex justify-between  mt-[0.5rem]   items-center">
                             <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                              Address
+                              Narration
                             </p>
                           </div>
-
-                          <div className=" relative flex items-center w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
-                            {/* Input Field */}
+                          <div className="w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
                             <input
                               type="text"
-                              name="address"
-                              placeholder={`Paste ${selectedCoin.label.toLowerCase()} wallet address`}
+                              name="narration"
+                              placeholder="Enter narration"
                               className="w-full px-3 py-4 outline-none bg-white text-[16px] rounded-md"
-                              value={sendForm.address}
+                              value={sendForm.narration}
                               onChange={(e) => handleSendFormChange(e)}
                             />
-
-                            <img
-                              src={scan}
-                              className="absolute right-2"
-                              alt=""
-                            />
-                          </div>
-                          <div className="flex justify-between  mt-[0.5rem]   items-center">
-                            <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                              Network{" "}
-                              <span className="text-gray-400">(Optional)</span>
-                            </p>
                           </div>
 
-                          <div className="w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
-                            <CustomSelect
-                              options={networkOptions}
-                              value={selectedNetwork}
-                              onChange={(val) => setSelectedNetwork(val)}
-                              placeholder="Select Network"
-                              inputWidth="w-auto"
-                              optionsWidth="w-full"
-                              px="px-2"
-                              py="py-4  "
-                              textSize="text-[15px]"
-                              borderColor="border-gray-300"
-                              backgroundColor="#fff"
-                              optionsPx="px-1"
-                              optionsPy="py-1"
-                            />
-                          </div>
-
-                          <div className="mt-[0.5rem]">
-                            <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                              Amount
-                            </p>
-
-                            <div
-                              className={`grid grid-cols-2 items-center px-2 py-1 border ${
-                                sendFormError
-                                  ? "border-red-500"
-                                  : "border-gray-300"
-                              }  rounded-lg`}
-                            >
-                              <input
-                                type="text"
-                                name="amount"
-                                placeholder="0.00104"
-                                className="w-full pr-3 py-3 outline-none bg-white text-[16px] rounded-md"
-                                value={sendForm.amount}
-                                onChange={(e) => handleSendFormChange(e)}
-                              />
-                              <div className="w-full flex">
-                                <div className="ml-auto w-auto">
-                                  <CustomSelect
-                                    // options={options}
-                                    inputWidth="w-full"
-                                    optionsWidth="w-full"
-                                    px="px-1"
-                                    py="py-1"
-                                    textSize="text-[1rem]"
-                                    value={selectedCoin}
-                                    borderColor="#fff"
-                                    backgroundColor="#EAEFF6"
-                                    optionsPx="px-1"
-                                    optionsPy="py-1"
-                                    showDropdownIcon={false}
-                                    readOnly={true}
-                                    defaultSelected={selectedCoin}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            {sendFormError && (
-                              <p className="text-red-500 text-sm">
-                                {sendFormError}
-                              </p>
-                            )}
-
-                            <div className="flex justify-between  mt-[0.5rem]   items-center">
-                              <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                                Narration
-                              </p>
-                            </div>
-                            <div className="w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
-                              <input
-                                type="text"
-                                name="narration"
-                                placeholder="Enter narration"
-                                className="w-full px-3 py-4 outline-none bg-white text-[16px] rounded-md"
-                                value={sendForm.narration}
-                                onChange={(e) => handleSendFormChange(e)}
-                              />
-                            </div>
-
-                            <div className="w-full flex mt-9 justify-end">
-                              <div className="flex items-center gap-3">
-                                <button
-                                  disabled={isInvalid}
-                                  onClick={() => setShowConfirmation(true)}
-                                  className={`border-[2px] ${
-                                    isInvalid
-                                      ? "opacity-50 cursor-not-allowed"
-                                      : "cursor-pointer"
-                                  } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
-                                >
-                                  Continue
-                                </button>
-                              </div>
+                          <div className="w-full flex mt-9 justify-end">
+                            <div className="flex w-full justify-end items-center gap-3">
+                              <button
+                                disabled={isInvalid}
+                                onClick={() => setShowConfirmation(true)}
+                                className={`border-[2px] ${
+                                  isInvalid
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : "cursor-pointer"
+                                } border-[#8003A9]   w-full sm:w-auto bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
+                              >
+                                Continue
+                              </button>
                             </div>
                           </div>
-                        </>
+                        </div>
                       </>
                     ) : null
                   ) : activeTab === "buy" ? (
                     <>
                       {/* Confirmation UI for Buy */}
-
-                      <>
-                        <div className="flex items-center justify-center">
-                          <div className="flex flex-col gap-[2px]">
-                            <p className="text-[18px] mb-[-8px] text-center">
-                              Purchase
-                            </p>
-                            <h4 className="flex justify-center gap-0.5   items-center text-[24px]">
-                              <span>
-                                {toAmount
-                                  ? `${toAmount} ${currency.toUpperCase()}`
-                                  : 0.0}
-                              </span>
-                            </h4>
-                            <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
-                              <span>-</span> <span>{numericAmount}</span>
-                              <span>NGN</span>
-                            </p>
-                          </div>
+                      <div className="flex items-center justify-center">
+                        <div className="flex flex-col gap-[2px]">
+                          <p className="text-[18px] mb-[-8px] text-center">
+                            Purchase
+                          </p>
+                          <h4 className="flex justify-center gap-0.5   items-center text-[24px]">
+                            <span>
+                              {toAmount
+                                ? `${toAmount} ${currency.toUpperCase()}`
+                                : 0.0}
+                            </span>
+                          </h4>
+                          <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
+                            <span>-</span> <span>{numericAmount}</span>
+                            <span>NGN</span>
+                          </p>
                         </div>
-                        <div className="border border-gray-300 mt-[2rem] px-4 py-6 rounded-md bg-white shadow">
-                          <div className="flex justify-between text-[15px] mb-4">
-                            <p className="">Price Per Asset</p>
-                            <span className="  flex items-center gap-1">
-                              <span>{Number(quotePrice).toLocaleString()}</span>
-                              <span>NGN</span>
-                              {/* <span>{currency}</span> */}
-                            </span>
-                          </div>
+                      </div>
+                      <div className="border border-gray-300 mt-[2rem] px-4 py-6 rounded-md bg-white shadow">
+                        <div className="flex justify-between text-[15px] mb-4">
+                          <p className="">Price Per Asset</p>
+                          <span className="  flex items-center gap-1">
+                            <span>{Number(quotePrice).toLocaleString()}</span>
+                            <span>NGN</span>
+                            {/* <span>{currency}</span> */}
+                          </span>
+                        </div>
 
-                          <div className="flex justify-between text-[15px] mb-4">
-                            <p className="">Cost</p>
-                            <span className=" flex items-center gap-1">
-                              <span>{numericAmount}</span>
-                              <span>NGN</span>
-                            </span>
-                          </div>
+                        <div className="flex justify-between text-[15px] mb-4">
+                          <p className="">Cost</p>
+                          <span className=" flex items-center gap-1">
+                            <span>{numericAmount}</span>
+                            <span>NGN</span>
+                          </span>
+                        </div>
 
-                          {/* <div className="flex justify-between text-[15px] mb-4">
+                        {/* <div className="flex justify-between text-[15px] mb-4">
                         <p className="">Transaction Fee</p>
                         <span className="flex items-center gap-1">
                           <span>0.0012</span>
@@ -890,35 +880,37 @@ const BuyCrypto = () => {
                         </span>
                       </div> */}
 
-                          <div className="flex justify-between text-[15px] ">
-                            <p className="">You will receive</p>
-                            <span className="flex items-center gap-1">
-                              <span>
-                                {toAmount
-                                  ? `${toAmount} ${currency.toUpperCase()}`
-                                  : 0.0}
-                              </span>
+                        <div className="flex justify-between text-[15px] ">
+                          <p className="">You will receive</p>
+                          <span className="flex items-center gap-1">
+                            <span>
+                              {toAmount
+                                ? `${toAmount} ${currency.toUpperCase()}`
+                                : 0.0}
                             </span>
-                          </div>
+                          </span>
                         </div>
+                      </div>
 
-                        <div className="w-full flex mt-9 justify-end">
-                          <div className="flex items-center gap-3">
-                            <button
-                              onClick={() => setShowConfirmation(false)}
-                              className="border-[2px] cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
-                            >
-                              Edit Purchase
-                            </button>
-                            <button
-                              className={`border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
-                              onClick={() => setOpenPinModal(true)}
-                            >
-                              Create Purchase
-                            </button>
-                          </div>
+                      <div className="w-full flex mt-9 justify-end">
+                        <div className=" flex flex-col sm:flex-row  justify-end w-full md:items-center gap-3">
+                          <button
+                            onClick={() => setShowConfirmation(false)}
+                            className="border-[2px] whitespace-nowrap cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
+                          >
+                            Edit Purchase
+                          </button>
+                          <button
+                            disabled={countdown <= 0}
+                            className={`border-[2px] bg-[#8003A9]  border-[#8003A9] text-white whitespace-nowrap px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]
+    ${countdown <= 0 ? " opacity-60  cursor-not-allowed" : "  cursor-pointer"}
+  `}
+                            onClick={() => setOpenPinModal(true)}
+                          >
+                            Create Purchase
+                          </button>
                         </div>
-                      </>
+                      </div>
                     </>
                   ) : activeTab === "send" ? (
                     <>
@@ -971,7 +963,7 @@ const BuyCrypto = () => {
                         </div>
 
                         <div className="w-full flex mt-9 justify-end">
-                          <div className="flex items-center gap-3">
+                          <div className=" flex flex-col sm:flex-row  justify-end w-full md:items-center gap-3">
                             <button
                               onClick={() => setShowConfirmation(false)}
                               className="border-[2px] cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
@@ -979,6 +971,11 @@ const BuyCrypto = () => {
                               Edit Purchase
                             </button>
                             <button
+                              disabled={
+                                countdown == null ||
+                                isNaN(countdown) ||
+                                countdown <= 0
+                              }
                               className={`border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
                               onClick={() => setOpenPinModal(true)}
                             >
