@@ -196,15 +196,7 @@ const UtilityTransaction: React.FC<{
                   <span className="text-[11px] sm:block hidden text-left text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
                     {transaction.id}
                   </span>
-                  {/* <p className="text-sm block sm:hidden text-[#27014F]  border-r pr-[0.5rem] border-[#9ea5ad] text-[11px]">
-                    {new Date(transaction.transactionDate).toLocaleString(
-                      "en-US",
-                      {
-                        dateStyle: "medium",
-                        timeStyle: "short",
-                      }
-                    )}
-                  </p> */}
+
                   <p className="text-sm block sm:hidden text-[#27014F] border-r pr-[0.5rem] border-[#9ea5ad] text-[11px]">
                     {new Date(transaction.transactionDate).toLocaleDateString(
                       "en-US",
@@ -265,7 +257,7 @@ const UtilityTransaction: React.FC<{
             <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
               {/* Conditional UI for Transaction Details OR Report Form */}
               {!showReportForm ? (
-                <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
+                <div className="bg-white overflow-y-auto sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
                   <div className=" flex flex-row-reverse">
                     {/* Close Button */}
                     <button
