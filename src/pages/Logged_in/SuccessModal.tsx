@@ -6,7 +6,7 @@ interface SuccessModalProps {
   title: string;
   message: string;
   onClose: () => void;
-  button?: React.ReactNode; 
+  button?: React.ReactNode;
 }
 
 const SuccessModal: React.FC<SuccessModalProps> = ({
@@ -18,7 +18,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-40 bg-black/40 bg-opacity-50">
       <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
-        <div className="bg-white rounded-lg shadow-lg px-6 pb-[2rem] sm:w-[500px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen text-center">
+        <div className="bg-white rounded-lg shadow-lg px-6 pb-[2rem] flex flex-col overflow-y-auto sm:w-[500px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen text-center">
           {/* Close Button */}
           <div className="flex justify-end">
             <button
