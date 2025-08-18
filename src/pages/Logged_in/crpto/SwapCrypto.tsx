@@ -347,16 +347,16 @@ const SwapCrypto = () => {
       <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
         <div className="flex-1 overflow-y-auto p-4 ">
           <div className="flex justify-center items-center">
-            <div className=" w-full  p-4">
+            <div className=" w-full  md:p-4">
               <div className="flex justify-start items-center mb-2">
                 <NavLink className="flex items-center gap-1 " to="/crypto">
                   <FaArrowLeft className="text- cursor-pointer" />
                   <p className="text-[15px]">Back</p>
                 </NavLink>
               </div>
-              <div className="w-full grid [grid-template-columns:45%_55%]   ">
+              <div className="w-full grid grid-cols-1 md:[grid-template-columns:45%_55%]">
                 {/* Left section */}
-                <div className=" ">
+                <div className="order-2 md:order-1 ">
                   <h3 className="text-[18px] my-[1rem]">Crypto Wallets</h3>
                   <div className="flex flex-col gap-4">
                     {loading
@@ -386,7 +386,7 @@ const SwapCrypto = () => {
                   </div>
                 </div>
                 {/* Right section */}
-                <div className=" ml-[2rem] mt-[-1rem] ">
+                <div className="order-1 md:order-2  md:ml-[2rem] mt-[-1rem] ">
                   {countdown > 0 && (
                     <div className="flex justify-center items-center">
                       <div className="flex justify-center w-[70%] items-center px-5 py-2 mt-4 rounded-[10px] bg-[#FBEEFF]">
@@ -519,7 +519,7 @@ const SwapCrypto = () => {
                     </div>
 
                     <div className="w-full flex mt-7 justify-end">
-                      <div className="flex items-center gap-3">
+                      <div className="flex w-full justify-end  items-center gap-3">
                         <button
                           disabled={isInputFocused || !!error}
                           onClick={() => setOpenPinModal(true)}
@@ -530,7 +530,9 @@ const SwapCrypto = () => {
                             countdown < 1
                               ? "cursor-not-allowed opacity-50"
                               : "cursor-pointer"
-                          } border-[#8003A9] bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
+                          } border-[#8003A9] bg-[#8003A9] text-[#fff] 
+         px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]
+         w-full sm:w-auto`}
                         >
                           Swap Now
                         </button>
