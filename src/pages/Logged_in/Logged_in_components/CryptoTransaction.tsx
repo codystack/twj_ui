@@ -1,15 +1,11 @@
-import MyStaticLogo from "../../../assets/dashboard_img/profile//transactions/bitcoin.svg";
-import ArrowDownIcon from "../../../assets/dashboard_img/profile/transactions/transactio_up.svg";
 import swap from "../../../assets/crpto_icons/swap_crypto.svg";
 import send from "../../../assets/crpto_icons/out_crypto.svg";
 import buy from "../../../assets/crpto_icons/in_crypto.svg";
-import ArrowUpIcon from "../../../assets/dashboard_img/profile//transactions/transaction_down.svg";
 import { useState } from "react";
 import Delete from "../../../assets/dashboard_img/profile/cancel.svg";
 import Copy from "../../../assets/dashboard_img/profile/transactions/Copy_light.svg";
 import HrtBroken from "../../../assets/dashboard_img/profile/transactions/heartbroken.svg";
 import Report from "../../../assets/dashboard_img/profile/transactions/report.svg";
-
 import btc from "../../../assets/crpto_icons/wallet_icons/Bitcoin.svg";
 import eth from "../../../assets/crpto_icons/wallet_icons/Ethereumm.svg";
 import usdt from "../../../assets/crpto_icons/wallet_icons/usdt.svg";
@@ -18,21 +14,6 @@ import sol from "../../../assets/crpto_icons/wallet_icons/solana.svg";
 import usdc from "../../../assets/crpto_icons/wallet_icons/USDC.svg";
 import trx from "../../../assets/crpto_icons/wallet_icons/Tron.svg";
 import ton from "../../../assets/crpto_icons/wallet_icons/ton_coin.svg";
-
-type Transaction = {
-  id: string;
-  name: string;
-  type: string;
-  amount: string;
-  date: string;
-  direction: string;
-  status: string;
-  quantity: string;
-  network: string;
-  time: string;
-  reference: string;
-  address: string;
-};
 
 interface CryptoTransactionType {
   amount: number;
@@ -55,7 +36,7 @@ const CrytoTransaction: React.FC<{
   noTransaction: string | null;
 }> = ({ transactions, noTransaction }) => {
   const [selectedTransaction, setSelectedTransaction] =
-    useState<Transaction | null>(null);
+    useState<CryptoTransactionType | null>(null);
   const [showReportForm, setShowReportForm] = useState(false);
   const [message, setMessage] = useState({
     reference: "",
@@ -115,7 +96,7 @@ const CrytoTransaction: React.FC<{
     !message.reference ||
     !message.messageSent;
 
-  const handleOpenModal = (transaction: any) => {
+  const handleOpenModal = (transaction: CryptoTransactionType) => {
     setSelectedTransaction(transaction);
   };
 
@@ -150,7 +131,7 @@ const CrytoTransaction: React.FC<{
   };
 
   return (
-    <div className="space-y-4 p-4">
+    <div className="space-y-4 p-4 px-3">
       {transactions.length > 0 ? (
         transactions
           ?.slice()
@@ -163,7 +144,7 @@ const CrytoTransaction: React.FC<{
             <button
               onClick={() => handleOpenModal(transaction)}
               key={transaction.id}
-              className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  md:p-4 py-3"
+              className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  md:p-4  md:py-3 p-1 "
             >
               {/* Left Side: Static Logo + Transaction Details */}
               <div className="flex items-center gap-4 relative">
@@ -259,9 +240,19 @@ const CrytoTransaction: React.FC<{
                   </p>
                   <div className="flex items-center gap-2 text-gray-600">
                     {/* Tracking ID */}
-                    <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
+                    <span className="text-[11px] sm:block hidden text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
                       {transaction.transactionReference}
                     </span>
+                    <p className="text-sm block sm:hidden text-[#27014F] border-r pr-[0.5rem] border-[#9ea5ad] text-[11px]">
+                      {new Date(transaction.transactionDate).toLocaleDateString(
+                        "en-US",
+                        {
+                          day: "numeric",
+                          month: "short",
+                        }
+                      )}
+                    </p>
+
                     {/* Unique Status Icon */}
                     {transaction.transactionStatus === "success" && (
                       <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
@@ -290,15 +281,12 @@ const CrytoTransaction: React.FC<{
                     : transaction.currency.toUpperCase()}{" "}
                   {transaction.amount}
                 </p>
-                <p className="text-sm text-[#27014F] text-[11px]">
-                  {new Date(transaction.transactionDate).toLocaleDateString(
+                <p className="text-sm sm:block hidden text-[#27014F] text-[11px]">
+                  {new Date(transaction.transactionDate).toLocaleString(
                     "en-US",
                     {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
+                      dateStyle: "medium",
+                      timeStyle: "short",
                     }
                   )}
                 </p>
@@ -318,7 +306,7 @@ const CrytoTransaction: React.FC<{
             {/* Modal Content */}
             <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
               {!showReportForm ? (
-                <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
+                <div className="bg-white overflow-y-auto sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen  z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
                   <div className=" flex flex-row-reverse">
                     {/* Close Button */}
                     <button
@@ -335,23 +323,83 @@ const CrytoTransaction: React.FC<{
                     </h2>
 
                     <div className="relative">
-                      <img
-                        src={MyStaticLogo}
-                        alt="Transaction Logo"
-                        className="w-12 h-12"
-                      />
-                      {/* Unique Direction Arrow (Absolute Positioning) */}
-                      {selectedTransaction.direction === "inward" ? (
+                      {selectedTransaction.currency === "btc" && (
                         <img
-                          src={ArrowDownIcon}
-                          alt="Inward Transaction"
-                          className="absolute bottom-0 right-0 w-4 h-4"
+                          src={btc}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
                         />
-                      ) : (
+                      )}
+                      {selectedTransaction.currency === "usdt" && (
                         <img
-                          src={ArrowUpIcon}
-                          alt="Outward Transaction"
-                          className="absolute right-0 bottom-0 w-4 h-4"
+                          src={usdt}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {selectedTransaction.currency === "ton" && (
+                        <img
+                          src={ton}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {selectedTransaction.currency === "eth" && (
+                        <img
+                          src={eth}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {selectedTransaction.currency === "bnb" && (
+                        <img
+                          src={bnb}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {selectedTransaction.currency === "usdc" && (
+                        <img
+                          src={usdc}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {selectedTransaction.currency === "trx" && (
+                        <img
+                          src={trx}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {selectedTransaction.currency === "sol" && (
+                        <img
+                          src={sol}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+
+                      {/* Unique Direction Arrow (Absolute Positioning) */}
+                      {selectedTransaction.cryptoCategory === "Buy" && (
+                        <img
+                          src={buy}
+                          alt="Inward Transaction"
+                          className="absolute bottom-0 right-0 "
+                        />
+                      )}
+                      {selectedTransaction.cryptoCategory === "Swap" && (
+                        <img
+                          src={swap}
+                          alt="Inward Transaction"
+                          className="absolute bottom-0 right-0"
+                        />
+                      )}
+                      {selectedTransaction.cryptoCategory === "Send" && (
+                        <img
+                          src={send}
+                          alt="Inward Transaction"
+                          className="absolute bottom-0 right-0"
                         />
                       )}
                     </div>
@@ -362,34 +410,47 @@ const CrytoTransaction: React.FC<{
                       <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
                       <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
                         <p>{selectedTransaction.network}</p>
-                        <p>{selectedTransaction.quantity}</p>
+                        {/* <p>{selectedTransaction.quantity}</p> */}
                       </div>
                     </div>
                     <div>
                       <p className="text-[#0A2E65]/60 mb-[10px]">Date</p>
                       <div className="flex text-[#0A2E65] items-center text-[13px]">
-                        <p>{selectedTransaction.date}</p>
-                        <div className="w-[5px] h-[5px] rounded-full mx-[4px] bg-[#0A2E65]/70  ">
-                          .
-                        </div>
-                        <p>{selectedTransaction.time}</p>
+                        <p>
+                          {new Date(
+                            selectedTransaction.transactionDate
+                          ).toLocaleDateString("en-US", {
+                            day: "numeric",
+                            month: "short",
+                          })}
+                        </p>
+                        <div className="w-[5px] h-[5px] rounded-full mx-[4px] bg-[#0A2E65]/70"></div>
+                        <p>
+                          {new Date(
+                            selectedTransaction.transactionDate
+                          ).toLocaleTimeString("en-US", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
                       </div>
                     </div>
                     <div>
                       <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
 
                       {/* Unique Status Icon */}
-                      {selectedTransaction.status === "success" && (
+                      {selectedTransaction.transactionStatus === "success" && (
                         <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
                           SUCCESSLL
                         </div>
                       )}
-                      {selectedTransaction.status === "Processing" && (
+                      {selectedTransaction.transactionStatus ===
+                        "Processing" && (
                         <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
                           PENDING
                         </div>
                       )}
-                      {selectedTransaction.status === "failed" && (
+                      {selectedTransaction.transactionStatus === "failed" && (
                         <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
                           FAILED
                         </div>
@@ -401,20 +462,24 @@ const CrytoTransaction: React.FC<{
                       <p className="text-[#0A2E65]/60 mb-[10px]">Reference</p>
                       <div className="flex text-[#0A2E65] items-center text-[13px]">
                         <div className="flex items-center">
-                          <p>{selectedTransaction.reference}</p>
+                          <p>{selectedTransaction.transactionReference}</p>
                           <button></button>
 
                           <button
                             onClick={() =>
-                              handleCopy(selectedTransaction.reference)
+                              handleCopy(
+                                selectedTransaction.transactionReference
+                              )
                             }
                             className="relative flex items-center justify-center cursor-pointer"
                           >
                             <img src={Copy} alt="" />
-                            {copiedRef === selectedTransaction.reference && (
+                            {copiedRef ===
+                              selectedTransaction.transactionReference && (
                               <span
                                 className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
-                                  copiedRef === selectedTransaction.reference
+                                  copiedRef ===
+                                  selectedTransaction.transactionReference
                                     ? "opacity-100"
                                     : "opacity-0"
                                 }`}
@@ -432,14 +497,14 @@ const CrytoTransaction: React.FC<{
                       </p>
                       <div className="flex text-[#0A2E65] items-center text-[13px]">
                         <div className="flex items-center">
-                          <p>{selectedTransaction.address}</p>
+                          <p>{selectedTransaction.twjUserId}</p>
                         </div>
                       </div>
                     </div>
                   </div>
                   {/* Report Button */}
                   <div className=" flex items-center justify-center w-full">
-                    {selectedTransaction.status === "pending" && (
+                    {selectedTransaction.transactionStatus === "pending" && (
                       <button
                         onClick={handleReportClick}
                         className="w-[360px] gap-1  flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
@@ -448,7 +513,7 @@ const CrytoTransaction: React.FC<{
                         <p> Report Transaction</p>
                       </button>
                     )}
-                    {selectedTransaction.status === "failed" && (
+                    {selectedTransaction.transactionStatus === "failed" && (
                       <button
                         onClick={handleReportClick}
                         className="w-[360px] flex items-center gap-1 justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"

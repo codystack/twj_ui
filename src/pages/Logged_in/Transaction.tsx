@@ -169,6 +169,7 @@ const Transaction = () => {
               (loading ? (
                 <div className="w-full px-5 border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
                   <TransactionSkeleton />
+                  ``
                 </div>
               ) : (
                 <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">

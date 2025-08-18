@@ -2,11 +2,8 @@ import { useState, useEffect } from "react";
 import Backspace from "../../../../assets/dashboard_img/profile/icon-park-solid_delete-two.svg";
 import lock from "../../../../assets/dashboard_img/profile/Lock.svg";
 import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
-// import { useModalStore } from "../../../../store/modalStore.ts";
 import api from "../../../../services/api";
 import { AxiosError } from "axios";
-
-// const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const PinModal = ({
   onClose,
@@ -29,21 +26,12 @@ const PinModal = ({
     }
   };
 
-  // Automatically call validatePin when 4 digits are entered
-
   const validatePin = async () => {
     setLoading(true);
     try {
       const pinResponse = await api.post(`/Authentication/validatePin`, {
         passCode: pin,
       });
-
-      // if (!pinResponse.data.isSuccessful) {
-      //   setError("Invalid PIN. Please try again.");
-      //   setPin("");
-      //   setLoading(false);
-      //   return;
-      // }
 
       if (pinResponse?.data?.statusCode !== "OK") {
         setError("Invalid PIN. Please try again.");
@@ -105,7 +93,7 @@ const PinModal = ({
     <>
       <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
         <div className="p-[0.8rem] rounded-[20px] bg-[#fff]/20">
-          <div className="bg-white sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen  z-50  sm:rounded-[10px]">
+          <div className="bg-white  overflow-y-auto   sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen  z-50  sm:rounded-[10px] flex flex-col">
             <div className="flex flex-row-reverse">
               <button
                 className="px-4 py-2 mr-[5px] cursor-pointer mt-[1rem]"
@@ -115,7 +103,7 @@ const PinModal = ({
               </button>
             </div>
             <div className="flex items-center  h-[80%] justify-center">
-              <div className="px-6 pt-4 rounded-lg w-[300px] flex flex-col mb-[2rem] items-center">
+              <div className="sm:px-6 px-0 borde pt-4 rounded-lg sm:w-[300px] w-full flex flex-col mb-[2rem] items-center">
                 {loading ? (
                   <>
                     <div className="w-10 h-10 border-4 border-gray-300 border-t-[#8003A9] rounded-full animate-spin"></div>
@@ -147,11 +135,11 @@ const PinModal = ({
                 </div>
 
                 {/* Keypad */}
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-3 sm:gap-3 gap-5">
                   {[..."123456789"].map((num) => (
                     <button
                       key={num}
-                      className="w-16 h-16 bg-gray-200 text-lg cursor-pointer text-[#27014F] font-bold rounded-full hover:bg-gray-300"
+                      className="sm:w-16 sm:h-16 w-20  h-20 bg-gray-200 sm:text-lg text-[30px] cursor-pointer text-[#27014F] font-bold rounded-full hover:bg-gray-300"
                       onClick={() => handleKeyPress(num)}
                     >
                       {num}
@@ -163,7 +151,7 @@ const PinModal = ({
 
                   {/* "0" centered below 8 */}
                   <button
-                    className="w-16 h-16 bg-gray-200 text-lg cursor-pointer text-[#27014F] font-bold rounded-full hover:bg-gray-300"
+                    className="sm:w-16 sm:h-16 w-20 h-20 bg-gray-200 sm:text-lg text-[30px] cursor-pointer text-[#27014F] font-bold rounded-full hover:bg-gray-300"
                     onClick={() => handleKeyPress("0")}
                   >
                     0
@@ -171,10 +159,10 @@ const PinModal = ({
 
                   {/* Backspace button under 9 */}
                   <button
-                    className="w-16 h-16 bg-white rounded-full cursor-pointer flex items-center justify-center"
+                    className="sm:w-16 sm:h-16 w-20 h-20 bg-white sm:text-lg  rounded-full cursor-pointer flex items-center justify-center"
                     onClick={() => handleKeyPress("del")}
                   >
-                    <img src={Backspace} alt="Backspace" />
+                    <img className=" sm:w-8 w-10" src={Backspace} alt="Backspace" />
                   </button>
                 </div>
 

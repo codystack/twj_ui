@@ -11,7 +11,6 @@ export const useAuthorizationStore = create<AuthState>((set) => ({
   accessToken: null,
   refreshToken: null,
 
-  // ✅ Function to update both tokens
   setTokens: (accessToken, refreshToken) => set({ accessToken, refreshToken }),
 
   clearTokens: () => set({ accessToken: null, refreshToken: null }),

@@ -1,16 +1,13 @@
 import axios from "axios";
-// import { useAuthorizationStore } from "../store/authorizationStore";
 import { decryptData, encryptData } from "./utils/crypto-utils";
-// import { useLocation } from "react-router";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL; // Access VITE env variable
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 // Create Axios instance
 const api = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   headers: { "Content-Type": "application/json" },
 });
-
-// const location = useLocation(); // Get the current route
 
 // Request Interceptor: Attach Access Token to Requests
 api.interceptors.request.use(
@@ -37,9 +34,11 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     // If access token is expired (401)
+    // console.log("Error response:", error.response);
     const status = error.response?.status;
+
     // console.log("401 error", status);
-    if ((status === 401) && !originalRequest._retry) {
+    if (status === 401 && !originalRequest._retry) {
       originalRequest._retry = true; // Prevent infinite loops
 
       try {
@@ -49,6 +48,7 @@ api.interceptors.response.use(
         };
 
         const refreshToken = getRefreshToken();
+        // console.log("Refresh token:", refreshToken);
         if (!refreshToken) throw new Error("No refresh token available");
 
         // Request new access token using payload
@@ -66,31 +66,23 @@ api.interceptors.response.use(
         // const newAccessToken = refreshResponse
         const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
           refreshResponse.data.data.token;
-        // console.log(
-        //   "new token:",
-        //   newAccessToken,
-        //   "new refresh:",
-        //   newRefreshToken
-        // );
-        // console.log("Refresh Response:", refreshResponse.data.data.token);
 
-        // ✅ Store the new tokens in local storage
         localStorage.setItem("accessToken", encryptData(newAccessToken));
         localStorage.setItem("refreshToken", encryptData(newRefreshToken));
+
+        // if (newRefreshToken) {
+        //   console.log("New refresh token set");
+        // }
 
         // Retry the original request with new access token
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return axios(originalRequest);
       } catch (refreshError) {
         // Logout user if refresh fails
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("name");
-        localStorage.removeItem("email");
-        localStorage.removeItem("userName");
-        localStorage.removeItem("isAuthenticated");
+        // console.log("Refresh token failed");
+        localStorage.clear();
         localStorage.setItem("lastVisitedRoute", location.pathname);
-        window.location.href = "/";
+        // window.location.href = "/";
         return Promise.reject(refreshError);
       }
     }
