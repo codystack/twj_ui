@@ -150,7 +150,7 @@ const CrytoTransaction: React.FC<{
   };
 
   return (
-    <div className="space-y-4 p-4">
+    <div className="space-y-4 p-4 px-3">
       {transactions.length > 0 ? (
         transactions
           ?.slice()
@@ -163,7 +163,7 @@ const CrytoTransaction: React.FC<{
             <button
               onClick={() => handleOpenModal(transaction)}
               key={transaction.id}
-              className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  md:p-4 py-3"
+              className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  md:p-4  md:py-3 p-1 "
             >
               {/* Left Side: Static Logo + Transaction Details */}
               <div className="flex items-center gap-4 relative">
@@ -259,9 +259,19 @@ const CrytoTransaction: React.FC<{
                   </p>
                   <div className="flex items-center gap-2 text-gray-600">
                     {/* Tracking ID */}
-                    <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
+                    <span className="text-[11px] sm:block hidden text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
                       {transaction.transactionReference}
                     </span>
+                    <p className="text-sm block sm:hidden text-[#27014F] border-r pr-[0.5rem] border-[#9ea5ad] text-[11px]">
+                      {new Date(transaction.transactionDate).toLocaleDateString(
+                        "en-US",
+                        {
+                          day: "numeric",
+                          month: "short",
+                        }
+                      )}
+                    </p>
+
                     {/* Unique Status Icon */}
                     {transaction.transactionStatus === "success" && (
                       <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
@@ -290,15 +300,12 @@ const CrytoTransaction: React.FC<{
                     : transaction.currency.toUpperCase()}{" "}
                   {transaction.amount}
                 </p>
-                <p className="text-sm text-[#27014F] text-[11px]">
-                  {new Date(transaction.transactionDate).toLocaleDateString(
+                <p className="text-sm sm:block hidden text-[#27014F] text-[11px]">
+                  {new Date(transaction.transactionDate).toLocaleString(
                     "en-US",
                     {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
+                      dateStyle: "medium",
+                      timeStyle: "short",
                     }
                   )}
                 </p>
