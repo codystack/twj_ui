@@ -123,7 +123,7 @@ const Login = () => {
         <div className="sm:mt-8  mt-2">
           <div className="Nav flex  justify-between">
             <a href="https://twjhub.com/" className="cursor-pointer">
-              <img src={Logo} className="md:w-[188px]  w-[200px] " alt="Logo" />
+              <img src={Logo} className="md:w-[188px]  w-[150px] " alt="Logo" />
             </a>
             <div className=" sm:flex hidden items-center text-[15px]">
               <p className="font-[500] text-[#27014F]">
