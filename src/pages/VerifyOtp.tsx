@@ -109,7 +109,7 @@ const VerifyOtp = () => {
               </div>
               <NavLink to="/signup" className="flex items-center text-[15px]">
                 <img src={Back} alt="" />
-                <p className="cursor-pointer font-semibold md:mx-0 mx-2 ml-[5px text-[#27014F]">
+                <p className="cursor-pointer whitespace-nowrap font-semibold md:mx-0 mx-2 ml-[5px text-[#27014F]">
                   Go Back
                 </p>
               </NavLink>
