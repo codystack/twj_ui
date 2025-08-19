@@ -29,7 +29,13 @@ interface TransactionType {
 interface CryptoTransactionType {
   amount: number;
   billPaymentCategory: string;
+  createdDate: string;
   cryptoCategory: string;
+  cryptoFromAmount: number;
+  cryptoFromCurrency: string;
+  cryptoNetwork: string | null;
+  cryptoToAmount: number;
+  cryptoToCurrency: string;
   currency: string;
   id: string;
   network: string | null;

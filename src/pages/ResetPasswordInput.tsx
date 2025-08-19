@@ -161,27 +161,6 @@ const ResetPasswordInput = () => {
                 Please enter your new password.
               </p>
               <div className="flex flex-col mt-[1rem]">
-                {/* <div className="w-full mb-4">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  onBlur={() => validateField("email", formData.email)}
-                  className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
-                    errors.email
-                      ? "border border-red-600"
-                      : "focus:border-purple-800"
-                  } `}
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-[13px] mt-1">
-                    {errors.email}
-                  </p>
-                )}
-              </div> */}
-
                 {/* New Password Field */}
                 <div className="w-full  relative">
                   <input
