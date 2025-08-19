@@ -277,7 +277,6 @@ const ResetPasswordInput = () => {
             </div>
             <div className="flex items-center text-[15px]"></div>
           </div>
-
           <div className="flex flex-col justify-center  h-[80%]  items-center  ">
             <div className=" max-w-[480p]  ">
               <div className="flex w-full  flex-col justify-center  items-center  bg-white">

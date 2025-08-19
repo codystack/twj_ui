@@ -14,10 +14,10 @@ const TransactionSkeleton = () => {
 
         {/* Skeleton Details */}
         <div className="flex flex-col gap-1">
-          <Skeleton width={120} height={14} /> {/* Category */}
+          <Skeleton width={120} height={14} />
           <div className="flex items-center gap-2">
-            <Skeleton width={60} height={10} /> {/* ID */}
-            <Skeleton width={50} height={10} /> {/* Status */}
+            <Skeleton width={60} height={10} /> 
+            <Skeleton width={50} height={10} /> 
           </div>
         </div>
       </div>

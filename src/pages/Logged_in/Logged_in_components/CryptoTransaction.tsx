@@ -14,6 +14,7 @@ import sol from "../../../assets/crpto_icons/wallet_icons/solana.svg";
 import usdc from "../../../assets/crpto_icons/wallet_icons/USDC.svg";
 import trx from "../../../assets/crpto_icons/wallet_icons/Tron.svg";
 import ton from "../../../assets/crpto_icons/wallet_icons/ton_coin.svg";
+import warning from "../../../assets/dashboard_img/disabled-warning .png";
 
 interface CryptoTransactionType {
   amount: number;
@@ -371,8 +372,9 @@ const CrytoTransaction: React.FC<{
             </button>
           ))
       ) : (
-        <div className="flex items-center justify-center h-[calc(100vh-18rem)]">
-          <p className="text-gray-500 text-lg">{noTransaction}</p>
+        <div className="flex flex-col items-center justify-center h-[calc(100vh-18rem)]">
+          <img src={warning} className="md:w-[9rem] w-[5rem]" alt="" />
+          <p className="text-gray-500 text-lg">{noTransaction}!</p>
         </div>
       )}
 
