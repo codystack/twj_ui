@@ -162,7 +162,11 @@ const PinModal = ({
                     className="sm:w-16 sm:h-16 w-20 h-20 bg-white sm:text-lg  rounded-full cursor-pointer flex items-center justify-center"
                     onClick={() => handleKeyPress("del")}
                   >
-                    <img className=" sm:w-8 w-10" src={Backspace} alt="Backspace" />
+                    <img
+                      className=" sm:w-8 w-10"
+                      src={Backspace}
+                      alt="Backspace"
+                    />
                   </button>
                 </div>
 

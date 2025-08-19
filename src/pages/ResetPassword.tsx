@@ -80,29 +80,32 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="flex h-screen w-full ">
+    <div className="flex h-screen  w-full ">
       {/* Left: Signup Form */}
-      <form onSubmit={handleSubmit} className=" w-1/2 my-[1rem] mx-[2rem] ">
+      <form
+        onSubmit={handleSubmit}
+        className=" [@media(min-width:1100px)]:w-1/2 w-full   my-[1rem]   md:mx-[2rem] mx-[10px] "
+      >
         <div className="mt-8">
           <div className="Nav flex justify-between ">
             <div className="cursor-pointer">
-              <img src={Logo} alt="Logo" />
+              <img src={Logo} className="md:w-[188px]  w-[150px]" alt="Logo" />
             </div>
 
             <NavLink to="/" className="flex items-center text-[15px]">
               <img src={Back} alt="" />
-              <div className=" cursor-pointer font-semibold ml-[5px] text-[#27014F]">
+              <div className=" cursor-pointer whitespace-nowrap font-semibold ml-[5px] text-[#27014F]">
                 Go Back
               </div>
             </NavLink>
           </div>
         </div>
-        <div className="flex  h-[80%] w-[480px] justify-center m-auto items-center ">
-          <div className="flex flex-col justify-center w-full p-8 bg-white">
+        <div className="flex  h-[80%] md:w-[500px] w-full  sm:w-[90%] justify-center m-auto items-center ">
+          <div className="flex  flex-col justify-center w-full sm:p-0   bg-white">
             <h2 className="text-2xl font-bold mb-[0.4rem] text-[40px] text-[#27014F] w-full leading-[2.5rem]">
               Reset password
             </h2>
-            <p className="text-[14px] text-[#27014F]">
+            <p className="text-[14px] mb-[2rem] text-[#27014F]">
               Please enter your registered email address to reset your password.{" "}
             </p>
             <div className="flex flex-col mt-[1rem] ">
@@ -116,7 +119,7 @@ const ResetPassword = () => {
                   onBlur={() =>
                     validateField("email", formData.emailOrPhoneNumber)
                   }
-                  className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                  className={`py-4 md:py-2.5 px-3   text-[16px] border  border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                     errors.email
                       ? "border border-red-600"
                       : "focus:border-purple-800"
@@ -130,7 +133,7 @@ const ResetPassword = () => {
               </div>
 
               <button
-                className={`bg-[#9605C5] mt-[2rem] font-semibold text-white p-3 rounded-[10px]  ${
+                className={`bg-[#9605C5] mt-[2rem] text-[16px] font-semibold text-white p-3 py-4 rounded-[10px]  ${
                   isFormInvalid
                     ? "opacity-60 cursor-not-allowed"
                     : "  cursor-pointer"
@@ -176,33 +179,36 @@ const ResetPassword = () => {
       </form>
 
       {/* Right: Image with Overlay */}
-      <div className="relative w-[641px] h-[calc(100vh-2rem)] m-[1rem]  ">
-        {/* Background Image */}
-        <img
-          src={Reset}
-          alt="Signup"
-          className="w-full h-full rounded-[3rem] bg-top object-cover object-top"
-        />
+      {/* <div className="relative w-[641px] h-[calc(100vh-2rem)] m-[1rem]  "> */}
+      <div className="fixed    hidden [@media(min-width:1100px)]:block [@media(min-width:950px)]:relative   right-0 top-0 w-[50%] h-screen p-[1rem]">
+        <div className="relative w-full h-full flex items-center justify-center">
+          {/* Background Image */}
+          <img
+            src={Reset}
+            alt="Signup"
+            className="w-full h-full rounded-[3rem] bg-top object-cover object-top"
+          />
 
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t rounded-[3rem] from-[#27014F] to-transparent opacity-90"></div>
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t rounded-[3rem] from-[#27014F] to-transparent opacity-90"></div>
 
-        {/* Top-Right Icon */}
+          {/* Top-Right Icon */}
 
-        <a
-          href="https://twjhub.com/"
-          className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer"
-        >
-          <LuHouse className=" text-[#27014F] text-[1.5rem]" />
-        </a>
-        {/* Bottom Text */}
-        <div className="absolute bottom-[4rem] left-10 text-white t]">
-          <h3 className="text-[48px] leading-[3rem] font-semibold">
-            Trade the future, <br /> today.
-          </h3>
-          <p className="text-[32px] text-[#D671F7] ">
-            safe, secure, and simple.
-          </p>
+          <a
+            href="https://twjhub.com/"
+            className="absolute top-8 right-8 bg-white rounded-full p-[0.8rem] text-2xl cursor-pointer"
+          >
+            <LuHouse className=" text-[#27014F] text-[1.5rem]" />
+          </a>
+          {/* Bottom Text */}
+          <div className="absolute bottom-[4rem] left-10 text-white t]">
+            <h3 className="text-[48px] leading-[3rem] font-semibold">
+              Trade the future, <br /> today.
+            </h3>
+            <p className="text-[32px] text-[#D671F7] ">
+              safe, secure, and simple.
+            </p>
+          </div>
         </div>
       </div>
     </div>

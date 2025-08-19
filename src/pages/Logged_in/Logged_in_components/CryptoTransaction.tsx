@@ -1,4 +1,4 @@
-import swap from "../../../assets/crpto_icons/swap_crypto.svg";
+import swap from "../../../assets/crpto_icons/swap_174.svg";
 import send from "../../../assets/crpto_icons/out_crypto.svg";
 import buy from "../../../assets/crpto_icons/in_crypto.svg";
 import { useState } from "react";
@@ -18,7 +18,13 @@ import ton from "../../../assets/crpto_icons/wallet_icons/ton_coin.svg";
 interface CryptoTransactionType {
   amount: number;
   billPaymentCategory: string;
+  createdDate: string;
   cryptoCategory: string;
+  cryptoFromAmount: number;
+  cryptoFromCurrency: string;
+  cryptoNetwork: string | null;
+  cryptoToAmount: number;
+  cryptoToCurrency: string;
   currency: string;
   id: string;
   network: string | null;
@@ -206,6 +212,73 @@ const CrytoTransaction: React.FC<{
                       className="w-12 h-12"
                     />
                   )}
+                  {transaction.currency === "ngn" && (
+                    <>
+                      {transaction.cryptoFromCurrency === "BTC" && (
+                        <img
+                          src={btc}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {transaction.cryptoFromCurrency === "USDT" && (
+                        <img
+                          src={usdt}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {transaction.cryptoFromCurrency === "TON" && (
+                        <img
+                          src={ton}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {transaction.cryptoFromCurrency === "ETH" && (
+                        <img
+                          src={eth}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {transaction.cryptoFromCurrency === "BNB" && (
+                        <img
+                          src={bnb}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {transaction.cryptoFromCurrency === "USDC" && (
+                        <img
+                          src={usdc}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {transaction.cryptoFromCurrency === "TRX" && (
+                        <img
+                          src={trx}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {transaction.cryptoFromCurrency === "SOL" && (
+                        <img
+                          src={sol}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                      {transaction.cryptoFromCurrency === "TON" && (
+                        <img
+                          src={ton}
+                          alt="Transaction Logo"
+                          className="w-12 h-12"
+                        />
+                      )}
+                    </>
+                  )}
 
                   {/* Unique Direction Arrow (Absolute Positioning) */}
                   {transaction.cryptoCategory === "Buy" && (
@@ -275,12 +348,16 @@ const CrytoTransaction: React.FC<{
 
               {/* Right Side: Date & Amount */}
               <div className="text-right">
-                <p className="font-semibold text-[#27014F]  ">
+                <p className="font-semibold text-[#27014F]">
                   {transaction.currency.toUpperCase() === "NGN"
                     ? "₦"
                     : transaction.currency.toUpperCase()}{" "}
-                  {transaction.amount}
+                  {new Intl.NumberFormat("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(transaction.amount)}
                 </p>
+
                 <p className="text-sm sm:block hidden text-[#27014F] text-[11px]">
                   {new Date(transaction.transactionDate).toLocaleString(
                     "en-US",
@@ -380,6 +457,76 @@ const CrytoTransaction: React.FC<{
                         />
                       )}
 
+                      {selectedTransaction.currency === "ngn" && (
+                        <>
+                          {selectedTransaction.cryptoFromCurrency === "BTC" && (
+                            <img
+                              src={btc}
+                              alt="Transaction Logo"
+                              className="w-12 h-12"
+                            />
+                          )}
+                          {selectedTransaction.cryptoFromCurrency ===
+                            "USDT" && (
+                            <img
+                              src={usdt}
+                              alt="Transaction Logo"
+                              className="w-12 h-12"
+                            />
+                          )}
+                          {selectedTransaction.cryptoFromCurrency === "TON" && (
+                            <img
+                              src={ton}
+                              alt="Transaction Logo"
+                              className="w-12 h-12"
+                            />
+                          )}
+                          {selectedTransaction.cryptoFromCurrency === "ETH" && (
+                            <img
+                              src={eth}
+                              alt="Transaction Logo"
+                              className="w-12 h-12"
+                            />
+                          )}
+                          {selectedTransaction.cryptoFromCurrency === "BNB" && (
+                            <img
+                              src={bnb}
+                              alt="Transaction Logo"
+                              className="w-12 h-12"
+                            />
+                          )}
+                          {selectedTransaction.cryptoFromCurrency ===
+                            "USDC" && (
+                            <img
+                              src={usdc}
+                              alt="Transaction Logo"
+                              className="w-12 h-12"
+                            />
+                          )}
+                          {selectedTransaction.cryptoFromCurrency === "TRX" && (
+                            <img
+                              src={trx}
+                              alt="Transaction Logo"
+                              className="w-12 h-12"
+                            />
+                          )}
+                          {selectedTransaction.cryptoFromCurrency === "SOL" && (
+                            <img
+                              src={sol}
+                              alt="Transaction Logo"
+                              className="w-12 h-12"
+                            />
+                          )}
+                          {selectedTransaction.cryptoFromCurrency === "TON" && (
+                            <img
+                              src={ton}
+                              alt="Transaction Logo"
+                              className="w-12 h-12"
+                            />
+                          )}
+                        </>
+                      )}
+
                       {/* Unique Direction Arrow (Absolute Positioning) */}
                       {selectedTransaction.cryptoCategory === "Buy" && (
                         <img
@@ -409,7 +556,11 @@ const CrytoTransaction: React.FC<{
                     <div>
                       <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
                       <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
-                        <p>{selectedTransaction.network}</p>
+                        <p>
+                          {selectedTransaction.network
+                            ? selectedTransaction.network
+                            : "---"}
+                        </p>
                         {/* <p>{selectedTransaction.quantity}</p> */}
                       </div>
                     </div>
@@ -497,7 +648,7 @@ const CrytoTransaction: React.FC<{
                       </p>
                       <div className="flex text-[#0A2E65] items-center text-[13px]">
                         <div className="flex items-center">
-                          <p>{selectedTransaction.twjUserId}</p>
+                          <p>{selectedTransaction.transactionReference}</p>
                         </div>
                       </div>
                     </div>

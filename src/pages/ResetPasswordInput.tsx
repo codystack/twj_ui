@@ -133,11 +133,18 @@ const ResetPasswordInput = () => {
       {/* Left:  Form */}
 
       {!isVerified ? (
-        <form onSubmit={handleSubmit} className="w-1/2 my-[1rem]   mx-[2rem]">
+        <form
+          onSubmit={handleSubmit}
+          className="[@media(min-width:1000px)]:w-1/2 w-full my-[1rem]   md:mx-[2rem] mx-[10px]"
+        >
           <div className="mt-8">
             <div className="Nav flex justify-between">
               <a href="https://twjhub.com/" className="cursor-pointer">
-                <img src={Logo} alt="Logo" />
+                <img
+                  src={Logo}
+                  className="md:w-[188px]  w-[150px] "
+                  alt="Logo"
+                />
               </a>
               <div className="flex items-center text-[15px]">
                 <NavLink
@@ -145,43 +152,22 @@ const ResetPasswordInput = () => {
                   className="flex items-center text-[15px]"
                 >
                   <img src={Back} alt="" />
-                  <span className="cursor-pointer font-semibold ml-[5px] text-[#27014F]">
+                  <span className="cursor-pointer whitespace-nowrap font-semibold ml-[5px] text-[#27014F]">
                     Go Back
                   </span>
                 </NavLink>
               </div>
             </div>
           </div>
-          <div className="flex w-full h-[80%] max-w-[480px] mx-auto justify-center items-center">
-            <div className="flex flex-col justify-center w-full p-8 bg-white">
-              {/* <h2 className="text-2xl font-bold mb-[0.4rem] text-[40px] text-[#27014F] w-full leading-[2.5rem]">
-            Please reset your new password.
-            </h2> */}
+          <div className="flex w-full h-[80%] md:w-[490px] mx-auto justify-center items-center">
+            <div className="flex flex-col justify-center w-full py-8 bg-white">
+              <h2 className="text-2xl font-bold mb-[0.4rem] text-[40px] text-[#27014F] w-full leading-[2.5rem]">
+                Password Reset
+              </h2>
               <p className="text-[18px] text-[#27014F]">
                 Please enter your new password.
               </p>
               <div className="flex flex-col mt-[1rem]">
-                {/* <div className="w-full mb-4">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  onBlur={() => validateField("email", formData.email)}
-                  className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
-                    errors.email
-                      ? "border border-red-600"
-                      : "focus:border-purple-800"
-                  } `}
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-[13px] mt-1">
-                    {errors.email}
-                  </p>
-                )}
-              </div> */}
-
                 {/* New Password Field */}
                 <div className="w-full  relative">
                   <input
@@ -284,7 +270,7 @@ const ResetPasswordInput = () => {
           </div>
         </form>
       ) : (
-        <div className=" w-1/2 my-[1rem] mx-[2rem] h-[calc(100vh-1rem)] ">
+        <div className="[@media(min-width:1100px)]:w-1/2 w-full my-[1rem]   md:mx-[2rem] mx-[10px]">
           <div className="Nav mt-8 flex justify-between ">
             <div className="cursor-pointer">
               <img src={Logo} alt="Logo" />
@@ -293,7 +279,7 @@ const ResetPasswordInput = () => {
           </div>
 
           <div className="flex flex-col justify-center  h-[80%]  items-center  ">
-            <div className=" max-w-[480px] mx-auto ">
+            <div className=" max-w-[480p]  ">
               <div className="flex w-full  flex-col justify-center  items-center  bg-white">
                 <div className="flex justify-center items-center">
                   <motion.svg
@@ -321,7 +307,7 @@ const ResetPasswordInput = () => {
                     />
                   </motion.svg>
                 </div>
-                <div className=" flex flex-col  justify-center items-center">
+                <div className=" flex  flex-col w-full justify-center items-center">
                   <h2 className="text-2xl mt-[1rem] font-bold mb-[0.4rem] text-[40px] text-[#27014F] text-center leading-[2.5rem]">
                     Password Reset Successful
                   </h2>
@@ -334,7 +320,7 @@ const ResetPasswordInput = () => {
                   <div className="flex items-center justify-center mt-[1rem] w-[480px] ">
                     <NavLink
                       to="/"
-                      className="bg-[#9605C5] lg:w-[80%] cursor-pointer font-semibold text-white text-center p-3 rounded-[10px]"
+                      className="bg-[#9605C5] w-[80%] cursor-pointer font-semibold text-white text-center p-3 rounded-[10px]"
                     >
                       Continue
                     </NavLink>
@@ -347,7 +333,7 @@ const ResetPasswordInput = () => {
       )}
 
       {/* Right: Image with Overlay */}
-      <div className="relative w-[641px] h-[calc(100vh-2rem)] m-[1rem]">
+      <div className="  hidden [@media(min-width:1000px)]:block [@media(min-width:1000px)]:relative  w-[641px] h-[calc(100vh-2rem)] m-[1rem]">
         <img
           src={Reset}
           alt="Signup"
@@ -361,7 +347,7 @@ const ResetPasswordInput = () => {
           <LuHouse className="text-[#27014F] text-[1.5rem]" />
         </a>
         <div className="absolute bottom-[4rem] left-10 text-white">
-          <h3 className="text-[48px] leading-[3rem] font-semibold">
+          <h3 className="text-[48px] whitespace-nowrap leading-[3rem] font-semibold">
             Trade the future, <br /> today.
           </h3>
           <p className="text-[32px] text-[#D671F7]">
