@@ -289,14 +289,7 @@ const CreditDebitTransactions: React.FC<{
                               day: "numeric",
                             }
                           );
-                          // const formattedTime = dateObj.toLocaleTimeString(
-                          //   "en-US",
-                          //   {
-                          //     hour: "2-digit",
-                          //     minute: "2-digit",
-                          //   }
-                          // );
-
+                         
                           return (
                             <>
                               <div className="flex text-[#0A2E65] items-center text-[13px]">

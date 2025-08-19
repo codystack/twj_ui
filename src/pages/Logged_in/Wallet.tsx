@@ -23,6 +23,8 @@ import ReactPaginate from "react-paginate";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import TransactionSkeleton from "../../components/TransactionSkeleton";
+// import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -228,6 +230,19 @@ const Wallet = () => {
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPage(selectedItem.selected);
   };
+
+  // const { totalTopUp, totalWithdraw } = transaction.reduce(
+  //   (acc, tx) => {
+  //     if (tx.walletCategory.toLowerCase() === "TopUp") {
+  //       acc.totalTopUp += Number(tx.amount);
+  //     } else if (tx.walletCategory.toLowerCase() === "withdraw") {
+  //       acc.totalWithdraw += Number(tx.amount);
+  //     }
+  //     return acc;
+  //   },
+  //   { totalTopUp: 0, totalWithdraw: 0 }
+  // );
+
   const isFormInvalid =
     Object.values(errors).some((error) => error) ||
     !formData.amount ||
@@ -560,7 +575,19 @@ const Wallet = () => {
                       <div className="flex gap-1 justify-center items-center">
                         <img src={Credit} alt="" />
                         <p className="text-[#27014F] font-bold sm:text-[24px] text-[20px]">
-                          ₦350,000
+                          ₦
+                          {loading ? (
+                            <Skeleton width={60} height={10} />
+                          ) : (
+                            transaction
+                              .filter(
+                                (tx) =>
+                                  tx.walletCategory.toLowerCase() === "topup"
+                              )
+                              .map((tx) => tx.amount)
+                              .reduce((a, b) => a + b, 0)
+                              .toLocaleString()
+                          )}
                         </p>
                       </div>
                     </div>
@@ -569,7 +596,19 @@ const Wallet = () => {
                       <div className="flex gap-1 justify-center items-center">
                         <img src={Debit} alt="" />
                         <p className="text-[#27014F] font-bold sm:text-[24px] text-[20px]">
-                          ₦150,000
+                          ₦
+                          {loading ? (
+                            <Skeleton width={60} height={10} />
+                          ) : (
+                            transaction
+                              .filter(
+                                (tx) =>
+                                  tx.walletCategory.toLowerCase() === "withdraw"
+                              )
+                              .map((tx) => tx.amount)
+                              .reduce((a, b) => a + b, 0)
+                              .toLocaleString()
+                          )}
                         </p>
                       </div>
                     </div>
