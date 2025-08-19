@@ -80,32 +80,32 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="flex h-screen w-full ">
+    <div className="flex h-screen  w-full ">
       {/* Left: Signup Form */}
       <form
         onSubmit={handleSubmit}
-        className=" [@media(min-width:1100px)]:w-1/2 w-full my-[1rem]   md:mx-[2rem] mx-[10px] "
+        className=" [@media(min-width:1100px)]:w-1/2 w-full   my-[1rem]   md:mx-[2rem] mx-[10px] "
       >
         <div className="mt-8">
           <div className="Nav flex justify-between ">
             <div className="cursor-pointer">
-              <img src={Logo} alt="Logo" />
+              <img src={Logo} className="md:w-[188px]  w-[150px]" alt="Logo" />
             </div>
 
             <NavLink to="/" className="flex items-center text-[15px]">
               <img src={Back} alt="" />
-              <div className=" cursor-pointer font-semibold ml-[5px] text-[#27014F]">
+              <div className=" cursor-pointer whitespace-nowrap font-semibold ml-[5px] text-[#27014F]">
                 Go Back
               </div>
             </NavLink>
           </div>
         </div>
-        <div className="flex  h-[80%] md:max-w-[480px]  w-[480px] justify-center m-auto items-center ">
-          <div className="flex flex-col justify-center w-full p-8 bg-white">
+        <div className="flex  h-[80%] md:w-[500px] w-full  sm:w-[90%] justify-center m-auto items-center ">
+          <div className="flex  flex-col justify-center w-full sm:p-0   bg-white">
             <h2 className="text-2xl font-bold mb-[0.4rem] text-[40px] text-[#27014F] w-full leading-[2.5rem]">
               Reset password
             </h2>
-            <p className="text-[14px] text-[#27014F]">
+            <p className="text-[14px] mb-[2rem] text-[#27014F]">
               Please enter your registered email address to reset your password.{" "}
             </p>
             <div className="flex flex-col mt-[1rem] ">
@@ -119,7 +119,7 @@ const ResetPassword = () => {
                   onBlur={() =>
                     validateField("email", formData.emailOrPhoneNumber)
                   }
-                  className={`p-2.5 pl-3 pr-3 border text-[13px] border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
+                  className={`py-4 md:py-2.5 px-3   text-[16px] border  border-[#A4A4A4] w-full focus:border-2  outline-none rounded-md ${
                     errors.email
                       ? "border border-red-600"
                       : "focus:border-purple-800"
@@ -133,7 +133,7 @@ const ResetPassword = () => {
               </div>
 
               <button
-                className={`bg-[#9605C5] mt-[2rem] font-semibold text-white p-3 rounded-[10px]  ${
+                className={`bg-[#9605C5] mt-[2rem] text-[16px] font-semibold text-white p-3 py-4 rounded-[10px]  ${
                   isFormInvalid
                     ? "opacity-60 cursor-not-allowed"
                     : "  cursor-pointer"
