@@ -25,7 +25,7 @@ const TransactionSkeleton = () => {
       {/* Right Side: Amount & Date */}
       <div className="text-right flex flex-col gap-1">
         <Skeleton width={60} height={14} />
-        <Skeleton width={100} height={10} />
+        {/* <Skeleton width={100} height={10} /> */}
       </div>
     </div>
   ));

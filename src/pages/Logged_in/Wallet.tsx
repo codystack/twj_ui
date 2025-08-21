@@ -23,7 +23,6 @@ import ReactPaginate from "react-paginate";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import TransactionSkeleton from "../../components/TransactionSkeleton";
-// import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const customStyles = {
@@ -56,13 +55,11 @@ const customStyles = {
 const Wallet = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
   const [loading, setLoading] = useState<boolean>(false);
   const [noTransaction, setNoTransaction] = useState<string | null>(null);
   const [transaction, setTransaction] = useState<TransactionType[]>([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-
   const [isHidden, setIsHidden] = useState(false);
   const [showKycModal, setShowKycModal] = useState(false);
   const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
@@ -230,18 +227,6 @@ const Wallet = () => {
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPage(selectedItem.selected);
   };
-
-  // const { totalTopUp, totalWithdraw } = transaction.reduce(
-  //   (acc, tx) => {
-  //     if (tx.walletCategory.toLowerCase() === "TopUp") {
-  //       acc.totalTopUp += Number(tx.amount);
-  //     } else if (tx.walletCategory.toLowerCase() === "withdraw") {
-  //       acc.totalWithdraw += Number(tx.amount);
-  //     }
-  //     return acc;
-  //   },
-  //   { totalTopUp: 0, totalWithdraw: 0 }
-  // );
 
   const isFormInvalid =
     Object.values(errors).some((error) => error) ||
@@ -592,7 +577,7 @@ const Wallet = () => {
                       </div>
                     </div>
                     <div className=" leading-[1.7rem]">
-                      <p className="text-[#27014F]">Total Debit</p>
+                      <p className="text-[#27014F]">Total Withdrawal</p>
                       <div className="flex gap-1 justify-center items-center">
                         <img src={Debit} alt="" />
                         <p className="text-[#27014F] font-bold sm:text-[24px] text-[20px]">

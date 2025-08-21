@@ -6,7 +6,6 @@ import ETHER from "../../../assets/crpto_icons/ETHER.svg";
 import scan from "../../../assets/crpto_icons/Scan_alt.svg";
 import CustomSelect from "../../../components/CustomSelect";
 import { useEffect, useState } from "react";
-// import axios from "axios";
 import warning from "../../../assets/crpto_icons/Alarm.svg";
 import { Wallet } from "../../../types/types.ts";
 import btc from "../../../assets/crpto_icons/wallet_icons/Bitcoin.svg";
@@ -22,7 +21,6 @@ import api from "../../../services/api.ts";
 import useAutoRefreshSwap from "./count_hooks/useAutoRefreshSwap.tsx";
 import PinModal from "../Logged_in_components/someUtilityComponent/PinModal.tsx";
 import SuccessModal from "../SuccessModal.tsx";
-// import SendCrypto from "./SendCrypto.tsx";
 
 export type Optiontype = {
   id: string;
@@ -480,6 +478,15 @@ const BuyCrypto = () => {
                         onClick={() => {
                           if (!showConfirmation && !loading)
                             setActiveTab("send");
+
+                          setError("");
+                          setToAmount("");
+                          setAmount("");
+                          setCurrency("");
+                          setQuoteId("");
+                          // setSelectedCoin(options[0]);
+                          stopCountdown();
+                          setSelectedNetwork(undefined);
                         }}
                       >
                         Send

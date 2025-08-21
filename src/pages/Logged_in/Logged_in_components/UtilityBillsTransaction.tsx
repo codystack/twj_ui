@@ -193,11 +193,11 @@ const UtilityTransaction: React.FC<{
                 </p>
                 <div className="flex items-center gap-2 text-gray-600">
                   {/* Tracking ID */}
-                  <span className="text-[11px] sm:block hidden text-left text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
+                  {/* <span className="text-[11px]  hidden text-left text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
                     {transaction.id}
-                  </span>
+                  </span> */}
 
-                  <p className="text-sm block sm:hidden text-[#27014F] border-r pr-[0.5rem] border-[#9ea5ad] text-[11px]">
+                  <p className="text-sm block  text-[#27014F] border-r pr-[0.5rem] border-[#9ea5ad] text-[11px]">
                     {new Date(transaction.transactionDate).toLocaleDateString(
                       "en-US",
                       {
@@ -232,13 +232,13 @@ const UtilityTransaction: React.FC<{
               <p className="font-semibold text-[#27014F]">
                 ₦{Number(transaction.amount).toLocaleString("en-NG")}
               </p>
-
+{/* 
               <p className="text-sm sm:block hidden text-[#27014F] text-[11px]">
                 {new Date(transaction.transactionDate).toLocaleString("en-US", {
                   dateStyle: "medium",
                   timeStyle: "short",
                 })}
-              </p>
+              </p> */}
             </div>
           </button>
         ))

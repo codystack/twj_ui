@@ -54,7 +54,7 @@ const CrytoTransaction: React.FC<{
     messageSent: "",
   });
 
-  const [copiedRef, setCopiedRef] = useState<string | null>(null); // Track copied reference
+  const [copiedRef, setCopiedRef] = useState<string | null>(null);
 
   const handleCopy = (reference: string) => {
     navigator.clipboard.writeText(reference);
@@ -66,7 +66,6 @@ const CrytoTransaction: React.FC<{
   const validateField = (fieldName: string, value: string) => {
     switch (fieldName) {
       case "reference":
-        // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!value.trim()) {
           setErrors((prev) => ({
             ...prev,
@@ -308,16 +307,20 @@ const CrytoTransaction: React.FC<{
                 {/* Transaction Details */}
                 <div>
                   <p className="text-[16px] text-[#27014F] text-left">
-                    {transaction.cryptoCategory.charAt(0).toUpperCase() +
-                      transaction.cryptoCategory.slice(1).toLowerCase()}{" "}
-                    {transaction.currency.toUpperCase()}
+                    {transaction.currency.toLowerCase() === "ngn"
+                      ? `Swap ${transaction.cryptoFromAmount}  ${transaction.cryptoFromCurrency} `
+                      : `${transaction.currency.toUpperCase()} ${
+                          transaction.cryptoCategory.charAt(0).toUpperCase() +
+                          transaction.cryptoCategory.slice(1).toLowerCase()
+                        }`}
                   </p>
+
                   <div className="flex items-center gap-2 text-gray-600">
                     {/* Tracking ID */}
-                    <span className="text-[11px] sm:block hidden text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
+                    {/* <span className="text-[11px]  hidden text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
                       {transaction.transactionReference}
-                    </span>
-                    <p className="text-sm block sm:hidden text-[#27014F] border-r pr-[0.5rem] border-[#9ea5ad] text-[11px]">
+                    </span> */}
+                    <p className="text-sm block text-[#27014F] border-r pr-[0.5rem] border-[#9ea5ad] text-[11px]">
                       {new Date(transaction.transactionDate).toLocaleDateString(
                         "en-US",
                         {
@@ -330,7 +333,7 @@ const CrytoTransaction: React.FC<{
                     {/* Unique Status Icon */}
                     {transaction.transactionStatus === "success" && (
                       <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                        SUCCESSFULL
+                        SUCCESSFUL
                       </div>
                     )}
                     {transaction.transactionStatus === "Processing" && (
@@ -350,16 +353,23 @@ const CrytoTransaction: React.FC<{
               {/* Right Side: Date & Amount */}
               <div className="text-right">
                 <p className="font-semibold text-[#27014F]">
-                  {transaction.currency.toUpperCase() === "NGN"
-                    ? "₦"
-                    : transaction.currency.toUpperCase()}{" "}
-                  {new Intl.NumberFormat("en-US", {
+                  <p>
+                    {transaction.currency.toUpperCase() === "NGN"
+                      ? `₦ ${(
+                          transaction.cryptoToAmount ?? 0
+                        ).toLocaleString()}`
+                      : `₦ ${(
+                          transaction.cryptoFromAmount ?? 0
+                        ).toLocaleString()}`}
+                  </p>
+
+                  {/* {new Intl.NumberFormat("en-US", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
-                  }).format(transaction.amount)}
+                  }).format(transaction.amount)} */}
                 </p>
 
-                <p className="text-sm sm:block hidden text-[#27014F] text-[11px]">
+                {/* <p className="text-sm sm:block hidden text-[#27014F] text-[11px]">
                   {new Date(transaction.transactionDate).toLocaleString(
                     "en-US",
                     {
@@ -367,7 +377,7 @@ const CrytoTransaction: React.FC<{
                       timeStyle: "short",
                     }
                   )}
-                </p>
+                </p> */}
               </div>
             </button>
           ))
@@ -398,7 +408,13 @@ const CrytoTransaction: React.FC<{
 
                   <div className="flex justify-between  border-b border-b-[#E2E8F0] pb-[1rem] items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
-                      {selectedTransaction.amount}
+                      {selectedTransaction.currency.toUpperCase() === "NGN"
+                        ? `₦ ${(
+                            selectedTransaction.cryptoToAmount ?? 0
+                          ).toLocaleString()}`
+                        : `₦ ${(
+                            selectedTransaction.cryptoFromAmount ?? 0
+                          ).toLocaleString()}`}
                     </h2>
 
                     <div className="relative">
@@ -555,17 +571,21 @@ const CrytoTransaction: React.FC<{
                   </div>
 
                   <div className="flex gap-[5rem] mt-[8%]">
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
-                      <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
-                        <p>
-                          {selectedTransaction.network
-                            ? selectedTransaction.network
-                            : "---"}
-                        </p>
-                        {/* <p>{selectedTransaction.quantity}</p> */}
-                      </div>
-                    </div>
+                    {/* <div> */}
+                    {selectedTransaction.network && (
+                      <>
+                        <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
+                        <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
+                          <p>
+                            {selectedTransaction.network
+                              ? selectedTransaction.network
+                              : "---"}
+                          </p>
+                          {/* <p>{selectedTransaction.quantity}</p> */}
+                        </div>
+                      </>
+                    )}
+                    {/* </div> */}
                     <div>
                       <p className="text-[#0A2E65]/60 mb-[10px]">Date</p>
                       <div className="flex text-[#0A2E65] items-center text-[13px]">
@@ -585,6 +605,20 @@ const CrytoTransaction: React.FC<{
                             hour: "2-digit",
                             minute: "2-digit",
                           })}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[#0A2E65]/60 mb-[10px]"> Crypto Value</p>
+                      <div className="flex text-[#0A2E65] items-center text-[13px]">
+                        <p>
+                          {selectedTransaction.currency.toUpperCase() === "NGN"
+                            ? `${selectedTransaction.cryptoFromCurrency.toUpperCase()} ${(
+                                selectedTransaction.cryptoFromAmount ?? 0
+                              ).toLocaleString()}`
+                            : `${selectedTransaction.currency.toUpperCase()} ${(
+                                selectedTransaction.cryptoToAmount ?? 0
+                              ).toLocaleString()}`}{" "}
                         </p>
                       </div>
                     </div>
