@@ -37,4 +37,5 @@ export interface Wallet {
   networks: Network[];
   deposit_address: string;
   destination_tag: string | null;
+  qrCodeBase64: string | null;
 }

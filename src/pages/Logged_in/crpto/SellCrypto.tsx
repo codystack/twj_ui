@@ -3,13 +3,6 @@ import CustomSelect from "../../../components/CustomSelect";
 import Bitcoin from "../../../assets/crpto_icons/Btc-coin.757f6cb3 2.svg";
 import Eth from "../../../assets/crpto_icons/ETH-b-coin.eac01ea4 1.svg";
 import warning from "../../../assets/crpto_icons/warning_c.svg";
-// import DOGE from "../../../assets/crpto_icons/Doge-coin.de2aebc7 1.svg";
-// import USDT from "../../../assets/crpto_icons/USDT-b-coin.9404ef8d 1.svg";
-// import BITCOIN from "../../../assets/crpto_icons/BITCOIN.svg";
-// import ETHER from "../../../assets/crpto_icons/ETHER.svg";
-// import positive from "../../../assets/crpto_icons/positive.svg";
-// import negative from "../../../assets/crpto_icons/negative.svg";
-import QR from "../../../assets/crpto_icons/qrcodee.svg";
 import copy from "../../../assets/crpto_icons/Copy_lightC.svg";
 import warRed from "../../../assets/crpto_icons/warn_red.svg";
 import { NavLink } from "react-router";
@@ -89,6 +82,7 @@ export type Optiontype = {
   value: string;
   image?: string;
   displayValue?: string;
+  qrCodeBase64?: string | null;
 };
 
 const SellCrypto = () => {
@@ -176,6 +170,7 @@ const SellCrypto = () => {
         label: wallet.name,
         value: wallet.currency,
         image: currencyIcons[wallet.currency.toLowerCase()],
+        qrCodeBase64: wallet.qrCodeBase64,
         displayValue: wallet.deposit_address,
       }));
       setSelectOptions(options);
@@ -185,6 +180,7 @@ const SellCrypto = () => {
 
   // Full wallet address
   const fullAddress = selectedCoin.displayValue;
+  const QRcode = selectedCoin.qrCodeBase64;
 
   const handleCopy = () => {
     if (!fullAddress) return;
@@ -204,7 +200,9 @@ const SellCrypto = () => {
 
   useEffect(() => {
     updateNetworksForCoin(selectedCoin);
-  }, [selectedCoin, wallets]);
+    // console.log(selectedCoin.qrCodeBase64);
+    console.log(selectedCoin.displayValue);
+  }, [selectedCoin, wallets, selectedCoin.displayValue]);
 
   type OptionType = {
     label: string;
@@ -378,7 +376,7 @@ const SellCrypto = () => {
 
                   <div className="w-full flex mt-9 justify-end">
                     <div className=" flex flex-col sm:flex-row  justify-end w-full md:items-center gap-3">
-                     <NavLink
+                      <NavLink
                         to="/crypto/swapcrypto"
                         className="border-[2px] text-center whitespace-nowrap cursor-pointer  text-[#8003A9] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]"
                       >
@@ -496,7 +494,13 @@ const SellCrypto = () => {
                     ) : selectedCoin.displayValue ? (
                       <>
                         <div className="flex justify-center items-center mt-15">
-                          <img src={QR} alt="qr code" />
+                          <img
+                            className="bg-black w-[19rem]"
+                            src={
+                              QRcode ? `data:image/png;base64,${QRcode}` : ""
+                            }
+                            alt="qr code"
+                          />
                         </div>
 
                         <div className="mt-10 px-[3rem]">
