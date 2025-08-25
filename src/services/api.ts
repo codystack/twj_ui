@@ -82,7 +82,7 @@ api.interceptors.response.use(
         // console.log("Refresh token failed");
         localStorage.clear();
         localStorage.setItem("lastVisitedRoute", location.pathname);
-        // window.location.href = "/";
+        window.location.href = "/";
         return Promise.reject(refreshError);
       }
     }

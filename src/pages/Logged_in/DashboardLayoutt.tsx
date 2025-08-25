@@ -39,6 +39,7 @@ const DashboardLayoutt = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   // Close on outside click
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node;
@@ -67,17 +68,19 @@ const DashboardLayoutt = () => {
 
   const { user } = useUserStore();
 
-  const passcodeSet = useAuthStore((state) => state.passcodeSet);
+  const userPasscodeSet = useUserStore((state) => state.user?.passcodeSet);
+
+  const authPasscodeSet = useAuthStore((state) => state.passcodeSet);
 
   useEffect(() => {
     if (hydrated) {
-      if (!passcodeSet) {
+      if (!userPasscodeSet && !authPasscodeSet) {
         setShowSetPinModal(true);
       } else {
         setShowSetPinModal(false);
       }
     }
-  }, [passcodeSet, hydrated]);
+  }, [userPasscodeSet, authPasscodeSet, hydrated]);
 
   // When fetchUser finishes, set hydrated to true
   useEffect(() => {

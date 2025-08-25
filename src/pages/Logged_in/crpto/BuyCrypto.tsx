@@ -57,7 +57,6 @@ const BuyCrypto = () => {
   const [selectedNetwork, setSelectedNetwork] = useState<
     Optiontype | undefined
   >(undefined);
-
   const [amount, setAmount] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [toAmount, setToAmount] = useState<string>("");
@@ -221,7 +220,6 @@ const BuyCrypto = () => {
       setToAmount,
       setCurrency,
       setQuotePrice,
-
       setError,
     });
 
