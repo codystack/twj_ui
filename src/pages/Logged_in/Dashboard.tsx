@@ -44,6 +44,7 @@ import airtimebg from "../../assets/dashboard_img/airtimebg.svg";
 import Airtimeimg from "../../assets/dashboard_img/dashboard_icons/ic_round-phone-iphone.svg";
 import api from "../../services/api";
 import PinModal from "./Logged_in_components/someUtilityComponent/PinModal";
+import { useAuthStore } from "../../store/authStore";
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -131,7 +132,8 @@ const Dashboard = () => {
     setIsHidden((prev) => !prev);
   };
 
-  const isKycComplete = useUserStore((state) => state?.user?.kycSet);
+  // const isKycComplete = useUserStore((state) => state?.user?.kycSet);
+  const isKycComplete = useAuthStore((state) => state.kycSet);
 
   const openModal = () => {
     const completeKyc = localStorage.getItem("kycComplete");

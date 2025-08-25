@@ -39,7 +39,6 @@ const DashboardLayoutt = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   // Close on outside click
-
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node;
@@ -68,7 +67,7 @@ const DashboardLayoutt = () => {
 
   const { user } = useUserStore();
 
-  const passcodeSet = useUserStore((state) => state.user?.passcodeSet);
+  const passcodeSet = useAuthStore((state) => state.passcodeSet);
 
   useEffect(() => {
     if (hydrated) {
