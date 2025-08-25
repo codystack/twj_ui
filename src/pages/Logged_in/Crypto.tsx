@@ -32,13 +32,10 @@ const cardData = [
 ];
 
 const Crypto = () => {
-
-
-
   return (
     <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
-      <div className="flex-1 overflow-y-auto p-4 ">
-        <div className="flex my-[1.5rem] ml-[1.5rem] justify-start items-center m">
+      <div className="flex-1 overflow-y-auto p-6 ">
+        <div className="flex my-[1.5rem] ml-[rem] justify-start items-center m">
           <NavLink className="flex items-center gap-1 " to="/dashboard">
             <FaArrowLeft className="text- cursor-pointer" />
             <p className="text-[15px]">Back</p>
