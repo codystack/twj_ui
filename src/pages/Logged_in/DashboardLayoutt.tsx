@@ -3,7 +3,6 @@ import Logo from "../../assets/dashboard_img/Logo.svg";
 import Alert from "../../assets/dashboard_img/Bell_pin_light.svg";
 import userIcon from "../../assets/dashboard_img/profile/userIcon.svg";
 import { useEffect, useState, useRef } from "react";
-
 import Dashboard from "./Dashboard";
 import Wallet from "./Wallet";
 import Transaction from "./Transaction";
@@ -14,7 +13,6 @@ import LogoutModal from "../../modals/LogoutModal";
 import { useAuthStore } from "../../store/authStore";
 import { useUserStore } from "../../store/useUserStore";
 import MobileNav from "../../modals/MobileNav";
-
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Help from "./Help";

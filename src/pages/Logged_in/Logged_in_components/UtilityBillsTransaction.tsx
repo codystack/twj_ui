@@ -4,7 +4,7 @@ import Data from "../../../assets/dashboard_img/profile//transactions/data.svg";
 import Electricity from "../../../assets/dashboard_img/profile//transactions/electricity.svg";
 import Gift from "../../../assets/dashboard_img/profile//transactions/gift.svg";
 import Television from "../../../assets/dashboard_img/profile//transactions/television.svg";
-// import Delete from "../../assets/dashboard_img/profile/";
+import warning from "../../../assets/dashboard_img/disabled-warning .png";
 import Delete from "../../../assets/dashboard_img/profile/cancel.svg";
 import Copy from "../../../assets/dashboard_img/profile/transactions/Copy_light.svg";
 import Report from "../../../assets/dashboard_img/profile/transactions/report.svg";
@@ -232,7 +232,7 @@ const UtilityTransaction: React.FC<{
               <p className="font-semibold text-[#27014F]">
                 ₦{Number(transaction.amount).toLocaleString("en-NG")}
               </p>
-{/* 
+              {/* 
               <p className="text-sm sm:block hidden text-[#27014F] text-[11px]">
                 {new Date(transaction.transactionDate).toLocaleString("en-US", {
                   dateStyle: "medium",
@@ -243,8 +243,9 @@ const UtilityTransaction: React.FC<{
           </button>
         ))
       ) : (
-        <div className="flex items-center justify-center h-[calc(100vh-18rem)]">
-          <p className="text-gray-500 text-lg">{noTransaction}</p>
+        <div className="flex flex-col items-center justify-center h-[calc(100vh-18rem)]">
+          <img src={warning} className="md:w-[9rem] w-[5rem]" alt="" />
+          <p className="text-gray-500 text-lg">{noTransaction}!</p>
         </div>
       )}
 
