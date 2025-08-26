@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom";
 import userIcon from "../../assets/dashboard_img/profile/userIcon.svg";
 import Camera from "../../assets/dashboard_img/profile/Camera_light.svg";
 import arrowRight from "../../assets/dashboard_img/profile/Arrow_right_light.svg";
@@ -25,6 +26,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const Profile = () => {
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState<"account" | "security" | "bank">(
     "account"
   );
@@ -53,9 +55,7 @@ const Profile = () => {
   const [showPinModal, setShowPinModal] = useState(false);
   const [isSuccessModal, setIsSuccessModal] = useState(false);
   const [proceedToSetPin, setProceedToSetPin] = useState(false);
-  // const [showKycPrompt, setShowKycPrompt] = useState(false);
   const [shouldCheckPasscode, setShouldCheckPasscode] = useState(false);
-  // const { isSuccessModalStore, setDataSuccessModal } = useModalStore();
   const {
     bankList,
     // isFetchingBanks,
@@ -71,6 +71,13 @@ const Profile = () => {
     fetchUser();
     // console.log("Fetching banks... in useEffect:", bankList);
   }, []);
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab === "account" || tab === "security" || tab === "bank") {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   // Update form field value
   const handleInputChange = (e: any) => {

@@ -176,8 +176,9 @@ const ProfileSecurity = () => {
   // functions for 2FA
   const handleToggle = async () => {
     if (!isTwoFAEnabled) {
-      setModalStep("start");
+      setModalStep("code");
       setIsModalVisible(true);
+      handleSendCode();
     } else {
       setIsTwoFAEnabled(false);
       api
@@ -187,8 +188,21 @@ const ProfileSecurity = () => {
     }
   };
 
+  // const reSendCode = async () => {
+  //   await api.post("/Authentication/enable2Fa");
+  // };
+
   const reSendCode = async () => {
-    await api.post("/Authentication/enable2Fa");
+    try {
+      setLoading(true);
+      await api.post("/Authentication/enable2Fa");
+      // maybe show success message here
+    } catch (error) {
+      return error;
+      // console.error("Failed to resend code:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSendCode = async () => {
@@ -472,7 +486,7 @@ const ProfileSecurity = () => {
                 setErrorMessage("");
                 setIsModalVisible(false);
               }}
-              onContinue={handleSendCode}
+              // onContinue={handleSendCode}
               onVerify={handleVerifyCode}
               errorMessage={errorMessage}
             />
