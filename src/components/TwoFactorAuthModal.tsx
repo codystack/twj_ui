@@ -1,5 +1,4 @@
 import cancel from "../assets/dashboard_img/profile/cancel.svg";
-import TwoFALock from "../assets/crpto_icons/2fa_protect.svg";
 import { useUserStore } from "../store/useUserStore";
 import { useEffect, useRef, useState } from "react";
 
@@ -9,7 +8,7 @@ type Props = {
   errorMessage?: string;
   step: "start" | "code";
   onClose: () => void;
-  onContinue: () => void;
+  onContinue?: () => void;
   onResend: () => void;
   onVerify: () => void;
   code?: string;
@@ -23,7 +22,7 @@ export default function TwoFactorAuthModal({
   errorMessage,
   onClose,
   onResend,
-  onContinue,
+  // onContinue,
   onVerify,
   //   code,
   onCodeChange,
@@ -99,25 +98,16 @@ export default function TwoFactorAuthModal({
     <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
       <div className="rounded-[20px] bg-[#fff]/20 md:p-[0.8rem] w-full max-w-[600px]">
         <div className="bg-white rounded-[15px] w-full h-auto p-6 shadow-xl text-center">
-          {step === "start" && (
+          <div className="flex justify-between border-b border-b-[#E2E8F0] pb-2 items-center">
+            <h2 className="text-xl  text-[#27014F] mb-2">Enter 2FA Code</h2>
             <div className="flex justify-end">
               <button className="cursor-pointer" onClick={onClose}>
                 <img src={cancel} alt="" />
               </button>
             </div>
-          )}
-          {step === "code" && (
-            <div className="flex justify-between border-b border-b-[#E2E8F0] pb-2 items-center">
-              <h2 className="text-xl  text-[#27014F] mb-2">Enter 2FA Code</h2>
-              <div className="flex justify-end">
-                <button className="cursor-pointer" onClick={onClose}>
-                  <img src={cancel} alt="" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {step === "start" && (
+          </div>
+          {/* This part is for the initial 2FA setup but no longer in use */}
+          {/* {step === "start" && (
             <div className="px-[2rem]">
               <img src={TwoFALock} alt="" className="mx-auto mb-8 mt-6" />
               <h4 className="text-[#27014F]  text-center font-semibold text-[20px]">
@@ -154,7 +144,7 @@ export default function TwoFactorAuthModal({
                 </button>
               </div>
             </div>
-          )}
+          )} */}
 
           {step === "code" && (
             <>
@@ -163,43 +153,51 @@ export default function TwoFactorAuthModal({
               </p>
 
               {/* OTP Input Fields */}
-              <div className="flex justify-center gap-[1rem] mx-[1rem] mt-[2rem]">
-                {token.map((digit, index) => (
-                  <input
-                    key={index}
-                    ref={(el) => {
-                      inputRefs.current[index] = el;
-                    }}
-                    id={`otp-${index}`}
-                    type="tel"
-                    inputMode="numeric"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handleOtpChange(e, index)}
-                    onPaste={handleOtpPaste}
-                    autoFocus={index === 0}
-                    onKeyDown={(e) => handleKeyDown(e, index)}
-                    className="focus:border-purple-800 md:w-[55px] w-[45px] h-[45px] md:h-[55px] font-semibold text-[32px] text-center focus:border-2 outline-none p-2.5 border border-[#A4A4A4] rounded-md"
-                  />
-                ))}
-              </div>
-              <button
-                onClick={onVerify}
-                disabled={token.some((digit) => digit === "")}
-                className={`bg-[#8003A9] text-white w-[80%] mt-[2rem] py-3 px-6 rounded-md ${
-                  token.some((digit) => digit === "")
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
-                }`}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  onVerify();
+                }}
               >
-                {loading ? (
-                  <div className="flex w-full  justify-center items-center">
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  </div>
-                ) : (
-                  "Activate 2FA"
-                )}
-              </button>
+                <div className="flex justify-center gap-[1rem] mx-[1rem] mt-[2rem]">
+                  {token.map((digit, index) => (
+                    <input
+                      key={index}
+                      ref={(el) => {
+                        inputRefs.current[index] = el;
+                      }}
+                      id={`otp-${index}`}
+                      type="tel"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleOtpChange(e, index)}
+                      onPaste={handleOtpPaste}
+                      autoFocus={index === 0}
+                      onKeyDown={(e) => handleKeyDown(e, index)}
+                      className="focus:border-purple-800 md:w-[55px] w-[45px] h-[45px] md:h-[55px] font-semibold text-[32px] text-center focus:border-2 outline-none p-2.5 border border-[#A4A4A4] rounded-md"
+                    />
+                  ))}
+                </div>
+                <button
+                  // onClick={onVerify}
+                  type="submit"
+                  disabled={token.some((digit) => digit === "" || loading)}
+                  className={`bg-[#8003A9] text-white w-[80%] mt-[2rem] py-3 px-6 rounded-md ${
+                    token.some((digit) => digit === "" || loading)
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
+                  }`}
+                >
+                  {loading ? (
+                    <div className="flex w-full  justify-center items-center">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  ) : (
+                    "Activate 2FA"
+                  )}
+                </button>
+              </form>
 
               <div className="flex text-[14px] my-[1.5rem] justify-center items-center">
                 <p className="text-[#0A2E65]/60 ">Didn't get any code?</p>

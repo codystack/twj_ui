@@ -30,6 +30,7 @@ interface AuthState {
   ForgotOtpSuccess: boolean;
   passcodeSet: boolean;
   kycSet: boolean;
+  is2FASet: boolean;
   setIsAuthenticated: (status: boolean) => void;
   checkAuth: () => void;
   signUp: (
@@ -81,6 +82,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   ForgotOtpSuccess: false,
   kycSet: false,
   passcodeSet: false,
+  is2FASet: false,
 
   setIsAuthenticated: (status: boolean) => set({ isAuthenticated: status }),
 
@@ -263,6 +265,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.removeItem("lastVisitedRoute");
 
       set({
+        is2FASet: data?.data?.is2FASet || false,
         passcodeSet: data?.data?.passcodeSet || false,
         kycSet: data?.data?.kycComplete || false,
         isAuthenticated: true,

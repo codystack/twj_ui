@@ -1,3 +1,4 @@
+// import { useNavigate } from "react-router-dom";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import Logo from "../../assets/dashboard_img/Logo.svg";
 import Alert from "../../assets/dashboard_img/Bell_pin_light.svg";
@@ -23,8 +24,11 @@ import Crypto from "./Crypto";
 import SetPinModal from "./Logged_in_components/someUtilityComponent/SetPinModal";
 import SuccessModal from "./SuccessModal";
 import { useModalStore } from "../../store/modalStore";
+import TwoFALock from "../../assets/crpto_icons/2fa_protect.svg";
+import cancel from "../../assets/dashboard_img/profile/cancel.svg";
 
 const DashboardLayoutt = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,11 +36,17 @@ const DashboardLayoutt = () => {
   const [showProfile, setShowProfile] = useState(false);
   const { isSuccessModalStore, setDataSuccessModal } = useModalStore();
   const [showSetPinModal, setShowSetPinModal] = useState(false);
+  const [twoFaModal, setTwoFaModal] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   // Close on outside click
+
+  const handleClick = () => {
+    navigate("/profile?tab=security");
+    setTwoFaModal(false);
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -67,8 +77,10 @@ const DashboardLayoutt = () => {
   const { user } = useUserStore();
 
   const userPasscodeSet = useUserStore((state) => state.user?.passcodeSet);
-
   const authPasscodeSet = useAuthStore((state) => state.passcodeSet);
+
+  const isTwoFASet = useUserStore((state) => state.user?.isTwoFASet);
+  const is2FASet = useAuthStore((state) => state.is2FASet);
 
   useEffect(() => {
     if (hydrated) {
@@ -80,6 +92,14 @@ const DashboardLayoutt = () => {
     }
   }, [userPasscodeSet, authPasscodeSet, hydrated]);
 
+  useEffect(() => {
+    if (!isTwoFASet && !is2FASet) {
+      setTwoFaModal(true);
+    } else {
+      setTwoFaModal(false);
+    }
+  }, [isTwoFASet, is2FASet]);
+
   // When fetchUser finishes, set hydrated to true
   useEffect(() => {
     const fetchUserData = async () => {
@@ -90,7 +110,7 @@ const DashboardLayoutt = () => {
   }, []);
 
   // Get logout function from store
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
 
   const location = useLocation();
@@ -615,6 +635,53 @@ const DashboardLayoutt = () => {
           </div>
         </div>
       </nav>
+
+      {twoFaModal && (
+        <div className="fixed inset-0 z-20 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+          <div className="rounded-[20px] bg-[#fff]/20 md:p-[0.8rem] w-full max-w-[600px]">
+            <div className="bg-white rounded-[15px] z-20 w-full h-auto p-6 shadow-xl text-center">
+              <div className="flex justify-end">
+                <button
+                  className="cursor-pointer"
+                  onClick={() => setTwoFaModal(false)}
+                >
+                  <img src={cancel} alt="" />
+                </button>
+              </div>
+              <div className="px-[2rem]">
+                <img src={TwoFALock} alt="" className="mx-auto mb-8 mt-6" />
+                <h4 className="text-[#27014F]  text-center font-semibold text-[20px]">
+                  Protect Your Account with 2FA
+                </h4>
+
+                <p className="text-[#0A2E65]/60 py-[1rem] w-full text-center ">
+                  Your account's security matters, and passwords alone aren't
+                  enough anymore. Turning on two-factor authentication (2FA)
+                  adds a second layer of protection, making it much harder for
+                  anyone to gain unauthorized access.
+                </p>
+
+                <button
+                  // disabled={loading}
+                  onClick={handleClick}
+                  className="bg-[#8003A9] cursor-pointer text-white w-full py-3 px-6 rounded-md"
+                >
+                  Activate 2FA
+                </button>
+
+                <div className="flex justify-center items-center">
+                  <button
+                    className="text-[15px] my-[1rem] text-[#FF3366] cursor-pointer "
+                    onClick={() => setTwoFaModal(false)}
+                  >
+                    Do this later
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hamburger Mobile  Menu */}
       <MobileNav isOpen={isOpen} onClose={toggleMenu} />

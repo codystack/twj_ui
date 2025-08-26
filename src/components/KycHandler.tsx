@@ -624,7 +624,7 @@ const KycHandler = ({ isVisible, onClose }: KycModalProps) => {
       {showModal && (
         <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
           <div className="rounded-[20px] bg-[#fff]/20 p-[0.8rem] w-full max-w-[500px]">
-            <div className="bg-white rounded-[15px] w-full h-auto p-6 shadow-xl text-center">
+            <div className="bg-white rounded-[15px] z-50 w-full h-auto p-6 shadow-xl text-center">
               <div className="flex justify-end">
                 <button
                   onClick={() => {
