@@ -41,41 +41,6 @@ const options = [
   },
 ];
 
-// const cryptoData = [
-//   {
-//     id: "btc",
-//     shortName: "BTC",
-//     fullName: "Bitcoin",
-//     priceNGN: "₦75,300,000",
-//     percentChange: 2.15,
-//     image: BITCOIN,
-//   },
-//   {
-//     id: "eth",
-//     shortName: "ETH",
-//     fullName: "Ethereum",
-//     priceNGN: "₦4,580,000",
-//     percentChange: -1.32,
-//     image: ETHER,
-//   },
-//   {
-//     id: "usdt",
-//     shortName: "USDT",
-//     fullName: "Tether",
-//     priceNGN: "₦1,320",
-//     percentChange: 0.05,
-//     image: USDT,
-//   },
-//   {
-//     id: "usdc",
-//     shortName: "DOGE",
-//     fullName: "Doge",
-//     priceNGN: "₦1,310",
-//     percentChange: -0.12,
-//     image: DOGE,
-//   },
-// ];
-
 export type Optiontype = {
   id: string;
   label: string;
@@ -96,6 +61,8 @@ const SellCrypto = () => {
   const [successModal, setSuccessModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [networkOptions, setNetworkOptions] = useState<Optiontype[]>([]);
+  const [QRcode, setQRcode] = useState<string | null>(null);
+  const [fullAddress, setFullAddress] = useState<string | null>(null);
   const [selectedNetwork, setSelectedNetwork] = useState<
     Optiontype | undefined
   >(undefined);
@@ -141,7 +108,7 @@ const SellCrypto = () => {
       const response = await api.get(`${BASE_URL}/Crypto/users/allWallets`);
 
       const rawResponse: Wallet[] = response.data?.data;
-      console.log("rawResponse:", rawResponse);
+      // console.log("rawResponse:", rawResponse);
 
       const filteredWallets = rawResponse.filter((wallet) =>
         allowedCurrencies.includes(wallet.currency.toLowerCase())
@@ -179,8 +146,8 @@ const SellCrypto = () => {
   }, [wallets]);
 
   // Full wallet address
-  const fullAddress = selectedCoin.displayValue;
-  const QRcode = selectedCoin.qrCodeBase64;
+  // const fullAddress = selectedCoin.displayValue;
+  // const QRcode = selectedCoin.qrCodeBase64;
 
   const handleCopy = () => {
     if (!fullAddress) return;
@@ -201,7 +168,7 @@ const SellCrypto = () => {
   useEffect(() => {
     updateNetworksForCoin(selectedCoin);
     // console.log(selectedCoin.qrCodeBase64);
-    console.log(selectedCoin.displayValue);
+    // console.log(selectedCoin.displayValue);
   }, [selectedCoin, wallets, selectedCoin.displayValue]);
 
   type OptionType = {
@@ -257,6 +224,7 @@ const SellCrypto = () => {
         response?.data?.message || "Wallet created successfully."
       );
       setSuccessModal(true);
+      fetchAddress();
     } catch (error: any) {
       // Axios error handling
       const errorMessage =
@@ -270,8 +238,36 @@ const SellCrypto = () => {
       setIsLoading(false);
     }
   };
+  const fetchAddress = async () => {
+    if (!selectedCoin?.value || !selectedNetwork?.id) return;
+    try {
+      setIsLoading(true);
+      setError("");
 
-  // const isDisabled = loading && !!selectedCoin != "";
+      const response = await api.get(
+        `/Crypto/paymentAddress?network=${selectedNetwork.id}&currency=${selectedCoin.value}`
+      );
+
+      setFullAddress(response.data?.data?.paymentAddress?.[0]?.address || null);
+      setQRcode(response.data?.data?.paymentAddress?.[0]?.qrCodeBase64 || null);
+    } catch (error: string | any) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "An unexpected error occurred while fetching the wallet.";
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchAddress();
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [selectedCoin?.value, selectedNetwork?.id]);
 
   return (
     <>
@@ -285,14 +281,14 @@ const SellCrypto = () => {
           }
           onClose={() => {
             setSuccessModal(false);
-            fetchWallets();
+            fetchAddress();
           }}
         />
       )}
       <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
         <div className="flex-1 overflow-y-auto p-4 ">
           <div className="flex justify-center items-center">
-            <div className=" w-full  p-4">
+            <div className=" w-full  md:p-4 sm:px-0 sm:mb-0 mb-[2rem] px-1">
               <div className="flex justify-start items-center mb-2">
                 <NavLink className="flex items-center gap-1 " to="/crypto">
                   <FaArrowLeft className="text- cursor-pointer" />
@@ -335,9 +331,7 @@ const SellCrypto = () => {
                   </div>
 
                   <div className="flex justify-between  mt-[0.5rem]   items-center">
-                    <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                      Network <span className="text-gray-400">(Optional)</span>
-                    </p>
+                    <p className="pt-2 pb-1 text-[14px] text-[#000]">Network</p>
                   </div>
 
                   <div className="w-full border border-gray-300 rounded-md focus-within:border-2 focus-within:border-gray-300">
@@ -384,83 +378,28 @@ const SellCrypto = () => {
                       </NavLink>
                       <button
                         onClick={handleCreateWallet}
-                        disabled={loading || !!selectedCoin?.displayValue}
+                        disabled={loading || isLoading || !!QRcode}
                         className={`border-[2px] whitespace-nowrap border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px] ${
-                          loading || !!selectedCoin?.displayValue
+                          loading || isLoading || !!QRcode
                             ? "opacity-50 cursor-not-allowed"
                             : " cursor-pointer"
                         }`}
                       >
                         {isLoading ? (
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <div className="flex w-full  justify-center items-center">
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          </div>
                         ) : (
                           "Create Wallet"
                         )}
                       </button>
                     </div>
                   </div>
-                  {/* 
-                  <div>
-                    <div className="mt-7">
-                      <p className=" text-[19px] font-[500]">Market</p>
-                    </div>
-
-                    <div className="w-full border  px-5 py-4 mt-2 border-[#8A95BF] rounded-md overflow-hidden">
-                      {cryptoData.map((coin, index) => (
-                        <div
-                          key={coin.id}
-                          className={`flex justify-between items-center  py-3 ${
-                            index !== cryptoData.length - 1 ? "border-b" : ""
-                          } border-[#8A95BF]`}
-                        >
-                         
-                          <div className="flex items-center gap-3">
-                            <img
-                              src={coin.image}
-                              alt={coin.fullName}
-                              className="w-8 h-8"
-                            />
-                            <div className="leading-tight">
-                              <p className="text-[15px]">{coin.shortName}</p>
-                              <p className="text-[12px] text-gray-500">
-                                {coin.fullName}
-                              </p>
-                            </div>
-                          </div>
-
-                        
-                          <div className="text-right leading-tight flex flex-col items-end">
-                            <p className="text-[15px]">{coin.priceNGN}</p>
-                            <p
-                              className={`text-sm flex items-center gap-1 ${
-                                coin.percentChange >= 0
-                                  ? "text-green-500"
-                                  : "text-red-500"
-                              }`}
-                            >
-                              <img
-                                src={
-                                  coin.percentChange >= 0 ? positive : negative
-                                }
-                                alt={
-                                  coin.percentChange >= 0
-                                    ? "positive"
-                                    : "negative"
-                                }
-                                className="w-3 h-3"
-                              />
-                              {coin.percentChange}%
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div> */}
                 </div>
 
                 {/* Right section */}
-                <div className=" order-2  relative mt-[2rem] mdmt-0 md:ml-5 w-full h-full flex justify-center items-center ">
-                  <div className="border border-[#8A95BF] rounded-[10px] bg-[#F5F7FA] w-[85%] border-dashed">
+                <div className=" order-2  relative mt-[2rem] md:mt-0 md:ml-5 w-full h-full flex justify-center items-center ">
+                  <div className="border border-[#8A95BF] rounded-[10px] bg-[#F5F7FA] sm:w-[85%] w-[96%] border-dashed">
                     {loading ? (
                       <>
                         <div className="flex justify-center items-center mt-15">
@@ -491,11 +430,11 @@ const SellCrypto = () => {
                           <Skeleton height={60} />
                         </div>
                       </>
-                    ) : selectedCoin.displayValue ? (
+                    ) : QRcode ? (
                       <>
                         <div className="flex justify-center items-center mt-15">
                           <img
-                            className="bg-black w-[19rem]"
+                            className=" w-[19rem] px-[1rem]"
                             src={
                               QRcode ? `data:image/png;base64,${QRcode}` : ""
                             }

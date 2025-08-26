@@ -391,7 +391,7 @@ const BuyCrypto = () => {
       <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] flex flex-col">
         <div className="flex-1 overflow-y-auto p-4 ">
           <div className="flex justify-center items-center">
-            <div className=" w-full  sm:p-4">
+            <div className=" w-full md:p-4 sm:px-0 sm:mb-0 mb-[2rem] px-1">
               <div className="flex justify-start items-center mb-2">
                 <NavLink className="flex items-center gap-1 " to="/crypto">
                   <FaArrowLeft className="text- cursor-pointer" />
