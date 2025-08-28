@@ -1,9 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
-// import { useAuthorizationStore } from "./authorizationStore";
 import { decryptData, encryptData } from "../services/utils/crypto-utils";
 import { useUserStore } from "./useUserStore";
-// import { useUserStore } from "./useUserStore";
 
 const API_URL = import.meta.env.VITE_API_URL;
 

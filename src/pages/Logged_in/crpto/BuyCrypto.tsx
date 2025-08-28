@@ -69,6 +69,8 @@ const BuyCrypto = () => {
   const [openPinModal, setOpenPinModal] = useState(false);
   const [activeTab, setActiveTab] = useState<"buy" | "send">("buy");
   const [sendFormError, setSendFormError] = useState<string>("");
+  const [sendLoading, setSendLoading] = useState<boolean>(false);
+  const [transactionFee, setTransactionFee] = useState<number | null>(null);
 
   const [sendForm, setSendForm] = useState({
     address: "",
@@ -355,6 +357,35 @@ const BuyCrypto = () => {
   const handleFocus = () => {
     setIsInputFocused(true);
   };
+
+  const getWithdrawalFees = async (currency: string, amount: number) => {
+    setSendLoading(true);
+    try {
+      const response = await api.get("/Crypto/getWithdrawalFees", {
+        params: { currency, amount },
+      });
+      setSendLoading(false);
+      const data = response.data;
+      setTransactionFee(data?.data?.fee);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching withdrawal fees:", error);
+      throw error;
+    } finally {
+      setSendLoading(false);
+    }
+  };
+
+  const handleClick = async () => {
+    const fees = await getWithdrawalFees(
+      selectedCoin.value,
+      parseFloat(sendForm.amount)
+    );
+    await setShowConfirmation(true);
+    console.log("Withdrawal Fees:", fees);
+  };
+
+  const totalAmount = Number(sendForm.amount) + (transactionFee || 0);
 
   const isDisabled =
     isInputFocused || !!error || loadingData || !amount || countdown < 1;
@@ -823,15 +854,21 @@ const BuyCrypto = () => {
                           <div className="w-full flex mt-9 justify-end">
                             <div className="flex w-full justify-end items-center gap-3">
                               <button
-                                disabled={isInvalid}
-                                onClick={() => setShowConfirmation(true)}
+                                disabled={isInvalid || sendLoading}
+                                onClick={handleClick}
                                 className={`border-[2px] ${
-                                  isInvalid
+                                  isInvalid || sendLoading
                                     ? "opacity-50 cursor-not-allowed"
                                     : "cursor-pointer"
                                 } border-[#8003A9]   w-full sm:w-auto bg-[#8003A9] text-[#fff] px-[4rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
                               >
-                                Continue
+                                {sendLoading ? (
+                                  <div className="flex justify-center items-center ">
+                                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                                  </div>
+                                ) : (
+                                  "     Continue"
+                                )}
                               </button>
                             </div>
                           </div>
@@ -929,15 +966,14 @@ const BuyCrypto = () => {
                             </p>
                             <h4 className="flex justify-center gap-0.5   items-center text-[24px]">
                               <span>
-                                {selectedCoin.displayValue}
+                                {selectedCoin.displayValue}{" "}
                                 {selectedCoin.value.toUpperCase()}
                               </span>
                             </h4>
                             <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
                               <span>-</span>{" "}
                               <span>
-                                {sendForm.amount}
-                                {selectedCoin.value.toUpperCase()}
+                                {totalAmount} {selectedCoin.value.toUpperCase()}
                               </span>
                               {/* <span>NGN</span> */}
                             </p>
@@ -962,7 +998,10 @@ const BuyCrypto = () => {
                           <div className="flex justify-between text-[15px] mb-4">
                             <p className="">Transaction fee</p>
                             <span className=" flex items-center gap-1">
-                              <span className="text-right">coming soon</span>
+                              <span className="text-right">
+                                {transactionFee}{" "}
+                                {selectedCoin.value.toUpperCase()}
+                              </span>
                               {/* <span>NGN</span> */}
                             </span>
                           </div>
