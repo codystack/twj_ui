@@ -948,20 +948,21 @@ const BuyCrypto = () => {
                             <p className="">Amount</p>
                             <span className="  flex items-center gap-1">
                               <span>{sendForm.amount}</span>
-                              {/* <span>{currency}</span> */}
+                              <span>{selectedCoin.value.toUpperCase()}</span>
                             </span>
                           </div>
                           <div className="flex justify-between text-[15px] mb-4">
                             <p className="">Wallet balance</p>
-                            <span className="  flex items-center gap-1">
-                              {selectedCoin.displayValue}
+                            <span className="  flex items-center text-right gap-1">
+                              {selectedCoin.displayValue}{" "}
+                              {selectedCoin.value.toUpperCase()}
                             </span>
                           </div>
 
                           <div className="flex justify-between text-[15px] mb-4">
                             <p className="">Transaction fee</p>
                             <span className=" flex items-center gap-1">
-                              <span>coming soon</span>
+                              <span className="text-right">coming soon</span>
                               {/* <span>NGN</span> */}
                             </span>
                           </div>
@@ -969,7 +970,9 @@ const BuyCrypto = () => {
                           <div className="flex justify-between text-[15px] ">
                             <p className="">Address</p>
                             <span className="flex items-center gap-1">
-                              <span>{sendForm.address}</span>
+                              <span className="text-right">
+                                {sendForm.address}
+                              </span>
                             </span>
                           </div>
                         </div>
