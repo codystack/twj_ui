@@ -1,5 +1,6 @@
 import axios from "axios";
 import { decryptData, encryptData } from "./utils/crypto-utils";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -82,7 +83,9 @@ api.interceptors.response.use(
         // console.log("Refresh token failed");
         localStorage.clear();
         localStorage.setItem("lastVisitedRoute", location.pathname);
-        window.location.href = "/";
+        // window.location.href = "/";
+        const navigate = useNavigate();
+        navigate("/");
         return Promise.reject(refreshError);
       }
     }
