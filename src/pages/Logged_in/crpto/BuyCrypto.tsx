@@ -340,7 +340,7 @@ const BuyCrypto = () => {
       const networks = selectedWallet.networks || [];
       const formattedNetworks = networks.map((net) => ({
         id: net.id,
-        label: net.id,
+        label: net.id.toUpperCase(),
         value: net.id,
       }));
       setNetworkOptions(formattedNetworks);
@@ -556,7 +556,7 @@ const BuyCrypto = () => {
                           </p>
 
                           <div className="flex items-center justify-between text-[#6779A7] ">
-                            <p className="mr-1">Wallel Balance:</p>
+                            <p className="mr-1">Wallet Balance:</p>
                             <span className="flex justify-center items-center">
                               <span>
                                 {user
@@ -734,8 +734,7 @@ const BuyCrypto = () => {
                         </div>
                         <div className="flex justify-between  mt-[0.5rem]   items-center">
                           <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                            Network{" "}
-                            <span className="text-gray-400">(Optional)</span>
+                            Network
                           </p>
                         </div>
 

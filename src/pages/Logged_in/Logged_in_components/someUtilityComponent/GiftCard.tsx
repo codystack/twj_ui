@@ -17,7 +17,7 @@ const GiftCard = () => {
 
   const openNestedModal = (view: string) => {
     setModalStack((prev) => [...prev, view]);
-    setIsModalOpen(false); 
+    setIsModalOpen(false);
   };
 
   const goBack = () => setModalStack((prev) => prev.slice(0, -1));
@@ -54,12 +54,9 @@ const GiftCard = () => {
                 </button>
               </div>
 
-              <div className=" block sm:flex mx-[2rem] justify-center mt-[1.5rem] py-[2.5rem] gap-[20px] items-center">
-                <div className="sm:mb-0 mb-8  ">
-                  <BuyGiftCard
-                 
-                    onOpenNestedModal={openNestedModal}
-                  />
+              <div className=" block sm:flex sm:mx-[2rem] mx-1 justify-center mt-[1.5rem] py-[2.5rem] gap-[20px] items-center">
+                <div className="sm:mb-0 mb-7  ">
+                  <BuyGiftCard onOpenNestedModal={openNestedModal} />
                 </div>
                 <SellGiftCard />
               </div>

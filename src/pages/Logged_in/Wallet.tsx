@@ -440,11 +440,11 @@ const Wallet = () => {
 
       <div className="w-full overflow-hidden h-[calc(100vh-5.2rem)] mr-[2rem] mt-[5rem] rounded-tl-[30px] bg-[#fff] text-center flex flex-col">
         <div className="flex-1 overflow-y-auto pb-[1.5rem] px-[1rem]">
-          <div className="md:h-[2rem]  h-[1rem] bg-[white] [@media(min-width:1350px)]:w-[78%]  w-[97%] fixed z-20 "></div>
+          <div className="md:h-[2rem]  h-[1rem] bg-[white] sm:block hidden [@media(min-width:1350px)]:w-[78%]  w-[97%] fixed z-20 "></div>
           <div className=" md:ml-[2%] py-[2.3%] bg-[#fff]  ">
             <div className="  block gap-[1.5rem] mt-[1rem] [@media(min-width:900px)]:flex">
               <div className="flex relative [@media(min-width:900px)]:w-auto w-full">
-                <div className="[@media(min-width:900px)]:w-[505px] w-full relative sm:h-[253px] h-[200px] bg-[#27014F] rounded-[10px] flex items-center justify-center">
+                <div className="[@media(min-width:900px)]:w-[505px] w-full relative sm:h-[253px] h-[200px] bg-[#27014F] rounded-[10px] sm:mt-0 mt-2 flex items-center justify-center">
                   <img
                     src={Lines}
                     className="absolute h-[110%] w-full top-0 left-0"

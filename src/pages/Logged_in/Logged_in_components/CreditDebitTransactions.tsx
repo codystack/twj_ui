@@ -43,7 +43,7 @@ const CreditDebitTransactions: React.FC<{
     messageSent: "",
   });
 
-  const [copiedRef, setCopiedRef] = useState<string | null>(null); // Track copied reference
+  const [copiedRef, setCopiedRef] = useState<string | null>(null);
 
   const handleCopy = (reference: string) => {
     navigator.clipboard.writeText(reference);
@@ -134,7 +134,7 @@ const CreditDebitTransactions: React.FC<{
           <button
             onClick={() => handleOpenModal(transaction)}
             key={transaction.id}
-            className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  p-4"
+            className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  sm:p-4 py-3"
           >
             {/* Left Side: Static Logo + Transaction Details */}
             <div className="flex items-center gap-4 relative">
@@ -169,9 +169,15 @@ const CreditDebitTransactions: React.FC<{
                 </p>
                 <div className="flex items-center gap-2 text-gray-600">
                   {/* Tracking ID */}
-                  <span className="text-[11px] text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
-                    {transaction.id}
-                  </span>
+                  <p className="text-sm block text-[#27014F] border-r pr-[0.5rem] border-[#9ea5ad] text-[11px]">
+                    {new Date(transaction.transactionDate).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                        month: "short",
+                      }
+                    )}
+                  </p>
                   {/* Unique Status Icon */}
                   {transaction.transactionStatus === "success" && (
                     <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
@@ -197,12 +203,6 @@ const CreditDebitTransactions: React.FC<{
               <p className="font-semibold text-[#27014F]  ">
                 ₦{transaction.amount}
               </p>
-              <p className="text-sm text-[#27014F] text-[11px]">
-                {new Date(transaction.transactionDate).toLocaleString("en-US", {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                })}
-              </p>
             </div>
           </button>
         ))
@@ -216,18 +216,20 @@ const CreditDebitTransactions: React.FC<{
       {selectedTransaction && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           {/* Dark Layered Background */}
-          <div className="fixed inset-0 flex w-[100vw] items-center h-[100vh] justify-center bg-black/40  z-100">
+          {/* <div className="fixed inset-0 flex w-[100vw] items-center h-[100vh] justify-center bg-black/40  z-100"> */}
+          <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50">
             {/* Modal Content */}
-            <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
+            <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
+              {/* <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20"> */}
               {!showReportForm ? (
-                <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
+                <div className="bg-white py-6 px-4 sm:rounded-2xl  sm:w-[600px] sm:h-auto   h-[min(100dvh,100vh)] max-h-screen   w-[100vw] text-center">
                   <div className=" flex flex-row-reverse">
                     {/* Close Button */}
                     <button
                       className="  cursor-pointer p-[5px] mr-[10px] mb-[2rem] mt-[1rem] "
                       onClick={handleCloseModal}
                     >
-                      <img src={Delete} alt="" />
+                      <img className="w-5 sm:w-4" src={Delete} alt="" />
                     </button>
                   </div>
 
@@ -255,7 +257,7 @@ const CreditDebitTransactions: React.FC<{
 
                   <div className="flex gap-[5rem] mt-[8%]">
                     <div>
-                      <p className="text-[#0A2E65]/60 text-left mb-[10px]">
+                      <p className="text-[#0A2E65]/60 whitespace-nowrap text-left mb-[10px]">
                         Transaction type
                       </p>
                       <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
@@ -289,7 +291,7 @@ const CreditDebitTransactions: React.FC<{
                               day: "numeric",
                             }
                           );
-                         
+
                           return (
                             <>
                               <div className="flex text-[#0A2E65] items-center text-[13px]">
@@ -302,7 +304,7 @@ const CreditDebitTransactions: React.FC<{
                       </>
                     </div>
                     <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px] text-left">
+                      <p className="text-[#0A2E65]/60 mb-[10px] whitespace-nowrap text-left">
                         Time
                       </p>
 
@@ -311,14 +313,7 @@ const CreditDebitTransactions: React.FC<{
                           const dateObj = new Date(
                             selectedTransaction.transactionDate
                           );
-                          // const formattedDate = dateObj.toLocaleDateString(
-                          //   "en-US",
-                          //   {
-                          //     year: "numeric",
-                          //     month: "long",
-                          //     day: "numeric",
-                          //   }
-                          // );
+
                           const formattedTime = dateObj.toLocaleTimeString(
                             "en-US",
                             {

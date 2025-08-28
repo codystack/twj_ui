@@ -191,7 +191,7 @@ const SellCrypto = () => {
       const networks = selectedWallet.networks || [];
       const formattedNetworks = networks.map((net) => ({
         id: net.id,
-        label: net.id,
+        label: net.id.toUpperCase(),
         value: net.id,
       }));
       setNetworkOptions(formattedNetworks);
