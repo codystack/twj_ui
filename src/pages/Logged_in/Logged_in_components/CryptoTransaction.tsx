@@ -353,20 +353,25 @@ const CrytoTransaction: React.FC<{
               {/* Right Side: Date & Amount */}
               <div className="text-right">
                 <p className="font-semibold text-[#27014F]">
-                  <p>
-                    {transaction.currency.toUpperCase() === "NGN"
-                      ? `₦ ${(
-                          transaction.cryptoToAmount ?? 0
-                        ).toLocaleString()}`
-                      : `₦ ${(
-                          transaction.cryptoFromAmount ?? 0
-                        ).toLocaleString()}`}
-                  </p>
-
-                  {/* {new Intl.NumberFormat("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }).format(transaction.amount)} */}
+                  {transaction.cryptoToAmount === null ? (
+                    <p>
+                      {transaction.currency.toUpperCase()}{" "}
+                      {new Intl.NumberFormat("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }).format(transaction.amount)}
+                    </p>
+                  ) : (
+                    <p>
+                      {transaction.currency.toUpperCase() === "NGN"
+                        ? `₦ ${(
+                            transaction.cryptoToAmount ?? 0
+                          ).toLocaleString()}`
+                        : `₦ ${(
+                            transaction.cryptoFromAmount ?? 0
+                          ).toLocaleString()}`}
+                    </p>
+                  )}
                 </p>
 
                 {/* <p className="text-sm sm:block hidden text-[#27014F] text-[11px]">
@@ -609,7 +614,10 @@ const CrytoTransaction: React.FC<{
                       </div>
                     </div>
                     <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]"> Crypto Value</p>
+                      <p className="text-[#0A2E65]/60 mb-[10px]">
+                        {" "}
+                        Crypto Value
+                      </p>
                       <div className="flex text-[#0A2E65] items-center text-[13px]">
                         <p>
                           {selectedTransaction.currency.toUpperCase() === "NGN"
