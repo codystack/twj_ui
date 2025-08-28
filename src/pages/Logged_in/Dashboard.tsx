@@ -133,10 +133,10 @@ const Dashboard = () => {
   };
 
   // const isKycComplete = useUserStore((state) => state?.user?.kycSet);
+  const completeKyc = localStorage.getItem("kycComplete");
   const isKycComplete = useAuthStore((state) => state.kycSet);
 
   const openModal = () => {
-    const completeKyc = localStorage.getItem("kycComplete");
 
     if (isKycComplete && completeKyc === "true") {
       setShowTopupModal(true);
@@ -148,7 +148,6 @@ const Dashboard = () => {
   };
 
   const cryptoKycOpenModal = () => {
-    const completeKyc = localStorage.getItem("kycComplete");
 
     if (isKycComplete && completeKyc === "true") {
       setShowKycModal(false);
@@ -234,7 +233,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // fetchBanks();
-    if (loading || user === null) return;
+    if (user?.kycSet || user === null) return;
 
     if (user.kycSet === false) {
       setShowKycModal(true);

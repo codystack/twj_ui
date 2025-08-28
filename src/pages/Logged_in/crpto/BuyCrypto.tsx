@@ -256,6 +256,7 @@ const BuyCrypto = () => {
         }
 
         setIsSuccessModal(true);
+        setShowConfirmation(false);
         setToAmount("");
         setAmount("");
         setCurrency("");
@@ -340,7 +341,7 @@ const BuyCrypto = () => {
       const networks = selectedWallet.networks || [];
       const formattedNetworks = networks.map((net) => ({
         id: net.id,
-        label: net.id,
+        label: net.id.toUpperCase(),
         value: net.id,
       }));
       setNetworkOptions(formattedNetworks);
@@ -556,7 +557,7 @@ const BuyCrypto = () => {
                           </p>
 
                           <div className="flex items-center justify-between text-[#6779A7] ">
-                            <p className="mr-1">Wallel Balance:</p>
+                            <p className="mr-1">Wallet Balance:</p>
                             <span className="flex justify-center items-center">
                               <span>
                                 {user
@@ -734,8 +735,7 @@ const BuyCrypto = () => {
                         </div>
                         <div className="flex justify-between  mt-[0.5rem]   items-center">
                           <p className="pt-2 pb-1 text-[14px] text-[#000]">
-                            Network{" "}
-                            <span className="text-gray-400">(Optional)</span>
+                            Network
                           </p>
                         </div>
 
@@ -928,10 +928,17 @@ const BuyCrypto = () => {
                               Sending
                             </p>
                             <h4 className="flex justify-center gap-0.5   items-center text-[24px]">
-                              <span>{selectedCoin.displayValue}</span>
+                              <span>
+                                {selectedCoin.displayValue}
+                                {selectedCoin.value.toUpperCase()}
+                              </span>
                             </h4>
                             <p className="flex mt-[-8px] items-center gap-0.5 justify-center text-[#FF3366] text-[13px]">
-                              <span>-</span> <span>{sendForm.amount}</span>
+                              <span>-</span>{" "}
+                              <span>
+                                {sendForm.amount}
+                                {selectedCoin.value.toUpperCase()}
+                              </span>
                               {/* <span>NGN</span> */}
                             </p>
                           </div>
@@ -950,14 +957,14 @@ const BuyCrypto = () => {
                               {selectedCoin.displayValue}
                             </span>
                           </div>
-                          {/* 
+
                           <div className="flex justify-between text-[15px] mb-4">
                             <p className="">Transaction fee</p>
                             <span className=" flex items-center gap-1">
-                              <span>{numericAmount}</span>
-                              <span>NGN</span>
+                              <span>coming soon</span>
+                              {/* <span>NGN</span> */}
                             </span>
-                          </div> */}
+                          </div>
 
                           <div className="flex justify-between text-[15px] ">
                             <p className="">Address</p>
@@ -976,13 +983,11 @@ const BuyCrypto = () => {
                               Edit Purchase
                             </button>
                             <button
-                              disabled={
-                                countdown == null ||
-                                isNaN(countdown) ||
-                                countdown <= 0
-                              }
                               className={`border-[2px] cursor-pointer border-[#8003A9] bg-[#8003A9] text-[#fff] px-[2rem] py-[0.8rem] text-[16px] font-semibold rounded-[5px]`}
-                              onClick={() => setOpenPinModal(true)}
+                              onClick={() => {
+                                setOpenPinModal(true);
+                                // console.log("open pin modal");
+                              }}
                             >
                               Create Purchase
                             </button>
