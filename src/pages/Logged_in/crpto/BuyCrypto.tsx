@@ -364,12 +364,12 @@ const BuyCrypto = () => {
       const response = await api.get("/Crypto/getWithdrawalFees", {
         params: { currency, amount },
       });
-      setSendLoading(false);
       const data = response.data;
       setTransactionFee(data?.data?.fee);
+      setSendLoading(false);
       return response.data;
     } catch (error) {
-      console.error("Error fetching withdrawal fees:", error);
+      // console.error("Error fetching withdrawal fees:", error);
       throw error;
     } finally {
       setSendLoading(false);
@@ -382,7 +382,8 @@ const BuyCrypto = () => {
       parseFloat(sendForm.amount)
     );
     await setShowConfirmation(true);
-    console.log("Withdrawal Fees:", fees);
+    // console.log("Withdrawal Fees:", fees);
+    return fees;
   };
 
   const totalAmount = Number(sendForm.amount) + (transactionFee || 0);

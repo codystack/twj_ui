@@ -45,6 +45,8 @@ import Airtimeimg from "../../assets/dashboard_img/dashboard_icons/ic_round-phon
 import api from "../../services/api";
 import PinModal from "./Logged_in_components/someUtilityComponent/PinModal";
 import { useAuthStore } from "../../store/authStore";
+import { loadFreshworksChat } from "../../utils/freshWorks";
+// import { loadFreshworksChat } from "../../utils/freshWorks";
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -137,7 +139,6 @@ const Dashboard = () => {
   const isKycComplete = useAuthStore((state) => state.kycSet);
 
   const openModal = () => {
-
     if (isKycComplete && completeKyc === "true") {
       setShowTopupModal(true);
       setShowKycModal(false);
@@ -148,7 +149,6 @@ const Dashboard = () => {
   };
 
   const cryptoKycOpenModal = () => {
-
     if (isKycComplete && completeKyc === "true") {
       setShowKycModal(false);
     } else {
@@ -287,6 +287,10 @@ const Dashboard = () => {
         }
       })();
     });
+
+  useEffect(() => {
+    loadFreshworksChat();
+  }, []);
 
   return (
     <>
