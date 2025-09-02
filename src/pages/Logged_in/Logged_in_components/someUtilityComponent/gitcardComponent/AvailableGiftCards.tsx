@@ -16,11 +16,9 @@ import { useEffect, useState } from "react";
 import Select from "react-select";
 import axios from "axios";
 import search from "../../../../../assets/dashboard_img/Search_light.svg";
-// import InfiniteScroll from "react-infinite-scroll-component";
 import { SingleValue } from "react-select";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-// import ErrorBoundary from "../../../../../components/error/ErrorBoundry";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
