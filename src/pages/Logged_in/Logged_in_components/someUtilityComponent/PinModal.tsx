@@ -20,7 +20,7 @@ const PinModal = ({
   // Handle number input and backspace
   const handleKeyPress = (value: string) => {
     if (value === "del") {
-      setPin((prev) => prev.slice(0, -1)); // Remove last digit
+      setPin((prev) => prev.slice(0, -1)); 
     } else if (pin.length < 4) {
       setPin((prev) => prev + value);
     }

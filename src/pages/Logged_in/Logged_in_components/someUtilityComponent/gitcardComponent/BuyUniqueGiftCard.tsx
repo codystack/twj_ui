@@ -1,25 +1,21 @@
 import cancel from "../../../../../assets/dashboard_img/profile/cancel.svg";
 import { useGiftCardStore } from "../../../../../store/useGiftCardStore";
 import back from "../../../../../assets/dashboard_img/Expand_left_light.svg";
-import { useState } from "react";
-import api from "../../../../../services/api";
-import { AxiosError } from "axios";
-// import { use, useEffect } from "react";
-// import { giftCardsData } from "../gitcardComponent/AvailableGiftCards";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 type ModalProps = {
   onNext: () => void;
   onBack: () => void;
   onClose: () => void;
+  // error: string;
+  onSubmit: (payload: any) => void;
 };
 
-const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  // const [showSuccessModal, setShowSuccessModal] = useState(false);
-  // const [isSuccessModal, setIsSuccessModal] = useState(false);
+const BuyUniqueGiftCard = ({
+  // error,
+  onBack,
+  onClose,
+  onSubmit,
+}: Omit<ModalProps, "onNext">) => {
   const {
     selectedGiftCardId,
     // totalAmount,
@@ -53,10 +49,6 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
   // }, []);
 
   const submitOrder = async () => {
-    const { setShowSuccessModal } = useGiftCardStore.getState();
-    console.log("Submitting orderid...", selectedGiftCardId);
-
-    // const payload = {
     const payload = {
       preOrder: true,
       productId: selectedGiftCardId,
@@ -78,30 +70,7 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
       },
     };
 
-    // console.log("Payload:", payload);
-    // return;
-
-    try {
-      setLoading(true);
-      const res = await api.post(
-        `${BASE_URL}/GiftCards/placeGiftCardOrder`,
-        payload
-      );
-      console.log("Order submitted successfully:", res.data);
-      onClose();
-      clearFormData();
-      // setIsSuccessModal(true)
-      setShowSuccessModal(true);
-    } catch (e) {
-      const error = e as AxiosError<{ message: string }> | Error;
-      const errorMessage =
-        ("response" in error && error.response?.data?.message) ||
-        error.message ||
-        "An error occurred. Please try again.";
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
+    onSubmit(payload);
   };
 
   return (
@@ -193,14 +162,6 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
           </div>
         </div>
 
-        {/* <div>{totalAmount > 0 ? totalAmount : formData.amount}</div> */}
-        {error && (
-          <div className="text-red-500 md:block hidden text-[14px] text-left ml-[19.4rem] mt-[-0.9rem]">{error}</div>
-        )}
-        <div className="border-b border-b-[#E2E8F0] mx-[1rem] pt-[2rem]"></div>
-        {error && (
-          <div className="text-red-500 ml-[16px] text-[14px] text-left  mt-[-0.9rem]">{error}</div>
-        )}
         <div className="md:flex block  items-center justify-between w-full md:px-[2rem]  mb-[2rem]">
           <div className="flex items-center text-[24px] gap-2">
             <p className="text-[#7688B4] text-left tracking-[1px]">Total:</p>
@@ -209,15 +170,10 @@ const BuyUniqueGiftCard = ({ onBack, onClose }: Omit<ModalProps, "onNext">) => {
             </p>
           </div>
           <button
-            disabled={loading}
             onClick={submitOrder}
-            className={`px-18 w-full mt-2 md:w-fit py-3.5 rounded-[5px] text-white ${
-              loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-[#8003A9] cursor-pointer"
-            }`}
+            className="px-18 w-full mt-2 md:w-fit py-3.5 rounded-[5px] text-white bg-[#8003A9] cursor-pointer"
           >
-            {loading ? "Processing..." : "Pay Now"}
+            Pay Now
           </button>
         </div>
       </div>
