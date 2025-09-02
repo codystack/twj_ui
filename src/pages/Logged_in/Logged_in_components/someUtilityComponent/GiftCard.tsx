@@ -1,16 +1,24 @@
 import giftcardsbg from "../../../../assets/dashboard_img/giftcardbg.svg";
 import Giftcard from "../../../../assets/dashboard_img/dashboard_icons/fluent_gift-card-20-filled.svg";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import cancel from "../../../../assets/dashboard_img/profile/cancel.svg";
 import BuyGiftCard from "./gitcardComponent/BuyGiftCard";
 import SellGiftCard from "./gitcardComponent/SellGiftCard";
 import AvailableGiftCards from "./gitcardComponent/AvailableGiftCards";
 import UniqueGiftCard from "./gitcardComponent/UniqueGiftCard";
 import BuyUniqueGiftCard from "./gitcardComponent/BuyUniqueGiftCard";
+import PinModal from "./PinModal";
+import api from "../../../../services/api";
+import SuccessModal from "../../SuccessModal";
 
 const GiftCard = () => {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  const payloadRef = useRef<any>(null); // keep payload around
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStack, setModalStack] = useState<string[]>([]);
+  const [showPinModal, setShowPinModal] = useState(false);
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -20,6 +28,36 @@ const GiftCard = () => {
     setIsModalOpen(false);
   };
 
+  const handleSubmitOrder = (payload: any) => {
+    // Store payload and open pin modal
+    payloadRef.current = payload;
+    closeNestedModal();
+    setShowPinModal(true);
+  };
+
+  const handleVerifyPin = () =>
+    new Promise<void>((resolve, reject) => {
+      (async () => {
+        try {
+          const purchaseResponse = await api.post(
+            `${BASE_URL}/GiftCards/placeGiftCardOrder`,
+            payloadRef.current
+          );
+
+          if (purchaseResponse?.data?.statusCode !== "OK") {
+            throw new Error(
+              purchaseResponse?.data?.message || "An error occurred"
+            );
+          }
+
+          setIsSuccessModal(true);
+          resolve();
+        } catch (e) {
+          reject(e);
+        }
+      })();
+    });
+
   const goBack = () => setModalStack((prev) => prev.slice(0, -1));
   const closeNestedModal = () => setModalStack([]);
 
@@ -27,6 +65,16 @@ const GiftCard = () => {
 
   return (
     <>
+      {isSuccessModal && (
+        <SuccessModal
+          title="Gift Card"
+          message="Your gift card has been successfully purchased."
+          onClose={() => {
+            setIsSuccessModal(false);
+          }}
+        />
+      )}
+
       <button
         onClick={openModal}
         className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px] sm:min-w-[252px] min-w-[152px] border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]"
@@ -83,9 +131,23 @@ const GiftCard = () => {
             />
           )}
           {currentView === "BuyUniqueGiftCard" && (
-            <BuyUniqueGiftCard onClose={closeNestedModal} onBack={goBack} />
+            <BuyUniqueGiftCard
+              onClose={closeNestedModal}
+              onBack={goBack}
+              onSubmit={handleSubmitOrder}
+            />
           )}
         </Modal>
+      )}
+
+      {showPinModal && (
+        <PinModal
+          onClose={() => {
+            setShowPinModal(false);
+            closeModal();
+          }}
+          onVerify={handleVerifyPin}
+        />
       )}
     </>
   );

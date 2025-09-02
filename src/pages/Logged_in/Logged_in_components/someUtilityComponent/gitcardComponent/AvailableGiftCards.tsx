@@ -169,8 +169,6 @@ type OptionType = {
 const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
   const { allCards, setAllCards, setProductIso, setSelectedGiftCardId } =
     useGiftCardStore();
-  // const [page, setPage] = useState(1);
-  // const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [loadingGiftCards, setLoadingGiftCards] = useState(false);
   const [categories, setCategories] = useState<
@@ -180,10 +178,6 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
   const [selectedCountry, setSelectedCountry] = useState<
     CountryOption | OptionType | null
   >(countries.find((country) => country.value === "United States") || null);
-
-  // const [selectedCountrys, setSelectedCountrys] = useState<
-  //   OptionType | OptionType
-  // >();
   const [selectedCategory, setSelectedCategory] = useState<OptionType | null>(
     null
   );
@@ -266,11 +260,11 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
 
   const page = 1;
   const fetchGiftCards = async (page: number) => {
-    // console.log("Fetching gift cards for page:", page);
     const pageSize = 0;
+
     try {
       setLoadingGiftCards(true);
-      // console.log("Fetching gift cards...");
+
       const res = await axios.get(
         `${BASE_URL}/GiftCards/products?size=${pageSize}&page=${page}`
       );
@@ -364,6 +358,10 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
   });
 
   const skeletonArray = Array.from({ length: 7 });
+
+  useEffect(() => {
+    console.log("All filtered cards:", filteredCards);
+ }, [filteredCards]);
 
   return (
     <>
