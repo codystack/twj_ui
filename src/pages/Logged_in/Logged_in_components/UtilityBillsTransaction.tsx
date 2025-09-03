@@ -27,6 +27,7 @@ interface TransactionType {
   network: string;
   quantity: string;
   reference: string;
+  encryptedPowerToken: string;
 }
 
 const UtilityTransaction: React.FC<{
@@ -313,13 +314,24 @@ const UtilityTransaction: React.FC<{
                   </div>
 
                   <div className="flex gap-[5rem] mt-[8%]">
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
-                      <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
-                        <p>{selectedTransaction.network.toUpperCase()}</p>
-                        <p>{selectedTransaction.quantity}</p>
+                    {selectedTransaction.billPaymentCategory === "Airtime" && (
+                      <div>
+                        <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
+                        <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
+                          <p>{selectedTransaction.network.toUpperCase()}</p>
+                          <p>{selectedTransaction.quantity}</p>
+                        </div>
                       </div>
-                    </div>
+                    )}
+                    {selectedTransaction.billPaymentCategory === "Electricity" && (
+                      <div>
+                        <p className="text-[#0A2E65]/60 mb-[10px]">Token</p>
+                        <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
+                          <p>{selectedTransaction.encryptedPowerToken}</p>
+                       
+                        </div>
+                      </div>
+                    )}
                     <div>
                       <p className="text-[#0A2E65]/60 mb-[10px]">Date</p>
                       <div className="flex text-[#0A2E65] items-center text-[13px]">

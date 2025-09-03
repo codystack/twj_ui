@@ -357,10 +357,6 @@ const AvailableGiftCards = ({ onNext, onClose }: ModalProps) => {
 
   const skeletonArray = Array.from({ length: 7 });
 
-  useEffect(() => {
-    console.log("All filtered cards:", filteredCards);
- }, [filteredCards]);
-
   return (
     <>
       <div
