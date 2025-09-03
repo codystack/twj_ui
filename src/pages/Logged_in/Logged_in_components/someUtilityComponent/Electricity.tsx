@@ -13,6 +13,7 @@ import SuccessModal from "../../SuccessModal";
 import SetPinModal from "./SetPinModal";
 import PinModal from "./PinModal";
 import { useUserStore } from "../../../../store/useUserStore";
+import { useNavigate } from "react-router-dom";
 
 const options = [
   { value: "postpaid", label: "postpaid" },
@@ -53,6 +54,8 @@ const customStyles = {
 };
 
 const Electricity = () => {
+  const navigate = useNavigate();
+
   const { user, fetchUser } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -79,6 +82,7 @@ const Electricity = () => {
   const [shouldCheckPasscode, setShouldCheckPasscode] = useState(false);
   const [showPinModal, setShowPinModal] = useState(false);
   const [isSuccessModal, setIsSuccessModal] = useState(false);
+
 
   const handleSelectChangee = (selectedOption: any) => {
     if (selectedOption) {
@@ -628,7 +632,14 @@ const Electricity = () => {
             setIsSuccessModal(false);
           }}
           button={
-            <button className="bg-[#8003A9] text-[16px] cursor-pointer w-[65%] text-white px-4 py-2 rounded">
+            <button
+              onClick={() =>
+                navigate("/transactions", {
+                  state: { activeTab: "BillsPayment" },
+                })
+              }
+              className="bg-[#8003A9] text-[16px] px-[2rem] cursor-pointer w-[100%] text-white py-2 rounded"
+            >
               View Transaction Detail
             </button>
           }
