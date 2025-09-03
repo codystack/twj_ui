@@ -265,7 +265,7 @@ const UtilityTransaction: React.FC<{
 
                   <div className="flex justify-between pb-[4%] border-b border-b-[#E2E8F0]  items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
-                      ₦{selectedTransaction.amount}
+                      ₦{selectedTransaction.amount.toLocaleString()}
                     </h2>
 
                     {selectedTransaction.billPaymentCategory === "Data" && (
