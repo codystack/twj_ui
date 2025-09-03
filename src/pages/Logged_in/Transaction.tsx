@@ -6,6 +6,8 @@ import GiftCardTransaction from "./Logged_in_components/GiftcardTransaction";
 import UtilityTransaction from "./Logged_in_components/UtilityBillsTransaction";
 import TransactionSkeleton from "../../components/TransactionSkeleton";
 import ErrorBoundary from "../../components/error/ErrorBoundry";
+import { useLocation } from "react-router";
+
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 interface TransactionType {
@@ -51,6 +53,7 @@ interface CryptoTransactionType {
 }
 
 const Transaction = () => {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<
     "Crypto" | "GiftCard" | "BillsPayment"
   >("Crypto");
@@ -67,6 +70,12 @@ const Transaction = () => {
   const [totalPages, setTotalPages] = useState(1);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const scrollContainer = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab);
+    }
+  }, [location.state]);
 
   const handleScrollToTop = () => {
     setTimeout(() => {
