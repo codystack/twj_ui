@@ -83,7 +83,6 @@ const Electricity = () => {
   const [showPinModal, setShowPinModal] = useState(false);
   const [isSuccessModal, setIsSuccessModal] = useState(false);
 
-  const isSuccessModalTwo = true;
 
   const handleSelectChangee = (selectedOption: any) => {
     if (selectedOption) {
