@@ -757,9 +757,7 @@ const Dashboard = () => {
                     </ErrorBoundary>
                   )}
                 </>
-
                 {/* <Airtime /> */}
-
                 <>
                   {!isKycComplete ? (
                     <button

@@ -243,12 +243,6 @@ const Transaction = () => {
                 activeLinkClassName="bg-[#8003A9] text-white"
               />
             ))}
-
-          {/* {loading && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
-              <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
-            </div>
-          )} */}
         </div>
       </div>
     </div>

@@ -156,8 +156,8 @@ const CreditDebitTransactions: React.FC<{
               </div>
 
               {/* Transaction Details */}
-              <div>
-                <p className="text-[16px] text-left text-[#27014F]">
+              <div className="sm:py-0 py-2">
+                <p className="text-[16px] text-left sm:mb-0 mb-1 text-[#27014F]">
                   Wallet{" "}
                   {(() => {
                     const word = transaction.walletCategory
@@ -201,7 +201,7 @@ const CreditDebitTransactions: React.FC<{
             {/* Right Side: Date & Amount */}
             <div className="text-right">
               <p className="font-semibold text-[#27014F]  ">
-                ₦{transaction.amount}
+                ₦{transaction.amount.toLocaleString()}
               </p>
             </div>
           </button>
@@ -235,7 +235,7 @@ const CreditDebitTransactions: React.FC<{
 
                   <div className="flex justify-between  border-b border-b-[#E2E8F0] pb-[1rem] items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
-                      ₦{selectedTransaction.amount}
+                      ₦{selectedTransaction.amount.toLocaleString()}
                     </h2>
 
                     <div className="relative">

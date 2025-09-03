@@ -168,7 +168,7 @@ const UtilityTransaction: React.FC<{
                   <img
                     src={Airtime}
                     alt="Transaction Logo"
-                    className="w-12 h-12"
+                    className="sm:w-12 sm:h-12 w-10 h-10"
                   />
                 )}
                 {transaction.billPaymentCategory === "CableTV" && (
@@ -188,8 +188,8 @@ const UtilityTransaction: React.FC<{
               </div>
 
               {/* Transaction Details */}
-              <div>
-                <p className="text-[16px] text-left text-[#27014F]">
+              <div className="sm:py-0 py-2">
+                <p className="text-[16px] text-left sm:mb-0 mb-1 text-[#27014F]">
                   {transaction.billPaymentCategory} Purchase
                 </p>
                 <div className="flex items-center gap-2 text-gray-600">
@@ -233,13 +233,6 @@ const UtilityTransaction: React.FC<{
               <p className="font-semibold text-[#27014F]">
                 ₦{Number(transaction.amount).toLocaleString("en-NG")}
               </p>
-              {/* 
-              <p className="text-sm sm:block hidden text-[#27014F] text-[11px]">
-                {new Date(transaction.transactionDate).toLocaleString("en-US", {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                })}
-              </p> */}
             </div>
           </button>
         ))
@@ -323,12 +316,12 @@ const UtilityTransaction: React.FC<{
                         </div>
                       </div>
                     )}
-                    {selectedTransaction.billPaymentCategory === "Electricity" && (
+                    {selectedTransaction.billPaymentCategory ===
+                      "Electricity" && (
                       <div>
                         <p className="text-[#0A2E65]/60 mb-[10px]">Token</p>
                         <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
                           <p>{selectedTransaction.encryptedPowerToken}</p>
-                       
                         </div>
                       </div>
                     )}
