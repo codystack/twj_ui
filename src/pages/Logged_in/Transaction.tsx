@@ -5,6 +5,7 @@ import CrytoTransaction from "./Logged_in_components/CryptoTransaction";
 import GiftCardTransaction from "./Logged_in_components/GiftcardTransaction";
 import UtilityTransaction from "./Logged_in_components/UtilityBillsTransaction";
 import TransactionSkeleton from "../../components/TransactionSkeleton";
+import ErrorBoundary from "../../components/error/ErrorBoundry";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 interface TransactionType {
@@ -24,6 +25,7 @@ interface TransactionType {
   network: string;
   quantity: string;
   reference: string;
+  encryptedPowerToken: string;
 }
 
 interface CryptoTransactionType {
@@ -206,10 +208,12 @@ const Transaction = () => {
                 </div>
               ) : (
                 <div className="w-full  border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%] [@media(min-width:900px)]:mt-[3%] ">
-                  <UtilityTransaction
-                    transactions={transaction || []}
-                    noTransaction={noTransaction}
-                  />
+                  <ErrorBoundary>
+                    <UtilityTransaction
+                      transactions={transaction || []}
+                      noTransaction={noTransaction}
+                    />
+                  </ErrorBoundary>
                 </div>
               ))}
           </div>
@@ -239,12 +243,6 @@ const Transaction = () => {
                 activeLinkClassName="bg-[#8003A9] text-white"
               />
             ))}
-
-          {/* {loading && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
-              <div className="w-10 h-10 border-4 border-white border-t-[#8003A9] rounded-full animate-spin"></div>
-            </div>
-          )} */}
         </div>
       </div>
     </div>

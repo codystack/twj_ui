@@ -98,7 +98,7 @@ const DashboardLayoutt = () => {
     } else {
       setTwoFaModal(false);
     }
-  }, [isTwoFASet, is2FASet]);
+  }, [is2FASet]);
 
   // When fetchUser finishes, set hydrated to true
   useEffect(() => {

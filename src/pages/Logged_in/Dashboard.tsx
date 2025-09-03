@@ -46,7 +46,6 @@ import api from "../../services/api";
 import PinModal from "./Logged_in_components/someUtilityComponent/PinModal";
 import { useAuthStore } from "../../store/authStore";
 import { loadFreshworksChat } from "../../utils/freshWorks";
-// import { loadFreshworksChat } from "../../utils/freshWorks";
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -757,9 +756,7 @@ const Dashboard = () => {
                     </ErrorBoundary>
                   )}
                 </>
-
                 {/* <Airtime /> */}
-
                 <>
                   {!isKycComplete ? (
                     <button
