@@ -46,7 +46,7 @@ interface AuthState {
   ) => Promise<void>;
 
   login: (
-    formData: Record<string, any>,
+    formData: FormDataType,
     navigate: (path: string) => void
   ) => Promise<void>;
   logout: (navigate: (path: string) => void) => void;
@@ -55,6 +55,11 @@ interface AuthState {
     navigate: (path: string) => void
   ) => Promise<void>;
   clearError: () => void;
+}
+
+interface FormDataType {
+  email: string;
+  password: string;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -216,7 +221,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  login: async (formData, navigate) => {
+  login: async (formData: FormDataType, navigate: any) => {
     // const { fetchUser } = useUserStore.getState();
 
     set({ isLoadingLogin: true, loginError: null });
@@ -224,6 +229,19 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       const response = await axios.post(`${API_URL}/login`, formData);
       const { data } = response;
+
+      console.log("Full Axios response:", response);
+      // console.log("Login response body:", response.data);
+      // console.log("2FA required?:", response.data.data.requires2Fa);
+
+      if (data.data.requires2Fa) {
+        navigate("/auth-account");
+        //using this forgotPasswordEmail key here to avoing ridirecting to email_for_reset_password page
+        localStorage.setItem("forgotPasswordEmail", formData.email);
+        localStorage.setItem("requireTwoFa", data.data.requires2Fa);
+        set({ isLoadingLogin: false });
+        return;
+      }
 
       const accessToken = data.data.token.accessToken;
       const refreshToken = data.data.token.refreshToken;

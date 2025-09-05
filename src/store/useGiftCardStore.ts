@@ -3,6 +3,7 @@ import { create } from "zustand";
 type GiftCardFormData = {
   phoneNumber: string;
   amount: string;
+  rangeAmount: string;
   email: string;
   name: string;
 };
@@ -68,17 +69,14 @@ type GiftCardStore = {
   updateFormData: (data: Partial<GiftCardFormData>) => void;
   clearFormData: () => void;
   totalAmount: number;
-  setTotalAmount: (value: number) => void;
-
   count: number;
-  setCount: (value: number) => void;
-
-  productIso: string | null;
-  setProductIso: (value: string | null) => void;
-
   allCards: GiftCard[];
-  setAllCards: (cards: GiftCard[] | ((prev: GiftCard[]) => GiftCard[])) => void;
   showSuccessModal: boolean;
+  productIso: string | null;
+  setTotalAmount: (value: number) => void;
+  setCount: (value: number) => void;
+  setProductIso: (value: string | null) => void;
+  setAllCards: (cards: GiftCard[] | ((prev: GiftCard[]) => GiftCard[])) => void;
   setShowSuccessModal: (value: boolean) => void;
 };
 
@@ -89,6 +87,7 @@ export const useGiftCardStore = create<GiftCardStore>((set) => ({
     amount: "",
     email: "",
     name: "",
+    rangeAmount: "",
   },
   setSelectedGiftCardId: (id) => set({ selectedGiftCardId: id }),
   clearSelectedGiftCardId: () => set({ selectedGiftCardId: null }),
@@ -104,6 +103,7 @@ export const useGiftCardStore = create<GiftCardStore>((set) => ({
       formData: {
         phoneNumber: "",
         amount: "",
+        rangeAmount: "",
         email: "",
         name: "",
       },
