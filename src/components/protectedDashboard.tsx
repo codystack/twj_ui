@@ -12,13 +12,13 @@ const ProtectedDashboard: React.FC<ProtectedDashboardProps> = ({
 }) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
  
-  // ✅ Check localStorage in case Zustand state resets on refresh
   const getAccessToken = () => {
     const storedToken = localStorage.getItem("accessToken");
     return storedToken ? decryptData(storedToken) : null;
   };
 
   const token = getAccessToken();
+
   if (!isAuthenticated && !token) {
     localStorage.removeItem("accessToken"); 
     localStorage.removeItem("refreshToken");

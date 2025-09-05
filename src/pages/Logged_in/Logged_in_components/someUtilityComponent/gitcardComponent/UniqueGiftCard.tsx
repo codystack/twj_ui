@@ -1,12 +1,90 @@
 import { useGiftCardStore } from "../../../../../store/useGiftCardStore";
-// import { giftCardsData } from "../gitcardComponent/AvailableGiftCards";
 import cancel from "../../../../../assets/dashboard_img/profile/cancel.svg";
 import back from "../../../../../assets/dashboard_img/Expand_left_light.svg";
 import { useEffect, useState } from "react";
-import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import PhoneInput from "react-phone-number-input";
 import Select from "react-select";
 import plus from "../../../../../assets/dashboard_img/plus.svg";
 import minus from "../../../../../assets/dashboard_img/minus.svg";
+
+type CurrencyCode =
+  | "USD"
+  | "EUR"
+  | "GBP"
+  | "JPY"
+  | "NGN"
+  | "INR"
+  | "KRW"
+  | "CHF"
+  | "CAD"
+  | "AUD"
+  | "NZD"
+  | "BRL"
+  | "RUB"
+  | "TRY"
+  | "SAR"
+  | "AED"
+  | "ZAR"
+  | "HKD"
+  | "SGD"
+  | "MXN"
+  | "SEK"
+  | "NOK"
+  | "DKK"
+  | "PLN"
+  | "THB"
+  | "IDR"
+  | "MYR"
+  | "PHP"
+  | "VND"
+  | "EGP"
+  | "KES"
+  | "GHS"
+  | "ARS"
+  | "CLP"
+  | "COP"
+  | "PKR"
+  | "BDT";
+
+const currencyMap: Record<CurrencyCode, string> = {
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+  JPY: "¥",
+  NGN: "₦",
+  INR: "₹",
+  KRW: "₩",
+  CHF: "CHF",
+  CAD: "C$",
+  AUD: "A$",
+  NZD: "NZ$",
+  BRL: "R$",
+  RUB: "₽",
+  TRY: "₺",
+  SAR: "SAR",
+  AED: "AED",
+  ZAR: "R",
+  HKD: "HK$",
+  SGD: "S$",
+  MXN: "MX$",
+  SEK: "kr",
+  NOK: "kr",
+  DKK: "kr",
+  PLN: "zł",
+  THB: "฿",
+  IDR: "Rp",
+  MYR: "RM",
+  PHP: "₱",
+  VND: "₫",
+  EGP: "£",
+  KES: "KSh",
+  GHS: "₵",
+  ARS: "$",
+  CLP: "$",
+  COP: "$",
+  PKR: "₨",
+  BDT: "৳",
+};
 
 const customStyles = {
   control: (provided: any, state: any) => ({
@@ -30,18 +108,11 @@ const customStyles = {
     backgroundColor: state.isSelected
       ? "#8003A9"
       : state.isFocused
-      ? "#F8E0FF" // Hover background color
+      ? "#F8E0FF"
       : "#fff",
-    color: state.isSelected ? "#fff" : "#27014F", // Text color change on selection
+    color: state.isSelected ? "#fff" : "#27014F",
   }),
 };
-
-// const priceOptions = [
-//   { label: "$10", value: 10 },
-//   { label: "$25", value: 25 },
-//   { label: "$50", value: 50 },
-//   { label: "$100", value: 100 },
-// ];
 
 type ModalProps = {
   onNext: () => void;
@@ -90,61 +161,106 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
     setCount(1);
   }, []);
 
+  // const validateField = (name: string, value: string | undefined) => {
+  //   switch (name) {
+  //     case "amount":
+  //       if (!value || value.trim() === "") {
+  //         setErrors((prev) => ({ ...prev, amount: "Please select an amount" }));
+  //       } else if (isNaN(Number(value))) {
+  //         setErrors((prev) => ({ ...prev, amount: "Amount must be a number" }));
+  //       } else if (Number(value) <= 0) {
+  //         setErrors((prev) => ({
+  //           ...prev,
+  //           amount: "Amount must be greater than 0",
+  //         }));
+  //       } else if (
+  //         selectedCard?.minRecipientDenomination != null &&
+  //         Number(value) < selectedCard.minRecipientDenomination
+  //       ) {
+  //         const currencySymbol =
+  //           currencyMap[selectedCard.recipientCurrencyCode as CurrencyCode] ||
+  //           "";
+  //         setErrors((prev) => ({
+  //           ...prev,
+  //           amount: `Amount must be at least ${currencySymbol}${selectedCard.minRecipientDenomination}`,
+  //         }));
+  //       } else if (
+  //         selectedCard?.maxRecipientDenomination != null &&
+  //         Number(value) > selectedCard.maxRecipientDenomination
+  //       ) {
+  //         const currencySymbol =
+  //           currencyMap[selectedCard.recipientCurrencyCode as CurrencyCode] ||
+  //           "";
+  //         setErrors((prev) => ({
+  //           ...prev,
+  //           amount: `Amount must not exceed ${currencySymbol}${selectedCard.maxRecipientDenomination}`,
+  //         }));
+  //       } else {
+  //         setErrors((prev) => ({ ...prev, amount: "" }));
+  //       }
+  //       break;
+
+  //     default:
+  //       break;
+  //   }
+  // };
+
   const validateField = (name: string, value: string | undefined) => {
-    let error = "";
-
     switch (name) {
-      case "phoneNumber":
-        if (!value || value.trim() === "") {
-          error = "Email is required";
-        } else if (!isValidPhoneNumber(value)) {
-          error = "Please enter a valid phone number";
-        }
-        break;
-
-      case "email":
-        if (!value) {
-          error = "Email is required";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          error = "Invalid email address";
-        }
-        break;
-
-      case "name":
-        if (!value || value.trim() === "") {
-          error = "Name is required";
-        }
-        break;
-
       case "amount":
-        if (!value) {
-          error = "Please select an amount";
+        if (!value || value.trim() === "") {
+          setErrors((prev) => ({ ...prev, amount: "Please select an amount" }));
         } else if (isNaN(Number(value))) {
-          error = "Amount must be a number";
+          setErrors((prev) => ({ ...prev, amount: "Amount must be a number" }));
         } else if (Number(value) <= 0) {
-          error = "Amount must be greater than 0";
+          setErrors((prev) => ({
+            ...prev,
+            amount: "Amount must be greater than 0",
+          }));
+        } 
+        // else if (
+        //   selectedCard?.minRecipientDenomination != null && // ✅ ensures not null
+        //   Number(value) < selectedCard.minRecipientDenomination
+        // ) {
+        //   setErrors((prev) => ({
+        //     ...prev,
+        //     amount: `Amount must be at least ${selectedCard.minRecipientDenomination}`,
+        //   }));
+        // } else if (
+        //   selectedCard?.maxRecipientDenomination != null && // ✅ ensures not null
+        //   Number(value) > selectedCard.maxRecipientDenomination
+        // ) {
+        //   setErrors((prev) => ({
+        //     ...prev,
+        //     amount: `Amount must not exceed ${selectedCard.maxRecipientDenomination}`,
+        //   }));
+        // }
+         else {
+          setErrors((prev) => ({ ...prev, amount: "" }));
         }
+        break;
+
+      default:
         break;
     }
-
-    setErrors((prev) => ({ ...prev, [name]: error }));
-    return error;
-  };
-
-  const validateAllFields = () => {
-    const newErrors = {
-      phoneNumber: validateField("phoneNumber", formData.phoneNumber),
-      email: validateField("email", formData.email),
-      name: validateField("name", formData.name),
-      amount: validateField("amount", formData.amount),
-    };
-
-    // Check if any error exists
-    return Object.values(newErrors).every((err) => !err);
   };
 
   const handleNext = () => {
-    if (validateAllFields()) {
+    const validateField = (name: string, value: string) => {
+      if (!value || value.trim() === "") {
+        setErrors((prev) => ({ ...prev, [name]: "This field is required" }));
+        return false;
+      }
+
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+      return true;
+    };
+
+    console.log("Validation Errors:", formData.amount);
+
+    const isAmountValid = validateField("amount", formData.amount);
+
+    if (isAmountValid) {
       onNext();
     }
   };
@@ -168,6 +284,10 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
       value: denomination,
       label: `$${denomination}`,
     })) || [];
+
+  const rate =
+    (selectedCard?.minSenderDenomination || 0) /
+    (selectedCard?.minRecipientDenomination || 0);
 
   return (
     <>
@@ -278,9 +398,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                       {
                         "--PhoneInputCountrySelect-marginRight": "0em",
                         borderRadius: "0.375rem",
-                        border: errors.phoneNumber
-                          ? "1px solid red"
-                          : "1px solid #ccc", // Red border if there's an error, else default
+                        border: errors.phoneNumber ? "1px solid red" : "",
                       } as React.CSSProperties
                     }
                   />
@@ -299,8 +417,8 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                       onChange={(e) =>
                         updateFormData({ email: e.target.value })
                       }
-                      onBlur={() => validateField("email", formData.email)} // optional blur validation
-                      className={`p-4 px-3 md:text-[15px] w-full outline-none rounded-md
+                      onBlur={() => validateField("email", formData.email)}
+                      className={`p-4 px-3 md:text-[15px]  w-full outline-none rounded-md
                       border ${
                         errors.email
                           ? "border-red-600"
@@ -323,8 +441,8 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                   name="name"
                   value={formData.name}
                   onChange={(e) => updateFormData({ name: e.target.value })}
-                  onBlur={() => validateField("name", formData.name)} // optional blur validation
-                  className={`p-4 px-3 border md:text-[12px] text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                  onBlur={() => validateField("name", formData.name)}
+                  className={`p-4 px-3 border  text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
                     errors.name
                       ? "border border-red-600"
                       : "focus:border-purple-800"
@@ -335,43 +453,94 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
             <div className="flex items-center  w-full ">
               <div className=" w-full md:w-[50%] ">
                 <p className="text-[#0A2E65]/60 mt-[10px] pb-[3px] pl-[3px] md:text-[12px] text-[15px] text-left  ">
-                  Select Amount
+                  {selectedCard.denominationType === "RANGE" ? (
+                    <>
+                      Amount{" "}
+                      <span className=" font">
+                        (amount must be between{" "}
+                        {
+                          currencyMap[
+                            selectedCard.recipientCurrencyCode as CurrencyCode
+                          ]
+                        }
+                        {selectedCard.minRecipientDenomination} and{" "}
+                        {
+                          currencyMap[
+                            selectedCard.recipientCurrencyCode as CurrencyCode
+                          ]
+                        }
+                        {selectedCard.maxRecipientDenomination})
+                      </span>
+                    </>
+                  ) : (
+                    <> Select Amount</>
+                  )}
                 </p>
-                <Select
-                  options={flattenedOptions}
-                  onChange={(selectedOption) => {
-                    const value = selectedOption
-                      ? String(selectedOption.value)
-                      : "";
-                    updateFormData({ amount: value });
-                  }}
-                  onBlur={() => validateField("amount", formData.amount)} // optional blur validation
-                  styles={{
-                    ...customStyles,
-                    control: (provided: any, state: any) => ({
-                      ...provided,
-                      borderRadius: "8px",
-                      padding: "9px",
-                      boxShadow: "none",
-                      outline: "none",
-                      fontSize: "15px",
-                      textAlign: "left",
-                      border: errors.amount
-                        ? "1px solid red"
-                        : state.isFocused
-                        ? "2px solid #8003A9"
-                        : "1px solid #a4a4a4",
-                      "&:hover": {
+
+                {selectedCard.denominationType === "RANGE" ? (
+                  <div className="w-full">
+                    <input
+                      type="text"
+                      placeholder="Enter Amount"
+                      name="amount"
+                      value={formData.amount}
+                      onChange={(e) => {
+                        const { name, value } = e.target;
+                        console.log("Input Change:", name, value);
+                        updateFormData({ [name]: value });
+                        validateField(name, value || "");
+                      }}
+                      onBlur={() => validateField("amount", formData.amount)}
+                      className={`p-4 px-3 border  text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                        errors.amount
+                          ? "border border-red-600"
+                          : "focus:border-purple-800"
+                      }`}
+                    />
+                  </div>
+                ) : (
+                  <Select
+                    options={flattenedOptions}
+                    onChange={(selectedOption) => {
+                      const value = selectedOption
+                        ? String(selectedOption.value)
+                        : "";
+                      updateFormData({ amount: value });
+                    }}
+                    onBlur={() => validateField("amount", formData.amount)}
+                    styles={{
+                      ...customStyles,
+                      control: (provided: any, state: any) => ({
+                        ...provided,
+                        borderRadius: "8px",
+                        padding: "9px",
+                        boxShadow: "none",
+                        outline: "none",
+                        fontSize: "15px",
+                        textAlign: "left",
                         border: errors.amount
                           ? "1px solid red"
                           : state.isFocused
                           ? "2px solid #8003A9"
                           : "1px solid #a4a4a4",
-                      },
-                    }),
-                  }}
-                />
+                        "&:hover": {
+                          border: errors.amount
+                            ? "1px solid red"
+                            : state.isFocused
+                            ? "2px solid #8003A9"
+                            : "1px solid #a4a4a4",
+                        },
+                      }),
+                    }}
+                  />
+                )}
+                {errors.amount && (
+                  <p className="text-red-600 text-[12px] text-left mt-[5px]">
+                    {errors.amount}
+                  </p>
+                )}
               </div>
+
               {/* <div className="flex flex-col  ml-[1rem] mt-[2rem] text-[10px]">
                 <p className="text-left">Estimated price</p>
 
