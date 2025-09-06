@@ -168,7 +168,15 @@ const DashboardLayoutt = () => {
   useEffect(() => {
     if (user) {
       setEmail(user.email);
-      setName(`${user.firstName ?? name} ${user.lastName ?? ""}`);
+      setName(
+        `${
+          user.firstName.charAt(0).toUpperCase() +
+          user.firstName.slice(1).toLowerCase()
+        } ${
+          user.lastName.charAt(0).toUpperCase() +
+          user.lastName.slice(1).toLowerCase()
+        } `
+      );
     }
   }, [user]);
 
@@ -235,7 +243,7 @@ const DashboardLayoutt = () => {
               <div className="md:mr-[10px]">
                 <p className="mb-[-3px] hidden md:block text-[15px] text-[#27014F] font-bold ">
                   {typeof name === "string" && name.trim().length > 0 ? (
-                    name
+                    <>{name}</>
                   ) : (
                     <Skeleton width={150} height={15} />
                   )}
