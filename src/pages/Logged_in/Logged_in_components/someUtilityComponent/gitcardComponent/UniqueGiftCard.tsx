@@ -141,6 +141,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
   });
   // const [count, setCount] = useState(0);
   const amount = parseFloat(formData.amount || "0");
+  
   //  when count or amount changes
   useEffect(() => {
     formData.amount = String("");
