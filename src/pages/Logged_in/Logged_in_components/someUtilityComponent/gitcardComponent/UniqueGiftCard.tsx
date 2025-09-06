@@ -141,6 +141,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
   });
   // const [count, setCount] = useState(0);
   const amount = parseFloat(formData.amount || "0");
+  
   //  when count or amount changes
   useEffect(() => {
     formData.amount = String("");
@@ -285,9 +286,9 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
       label: `$${denomination}`,
     })) || [];
 
-  const rate =
-    (selectedCard?.minSenderDenomination || 0) /
-    (selectedCard?.minRecipientDenomination || 0);
+  // const rate =
+  //   (selectedCard?.minSenderDenomination || 0) /
+  //   (selectedCard?.minRecipientDenomination || 0);
 
   return (
     <>

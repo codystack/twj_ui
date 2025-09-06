@@ -89,7 +89,6 @@ interface BankOptionType {
 const Dashboard = () => {
   const navigate = useNavigate();
   const { showSuccessModal, setShowSuccessModal } = useGiftCardStore();
-
   const [isHidden, setIsHidden] = useState(false);
   const [showKycModal, setShowKycModal] = useState(false);
   const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);

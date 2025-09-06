@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import "../App.css";
 import { NavLink, useNavigate } from "react-router";
 import { useAuthStore } from "../store/authStore";
+import { encryptData } from "../services/utils/crypto-utils";
 // import { Navigate } from "react-router-dom";
 
 const RecoverAccount = () => {
@@ -17,7 +18,7 @@ const RecoverAccount = () => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [email, setEmail] = useState<string | null>("");
   const [loading, setLoading] = useState(false);
-  const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
+  const [error, setError] = useState<string | null>(null);
 
   // const API_URL = import.meta.env.VITE_API_URL;
   const {
@@ -97,9 +98,23 @@ const RecoverAccount = () => {
         if (!response.ok) {
           throw new Error("2FA verification failed");
         }
-
         const data = await response.json();
-        console.log("2FA success:", data);
+        // console.log("2FA success:", data);
+
+        const accessToken = data.data.token.accessToken;
+        const refreshToken = data.data.token.refreshToken;
+
+        if (!accessToken || !refreshToken) {
+          throw new Error("Access or Refresh Token is missing in response");
+        }
+
+        // Encrypt tokens
+        const encryptedAccessToken = encryptData(accessToken);
+        const encryptedRefreshToken = encryptData(refreshToken);
+
+        // Store encrypted tokens
+        localStorage.setItem("accessToken", encryptedAccessToken);
+        localStorage.setItem("refreshToken", encryptedRefreshToken);
 
         localStorage.setItem("name", data.data.userDetails.fullName);
         localStorage.setItem("email", data.data.userDetails.email);
@@ -114,13 +129,23 @@ const RecoverAccount = () => {
         localStorage.setItem("kycComplete", data.data.kycComplete);
         localStorage.setItem("isAuthenticated", "true");
 
-        // maybe navigate to dashboard or home after success
-        // navigate("/dashboard");
-        localStorage.setItem("accessToken", data.data.accessToken);
-        localStorage.setItem("refreshToken", data.data.refreshToken);
-        setIsAuthenticated(true);
-        localStorage.removeItem("requireTwoFa");
-        navigate("/dashboard");
+        // Update Zustand state just like normal login
+        useAuthStore.setState({
+          is2FASet: data?.data?.is2FASet,
+          passcodeSet: data?.data?.passcodeSet,
+          kycSet: data?.data?.kycComplete,
+          isAuthenticated: true,
+          isLoadingLogin: false,
+          loginSuccess: true,
+          loginError: null,
+        });
+
+        // Navigate
+        const lastVisitedRoute =
+          localStorage.getItem("lastVisitedRoute") || "/dashboard";
+        localStorage.removeItem("lastVisitedRoute");
+
+        navigate(lastVisitedRoute);
         setLoading(false);
       } else {
         // your existing forgot password flow
@@ -128,6 +153,9 @@ const RecoverAccount = () => {
       }
     } catch (error) {
       console.error(error);
+      if (error instanceof Error) {
+        setError(error.message);
+      }
       setLoading(false);
       return;
       // show some error message to user
@@ -290,6 +318,7 @@ const RecoverAccount = () => {
                 "Verify Account"
               )}
             </button>
+            {error && <p className="text-red-600 text-[14px] mt-1">{error}</p>}
 
             <div className="flex flex-col w-full items-center mt-2.5">
               <p>Didn't receive OTP? </p>
