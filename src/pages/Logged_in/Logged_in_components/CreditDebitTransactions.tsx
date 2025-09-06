@@ -128,13 +128,13 @@ const CreditDebitTransactions: React.FC<{
   };
 
   return (
-    <div className="space-y-4 p-4">
+    <div className=" px-4">
       {transactions.length > 0 && noTransaction ? (
         transactions.map((transaction) => (
           <button
             onClick={() => handleOpenModal(transaction)}
             key={transaction.id}
-            className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  sm:p-4 py-3"
+            className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  sm:py-4 py-3"
           >
             {/* Left Side: Static Logo + Transaction Details */}
             <div className="flex items-center gap-4 relative">
@@ -144,20 +144,20 @@ const CreditDebitTransactions: React.FC<{
                   <img
                     src={Credit}
                     alt="Transaction Logo"
-                    className="w-12 h-12"
+                    className="w-10 h-10"
                   />
                 ) : (
                   <img
                     src={Debit}
                     alt="Outward Transaction"
-                    className="w-12 h-12"
+                    className="w-10 h-10"
                   />
                 )}
               </div>
 
               {/* Transaction Details */}
               <div className="sm:py-0 py-2">
-                <p className="text-[16px] text-left sm:mb-0 mb-1 text-[#27014F]">
+                <p className="text-[16px] text-left sm:mb-0.5 mb-1 text-[#27014F]">
                   Wallet{" "}
                   {(() => {
                     const word = transaction.walletCategory
@@ -243,172 +243,277 @@ const CreditDebitTransactions: React.FC<{
                         <img
                           src={Credit}
                           alt="Transaction Logo"
-                          className="w-15 h-15"
+                          className="w-10 h-10"
                         />
                       ) : (
                         <img
                           src={Debit}
                           alt="Outward Transaction"
-                          className="w-15 h-15"
+                          className="w-10 h-10"
                         />
                       )}
                     </div>
                   </div>
 
-                  <div className="flex gap-[5rem] mt-[8%]">
-                    <div>
-                      <p className="text-[#0A2E65]/60 whitespace-nowrap text-left mb-[10px]">
-                        Transaction type
-                      </p>
-                      <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
-                        <p className="text-[16px] text-left text-[#27014F]">
+                  <div className=" sm:block hidden">
+                    <div className="flex gap-[5rem] mt-[8%]">
+                      <div>
+                        <p className="text-[#0A2E65]/60 whitespace-nowrap text-left mb-[10px]">
+                          Transaction type
+                        </p>
+                        <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
+                          <p className="text-[16px] text-left text-[#27014F]">
+                            Wallet{" "}
+                            {(() => {
+                              const word = selectedTransaction.walletCategory
+                                .replace(/([a-z])([A-Z])/g, "$1 $2")
+                                .toLowerCase();
+
+                              return word === "withdraw" ? "withdrawal" : word;
+                            })()}
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-[#0A2E65]/60 mb-[10px] text-left">
+                          Date
+                        </p>
+
+                        <>
+                          {(() => {
+                            const dateObj = new Date(
+                              selectedTransaction.transactionDate
+                            );
+                            const formattedDate = dateObj.toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              }
+                            );
+
+                            return (
+                              <>
+                                <div className="flex text-[#0A2E65] items-center text-[13px]">
+                                  <p>{formattedDate}</p>
+                                  {/* <p>{formattedTime}</p> */}
+                                </div>
+                              </>
+                            );
+                          })()}
+                        </>
+                      </div>
+                      <div>
+                        <p className="text-[#0A2E65]/60 mb-[10px] whitespace-nowrap text-left">
+                          Time
+                        </p>
+
+                        <>
+                          {(() => {
+                            const dateObj = new Date(
+                              selectedTransaction.transactionDate
+                            );
+
+                            const formattedTime = dateObj.toLocaleTimeString(
+                              "en-US",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            );
+
+                            return (
+                              <>
+                                <div className="flex text-[#0A2E65] items-center text-[13px]">
+                                  {/* <p>{formattedDate}</p> */}
+                                  <p>{formattedTime}</p>
+                                </div>
+                              </>
+                            );
+                          })()}
+                        </>
+                      </div>
+                    </div>
+                    <div className="flex gap-[3rem]">
+                      <div className="my-[6%]">
+                        <p className="text-[#0A2E65]/60 text-left mb-[10px]">
+                          Reference
+                        </p>
+                        <div className="flex text-[#0A2E65] items-center text-[13px]">
+                          <div className="flex items-center">
+                            <p>{selectedTransaction.id}</p>
+                            <button></button>
+
+                            <button
+                              onClick={() => handleCopy(selectedTransaction.id)}
+                              className="relative flex items-center justify-center cursor-pointer"
+                            >
+                              <img src={Copy} alt="" />
+                              {copiedRef === selectedTransaction.id && (
+                                <span
+                                  className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
+                                    copiedRef === selectedTransaction.id
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  }`}
+                                >
+                                  Copied
+                                </span>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="my-[6%]">
+                        <>
+                          <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
+
+                          {/* Unique Status Icon */}
+                          {selectedTransaction.transactionStatus ===
+                            "success" && (
+                            <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                              SUCCESSLL
+                            </div>
+                          )}
+                          {selectedTransaction.transactionStatus ===
+                            "pending" && (
+                            <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
+                              PENDING
+                            </div>
+                          )}
+                          {selectedTransaction.transactionStatus ===
+                            "failed" && (
+                            <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
+                              FAILED
+                            </div>
+                          )}
+                        </>
+                      </div>
+                    </div>
+                    {/* Report Button */}
+                    <div className=" flex items-center justify-center w-full">
+                      {selectedTransaction.status === "pending" && (
+                        <button
+                          onClick={handleReportClick}
+                          className="w-[360px] gap-1  flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
+                        >
+                          <img className="w-[1.1rem] " src={Report} alt="" />
+                          <p> Report Transaction</p>
+                        </button>
+                      )}
+                      {selectedTransaction.status === "failed" && (
+                        <button
+                          onClick={handleReportClick}
+                          className="w-[360px] flex items-center gap-1 justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
+                        >
+                          <img className="w-[1.1rem] " src={Report} alt="" />
+                          <p> Report Transaction</p>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Mobile modal */}
+
+                  <div className="block sm:hidden">
+                    <div className="flex flex-col gap-4 mt-6">
+                      {/* Transaction Type */}
+                      <div className="flex justify-between items-start">
+                        <p className="text-[#0A2E65]/60 text-sm">
+                          Transaction type
+                        </p>
+                        <p className="text-[16px] text-[#27014F]">
                           Wallet{" "}
                           {(() => {
                             const word = selectedTransaction.walletCategory
                               .replace(/([a-z])([A-Z])/g, "$1 $2")
                               .toLowerCase();
-
                             return word === "withdraw" ? "withdrawal" : word;
                           })()}
                         </p>
                       </div>
-                    </div>
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px] text-left">
-                        Date
-                      </p>
 
-                      <>
-                        {(() => {
-                          const dateObj = new Date(
+                      {/* Status */}
+                      <div className="flex justify-between items-start">
+                        <p className="text-[#0A2E65]/60 text-sm">Status</p>
+                        {selectedTransaction.transactionStatus ===
+                          "success" && (
+                          <div className="bg-[#32A071]/20 px-2 py-[1px] rounded-[2px] text-[12px] text-[#32A071]">
+                            SUCCESS
+                          </div>
+                        )}
+                        {selectedTransaction.transactionStatus ===
+                          "pending" && (
+                          <div className="bg-[#FFB700]/20 px-2 py-[1px] rounded-[2px] text-[12px] text-[#FFB700]">
+                            PENDING
+                          </div>
+                        )}
+                        {selectedTransaction.transactionStatus === "failed" && (
+                          <div className="bg-[#FF3366]/20 px-2 py-[1px] rounded-[2px] text-[12px] text-[#FF3366]">
+                            FAILED
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Date */}
+                      <div className="flex justify-between items-start">
+                        <p className="text-[#0A2E65]/60 text-sm">Date</p>
+                        <p className="text-[#0A2E65] text-[13px]">
+                          {new Date(
                             selectedTransaction.transactionDate
-                          );
-                          const formattedDate = dateObj.toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            }
-                          );
+                          ).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}
+                        </p>
+                      </div>
 
-                          return (
-                            <>
-                              <div className="flex text-[#0A2E65] items-center text-[13px]">
-                                <p>{formattedDate}</p>
-                                {/* <p>{formattedTime}</p> */}
-                              </div>
-                            </>
-                          );
-                        })()}
-                      </>
-                    </div>
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px] whitespace-nowrap text-left">
-                        Time
-                      </p>
-
-                      <>
-                        {(() => {
-                          const dateObj = new Date(
+                      {/* Time */}
+                      <div className="flex justify-between items-start">
+                        <p className="text-[#0A2E65]/60 text-sm">Time</p>
+                        <p className="text-[#0A2E65] text-[13px]">
+                          {new Date(
                             selectedTransaction.transactionDate
-                          );
+                          ).toLocaleTimeString("en-US", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      </div>
 
-                          const formattedTime = dateObj.toLocaleTimeString(
-                            "en-US",
-                            {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }
-                          );
-
-                          return (
-                            <>
-                              <div className="flex text-[#0A2E65] items-center text-[13px]">
-                                {/* <p>{formattedDate}</p> */}
-                                <p>{formattedTime}</p>
-                              </div>
-                            </>
-                          );
-                        })()}
-                      </>
-                    </div>
-                  </div>
-                  <div className="flex gap-[3rem]">
-                    <div className="my-[6%]">
-                      <p className="text-[#0A2E65]/60 text-left mb-[10px]">
-                        Reference
-                      </p>
-                      <div className="flex text-[#0A2E65] items-center text-[13px]">
-                        <div className="flex items-center">
+                      {/* Reference */}
+                      <div className="flex justify-between items-start">
+                        <p className="text-[#0A2E65]/60 text-sm">Reference</p>
+                        <div className="flex items-center gap-2 text-[#0A2E65] text-right text-[13px]">
                           <p>{selectedTransaction.id}</p>
-                          <button></button>
-
                           <button
                             onClick={() => handleCopy(selectedTransaction.id)}
                             className="relative flex items-center justify-center cursor-pointer"
                           >
                             <img src={Copy} alt="" />
                             {copiedRef === selectedTransaction.id && (
-                              <span
-                                className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
-                                  copiedRef === selectedTransaction.id
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                }`}
-                              >
+                              <span className="ml-2 absolute bg-[#32A071]/20 px-2 py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071] top-[2rem]">
                                 Copied
                               </span>
                             )}
                           </button>
                         </div>
                       </div>
-                    </div>
-                    <div className="my-[6%]">
-                      <>
-                        <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
 
-                        {/* Unique Status Icon */}
-                        {selectedTransaction.transactionStatus ===
-                          "success" && (
-                          <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                            SUCCESSLL
-                          </div>
-                        )}
-                        {selectedTransaction.transactionStatus ===
-                          "pending" && (
-                          <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
-                            PENDING
-                          </div>
-                        )}
-                        {selectedTransaction.transactionStatus === "failed" && (
-                          <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
-                            FAILED
-                          </div>
-                        )}
-                      </>
+                      {/* Report Button */}
+                      {(selectedTransaction.status === "pending" ||
+                        selectedTransaction.status === "failed") && (
+                        <button
+                          onClick={handleReportClick}
+                          className="w-full flex items-center gap-1 justify-center my-6 py-3 bg-[#FF3366] hover:bg-[#FF3366]/90 transition duration-300 text-white rounded-lg"
+                        >
+                          <img className="w-[1.1rem]" src={Report} alt="" />
+                          <p>Report Transaction</p>
+                        </button>
+                      )}
                     </div>
-                  </div>
-                  {/* Report Button */}
-                  <div className=" flex items-center justify-center w-full">
-                    {selectedTransaction.status === "pending" && (
-                      <button
-                        onClick={handleReportClick}
-                        className="w-[360px] gap-1  flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
-                      >
-                        <img className="w-[1.1rem] " src={Report} alt="" />
-                        <p> Report Transaction</p>
-                      </button>
-                    )}
-                    {selectedTransaction.status === "failed" && (
-                      <button
-                        onClick={handleReportClick}
-                        className="w-[360px] flex items-center gap-1 justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
-                      >
-                        <img className="w-[1.1rem] " src={Report} alt="" />
-                        <p> Report Transaction</p>
-                      </button>
-                    )}
                   </div>
                 </div>
               ) : (
