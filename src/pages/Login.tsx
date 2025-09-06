@@ -21,9 +21,7 @@ const Login = () => {
 
   const {
     login,
-    // isLoading,
     isLoadingLogin,
-    // isAuthenticated,
     loginError,
   } = useAuthStore();
 

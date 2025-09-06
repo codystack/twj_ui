@@ -85,7 +85,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   ForgotOtpSuccess: false,
   kycSet: false,
   passcodeSet: false,
-  is2FASet: false,
+  is2FASet: true,
 
   setIsAuthenticated: (status: boolean) => set({ isAuthenticated: status }),
 
@@ -230,13 +230,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       const response = await axios.post(`${API_URL}/login`, formData);
       const { data } = response;
 
-      console.log("Full Axios response:", response);
-      // console.log("Login response body:", response.data);
-      // console.log("2FA required?:", response.data.data.requires2Fa);
-
       if (data.data.requires2Fa) {
         navigate("/auth-account");
-        //using this forgotPasswordEmail key here to avoing ridirecting to email_for_reset_password page
         localStorage.setItem("forgotPasswordEmail", formData.email);
         localStorage.setItem("requireTwoFa", data.data.requires2Fa);
         set({ isLoadingLogin: false });
@@ -259,13 +254,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       // Store encrypted tokens in localStorage
       localStorage.setItem("accessToken", encryptedAccessToken);
       localStorage.setItem("refreshToken", encryptedRefreshToken);
-
-      // console.log(
-      //   "Tokens encrypted and stored securely:",
-      //   encryptedAccessToken,
-      //  "refreshToken:", encryptedRefreshToken
-      // );
-
       localStorage.setItem("name", data.data.userDetails.fullName);
       localStorage.setItem("email", data.data.userDetails.email);
       localStorage.setItem("userName", data.data.userDetails.userName);
@@ -281,9 +269,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.removeItem("lastVisitedRoute");
 
       set({
-        is2FASet: data?.data?.is2FASet || false,
-        passcodeSet: data?.data?.passcodeSet || false,
-        kycSet: data?.data?.kycComplete || false,
+        is2FASet: data?.data?.is2FASet,
+        passcodeSet: data?.data?.passcodeSet,
+        kycSet: data?.data?.kycComplete,
         isAuthenticated: true,
         isLoadingLogin: false,
         loginSuccess: true,

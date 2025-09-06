@@ -79,7 +79,7 @@ const DashboardLayoutt = () => {
   const userPasscodeSet = useUserStore((state) => state.user?.passcodeSet);
   const authPasscodeSet = useAuthStore((state) => state.passcodeSet);
 
-  const isTwoFASet = useUserStore((state) => state.user?.isTwoFASet);
+  // const isTwoFASet = useUserStore((state) => state.user?.isTwoFASet);
   const is2FASet = useAuthStore((state) => state.is2FASet);
 
   useEffect(() => {
@@ -93,7 +93,8 @@ const DashboardLayoutt = () => {
   }, [userPasscodeSet, authPasscodeSet, hydrated]);
 
   useEffect(() => {
-    if (!isTwoFASet && !is2FASet) {
+    console.log("is2FASet:", is2FASet);
+    if (!is2FASet) {
       setTwoFaModal(true);
     } else {
       setTwoFaModal(false);
