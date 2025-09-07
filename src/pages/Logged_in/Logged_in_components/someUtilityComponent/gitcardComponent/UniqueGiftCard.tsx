@@ -141,7 +141,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
   });
   // const [count, setCount] = useState(0);
   const amount = parseFloat(formData.amount || "0");
-  
+
   //  when count or amount changes
   useEffect(() => {
     formData.amount = String("");
@@ -218,7 +218,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
             ...prev,
             amount: "Amount must be greater than 0",
           }));
-        } 
+        }
         // else if (
         //   selectedCard?.minRecipientDenomination != null && // ✅ ensures not null
         //   Number(value) < selectedCard.minRecipientDenomination
@@ -236,7 +236,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
         //     amount: `Amount must not exceed ${selectedCard.maxRecipientDenomination}`,
         //   }));
         // }
-         else {
+        else {
           setErrors((prev) => ({ ...prev, amount: "" }));
         }
         break;
@@ -419,7 +419,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                         updateFormData({ email: e.target.value })
                       }
                       onBlur={() => validateField("email", formData.email)}
-                      className={`p-4 px-3 md:text-[15px]  w-full outline-none rounded-md
+                      className={`md:p-2.5 p-4 px-3   text-[16px]   w-full outline-none rounded-md
                       border ${
                         errors.email
                           ? "border-red-600"
@@ -443,7 +443,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                   value={formData.name}
                   onChange={(e) => updateFormData({ name: e.target.value })}
                   onBlur={() => validateField("name", formData.name)}
-                  className={`p-4 px-3 border  text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                  className={`md:p-2.5 p-4 px-3 border  text-[16px]  border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
                     errors.name
                       ? "border border-red-600"
                       : "focus:border-purple-800"
@@ -492,7 +492,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                         validateField(name, value || "");
                       }}
                       onBlur={() => validateField("amount", formData.amount)}
-                      className={`p-4 px-3 border  text-[15px] border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
+                      className={`md:p-2.5 p-4 px-3 border  text-[16px]  border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
                         errors.amount
                           ? "border border-red-600"
                           : "focus:border-purple-800"
@@ -513,12 +513,13 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                       ...customStyles,
                       control: (provided: any, state: any) => ({
                         ...provided,
-                        borderRadius: "8px",
-                        padding: "9px",
+                        borderRadius: "6px",
+                        padding: "4px",
                         boxShadow: "none",
                         outline: "none",
                         fontSize: "15px",
                         textAlign: "left",
+                        cursor: "pointer",
                         border: errors.amount
                           ? "1px solid red"
                           : state.isFocused

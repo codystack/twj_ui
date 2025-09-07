@@ -145,6 +145,7 @@ const BuyCrypto = () => {
   }, [userSubAccountId]);
 
   useEffect(() => {
+    console.log("filtered wallets:", wallets);
     if (wallets.length > 0) {
       const options = wallets.map((wallet) => ({
         id: wallet.id,
