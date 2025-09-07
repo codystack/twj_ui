@@ -1,7 +1,7 @@
 // import { useNavigate } from "react-router-dom";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import Logo from "../../assets/dashboard_img/Logo.svg";
-import Alert from "../../assets/dashboard_img/Bell_pin_light.svg";
+// import Alert from "../../assets/dashboard_img/Bell_pin_light.svg";
 import userIcon from "../../assets/dashboard_img/profile/userIcon.svg";
 import { useEffect, useState, useRef } from "react";
 import Dashboard from "./Dashboard";
@@ -229,9 +229,9 @@ const DashboardLayoutt = () => {
             {pageName}
           </h3>
           <div className="flex items-center ">
-            <div className="bg-[#fff] rounded-[100%] md:h-[40px] md:w-[40px] h-[35px] w-[35px] flex items-center justify-center border md:mr-[1rem] mr-[0.5rem]  border-[#8003A9]">
+            {/* <div className="bg-[#fff] rounded-[100%] md:h-[40px] md:w-[40px] h-[35px] w-[35px] flex items-center justify-center border md:mr-[1rem] mr-[0.5rem]  border-[#8003A9]">
               <img src={Alert} alt="" />
-            </div>
+            </div> */}
             <div className=" md:flex hidden  md:gap-[15px] items-center border border-[#8003A9]  md:mr-[1rem] mr-2 rounded-r-[50px] [@media(min-width:1350px)]:my-0 my-2  rounded-l-[50px] md:p-[7px] p-[4px] ">
               <div>
                 <img
