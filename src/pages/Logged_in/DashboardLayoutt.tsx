@@ -93,7 +93,7 @@ const DashboardLayoutt = () => {
   }, [userPasscodeSet, authPasscodeSet, hydrated]);
 
   useEffect(() => {
-    console.log("is2FASet:", is2FASet);
+    // console.log("is2FASet:", is2FASet);
     if (!is2FASet) {
       setTwoFaModal(true);
     } else {
