@@ -140,7 +140,7 @@ const Transaction = () => {
       <div ref={scrollContainer} className="flex-1 overflow-y-auto pb-4 px-4">
         <div className=" flex flex-col  md:ml-[2%] ">
           {/* Tab Buttons */}
-          <div className="py-[2.3%] sm:ml-0 ml-[-7px] fixed [@media(min-width:1350px)]:w-[78%]  w-[95%]   z-20 bg-[#fff]  ">
+          <div className="py-[2.3%] sm:mt-0 mt-[-1.2rem] sm:ml-0 ml-[-7px] fixed [@media(min-width:1350px)]:w-[78%]  w-[95%]   z-20 bg-[#fff]  ">
             <div className="bg-[#F5F7FA]/99  backdrop-blur-lg w-full   [@media(min-width:900px)]:w-[38%] bg-blur-md flex items-center rounded-[50px] justify-between p-[7px]">
               <button
                 className={`flex-1 px-[20px] cursor-pointer py-[5px] rounded-[40px] ${

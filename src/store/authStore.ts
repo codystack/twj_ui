@@ -27,7 +27,7 @@ interface AuthState {
   ForgotOtpError: string | null;
   ForgotOtpSuccess: boolean;
   passcodeSet: boolean;
-  kycSet: boolean;
+  kycSet: boolean | null;
   is2FASet: boolean;
   setIsAuthenticated: (status: boolean) => void;
   checkAuth: () => void;
@@ -83,7 +83,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   isVerifyingForgotOtp: true,
   ForgotOtpError: null,
   ForgotOtpSuccess: false,
-  kycSet: false,
+  kycSet: null,
   passcodeSet: false,
   is2FASet: true,
 

@@ -159,7 +159,15 @@ const Profile = () => {
   useEffect(() => {
     if (user) {
       setEmail(user.email);
-      setName(`${user.firstName ?? ""} ${user.lastName ?? ""}`);
+      setName(
+        `${
+          user.firstName.charAt(0).toUpperCase() +
+          user.firstName.slice(1).toLowerCase()
+        } ${
+          user.lastName.charAt(0).toUpperCase() +
+          user.lastName.slice(1).toLowerCase()
+        }`
+      );
       setUniqueID(user.twjUserId);
       setPhone(user.phoneNumber);
       setUserName(user.userName);

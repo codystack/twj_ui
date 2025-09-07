@@ -140,13 +140,13 @@ const UtilityTransaction: React.FC<{
   }, [transactions]);
 
   return (
-    <div className="space-y-1 p-4 px-3">
+    <div className=" px-4">
       {transactions.length > 0 ? (
         transactions.map((transaction) => (
           <button
             onClick={() => handleOpenModal(transaction)}
             key={transaction.id}
-            className="flex justify-between cursor-pointer items-center bg-white border-b  w-full border-[#E2E8F0] last:border-b-0 md:p-4 md:py-3 py-1"
+            className="flex justify-between cursor-pointer items-center bg-white border-b  w-full border-[#E2E8F0] last:border-b-0 sm:p-4 py-3 "
           >
             <div className="flex items-center gap-4 relative">
               <div className="relative">
@@ -154,42 +154,42 @@ const UtilityTransaction: React.FC<{
                   <img
                     src={Data}
                     alt="Transaction Logo"
-                    className="w-12 h-12"
+                    className="w-10 h-10"
                   />
                 )}
                 {transaction.billPaymentCategory === "Electricity" && (
                   <img
                     src={Electricity}
                     alt="Transaction Logo"
-                    className="w-12 h-12"
+                    className="w-10 h-10"
                   />
                 )}
                 {transaction.billPaymentCategory === "Airtime" && (
                   <img
                     src={Airtime}
                     alt="Transaction Logo"
-                    className="sm:w-12 sm:h-12 w-10 h-10"
+                    className="w-10 h-10"
                   />
                 )}
                 {transaction.billPaymentCategory === "CableTV" && (
                   <img
                     src={Television}
                     alt="Transaction Logo"
-                    className="w-12 h-12"
+                    className="w-10 h-10"
                   />
                 )}
                 {transaction.billPaymentCategory === "Betting" && (
                   <img
                     src={Gift}
                     alt="Transaction Logo"
-                    className="w-12 h-12"
+                    className="w-10 h-10"
                   />
                 )}
               </div>
 
               {/* Transaction Details */}
               <div className="sm:py-0 py-2">
-                <p className="text-[16px] text-left sm:mb-0 mb-1 text-[#27014F]">
+                <p className="text-[16px] text-left sm:mb-0.5 mb-1 text-[#27014F]">
                   {transaction.billPaymentCategory} Purchase
                 </p>
                 <div className="flex items-center gap-2 text-gray-600">
@@ -247,12 +247,12 @@ const UtilityTransaction: React.FC<{
       {selectedTransaction && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           {/* Dark Layered Background */}
-          <div className="fixed inset-0 flex w-[100vw] items-center h-[100vh] justify-center bg-black/40  z-100">
-            {/* Modal Content */}
-            <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
+          <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
+            {/* Dialog Box */}
+            <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
               {/* Conditional UI for Transaction Details OR Report Form */}
               {!showReportForm ? (
-                <div className="bg-white overflow-y-auto sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
+                <div className="bg-white overflow-y-auto sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen   z-[50]   py-6 px-4 sm:rounded-[15px]  flex flex-col">
                   <div className=" flex flex-row-reverse">
                     {/* Close Button */}
                     <button
@@ -306,107 +306,215 @@ const UtilityTransaction: React.FC<{
                     )}
                   </div>
 
-                  <div className="flex gap-[5rem] mt-[8%]">
-                    {selectedTransaction.billPaymentCategory === "Airtime" && (
+                  <div className="sm:block hidden">
+                    <div className="flex gap-[5rem] mt-[8%]">
+                      {selectedTransaction.billPaymentCategory ===
+                        "Airtime" && (
+                        <div>
+                          <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
+                          <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
+                            <p>{selectedTransaction.network.toUpperCase()}</p>
+                            <p>{selectedTransaction.quantity}</p>
+                          </div>
+                        </div>
+                      )}
+                      {selectedTransaction.billPaymentCategory ===
+                        "Electricity" && (
+                        <div>
+                          <p className="text-[#0A2E65]/60 mb-[10px]">Token</p>
+                          <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
+                            <p>{selectedTransaction.encryptedPowerToken}</p>
+                          </div>
+                        </div>
+                      )}
                       <div>
-                        <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
-                        <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
-                          <p>{selectedTransaction.network.toUpperCase()}</p>
-                          <p>{selectedTransaction.quantity}</p>
+                        <p className="text-[#0A2E65]/60 mb-[10px]">Date</p>
+                        <div className="flex text-[#0A2E65] items-center text-[13px]">
+                          {new Date(
+                            selectedTransaction.transactionDate
+                          ).toLocaleString("en-US", {
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                          })}
                         </div>
                       </div>
-                    )}
-                    {selectedTransaction.billPaymentCategory ===
-                      "Electricity" && (
                       <div>
-                        <p className="text-[#0A2E65]/60 mb-[10px]">Token</p>
-                        <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
-                          <p>{selectedTransaction.encryptedPowerToken}</p>
-                        </div>
-                      </div>
-                    )}
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Date</p>
-                      <div className="flex text-[#0A2E65] items-center text-[13px]">
-                        {new Date(
-                          selectedTransaction.transactionDate
-                        ).toLocaleString("en-US", {
-                          dateStyle: "medium",
-                          timeStyle: "short",
-                        })}
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
+                        <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
 
-                      {/* Unique Status Icon */}
-                      {selectedTransaction.transactionStatus === "success" && (
-                        <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                          SUCCESSLL
-                        </div>
-                      )}
-                      {selectedTransaction.transactionStatus ===
-                        "processing" && (
-                        <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
-                          PENDING
-                        </div>
-                      )}
-                      {selectedTransaction.transactionStatus === "failed" && (
-                        <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
-                          FAILED
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="my-[6%]">
-                    <p className="text-[#0A2E65]/60 mb-[10px]">Reference</p>
-                    <div className="flex text-[#0A2E65] items-center text-[13px]">
-                      <div className="flex items-center">
-                        <p>{selectedTransaction.transactionReference}</p>
-                        <button
-                          onClick={() =>
-                            handleCopy(selectedTransaction.transactionReference)
-                          }
-                          className="relative flex items-center justify-center cursor-pointer"
-                        >
-                          <img src={Copy} alt="" />
-                          {copiedRef ===
-                            selectedTransaction.transactionReference && (
-                            <span
-                              className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
-                                copiedRef ===
-                                selectedTransaction.transactionReference
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              }`}
-                            >
-                              Copied
-                            </span>
-                          )}
-                        </button>
+                        {/* Unique Status Icon */}
+                        {selectedTransaction.transactionStatus ===
+                          "success" && (
+                          <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                            SUCCESSLL
+                          </div>
+                        )}
+                        {selectedTransaction.transactionStatus ===
+                          "processing" && (
+                          <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
+                            PENDING
+                          </div>
+                        )}
+                        {selectedTransaction.transactionStatus === "failed" && (
+                          <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
+                            FAILED
+                          </div>
+                        )}
                       </div>
                     </div>
+                    <div className="my-[6%]">
+                      <p className="text-[#0A2E65]/60 mb-[10px]">Reference</p>
+                      <div className="flex text-[#0A2E65] items-center text-[13px]">
+                        <div className="flex items-center">
+                          <p>{selectedTransaction.transactionReference}</p>
+                          <button
+                            onClick={() =>
+                              handleCopy(
+                                selectedTransaction.transactionReference
+                              )
+                            }
+                            className="relative flex items-center justify-center cursor-pointer"
+                          >
+                            <img src={Copy} alt="" />
+                            {copiedRef ===
+                              selectedTransaction.transactionReference && (
+                              <span
+                                className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
+                                  copiedRef ===
+                                  selectedTransaction.transactionReference
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                }`}
+                              >
+                                Copied
+                              </span>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Report Button */}
+                    <div className=" flex items-center justify-center w-full">
+                      {selectedTransaction.status === "pending" && (
+                        <button
+                          onClick={handleReportClick}
+                          className="w-[360px] gap-1 flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
+                        >
+                          <img className="w-[1.1rem]" src={Report} alt="" />
+                          <p> Report Transaction</p>
+                        </button>
+                      )}
+                      {selectedTransaction.status === "failed" && (
+                        <button
+                          onClick={handleReportClick}
+                          className="w-[360px] gap-1 flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
+                        >
+                          <img className="w-[1.1rem]" src={Report} alt="" />
+                          <p> Report Transaction</p>
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  {/* Report Button */}
-                  <div className=" flex items-center justify-center w-full">
-                    {selectedTransaction.status === "pending" && (
-                      <button
-                        onClick={handleReportClick}
-                        className="w-[360px] gap-1 flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
-                      >
-                        <img className="w-[1.1rem]" src={Report} alt="" />
-                        <p> Report Transaction</p>
-                      </button>
-                    )}
-                    {selectedTransaction.status === "failed" && (
-                      <button
-                        onClick={handleReportClick}
-                        className="w-[360px] gap-1 flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
-                      >
-                        <img className="w-[1.1rem]" src={Report} alt="" />
-                        <p> Report Transaction</p>
-                      </button>
-                    )}
+
+                  {/* Mobile view */}
+                  <div className="block sm:hidden">
+                    <div className="flex flex-col gap-6 mt-6">
+                      {selectedTransaction.billPaymentCategory ===
+                        "Airtime" && (
+                        <div className="flex justify-between items-center">
+                          <p className="text-[#0A2E65]/60 text-[13px]">
+                            Network
+                          </p>
+                          <div className="flex text-[#0A2E65] items-center gap-2 text-[13px]">
+                            <p>{selectedTransaction.network.toUpperCase()}</p>
+                            <p>{selectedTransaction.quantity}</p>
+                          </div>
+                        </div>
+                      )}
+
+                      {selectedTransaction.billPaymentCategory ===
+                        "Electricity" && (
+                        <div className="flex justify-between items-center">
+                          <p className="text-[#0A2E65]/60 text-[13px]">Token</p>
+                          <p className="text-[#0A2E65] text-[13px] break-all">
+                            {selectedTransaction.encryptedPowerToken}
+                          </p>
+                        </div>
+                      )}
+
+                      <div className="flex justify-between items-center">
+                        <p className="text-[#0A2E65]/60 text-[13px]">Date</p>
+                        <p className="text-[#0A2E65] text-[13px]">
+                          {new Date(
+                            selectedTransaction.transactionDate
+                          ).toLocaleString("en-US", {
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                          })}
+                        </p>
+                      </div>
+
+                      <div className="flex justify-between items-center">
+                        <p className="text-[#0A2E65]/60 text-[13px]">Status</p>
+                        {selectedTransaction.transactionStatus ===
+                          "success" && (
+                          <span className="bg-[#32A071]/20 px-2 py-1 rounded-[2px] text-[11px] text-[#32A071]">
+                            SUCCESSFUL
+                          </span>
+                        )}
+                        {selectedTransaction.transactionStatus ===
+                          "processing" && (
+                          <span className="bg-[#FFB700]/20 px-2 py-1 rounded-[2px] text-[11px] text-[#FFB700]">
+                            PENDING
+                          </span>
+                        )}
+                        {selectedTransaction.transactionStatus === "failed" && (
+                          <span className="bg-[#FF3366]/20 px-2 py-1 rounded-[2px] text-[11px] text-[#FF3366]">
+                            FAILED
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex justify-between items-center">
+                        <p className="text-[#0A2E65]/60 text-[13px]">
+                          Reference
+                        </p>
+                        <div className="flex items-center gap-2 text-[13px] text-[#0A2E65]">
+                          <p className="break-all">
+                            {selectedTransaction.transactionReference}
+                          </p>
+                          <button
+                            onClick={() =>
+                              handleCopy(
+                                selectedTransaction.transactionReference
+                              )
+                            }
+                            className="relative flex items-center justify-center cursor-pointer"
+                          >
+                            <img src={Copy} alt="copy" />
+                            {copiedRef ===
+                              selectedTransaction.transactionReference && (
+                              <span className="absolute bg-[#32A071]/20 px-2 py-1 rounded-[2px] text-[12px] text-[#32A071] top-[2rem] right-0">
+                                Copied
+                              </span>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Report Button */}
+                    <div className="flex items-center justify-center w-full">
+                      {(selectedTransaction.status === "pending" ||
+                        selectedTransaction.status === "failed") && (
+                        <button
+                          onClick={handleReportClick}
+                          className="w-full max-w-[360px] flex items-center justify-center gap-1 my-6 py-3 bg-[#FF3366] hover:bg-[#FF3366]/90 text-white rounded-lg transition"
+                        >
+                          <img className="w-[1.1rem]" src={Report} alt="" />
+                          <p>Report Transaction</p>
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ) : (

@@ -132,9 +132,11 @@ const Dashboard = () => {
     setIsHidden((prev) => !prev);
   };
 
-  // const isKycComplete = useUserStore((state) => state?.user?.kycSet);
+  const KycComplete = useUserStore((state) => state?.user?.kycSet);
   const completeKyc = localStorage.getItem("kycComplete");
   const isKycComplete = useAuthStore((state) => state.kycSet);
+
+  const KYC = isKycComplete === null ? KycComplete : isKycComplete;
 
   const openModal = () => {
     if (isKycComplete && completeKyc === "true") {
@@ -705,7 +707,7 @@ const Dashboard = () => {
             <div className="w-full mt-[3rem]  ">
               <div className="grid grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6 w-full h-full auto-rows-fr">
                 <>
-                  {!isKycComplete ? (
+                  {!KYC ? (
                     <>
                       <button
                         onClick={cryptoKycOpenModal}
@@ -730,7 +732,7 @@ const Dashboard = () => {
                 </>
 
                 <>
-                  {!isKycComplete ? (
+                  {!KYC ? (
                     <>
                       <button
                         onClick={cryptoKycOpenModal}
@@ -757,7 +759,7 @@ const Dashboard = () => {
                 </>
                 {/* <Airtime /> */}
                 <>
-                  {!isKycComplete ? (
+                  {!KYC ? (
                     <button
                       onClick={cryptoKycOpenModal}
                       className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px]  sm:min-w-[252px] min-w-[152px]  border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]"
@@ -775,7 +777,7 @@ const Dashboard = () => {
                   )}
                 </>
                 <>
-                  {!isKycComplete ? (
+                  {!KYC ? (
                     <button
                       onClick={openModal}
                       className="cursor-pointer  transition-transform duration-300 hover:scale-105 relative h-[146px]  sm:min-w-[252px] min-w-[152px]  border border-[#D0DAE6] rounded-[10px] flex flex-col items-start pl-[1rem] py-[1rem]"
@@ -797,7 +799,7 @@ const Dashboard = () => {
                   )}
                 </>
                 <>
-                  {!isKycComplete ? (
+                  {!KYC ? (
                     <>
                       <button
                         onClick={cryptoKycOpenModal}
@@ -818,7 +820,7 @@ const Dashboard = () => {
                 </>
 
                 <>
-                  {!isKycComplete ? (
+                  {!KYC ? (
                     <>
                       <button
                         onClick={cryptoKycOpenModal}
@@ -842,7 +844,7 @@ const Dashboard = () => {
                   )}
                 </>
                 <>
-                  {!isKycComplete ? (
+                  {!KYC ? (
                     <>
                       <button
                         onClick={cryptoKycOpenModal}
