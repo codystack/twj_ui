@@ -137,7 +137,7 @@ const CrytoTransaction: React.FC<{
   };
 
   return (
-    <div className="space-y-4 p-4 px-3">
+    <div className=" px-4">
       {transactions.length > 0 ? (
         transactions
           ?.slice()
@@ -150,7 +150,7 @@ const CrytoTransaction: React.FC<{
             <button
               onClick={() => handleOpenModal(transaction)}
               key={transaction.id}
-              className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  md:p-4  md:py-3 p-1 "
+              className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0  sm:py-4 py-3"
             >
               {/* Left Side: Static Logo + Transaction Details */}
               <div className="flex items-center gap-4 relative">
@@ -160,56 +160,56 @@ const CrytoTransaction: React.FC<{
                     <img
                       src={btc}
                       alt="Transaction Logo"
-                      className="sm:w-12 sm:h-12 w-10 h-10"
+                      className=" w-10 h-10"
                     />
                   )}
                   {transaction.currency === "usdt" && (
                     <img
                       src={usdt}
                       alt="Transaction Logo"
-                      className="sm:w-12 sm:h-12 w-10 h-10"
+                      className=" w-10 h-10"
                     />
                   )}
                   {transaction.currency === "ton" && (
                     <img
                       src={ton}
                       alt="Transaction Logo"
-                      className="sm:w-12 sm:h-12 w-10 h-10"
+                      className=" w-10 h-10"
                     />
                   )}
                   {transaction.currency === "eth" && (
                     <img
                       src={eth}
                       alt="Transaction Logo"
-                      className="sm:w-12 sm:h-12 w-10 h-10"
+                      className=" w-10 h-10"
                     />
                   )}
                   {transaction.currency === "bnb" && (
                     <img
                       src={bnb}
                       alt="Transaction Logo"
-                      className="sm:w-12 sm:h-12 w-10 h-10"
+                      className=" w-10 h-10"
                     />
                   )}
                   {transaction.currency === "usdc" && (
                     <img
                       src={usdc}
                       alt="Transaction Logo"
-                      className="sm:w-12 sm:h-12 w-10 h-10"
+                      className=" w-10 h-10"
                     />
                   )}
                   {transaction.currency === "trx" && (
                     <img
                       src={trx}
                       alt="Transaction Logo"
-                      className="sm:w-12 sm:h-12 w-10 h-10"
+                      className=" w-10 h-10"
                     />
                   )}
                   {transaction.currency === "sol" && (
                     <img
                       src={sol}
                       alt="Transaction Logo"
-                      className="sm:w-12 sm:h-12 w-10 h-10"
+                      className=" w-10 h-10"
                     />
                   )}
                   {transaction.currency === "ngn" && (
@@ -218,63 +218,63 @@ const CrytoTransaction: React.FC<{
                         <img
                           src={btc}
                           alt="Transaction Logo"
-                          className="sm:w-12 sm:h-12 w-10 h-10"
+                          className=" w-10 h-10"
                         />
                       )}
                       {transaction.cryptoFromCurrency === "USDT" && (
                         <img
                           src={usdt}
                           alt="Transaction Logo"
-                          className="sm:w-12 sm:h-12 w-10 h-10"
+                          className="w-10 h-10"
                         />
                       )}
                       {transaction.cryptoFromCurrency === "TON" && (
                         <img
                           src={ton}
                           alt="Transaction Logo"
-                          className="sm:w-12 sm:h-12 w-10 h-10"
+                          className=" w-10 h-10"
                         />
                       )}
                       {transaction.cryptoFromCurrency === "ETH" && (
                         <img
                           src={eth}
                           alt="Transaction Logo"
-                          className="sm:w-12 sm:h-12 w-10 h-10"
+                          className="w-10 h-10"
                         />
                       )}
                       {transaction.cryptoFromCurrency === "BNB" && (
                         <img
                           src={bnb}
                           alt="Transaction Logo"
-                          className="sm:w-12 sm:h-12 w-10 h-10"
+                          className="w-10 h-10"
                         />
                       )}
                       {transaction.cryptoFromCurrency === "USDC" && (
                         <img
                           src={usdc}
                           alt="Transaction Logo"
-                          className="sm:w-12 sm:h-12 w-10 h-10"
+                          className=" w-10 h-10"
                         />
                       )}
                       {transaction.cryptoFromCurrency === "TRX" && (
                         <img
                           src={trx}
                           alt="Transaction Logo"
-                          className="sm:w-12 sm:h-12 w-10 h-10"
+                          className=" w-10 h-10"
                         />
                       )}
                       {transaction.cryptoFromCurrency === "SOL" && (
                         <img
                           src={sol}
                           alt="Transaction Logo"
-                          className="sm:w-12 sm:h-12 w-10 h-10"
+                          className="w-10 h-10"
                         />
                       )}
                       {transaction.cryptoFromCurrency === "TON" && (
                         <img
                           src={ton}
                           alt="Transaction Logo"
-                          className="sm:w-12 sm:h-12 w-10 h-10"
+                          className=" w-10 h-10"
                         />
                       )}
                     </>
@@ -306,7 +306,7 @@ const CrytoTransaction: React.FC<{
 
                 {/* Transaction Details */}
                 <div className="sm:py-0 py-2">
-                  <p className="text-[16px] text-[#27014F] sm:mb-0 mb-1 text-left">
+                  <p className="text-[16px] text-[#27014F] sm:mb-0.5 mb-1 text-left">
                     {transaction.currency.toLowerCase() === "ngn"
                       ? `Swap ${transaction.cryptoFromAmount}  ${transaction.cryptoFromCurrency} `
                       : `${transaction.currency.toUpperCase()} ${
@@ -434,56 +434,56 @@ const CrytoTransaction: React.FC<{
                         <img
                           src={btc}
                           alt="Transaction Logo"
-                          className="w-12 h-12"
+                          className="w-10 h-10"
                         />
                       )}
                       {selectedTransaction.currency === "usdt" && (
                         <img
                           src={usdt}
                           alt="Transaction Logo"
-                          className="w-12 h-12"
+                          className="w-10 h-10"
                         />
                       )}
                       {selectedTransaction.currency === "ton" && (
                         <img
                           src={ton}
                           alt="Transaction Logo"
-                          className="w-12 h-12"
+                          className="w-10 h-10"
                         />
                       )}
                       {selectedTransaction.currency === "eth" && (
                         <img
                           src={eth}
                           alt="Transaction Logo"
-                          className="w-12 h-12"
+                          className="w-10 h-10"
                         />
                       )}
                       {selectedTransaction.currency === "bnb" && (
                         <img
                           src={bnb}
                           alt="Transaction Logo"
-                          className="w-12 h-12"
+                          className="w-10 h-10"
                         />
                       )}
                       {selectedTransaction.currency === "usdc" && (
                         <img
                           src={usdc}
                           alt="Transaction Logo"
-                          className="w-12 h-12"
+                          className="w-10 h-10"
                         />
                       )}
                       {selectedTransaction.currency === "trx" && (
                         <img
                           src={trx}
                           alt="Transaction Logo"
-                          className="w-12 h-12"
+                          className="w-10 h-10"
                         />
                       )}
                       {selectedTransaction.currency === "sol" && (
                         <img
                           src={sol}
                           alt="Transaction Logo"
-                          className="w-12 h-12"
+                          className="w-10 h-10"
                         />
                       )}
 
@@ -493,7 +493,7 @@ const CrytoTransaction: React.FC<{
                             <img
                               src={btc}
                               alt="Transaction Logo"
-                              className="w-12 h-12"
+                              className="w-10 h-10"
                             />
                           )}
                           {selectedTransaction.cryptoFromCurrency ===
@@ -501,28 +501,28 @@ const CrytoTransaction: React.FC<{
                             <img
                               src={usdt}
                               alt="Transaction Logo"
-                              className="w-12 h-12"
+                              className="w-10 h-10"
                             />
                           )}
                           {selectedTransaction.cryptoFromCurrency === "TON" && (
                             <img
                               src={ton}
                               alt="Transaction Logo"
-                              className="w-12 h-12"
+                              className="w-10 h-10"
                             />
                           )}
                           {selectedTransaction.cryptoFromCurrency === "ETH" && (
                             <img
                               src={eth}
                               alt="Transaction Logo"
-                              className="w-12 h-12"
+                              className="w-10 h-10"
                             />
                           )}
                           {selectedTransaction.cryptoFromCurrency === "BNB" && (
                             <img
                               src={bnb}
                               alt="Transaction Logo"
-                              className="w-12 h-12"
+                              className="w-10 h-10"
                             />
                           )}
                           {selectedTransaction.cryptoFromCurrency ===
@@ -530,28 +530,28 @@ const CrytoTransaction: React.FC<{
                             <img
                               src={usdc}
                               alt="Transaction Logo"
-                              className="w-12 h-12"
+                              className="w-10 h-10"
                             />
                           )}
                           {selectedTransaction.cryptoFromCurrency === "TRX" && (
                             <img
                               src={trx}
                               alt="Transaction Logo"
-                              className="w-12 h-12"
+                              className="w-10 h-10"
                             />
                           )}
                           {selectedTransaction.cryptoFromCurrency === "SOL" && (
                             <img
                               src={sol}
                               alt="Transaction Logo"
-                              className="w-12 h-12"
+                              className="w-10 h-10"
                             />
                           )}
                           {selectedTransaction.cryptoFromCurrency === "TON" && (
                             <img
                               src={ton}
                               alt="Transaction Logo"
-                              className="w-12 h-12"
+                              className="w-10 h-10"
                             />
                           )}
                         </>
@@ -696,16 +696,19 @@ const CrytoTransaction: React.FC<{
                           </div>
                         </div>
                       </div>
-                      <div className="my-[6%]">
-                        <p className="text-[#0A2E65]/60 mb-[10px]">
-                          Wallet Address
-                        </p>
-                        <div className="flex text-[#0A2E65] items-center text-[13px]">
-                          <div className="flex items-center">
-                            <p>{selectedTransaction.transactionReference}</p>
+
+                      {selectedTransaction.cryptoCategory === "Send" && (
+                        <div className="my-[6%]">
+                          <p className="text-[#0A2E65]/60 mb-[10px]">
+                            Wallet Address
+                          </p>
+                          <div className="flex text-[#0A2E65] items-center text-[13px]">
+                            <div className="flex items-center">
+                              <p>{selectedTransaction.transactionReference}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                     {/* Report Button */}
                     <div className=" flex items-center justify-center w-full">
