@@ -396,11 +396,11 @@ const CrytoTransaction: React.FC<{
       {selectedTransaction && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           {/* Dark Layered Background */}
-          <div className="fixed inset-0 flex w-[100vw] items-center h-[100vh] justify-center bg-black/40  z-100">
-            {/* Modal Content */}
-            <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
+          <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
+            {/* Dialog Box */}
+            <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
               {!showReportForm ? (
-                <div className="bg-white overflow-y-auto sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen  z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
+                <div className="bg-white overflow-y-auto sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen   z-[50]   py-6 px-4 sm:rounded-[15px]  flex flex-col">
                   <div className=" flex flex-row-reverse">
                     {/* Close Button */}
                     <button
@@ -412,15 +412,22 @@ const CrytoTransaction: React.FC<{
                   </div>
 
                   <div className="flex justify-between  border-b border-b-[#E2E8F0] pb-[1rem] items-center">
-                    <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
-                      {selectedTransaction.currency.toUpperCase() === "NGN"
-                        ? `₦ ${(
-                            selectedTransaction.cryptoToAmount ?? 0
-                          ).toLocaleString()}`
-                        : `₦ ${(
-                            selectedTransaction.cryptoFromAmount ?? 0
-                          ).toLocaleString()}`}
-                    </h2>
+                    {selectedTransaction.cryptoCategory === "Send" ? (
+                      <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
+                        {selectedTransaction.currency.toUpperCase()}{" "}
+                        {selectedTransaction.amount}
+                      </h2>
+                    ) : (
+                      <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
+                        {selectedTransaction.currency.toUpperCase() === "NGN"
+                          ? `₦ ${(
+                              selectedTransaction.cryptoToAmount ?? 0
+                            ).toLocaleString()}`
+                          : `₦ ${(
+                              selectedTransaction.cryptoFromAmount ?? 0
+                            ).toLocaleString()}`}
+                      </h2>
+                    )}
 
                     <div className="relative">
                       {selectedTransaction.currency === "btc" && (
@@ -574,148 +581,266 @@ const CrytoTransaction: React.FC<{
                       )}
                     </div>
                   </div>
+                  <div className="sm:block hidden">
+                    <div className="flex gap-[5rem] mt-[8%]">
+                      {/* <div> */}
+                      {selectedTransaction.network && (
+                        <>
+                          <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
+                          <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
+                            <p>
+                              {selectedTransaction.network
+                                ? selectedTransaction.network
+                                : "---"}
+                            </p>
+                            {/* <p>{selectedTransaction.quantity}</p> */}
+                          </div>
+                        </>
+                      )}
+                      {/* </div> */}
 
-                  <div className="flex gap-[5rem] mt-[8%]">
-                    {/* <div> */}
-                    {selectedTransaction.network && (
-                      <>
-                        <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
-                        <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
+                      <div className="">
+                        <p className="text-[#0A2E65]/60 mb-[10px]">Date</p>
+                        <div className="flex text-[#0A2E65] items-center text-[13px]">
                           <p>
-                            {selectedTransaction.network
-                              ? selectedTransaction.network
-                              : "---"}
+                            {new Date(
+                              selectedTransaction.transactionDate
+                            ).toLocaleDateString("en-US", {
+                              day: "numeric",
+                              month: "short",
+                            })}
                           </p>
-                          {/* <p>{selectedTransaction.quantity}</p> */}
+                          <div className="w-[5px] h-[5px] rounded-full mx-[4px] bg-[#0A2E65]/70"></div>
+                          <p>
+                            {new Date(
+                              selectedTransaction.transactionDate
+                            ).toLocaleTimeString("en-US", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </p>
                         </div>
-                      </>
-                    )}
-                    {/* </div> */}
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Date</p>
-                      <div className="flex text-[#0A2E65] items-center text-[13px]">
-                        <p>
-                          {new Date(
-                            selectedTransaction.transactionDate
-                          ).toLocaleDateString("en-US", {
-                            day: "numeric",
-                            month: "short",
-                          })}
+                      </div>
+                      <div>
+                        <p className="text-[#0A2E65]/60 mb-[10px]">
+                          {" "}
+                          Crypto Value
                         </p>
-                        <div className="w-[5px] h-[5px] rounded-full mx-[4px] bg-[#0A2E65]/70"></div>
-                        <p>
-                          {new Date(
-                            selectedTransaction.transactionDate
-                          ).toLocaleTimeString("en-US", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </p>
+                        <div className="flex text-[#0A2E65] items-center text-[13px]">
+                          <p>
+                            {selectedTransaction.currency.toUpperCase() ===
+                            "NGN"
+                              ? `${selectedTransaction.cryptoFromCurrency.toUpperCase()} ${(
+                                  selectedTransaction.cryptoFromAmount ?? 0
+                                ).toLocaleString()}`
+                              : `${selectedTransaction.currency.toUpperCase()} ${(
+                                  selectedTransaction.cryptoToAmount ?? 0
+                                ).toLocaleString()}`}{" "}
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
+
+                        {/* Unique Status Icon */}
+                        {selectedTransaction.transactionStatus ===
+                          "success" && (
+                          <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                            SUCCESSLL
+                          </div>
+                        )}
+                        {selectedTransaction.transactionStatus ===
+                          "Processing" && (
+                          <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
+                            PENDING
+                          </div>
+                        )}
+                        {selectedTransaction.transactionStatus === "failed" && (
+                          <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
+                            FAILED
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">
-                        {" "}
+                    <div className="flex gap-[3rem]">
+                      <div className="my-[6%]">
+                        <p className="text-[#0A2E65]/60 mb-[10px]">Reference</p>
+                        <div className="flex text-[#0A2E65] items-center text-[13px]">
+                          <div className="flex items-center">
+                            <p>{selectedTransaction.transactionReference}</p>
+                            <button></button>
+
+                            <button
+                              onClick={() =>
+                                handleCopy(
+                                  selectedTransaction.transactionReference
+                                )
+                              }
+                              className="relative flex items-center justify-center cursor-pointer"
+                            >
+                              <img src={Copy} alt="" />
+                              {copiedRef ===
+                                selectedTransaction.transactionReference && (
+                                <span
+                                  className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
+                                    copiedRef ===
+                                    selectedTransaction.transactionReference
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  }`}
+                                >
+                                  Copied
+                                </span>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="my-[6%]">
+                        <p className="text-[#0A2E65]/60 mb-[10px]">
+                          Wallet Address
+                        </p>
+                        <div className="flex text-[#0A2E65] items-center text-[13px]">
+                          <div className="flex items-center">
+                            <p>{selectedTransaction.transactionReference}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Report Button */}
+                    <div className=" flex items-center justify-center w-full">
+                      {selectedTransaction.transactionStatus === "pending" && (
+                        <button
+                          onClick={handleReportClick}
+                          className="w-[360px] gap-1  flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
+                        >
+                          <img className="w-[1.1rem] " src={Report} alt="" />
+                          <p> Report Transaction</p>
+                        </button>
+                      )}
+                      {selectedTransaction.transactionStatus === "failed" && (
+                        <button
+                          onClick={handleReportClick}
+                          className="w-[360px] flex items-center gap-1 justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
+                        >
+                          <img className="w-[1.1rem] " src={Report} alt="" />
+                          <p> Report Transaction</p>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Mobile view */}
+                  <div className="sm:hidden block mt-[8%] space-y-6">
+                    {/* Date & Time */}
+                    <div className="flex justify-between items-center">
+                      <p className="text-[#0A2E65]/60 text-left">Date</p>
+                      <p className="text-[#0A2E65] text-right text-[13px]">
+                        {new Date(
+                          selectedTransaction.transactionDate
+                        ).toLocaleDateString("en-US", {
+                          day: "numeric",
+                          month: "short",
+                        })}{" "}
+                        •{" "}
+                        {new Date(
+                          selectedTransaction.transactionDate
+                        ).toLocaleTimeString("en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+
+                    {/* Crypto Value */}
+                    <div className="flex justify-between items-center">
+                      <p className="text-[#0A2E65]/60 text-left">
                         Crypto Value
                       </p>
-                      <div className="flex text-[#0A2E65] items-center text-[13px]">
-                        <p>
-                          {selectedTransaction.currency.toUpperCase() === "NGN"
-                            ? `${selectedTransaction.cryptoFromCurrency.toUpperCase()} ${(
-                                selectedTransaction.cryptoFromAmount ?? 0
-                              ).toLocaleString()}`
-                            : `${selectedTransaction.currency.toUpperCase()} ${(
-                                selectedTransaction.cryptoToAmount ?? 0
-                              ).toLocaleString()}`}{" "}
-                        </p>
-                      </div>
+                      <p className="text-[#0A2E65] text-right text-[13px]">
+                        {selectedTransaction.currency.toUpperCase() === "NGN"
+                          ? `${selectedTransaction.cryptoFromCurrency.toUpperCase()} ${(
+                              selectedTransaction.cryptoFromAmount ?? 0
+                            ).toLocaleString()}`
+                          : `${selectedTransaction.currency.toUpperCase()} ${(
+                              selectedTransaction.cryptoToAmount ?? 0
+                            ).toLocaleString()}`}
+                      </p>
                     </div>
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
 
-                      {/* Unique Status Icon */}
+                    {/* Status */}
+                    <div className="flex justify-between items-center">
+                      <p className="text-[#0A2E65]/60 text-left">Status</p>
                       {selectedTransaction.transactionStatus === "success" && (
-                        <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                          SUCCESSLL
-                        </div>
+                        <span className="bg-[#32A071]/20 px-2 py-[2px] rounded-[2px] text-[10px] text-[#32A071]">
+                          SUCCESS
+                        </span>
                       )}
                       {selectedTransaction.transactionStatus ===
                         "Processing" && (
-                        <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
+                        <span className="bg-[#FFB700]/20 px-2 py-[2px] rounded-[2px] text-[10px] text-[#FFB700]">
                           PENDING
-                        </div>
+                        </span>
                       )}
                       {selectedTransaction.transactionStatus === "failed" && (
-                        <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
+                        <span className="bg-[#FF3366]/20 px-2 py-[2px] rounded-[2px] text-[10px] text-[#FF3366]">
                           FAILED
-                        </div>
+                        </span>
                       )}
                     </div>
-                  </div>
-                  <div className="flex gap-[3rem]">
-                    <div className="my-[6%]">
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Reference</p>
-                      <div className="flex text-[#0A2E65] items-center text-[13px]">
-                        <div className="flex items-center">
-                          <p>{selectedTransaction.transactionReference}</p>
-                          <button></button>
 
-                          <button
-                            onClick={() =>
-                              handleCopy(
-                                selectedTransaction.transactionReference
-                              )
-                            }
-                            className="relative flex items-center justify-center cursor-pointer"
-                          >
-                            <img src={Copy} alt="" />
-                            {copiedRef ===
-                              selectedTransaction.transactionReference && (
-                              <span
-                                className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
-                                  copiedRef ===
-                                  selectedTransaction.transactionReference
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                }`}
-                              >
-                                Copied
-                              </span>
-                            )}
-                          </button>
-                        </div>
+                    {/* Reference */}
+                    <div className="flex justify-between items-center">
+                      <p className="text-[#0A2E65]/60 text-left">Reference</p>
+                      <div className="flex items-center text-[13px] text-[#0A2E65]">
+                        <p className=" text-right">
+                          {selectedTransaction.transactionReference}
+                        </p>
+                        <button
+                          onClick={() =>
+                            handleCopy(selectedTransaction.transactionReference)
+                          }
+                          className="ml-2 flex items-center justify-center cursor-pointer"
+                        >
+                          <img src={Copy} alt="copy" />
+                        </button>
                       </div>
                     </div>
-                    <div className="my-[6%]">
-                      <p className="text-[#0A2E65]/60 mb-[10px]">
-                        Wallet Address
-                      </p>
-                      <div className="flex text-[#0A2E65] items-center text-[13px]">
-                        <div className="flex items-center">
-                          <p>{selectedTransaction.transactionReference}</p>
-                        </div>
+
+                    {/* Network */}
+                    {selectedTransaction.cryptoCategory === "Send" && (
+                      <div className="flex justify-between items-center">
+                        <p className="text-[#0A2E65]/60 text-left">Network</p>
+                        <p className="text-[#0A2E65] text-right text-[13px]">
+                          {selectedTransaction.network}
+                        </p>
                       </div>
-                    </div>
-                  </div>
-                  {/* Report Button */}
-                  <div className=" flex items-center justify-center w-full">
-                    {selectedTransaction.transactionStatus === "pending" && (
-                      <button
-                        onClick={handleReportClick}
-                        className="w-[360px] gap-1  flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
-                      >
-                        <img className="w-[1.1rem] " src={Report} alt="" />
-                        <p> Report Transaction</p>
-                      </button>
                     )}
-                    {selectedTransaction.transactionStatus === "failed" && (
-                      <button
-                        onClick={handleReportClick}
-                        className="w-[360px] flex items-center gap-1 justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
-                      >
-                        <img className="w-[1.1rem] " src={Report} alt="" />
-                        <p> Report Transaction</p>
-                      </button>
+
+                    {/* Wallet Address */}
+                    {selectedTransaction.cryptoCategory === "Send" && (
+                      <div className="flex justify-between items-center">
+                        <p className="text-[#0A2E65]/60 text-left">
+                          Wallet Address
+                        </p>
+                        <p className="text-[#0A2E65] text-right text-[13px] ">
+                          {selectedTransaction.transactionReference}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Report Button */}
+                    {(selectedTransaction.transactionStatus === "pending" ||
+                      selectedTransaction.transactionStatus === "failed") && (
+                      <div className="flex items-center justify-center w-full">
+                        <button
+                          onClick={handleReportClick}
+                          className="w-full flex items-center gap-1 justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90 transition duration-300 text-white rounded-lg"
+                        >
+                          <img className="w-[1.1rem]" src={Report} alt="" />
+                          <p>Report Transaction</p>
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
