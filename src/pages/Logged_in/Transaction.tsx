@@ -52,6 +52,23 @@ interface CryptoTransactionType {
   walletCategory: string;
 }
 
+interface giftcardTransaction {
+  id: string;
+  amount: number;
+  currency: string;
+  transactionType: string;
+  billPaymentCategory: string;
+  walletCategory: string;
+  transactionReference: string;
+  transactionStatus: string;
+  transactionId: string;
+  transactionDate: string;
+  encryptedPowerToken: string | null;
+  createdDate: string;
+  network: string | null;
+  twjUserId: string;
+}
+
 const Transaction = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<
@@ -64,7 +81,7 @@ const Transaction = () => {
     CryptoTransactionType[]
   >([]);
   const [giftcardTransaction, setGiftcardTransaction] = useState<
-    TransactionType[]
+    giftcardTransaction[]
   >([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -100,7 +117,7 @@ const Transaction = () => {
       if (type === "Crypto") {
         setCryptoTransaction(transactions as CryptoTransactionType[]);
       } else if (type === "GiftCard") {
-        setGiftcardTransaction(transactions);
+        setGiftcardTransaction(transactions as giftcardTransaction[]);
       } else if (type === "BillsPayment") {
         setTransaction(transactions as TransactionType[]);
       }
@@ -205,7 +222,8 @@ const Transaction = () => {
               ) : (
                 <div className="w-full border border-[#E2E8F0] rounded-[10px] mt-[10%] sm:mt-[4.5%]  [@media(min-width:900px)]:mt-[3%] ">
                   <GiftCardTransaction
-                  // transactions={transactions || []}
+                    transactions={giftcardTransaction || []}
+                    noTransaction={noTransaction}
                   />
                 </div>
               ))}
