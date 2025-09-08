@@ -512,9 +512,8 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                 <p className="text-[#0A2E65]/60 mt-[10px] pb-[3px] pl-[3px] md:text-[12px] text-[15px] text-left  ">
                   {selectedCard.denominationType === "RANGE" ? (
                     <>
-                      Amount{" "}
                       <span className=" font">
-                        (amount must be between{" "}
+                        Amount must be between{" "}
                         {
                           currencyMap[
                             selectedCard.recipientCurrencyCode as CurrencyCode
@@ -526,7 +525,7 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                             selectedCard.recipientCurrencyCode as CurrencyCode
                           ]
                         }
-                        {selectedCard.maxRecipientDenomination})
+                        {selectedCard.maxRecipientDenomination}
                       </span>
                     </>
                   ) : (
