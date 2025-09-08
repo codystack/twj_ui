@@ -139,8 +139,9 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
     email: "",
     name: "",
   });
+
   // const [count, setCount] = useState(0);
-  const amount = parseFloat(formData.amount || "0");
+  const amount = parseFloat(formData.amount);
 
   //  when count or amount changes
   useEffect(() => {
@@ -218,26 +219,76 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
             ...prev,
             amount: "Amount must be greater than 0",
           }));
-        }
-        // else if (
-        //   selectedCard?.minRecipientDenomination != null && // ✅ ensures not null
-        //   Number(value) < selectedCard.minRecipientDenomination
-        // ) {
-        //   setErrors((prev) => ({
-        //     ...prev,
-        //     amount: `Amount must be at least ${selectedCard.minRecipientDenomination}`,
-        //   }));
-        // } else if (
-        //   selectedCard?.maxRecipientDenomination != null && // ✅ ensures not null
-        //   Number(value) > selectedCard.maxRecipientDenomination
-        // ) {
-        //   setErrors((prev) => ({
-        //     ...prev,
-        //     amount: `Amount must not exceed ${selectedCard.maxRecipientDenomination}`,
-        //   }));
-        // }
-        else {
+        } else if (
+          selectedCard?.minRecipientDenomination != null &&
+          Number(value) < selectedCard.minRecipientDenomination
+        ) {
+          setErrors((prev) => ({
+            ...prev,
+            amount: `Amount must be at least ${selectedCard.minRecipientDenomination}`,
+          }));
+        } else if (
+          selectedCard?.maxRecipientDenomination != null &&
+          Number(value) > selectedCard.maxRecipientDenomination
+        ) {
+          setErrors((prev) => ({
+            ...prev,
+            amount: `Amount must not exceed ${selectedCard.maxRecipientDenomination}`,
+          }));
+        } else {
           setErrors((prev) => ({ ...prev, amount: "" }));
+        }
+        break;
+
+      case "email":
+        if (!value || value.trim() === "") {
+          setErrors((prev) => ({ ...prev, email: "Email is required" }));
+        } else {
+          // Simple email regex
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            setErrors((prev) => ({
+              ...prev,
+              email: "Enter a valid email address",
+            }));
+          } else {
+            setErrors((prev) => ({ ...prev, email: "" }));
+          }
+        }
+        break;
+
+      case "phoneNumber":
+        if (!value || value.trim() === "") {
+          setErrors((prev) => ({
+            ...prev,
+            phoneNumber: "Phone number is required",
+          }));
+        } else {
+          // Remove all non-digit characters
+          const digitsOnly = value.replace(/\D/g, "");
+
+          // Should be 13 digits and start with 234 (for Nigeria)
+          if (!digitsOnly.startsWith("234") || digitsOnly.length !== 13) {
+            setErrors((prev) => ({
+              ...prev,
+              phoneNumber: "Enter a valid Nigerian phone number (+234 ...)",
+            }));
+          } else {
+            setErrors((prev) => ({ ...prev, phoneNumber: "" }));
+          }
+        }
+        break;
+
+      case "name":
+        if (!value || value.trim() === "") {
+          setErrors((prev) => ({ ...prev, name: "Name is required" }));
+        } else if (value.trim().length < 2) {
+          setErrors((prev) => ({
+            ...prev,
+            name: "Name must be at least 2 characters long",
+          }));
+        } else {
+          setErrors((prev) => ({ ...prev, name: "" }));
         }
         break;
 
@@ -257,11 +308,14 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
       return true;
     };
 
-    console.log("Validation Errors:", formData.amount);
+    // console.log("Validation Errors:", formData.amount);
 
     const isAmountValid = validateField("amount", formData.amount);
+    const isPhoneNumber = validateField("phoneNumber", formData.phoneNumber);
+    const isEmail = validateField("email", formData.email);
+    const isNamw = validateField("name", formData.name);
 
-    if (isAmountValid) {
+    if (isAmountValid && isPhoneNumber && isEmail && isNamw) {
       onNext();
     }
   };
@@ -285,10 +339,6 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
       value: denomination,
       label: `$${denomination}`,
     })) || [];
-
-  // const rate =
-  //   (selectedCard?.minSenderDenomination || 0) /
-  //   (selectedCard?.minRecipientDenomination || 0);
 
   return (
     <>
@@ -389,20 +439,28 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                     {/* {selectedCard.fixedSenderDenominations} */}
                   </p>
                   <PhoneInput
+                    name="phoneNumber"
                     placeholder="Enter phone number"
                     defaultCountry="NG"
                     value={formData.phoneNumber}
-                    onChange={(value) =>
-                      updateFormData({ phoneNumber: value || "" })
-                    }
-                    style={
-                      {
-                        "--PhoneInputCountrySelect-marginRight": "0em",
-                        borderRadius: "0.375rem",
-                        border: errors.phoneNumber ? "1px solid red" : "",
-                      } as React.CSSProperties
-                    }
+                    onChange={(value) => {
+                      updateFormData({ phoneNumber: value || "" });
+                      validateField("phoneNumber", value || "");
+                    }}
+                    style={{
+                      "--PhoneInputCountrySelect-marginRight": "0em",
+                      borderRadius: "0.375rem",
+                      ...(errors.phoneNumber && {
+                        border: "1px solid red",
+                      }),
+                    }}
                   />
+
+                  {errors.phoneNumber && (
+                    <p className="text-red-500 text-left text-[13px] mt-">
+                      {errors.phoneNumber}
+                    </p>
+                  )}
                 </div>
 
                 <div className="w-full">
@@ -487,9 +545,15 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
                       value={formData.amount}
                       onChange={(e) => {
                         const { name, value } = e.target;
-                        console.log("Input Change:", name, value);
-                        updateFormData({ [name]: value });
-                        validateField(name, value || "");
+
+                        // Keep only digits
+                        const numericValue = value.replace(/\D/g, "");
+
+                        const safeValue = numericValue
+                          ? String(numericValue)
+                          : "";
+                        updateFormData({ [name]: safeValue });
+                        validateField(name, safeValue);
                       }}
                       onBlur={() => validateField("amount", formData.amount)}
                       className={`md:p-2.5 p-4 px-3 border  text-[16px]  border-[#A4A4A4] w-full focus:border-2 outline-none rounded-md ${
