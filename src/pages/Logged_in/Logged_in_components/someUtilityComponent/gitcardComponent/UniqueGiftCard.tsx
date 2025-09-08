@@ -308,8 +308,6 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
       return true;
     };
 
-    // console.log("Validation Errors:", formData.amount);
-
     const isAmountValid = validateField("amount", formData.amount);
     const isPhoneNumber = validateField("phoneNumber", formData.phoneNumber);
     const isEmail = validateField("email", formData.email);
