@@ -37,11 +37,19 @@ const BuyUniqueGiftCard = ({
     return <p className="text-red-500">Gift card not found.</p>;
 
   const key = Number(formData.amount).toFixed(1);
-  const equivalentNairaValue =
-    selectedCard.fixedRecipientToSenderDenominationsMap[key];
 
-  const subToatal = equivalentNairaValue * count;
-  const totalAmount = subToatal + allCards[0].senderFee;
+  const equivalentNairaValue =
+    selectedCard?.fixedRecipientToSenderDenominationsMap?.[key] ?? null;
+
+  const rate =
+    (selectedCard?.minSenderDenomination || 0) /
+    (selectedCard?.minRecipientDenomination || 0);
+
+  const rangeEuivalentNairaValue = rate * Number(formData.amount);
+
+  const subTotal = (equivalentNairaValue ?? rangeEuivalentNairaValue) * count;
+
+  const totalAmount = subTotal + allCards[0].senderFee;
 
   // useEffect(() => {
   //   console.log("Selected card:", formData.amount);
@@ -61,7 +69,7 @@ const BuyUniqueGiftCard = ({
       totalCharge: totalAmount,
       fee: allCards[0].senderFee,
       senderName: formData.name,
-      nairaUnitPrice: equivalentNairaValue,
+      nairaUnitPrice: equivalentNairaValue ?? rangeEuivalentNairaValue,
       unitPrice: Number(formData.amount),
       productAdditionalRequirements: {
         additionalProp1: "",
@@ -137,7 +145,12 @@ const BuyUniqueGiftCard = ({
               <p className="text-[#7688B4] text-left tracking-[1px]">
                 Unit Price:
               </p>
-              <p className="text-[#27014F]">₦{equivalentNairaValue}</p>
+              <p className="text-[#27014F]">
+                ₦
+                {new Intl.NumberFormat("en-NG").format(
+                  equivalentNairaValue ?? rangeEuivalentNairaValue
+                )}
+              </p>
             </div>
             <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
               <p className="text-[#7688B4] text-left tracking-[1px]">
@@ -150,7 +163,7 @@ const BuyUniqueGiftCard = ({
                 Subtotal:
               </p>
               <p className="text-[#27014F]">
-                ₦{Number(subToatal).toLocaleString()}
+                ₦{Number(subTotal).toLocaleString()}
               </p>
             </div>
             <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">

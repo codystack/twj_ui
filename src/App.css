@@ -42,7 +42,7 @@ input[type="checkbox"]:checked:before {
 }
 
 .PhoneInputInput {
-  padding: 16px 10px;
+  padding: 10px 10px;
   /* font-size: 16px; */
   border: 1px solid #a4a4a4;
   outline: none;
