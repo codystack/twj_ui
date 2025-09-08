@@ -1,77 +1,34 @@
 import MyStaticLogo from "../../../assets/dashboard_img/profile//transactions/gift_card_icon.svg";
-import ArrowDownIcon from "../../../assets/dashboard_img/profile/transactions/transactio_up.svg";
-import ArrowUpIcon from "../../../assets/dashboard_img/profile//transactions/transaction_down.svg";
 import { useState } from "react";
 import Delete from "../../../assets/dashboard_img/profile/cancel.svg";
 import Copy from "../../../assets/dashboard_img/profile/transactions/Copy_light.svg";
 import HrtBroken from "../../../assets/dashboard_img/profile/transactions/heartbroken.svg";
 import Report from "../../../assets/dashboard_img/profile/transactions/report.svg";
+import warning from "../../../assets/dashboard_img/disabled-warning .png";
 
-const transactions = [
-  {
-    id: "XYZ123456",
-    type: "Gift Card Purchase",
-    amount: "₦200,500",
-    date: "Mar 3, 2025",
-    direction: "outward",
-    status: "pending",
-    reference: "765423000000000658",
-    time: "1:59",
-    network: "Amazon Gift Card",
-  },
-  {
-    id: "QYWTU578HG",
-    type: "Gift Card Sale",
-    amount: "₦1,880,500",
-    date: "Mar 4, 2025",
-    direction: "inward",
-    status: "success",
-    reference: "700000004567890098",
-    time: "17:09",
-    network: "Apple Gift Card",
-  },
-
-  {
-    id: "ABCD7890JK",
-    type: "Gift Card Purchase",
-    amount: "₦1,167,500",
-    date: "Mar 2, 2025",
-    direction: "outward",
-    status: "failed",
-    reference: "761111167890098",
-    time: "19:55",
-    network: "Amazon Gift Card",
-  },
-  {
-    id: "LMNOP45678",
-    type: "Gift Card Sale",
-    amount: "₦1,200,750",
-    date: "Mar 1, 2025",
-    direction: "inward",
-    status: "success",
-    reference: "7654234567890098",
-    time: "19:09",
-    network: "Apple Gift Card",
-  },
-];
-
-type Transaction = {
+interface giftcardTransaction {
   id: string;
-  name: string;
-  type: string;
-  amount: string;
-  date: string;
-  direction: string;
-  status: string;
-  network: string;
-  quantity: string;
-  time: string;
-  reference: string;
-};
+  amount: number;
+  currency: string;
+  transactionType: string;
+  billPaymentCategory: string;
+  walletCategory: string;
+  transactionReference: string;
+  transactionStatus: string;
+  transactionId: string;
+  transactionDate: string;
+  encryptedPowerToken: string | null;
+  createdDate: string;
+  network: string | null;
+  twjUserId: string;
+}
 
-const GiftCardTransaction = () => {
+const GiftCardTransaction: React.FC<{
+  transactions: giftcardTransaction[];
+  noTransaction: string | null;
+}> = ({ transactions, noTransaction }) => {
   const [selectedTransaction, setSelectedTransaction] =
-    useState<Transaction | null>(null);
+    useState<giftcardTransaction | null>(null);
 
   const [showReportForm, setShowReportForm] = useState(false);
   const [message, setMessage] = useState({
@@ -174,24 +131,32 @@ const GiftCardTransaction = () => {
   };
 
   return (
-    <div className="space-y-4 p-4">
-      {transactions.map((transaction) => (
-        <button
-          onClick={() => handleOpenModal(transaction)}
-          key={transaction.id}
-          className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0 md:p-4 py-3"
-        >
-          {/* Left Side: Static Logo + Transaction Details */}
-          <div className="flex items-center gap-4 relative">
-            {/* Static Logo Container */}
-            <div className="relative">
-              <img
-                src={MyStaticLogo}
-                alt="Transaction Logo"
-                className="w-12 h-12"
-              />
-              {/* Unique Direction Arrow (Absolute Positioning) */}
-              {transaction.direction === "inward" ? (
+    <div className="p-4">
+      {transactions.length > 0 ? (
+        transactions
+          ?.slice()
+          .sort(
+            (a, b) =>
+              new Date(b.transactionDate).getTime() -
+              new Date(a.transactionDate).getTime()
+          )
+          .map((transaction) => (
+            <button
+              onClick={() => handleOpenModal(transaction)}
+              key={transaction.id}
+              className="flex justify-between w-full cursor-pointer items-center bg-white border-b  border-[#E2E8F0] last:border-b-0 md:p-4 py-3"
+            >
+              {/* Left Side: Static Logo + Transaction Details */}
+              <div className="flex items-center gap-4 relative">
+                {/* Static Logo Container */}
+                <div className="relative">
+                  <img
+                    src={MyStaticLogo}
+                    alt="Transaction Logo"
+                    className="w-10 h-10"
+                  />
+                  {/* Unique Direction Arrow (Absolute Positioning) */}
+                  {/* {transaction.direction === "inward" ? (
                 <img
                   src={ArrowDownIcon}
                   alt="Inward Transaction"
@@ -203,50 +168,67 @@ const GiftCardTransaction = () => {
                   alt="Outward Transaction"
                   className="absolute right-0 bottom-0 w-4 h-4"
                 />
-              )}
-            </div>
+              )} */}
+                </div>
 
-            {/* Transaction Details */}
-            <div>
-              <p className="text-[16px] text-left text-[#27014F]">
-                {transaction.type}
-              </p>
-              <div className="flex items-center gap-2 text-gray-600">
-                {/* Tracking ID */}
-                <span className="text-[11px]  text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
-                  {transaction.id}
-                </span>
-                {/* Unique Status Icon */}
-                {transaction.status === "success" && (
-                  <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                    SUCCESSFULL
+                {/* Transaction Details */}
+                <div className="sm:py-0 py-2">
+                  <p className="text-[16px] text-left text-[#27014F]">
+                    {transaction.transactionType}
+                  </p>
+                  <div className="flex items-center gap-2 text-gray-600">
+                    {/* Tracking ID */}
+                    {/* <span className="text-[11px]  text-[#0A2E65] border-r pr-[0.5rem] border-[#9ea5ad]">
+                      {transaction.id}
+                    </span> */}
+                    <p className="text-sm block text-[#27014F] border-r pr-[0.5rem] border-[#9ea5ad] text-[11px]">
+                      {new Date(transaction.transactionDate).toLocaleDateString(
+                        "en-US",
+                        {
+                          day: "numeric",
+                          month: "short",
+                        }
+                      )}
+                    </p>
+
+                    {/* Unique Status Icon */}
+                    {transaction.transactionStatus === "success" && (
+                      <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                        SUCCESSFULL
+                      </div>
+                    )}
+                    {transaction.transactionStatus === "pending" && (
+                      <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
+                        PENDING
+                      </div>
+                    )}
+                    {transaction.transactionStatus === "failed" && (
+                      <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
+                        FAILED
+                      </div>
+                    )}
                   </div>
-                )}
-                {transaction.status === "pending" && (
-                  <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
-                    PENDING
-                  </div>
-                )}
-                {transaction.status === "failed" && (
-                  <div className="bg-[#FF3366]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FF3366]">
-                    FAILED
-                  </div>
-                )}
+                </div>
               </div>
-            </div>
-          </div>
 
-          {/* Right Side: Date & Amount */}
-          <div className="text-right">
-            <p className="font-semibold text-[#27014F]  ">
-              {transaction.amount}
-            </p>
-            <p className="text-sm text-[#27014F] text-[11px]">
-              {transaction.date}
-            </p>
-          </div>
-        </button>
-      ))}
+              {/* Right Side: Date & Amount */}
+              <div className="text-right">
+                <p className="font-semibold text-[#27014F]  ">
+                  ₦{transaction.amount.toLocaleString()}
+                </p>
+                {/* <p className="text-sm text-[#27014F] text-[11px]">
+              {transaction.transactionDate}
+            </p> */}
+              </div>
+            </button>
+          ))
+      ) : (
+        <div className="flex flex-col items-center justify-center h-[calc(100vh-18rem)]">
+          <img src={warning} className="md:w-[9rem] w-[5rem]" alt="" />
+          <p className="text-gray-500 text-lg">{noTransaction}!</p>
+        </div>
+      )}
+
       {/* Modal */}
       {selectedTransaction && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -268,7 +250,7 @@ const GiftCardTransaction = () => {
 
                   <div className="flex justify-between pb-[4%] border-b border-b-[#E2E8F0] items-center">
                     <h2 className="text-[32px] font-semibold text-[#27014F] mb-2">
-                      {selectedTransaction.amount}
+                      ₦{selectedTransaction.amount.toLocaleString()}
                     </h2>
 
                     {/* Static Logo Container */}
@@ -279,7 +261,7 @@ const GiftCardTransaction = () => {
                         className="w-12 h-12"
                       />
                       {/* Unique Direction Arrow (Absolute Positioning) */}
-                      {selectedTransaction.direction === "inward" ? (
+                      {/* {selectedTransaction.direction === "inward" ? (
                         <img
                           src={ArrowDownIcon}
                           alt="Inward Transaction"
@@ -291,7 +273,7 @@ const GiftCardTransaction = () => {
                           alt="Outward Transaction"
                           className="absolute right-0 bottom-0 w-4 h-4"
                         />
-                      )}
+                      )} */}
                     </div>
                   </div>
 
@@ -300,34 +282,46 @@ const GiftCardTransaction = () => {
                       <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
                       <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
                         <p>{selectedTransaction.network}</p>
-                        <p>{selectedTransaction.quantity}</p>
+                        {/* <p>{selectedTransaction.quantity}</p> */}
                       </div>
                     </div>
                     <div>
                       <p className="text-[#0A2E65]/60 mb-[10px]">Date</p>
                       <div className="flex text-[#0A2E65] items-center text-[13px]">
-                        <p>{selectedTransaction.date}</p>
-                        <div className="w-[5px] h-[5px] rounded-full mx-[4px] bg-[#0A2E65]/70  ">
-                          .
-                        </div>
-                        <p>{selectedTransaction.time}</p>
+                        <p>
+                          {new Date(
+                            selectedTransaction.transactionDate
+                          ).toLocaleDateString("en-US", {
+                            day: "numeric",
+                            month: "short",
+                          })}
+                        </p>
+                        <div className="w-[5px] h-[5px] rounded-full mx-[4px] bg-[#0A2E65]/70"></div>
+                        <p>
+                          {new Date(
+                            selectedTransaction.transactionDate
+                          ).toLocaleTimeString("en-US", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
                       </div>
                     </div>
                     <div>
                       <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
 
                       {/* Unique Status Icon */}
-                      {selectedTransaction.status === "success" && (
+                      {selectedTransaction.transactionStatus === "success" && (
                         <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
                           SUCCESSLL
                         </div>
                       )}
-                      {selectedTransaction.status === "pending" && (
+                      {selectedTransaction.transactionStatus === "pending" && (
                         <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
                           PENDING
                         </div>
                       )}
-                      {selectedTransaction.status === "failed" && (
+                      {selectedTransaction.transactionStatus === "failed" && (
                         <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
                           FAILED
                         </div>
@@ -338,18 +332,20 @@ const GiftCardTransaction = () => {
                     <p className="text-[#0A2E65]/60 mb-[10px]">Reference</p>
                     <div className="flex text-[#0A2E65] items-center text-[13px]">
                       <div className="flex items-center">
-                        <p>{selectedTransaction.reference}</p>
+                        <p>{selectedTransaction.transactionReference}</p>
                         <button
                           onClick={() =>
-                            handleCopy(selectedTransaction.reference)
+                            handleCopy(selectedTransaction.transactionReference)
                           }
                           className="relative flex items-center justify-center cursor-pointer"
                         >
                           <img src={Copy} alt="" />
-                          {copiedRef === selectedTransaction.reference && (
+                          {copiedRef ===
+                            selectedTransaction.transactionReference && (
                             <span
                               className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
-                                copiedRef === selectedTransaction.reference
+                                copiedRef ===
+                                selectedTransaction.transactionReference
                                   ? "opacity-100"
                                   : "opacity-0"
                               }`}
@@ -363,7 +359,7 @@ const GiftCardTransaction = () => {
                   </div>
                   {/* Report Button */}
                   <div className=" flex items-center justify-center w-full">
-                    {selectedTransaction.status === "pending" && (
+                    {selectedTransaction.transactionStatus === "pending" && (
                       <button
                         onClick={handleReportClick}
                         className="w-[360px] gap-1 flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
@@ -372,7 +368,7 @@ const GiftCardTransaction = () => {
                         <p> Report Transaction</p>
                       </button>
                     )}
-                    {selectedTransaction.status === "failed" && (
+                    {selectedTransaction.transactionStatus === "failed" && (
                       <button
                         onClick={handleReportClick}
                         className="w-[360px] gap-1  flex items-center justify-center my-[2rem] cursor-pointer py-3 bg-[#FF3366] hover:bg-[#FF3366]/90  transition duration-300 text-white rounded-lg"
