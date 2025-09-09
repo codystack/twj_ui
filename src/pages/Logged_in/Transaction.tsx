@@ -67,6 +67,13 @@ interface giftcardTransaction {
   createdDate: string;
   network: string | null;
   twjUserId: string;
+  giftCardName: string;
+  giftCardProductAmount: number;
+  giftCardProductCurrency: string;
+  giftCardRecipientEmail: string;
+  giftCardRecipientName: string;
+  giftCardRecipientPhone: string;
+  giftCardsCategory: string;
 }
 
 const Transaction = () => {

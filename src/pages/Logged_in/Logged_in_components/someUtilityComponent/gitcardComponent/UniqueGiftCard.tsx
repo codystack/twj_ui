@@ -163,50 +163,6 @@ const UniqueGiftCard = ({ onNext, onBack, onClose }: ModalProps) => {
     setCount(1);
   }, []);
 
-  // const validateField = (name: string, value: string | undefined) => {
-  //   switch (name) {
-  //     case "amount":
-  //       if (!value || value.trim() === "") {
-  //         setErrors((prev) => ({ ...prev, amount: "Please select an amount" }));
-  //       } else if (isNaN(Number(value))) {
-  //         setErrors((prev) => ({ ...prev, amount: "Amount must be a number" }));
-  //       } else if (Number(value) <= 0) {
-  //         setErrors((prev) => ({
-  //           ...prev,
-  //           amount: "Amount must be greater than 0",
-  //         }));
-  //       } else if (
-  //         selectedCard?.minRecipientDenomination != null &&
-  //         Number(value) < selectedCard.minRecipientDenomination
-  //       ) {
-  //         const currencySymbol =
-  //           currencyMap[selectedCard.recipientCurrencyCode as CurrencyCode] ||
-  //           "";
-  //         setErrors((prev) => ({
-  //           ...prev,
-  //           amount: `Amount must be at least ${currencySymbol}${selectedCard.minRecipientDenomination}`,
-  //         }));
-  //       } else if (
-  //         selectedCard?.maxRecipientDenomination != null &&
-  //         Number(value) > selectedCard.maxRecipientDenomination
-  //       ) {
-  //         const currencySymbol =
-  //           currencyMap[selectedCard.recipientCurrencyCode as CurrencyCode] ||
-  //           "";
-  //         setErrors((prev) => ({
-  //           ...prev,
-  //           amount: `Amount must not exceed ${currencySymbol}${selectedCard.maxRecipientDenomination}`,
-  //         }));
-  //       } else {
-  //         setErrors((prev) => ({ ...prev, amount: "" }));
-  //       }
-  //       break;
-
-  //     default:
-  //       break;
-  //   }
-  // };
-
   const validateField = (name: string, value: string | undefined) => {
     switch (name) {
       case "amount":
