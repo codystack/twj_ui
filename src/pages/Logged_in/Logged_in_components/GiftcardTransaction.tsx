@@ -5,6 +5,8 @@ import Copy from "../../../assets/dashboard_img/profile/transactions/Copy_light.
 import HrtBroken from "../../../assets/dashboard_img/profile/transactions/heartbroken.svg";
 import Report from "../../../assets/dashboard_img/profile/transactions/report.svg";
 import warning from "../../../assets/dashboard_img/disabled-warning .png";
+import ArrowDownIcon from "../../../assets/dashboard_img/profile/transactions/transactio_up.svg";
+import ArrowUpIcon from "../../../assets/dashboard_img/profile//transactions/transaction_down.svg";
 
 interface giftcardTransaction {
   id: string;
@@ -21,6 +23,13 @@ interface giftcardTransaction {
   createdDate: string;
   network: string | null;
   twjUserId: string;
+  giftCardName: string;
+  giftCardProductAmount: number;
+  giftCardProductCurrency: string;
+  giftCardRecipientEmail: string;
+  giftCardRecipientName: string;
+  giftCardRecipientPhone: string;
+  giftCardsCategory: string;
 }
 
 const GiftCardTransaction: React.FC<{
@@ -130,6 +139,23 @@ const GiftCardTransaction: React.FC<{
     handleCloseModal();
   };
 
+  function formatNGNPhone(phone: string): string {
+    // Remove non-digits just in case
+    let cleaned = phone.replace(/\D/g, "");
+
+    // Ensure it starts with +234
+    if (cleaned.startsWith("234")) {
+      cleaned = "+" + cleaned;
+    } else if (cleaned.startsWith("0")) {
+      cleaned = "+234" + cleaned.slice(1);
+    } else if (!cleaned.startsWith("+234")) {
+      cleaned = "+234" + cleaned;
+    }
+
+    // Format as +234 XXX XXX XXXX
+    return cleaned.replace(/(\+234)(\d{3})(\d{3})(\d{4})$/, "$1 $2 $3 $4");
+  }
+
   return (
     <div className="p-4">
       {transactions.length > 0 ? (
@@ -156,25 +182,25 @@ const GiftCardTransaction: React.FC<{
                     className="w-10 h-10"
                   />
                   {/* Unique Direction Arrow (Absolute Positioning) */}
-                  {/* {transaction.direction === "inward" ? (
-                <img
-                  src={ArrowDownIcon}
-                  alt="Inward Transaction"
-                  className="absolute bottom-0 right-0 w-4 h-4"
-                />
-              ) : (
-                <img
-                  src={ArrowUpIcon}
-                  alt="Outward Transaction"
-                  className="absolute right-0 bottom-0 w-4 h-4"
-                />
-              )} */}
+                  {transaction.giftCardsCategory === "Buy" ? (
+                    <img
+                      src={ArrowUpIcon}
+                      alt="Outward Transaction"
+                      className="absolute right-0 bottom-0 w-4 h-4"
+                    />
+                  ) : (
+                    <img
+                      src={ArrowDownIcon}
+                      alt="Inward Transaction"
+                      className="absolute bottom-0 right-0 w-4 h-4"
+                    />
+                  )}
                 </div>
 
                 {/* Transaction Details */}
                 <div className="sm:py-0 py-2">
                   <p className="text-[16px] text-left text-[#27014F]">
-                    {transaction.transactionType}
+                    {transaction.giftCardName}
                   </p>
                   <div className="flex items-center gap-2 text-gray-600">
                     {/* Tracking ID */}
@@ -197,7 +223,7 @@ const GiftCardTransaction: React.FC<{
                         SUCCESSFULL
                       </div>
                     )}
-                    {transaction.transactionStatus === "pending" && (
+                    {transaction.transactionStatus === "PENDING" && (
                       <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
                         PENDING
                       </div>
@@ -216,9 +242,6 @@ const GiftCardTransaction: React.FC<{
                 <p className="font-semibold text-[#27014F]  ">
                   ₦{transaction.amount.toLocaleString()}
                 </p>
-                {/* <p className="text-sm text-[#27014F] text-[11px]">
-              {transaction.transactionDate}
-            </p> */}
               </div>
             </button>
           ))
@@ -233,11 +256,11 @@ const GiftCardTransaction: React.FC<{
       {selectedTransaction && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           {/* Dark Layered Background */}
-          <div className="fixed inset-0 flex w-[100vw] items-center h-[100vh] justify-center bg-black/40  z-100">
-            {/* Modal Content */}
-            <div className="p-[0.7rem] rounded-[20px] bg-[#fff]/20">
+          <div className="fixed inset-0 flex  items-center justify-center bg-black/40  z-[20]">
+            {/* Dialog Box */}
+            <div className="p-[0.8rem]  rounded-[20px] bg-[#fff]/20">
               {!showReportForm ? (
-                <div className="bg-white w-[600px]   z-[50]   p-6 rounded-[15px] shadow-lg flex flex-col">
+                <div className="bg-white overflow-y-auto sm:w-[600px] w-[100vw] sm:h-auto h-[min(100dvh,100vh)] max-h-screen   z-[50]   py-6 px-4 sm:rounded-[15px]  flex flex-col">
                   <div className=" flex flex-row-reverse">
                     {/* Close Button */}
                     <button
@@ -261,7 +284,7 @@ const GiftCardTransaction: React.FC<{
                         className="w-12 h-12"
                       />
                       {/* Unique Direction Arrow (Absolute Positioning) */}
-                      {/* {selectedTransaction.direction === "inward" ? (
+                      {selectedTransaction.giftCardsCategory === "Buy" ? (
                         <img
                           src={ArrowDownIcon}
                           alt="Inward Transaction"
@@ -273,90 +296,232 @@ const GiftCardTransaction: React.FC<{
                           alt="Outward Transaction"
                           className="absolute right-0 bottom-0 w-4 h-4"
                         />
-                      )} */}
-                    </div>
-                  </div>
-
-                  <div className="flex gap-[5rem] mt-[8%]">
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Network</p>
-                      <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
-                        <p>{selectedTransaction.network}</p>
-                        {/* <p>{selectedTransaction.quantity}</p> */}
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Date</p>
-                      <div className="flex text-[#0A2E65] items-center text-[13px]">
-                        <p>
-                          {new Date(
-                            selectedTransaction.transactionDate
-                          ).toLocaleDateString("en-US", {
-                            day: "numeric",
-                            month: "short",
-                          })}
-                        </p>
-                        <div className="w-[5px] h-[5px] rounded-full mx-[4px] bg-[#0A2E65]/70"></div>
-                        <p>
-                          {new Date(
-                            selectedTransaction.transactionDate
-                          ).toLocaleTimeString("en-US", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </p>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
-
-                      {/* Unique Status Icon */}
-                      {selectedTransaction.transactionStatus === "success" && (
-                        <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
-                          SUCCESSLL
-                        </div>
-                      )}
-                      {selectedTransaction.transactionStatus === "pending" && (
-                        <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
-                          PENDING
-                        </div>
-                      )}
-                      {selectedTransaction.transactionStatus === "failed" && (
-                        <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
-                          FAILED
-                        </div>
                       )}
                     </div>
                   </div>
-                  <div className="my-[6%]">
-                    <p className="text-[#0A2E65]/60 mb-[10px]">Reference</p>
-                    <div className="flex text-[#0A2E65] items-center text-[13px]">
-                      <div className="flex items-center">
-                        <p>{selectedTransaction.transactionReference}</p>
-                        <button
-                          onClick={() =>
-                            handleCopy(selectedTransaction.transactionReference)
-                          }
-                          className="relative flex items-center justify-center cursor-pointer"
-                        >
-                          <img src={Copy} alt="" />
-                          {copiedRef ===
-                            selectedTransaction.transactionReference && (
-                            <span
-                              className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
-                                copiedRef ===
-                                selectedTransaction.transactionReference
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              }`}
+                  <>
+                    <div className="sm:block hidden">
+                      <div className="flex gap-[3rem] items-center jus mt-[8%]">
+                        <div>
+                          <p className="text-[#0A2E65]/60 mb-[10px]">Name</p>
+                          <div className="flex text-[#0A2E65] items-center gap-[3px] text-[13px]">
+                            <p>{selectedTransaction.giftCardName}</p>
+                            {/* <p>{selectedTransaction.quantity}</p> */}
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-[#0A2E65]/60 mb-[10px]">
+                            Recipient Email
+                          </p>
+                          <div className="flex text-[#0A2E65] items-center text-[13px]">
+                            {selectedTransaction.giftCardRecipientEmail}
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-[#0A2E65]/60 mb-[10px]">
+                            Recippient Phone
+                          </p>
+                          <div className="flex text-[#0A2E65] items-center text-[13px]">
+                            {selectedTransaction.giftCardRecipientPhone
+                              ? formatNGNPhone(
+                                  selectedTransaction.giftCardRecipientPhone
+                                )
+                              : ""}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="my-[6%] flex gap-[3rem] items-center">
+                        <div>
+                          <p className="text-[#0A2E65]/60 mb-[10px]">
+                            Reference
+                          </p>
+                          <div className="flex text-[#0A2E65] items-center text-[13px]">
+                            <div className="flex items-center">
+                              <p>{selectedTransaction.transactionReference}</p>
+                              <button
+                                onClick={() =>
+                                  handleCopy(
+                                    selectedTransaction.transactionReference
+                                  )
+                                }
+                                className="relative flex items-center justify-center cursor-pointer"
+                              >
+                                <img src={Copy} alt="" />
+                                {copiedRef ===
+                                  selectedTransaction.transactionReference && (
+                                  <span
+                                    className={`ml-2 absolute bg-[#32A071]/20 px-[10px] py-[1px] w-fit rounded-[2px] text-[13px] text-[#32A071]  top-[2rem]  ${
+                                      copiedRef ===
+                                      selectedTransaction.transactionReference
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    }`}
+                                  >
+                                    Copied
+                                  </span>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-[#0A2E65]/60 mb-[10px]">Date</p>
+                          <div className="flex text-[#0A2E65] items-center text-[13px]">
+                            <p>
+                              {new Date(
+                                selectedTransaction.transactionDate
+                              ).toLocaleDateString("en-US", {
+                                day: "numeric",
+                                month: "short",
+                              })}
+                            </p>
+                            <div className="w-[5px] h-[5px] rounded-full mx-[4px] bg-[#0A2E65]/70"></div>
+                            <p>
+                              {new Date(
+                                selectedTransaction.transactionDate
+                              ).toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-[#0A2E65]/60 mb-[10px]">Action</p>
+                          <div className="flex text-[#0A2E65] items-center text-[13px]">
+                            {selectedTransaction.giftCardsCategory} Gift Card
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-[#0A2E65]/60 mb-[10px]">Status</p>
+
+                          {/* Unique Status Icon */}
+                          {selectedTransaction.transactionStatus ===
+                            "success" && (
+                            <div className="bg-[#32A071]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#32A071]">
+                              SUCCESSLL
+                            </div>
+                          )}
+                          {selectedTransaction.transactionStatus ===
+                            "PENDING" && (
+                            <div className="bg-[#FFB700]/20 px-[5px] py-[1px] rounded-[2px] text-[8px] text-[#FFB700]">
+                              PENDING
+                            </div>
+                          )}
+                          {selectedTransaction.transactionStatus ===
+                            "failed" && (
+                            <div className="bg-[#FF3366]/20 px-[5px]  py-[1px] w-fit rounded-[2px] text-[8px] text-[#FF3366]">
+                              FAILED
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="block mt-8 sm:hidden">
+                      <div className="border border-gray-300 rounded-[10px] p-3 space-y-4">
+                        {/* Name */}
+                        <div className="flex justify-between items-center text-[13px]">
+                          <p className="text-[#0A2E65]/60">Name</p>
+                          <p className="text-[#0A2E65]">
+                            {selectedTransaction.giftCardName}
+                          </p>
+                        </div>
+
+                        {/* Recipient Email */}
+                        <div className="flex justify-between items-center text-[13px]">
+                          <p className="text-[#0A2E65]/60">Recipient Email</p>
+                          <p className="text-[#0A2E65]">
+                            {selectedTransaction.giftCardRecipientEmail}
+                          </p>
+                        </div>
+
+                        {/* Recipient Phone */}
+                        <div className="flex justify-between items-center text-[13px]">
+                          <p className="text-[#0A2E65]/60">Recipient Phone</p>
+                          <p className="text-[#0A2E65]">
+                            {selectedTransaction.giftCardRecipientPhone
+                              ? formatNGNPhone(
+                                  selectedTransaction.giftCardRecipientPhone
+                                )
+                              : ""}
+                          </p>
+                        </div>
+
+                        {/* Reference */}
+                        <div className="flex justify-between items-center text-[13px]">
+                          <p className="text-[#0A2E65]/60">Reference</p>
+                          <div className="flex items-center gap-2">
+                            <p>{selectedTransaction.transactionReference}</p>
+                            <button
+                              onClick={() =>
+                                handleCopy(
+                                  selectedTransaction.transactionReference
+                                )
+                              }
+                              className="cursor-pointer"
                             >
-                              Copied
+                              <img src={Copy} alt="copy" />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Date */}
+                        <div className="flex justify-between items-center text-[13px]">
+                          <p className="text-[#0A2E65]/60">Date & Time</p>
+                          <p className="text-[#0A2E65]">
+                            {new Date(
+                              selectedTransaction.transactionDate
+                            ).toLocaleDateString("en-US", {
+                              day: "numeric",
+                              month: "short",
+                            })}{" "}
+                            ·{" "}
+                            {new Date(
+                              selectedTransaction.transactionDate
+                            ).toLocaleTimeString("en-US", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </p>
+                        </div>
+
+                        {/* Action */}
+                        <div className="flex justify-between items-center text-[13px]">
+                          <p className="text-[#0A2E65]/60">Action</p>
+                          <p className="text-[#0A2E65]">
+                            {selectedTransaction.giftCardsCategory} Gift Card
+                          </p>
+                        </div>
+
+                        {/* Status */}
+                        <div className="flex justify-between items-center text-[13px]">
+                          <p className="text-[#0A2E65]/60">Status</p>
+                          {selectedTransaction.transactionStatus ===
+                            "success" && (
+                            <span className="bg-[#32A071]/20 px-2 py-[1px] rounded-[2px] text-[12px] text-[#32A071]">
+                              SUCCESS
                             </span>
                           )}
-                        </button>
+                          {selectedTransaction.transactionStatus ===
+                            "PENDING" && (
+                            <span className="bg-[#FFB700]/20 px-2 py-[1px] rounded-[2px] text-[12px] text-[#FFB700]">
+                              PENDING
+                            </span>
+                          )}
+                          {selectedTransaction.transactionStatus ===
+                            "failed" && (
+                            <span className="bg-[#FF3366]/20 px-2 py-[1px] rounded-[2px] text-[12px] text-[#FF3366]">
+                              FAILED
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </>
+
                   {/* Report Button */}
                   <div className=" flex items-center justify-center w-full">
                     {selectedTransaction.transactionStatus === "pending" && (
