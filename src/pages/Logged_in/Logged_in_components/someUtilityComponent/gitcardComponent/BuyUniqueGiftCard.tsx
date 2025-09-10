@@ -121,62 +121,53 @@ const BuyUniqueGiftCard = ({
             <h2 className="text-[30px] text-left mt-[-10px] font-bold text-black">
               {selectedCard.productName}
             </h2>
+            <div className="border sm:border-none border-[#E0E4EC] rounded-xl sm:p-0 p-4 mt-6">
+              <div className="flex items-center justify-between sm:justify-start tracking-[0.8px] text-[14px] gap-2 ">
+                <p className="text-[#7688B4] text-left tracking-[1px]">
+                  Recipient Email:
+                </p>
+                <p className="text-[#27014F]">{formData.email}</p>
+              </div>
 
-            <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
-              <p className="text-[#7688B4] text-left tracking-[1px]">
-                Recepient Email:
-              </p>
-              <p className="text-[#27014F]">{formData.email}</p>
-            </div>
+              <div className="flex items-center justify-between sm:justify-start tracking-[0.8px] text-[14px] gap-2 mt-4">
+                <p className="text-[#7688B4] text-left tracking-[1px]">
+                  Recipient Phone:
+                </p>
+                <p className="text-[#27014F]">{formData.phoneNumber}</p>
+              </div>
 
-            <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
-              <p className="text-[#7688B4] text-left tracking-[1px]">
-                Recepient Phone:
-              </p>
-              <p className="text-[#27014F]">{formData.phoneNumber}</p>
-            </div>
+              <div className="flex items-center justify-between sm:justify-start tracking-[0.8px] text-[14px] gap-2 mt-4">
+                <p className="text-[#7688B4] text-left tracking-[1px]">
+                  Sender:
+                </p>
+                <p className="text-[#27014F]">{formData.name}</p>
+              </div>
 
-            <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
-              <p className="text-[#7688B4] text-left tracking-[1px]">Sender:</p>
-              <p className="text-[#27014F]">{formData.name}</p>
-            </div>
+              <div className="flex items-center justify-between sm:justify-start tracking-[0.8px] text-[14px] gap-2 mt-4">
+                <p className="text-[#7688B4] text-left tracking-[1px]">
+                  Unit Price:
+                </p>
+                <p className="text-[#27014F]">
+                  ₦
+                  {(
+                    (equivalentNairaValue ?? rangeEuivalentNairaValue) +
+                    Number(allCards[0]?.senderFee ?? 0)
+                  ).toLocaleString()}
+                </p>
+              </div>
 
-            <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
-              <p className="text-[#7688B4] text-left tracking-[1px]">
-                Unit Price:
-              </p>
-              <p className="text-[#27014F]">
-                ₦
-                {new Intl.NumberFormat("en-NG").format(
-                  equivalentNairaValue ?? rangeEuivalentNairaValue
-                )}
-              </p>
-            </div>
-            <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
-              <p className="text-[#7688B4] text-left tracking-[1px]">
-                Quatity:
-              </p>
-              <p className="text-[#27014F]">{count}</p>
-            </div>
-            <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
-              <p className="text-[#7688B4] text-left tracking-[1px]">
-                Subtotal:
-              </p>
-              <p className="text-[#27014F]">
-                ₦{Number(subTotal).toLocaleString()}
-              </p>
-            </div>
-            <div className="flex items-center tracking-[0.8px] text-[14px] gap-2 mt-4">
-              <p className="text-[#7688B4] text-left tracking-[1px]">Fee:</p>
-              <p className="text-[#27014F]">
-                ₦{Number(allCards[0].senderFee).toLocaleString()}{" "}
-              </p>
+              <div className="flex items-center justify-between sm:justify-start tracking-[0.8px] text-[14px] gap-2 mt-4">
+                <p className="text-[#7688B4] text-left tracking-[1px]">
+                  Quantity:
+                </p>
+                <p className="text-[#27014F]">{count}</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="md:flex block  items-center justify-between w-full md:px-[2rem]  mb-[2rem]">
-          <div className="flex items-center text-[24px] gap-2">
+        <div className="md:flex block mt-[1.5rem]   sm:mt-0 items-center justify-between w-full md:px-[2rem]  mb-[2rem]">
+          <div className="flex px-3 sm:px-0 items-center justify-between sm:justify-start text-[24px] gap-2">
             <p className="text-[#7688B4] text-left tracking-[1px]">Total:</p>
             <p className="text-[#27014F]">
               ₦{Number(totalAmount).toLocaleString()}
@@ -184,7 +175,7 @@ const BuyUniqueGiftCard = ({
           </div>
           <button
             onClick={submitOrder}
-            className="px-18 w-full mt-2 md:w-fit py-3.5 rounded-[5px] text-white bg-[#8003A9] cursor-pointer"
+            className="px-18 w-full mt-4 md:w-fit py-3.5 rounded-[5px] text-white bg-[#8003A9] cursor-pointer"
           >
             Pay Now
           </button>
