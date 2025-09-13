@@ -27,6 +27,7 @@ import BuyCrypto from "./pages/Logged_in/crpto/BuyCrypto.tsx";
 import SellCrypto from "./pages/Logged_in/crpto/SellCrypto.tsx";
 import SwapCrypto from "./pages/Logged_in/crpto/SwapCrypto.tsx";
 import Crypto from "./pages/Logged_in/Crypto.tsx";
+import ErrorBoundary from "./components/error/ErrorBoundry.tsx";
 
 const App = () => {
   return (
@@ -86,9 +87,12 @@ const AppWithRoutes = () => {
         {/* Protected Dashboard with Nested Routes */}
         <Route
           element={
-            <ProtectedDashboard>
-              <DashboardLayoutt />
-            </ProtectedDashboard>
+            <ErrorBoundary>
+            
+              <ProtectedDashboard>
+                <DashboardLayoutt />
+              </ProtectedDashboard>
+            </ErrorBoundary>
           }
         >
           <Route path="/dashboard" element={<Dashboard />} />
