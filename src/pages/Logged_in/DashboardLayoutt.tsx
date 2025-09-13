@@ -166,27 +166,26 @@ const DashboardLayoutt = () => {
   }
 
   useEffect(() => {
-    if (user) {
-      setEmail(user.email);
+    if (user?.firstName && user?.lastName) {
+      setEmail(user.email || "");
       setName(
         `${
           user.firstName.charAt(0).toUpperCase() +
           user.firstName.slice(1).toLowerCase()
-        } ${
-          user.lastName.charAt(0).toUpperCase() +
-          user.lastName.slice(1).toLowerCase()
-        } `
+        } 
+       ${
+         user.lastName.charAt(0).toUpperCase() +
+         user.lastName.slice(1).toLowerCase()
+       }`
       );
+    } else {
+      const storedEmail = localStorage.getItem("email");
+      const storedName = localStorage.getItem("userName");
+
+      setEmail(storedEmail ?? "");
+      setName(storedName ?? "");
     }
   }, [user]);
-
-  useEffect(() => {
-    const storedEmail = localStorage.getItem("email");
-    const storedName = localStorage.getItem("userName");
-
-    setEmail(storedEmail ?? "");
-    setName(storedName ?? "");
-  }, []);
 
   return (
     <>
